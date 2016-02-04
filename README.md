@@ -1,2 +1,1 @@
-# TraveloggiaVAuthClient
-angular sign in page 
+﻿This is a seed app for angular with Karma Jasmin and Html reporter

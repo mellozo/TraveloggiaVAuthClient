@@ -1,0 +1,19 @@
+{
+  "name": "angular-karma-jasmine",
+  "version": "1.0.0",
+  "description": "seed for angular app with karma testrunner jasmine framework with html reporter",
+  "main": "karma.conf.js",
+  
+  "devDependencies": {
+    "karma": "^0.13.15",
+    "jasmine-core": "^2.3.4",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-jasmine": "^0.3.6",
+    "karma-jasmine-html-reporter": "^0.1.8"
+  },
+  "scripts": {
+    "test": "karma start"
+  },
+  "author": "Athena Kathe Capsis",
+  "license": "ISC"
+}
