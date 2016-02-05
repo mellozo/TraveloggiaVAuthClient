@@ -1,4 +1,4 @@
-﻿sampleApp.controller('SignInController', function(DataFactory) {
+﻿angularTraveloggia.controller('SignInController', function (DataFactory) {
     var VM = this;
 
     VM.Member = new Member();
@@ -10,11 +10,7 @@
             )
 
     }
-    VM.callTest = function () {
-        alert(VM.Member.Email + " " + VM.Member.Password);
-           // return DataFactory.test("monkey");
-
-        }
+   
 
     VM.suck = "you suck";
 

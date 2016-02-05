@@ -2,7 +2,7 @@
 
 
 
-sampleApp.factory('DataFactory', function ($http) {
+angularTraveloggia.factory('DataFactory', function ($http) {
 
     return {
    
