@@ -1,36 +1,43 @@
 /*this is the default - border-box means h/w include border and padding - as old ie*/
 body {
   background-image: url("../image/turq.jpg");
-     font-family: 'Cinzel',  Verdana;
+  font-family: 'Cinzel', Verdana;
 }
-
-.lightgreen{
-
-   background-image:url("../image/lightgreen.jpg");  
-   background-size:cover;
-   background-repeat:no-repeat;
-   max-width:300px;
-  
+/* unvisited link */
+a:link {
+    font-size:16px;
+    font-weight:500;
+margin-left:5px;
+margin-right:5px;
+  color: white;
+  opacity:1.0;
 }
-
+/* visited link */
+a:visited {
+  color: hotpink;
+}
+/* mouse over link */
+a:hover {
+font-weight: bold ;
+}
+/* selected link */
+a:active {
+  color: white;
+}
+.lightgreen {
+  background-image: url("../image/lightgreen.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  max-width: 300px;
+}
 .goldtrim {
-    border-style:solid;border-color:goldenrod;border-width:2px;
-    border-radius:3.5px;
+  border-style: solid;
+  border-color: goldenrod;
+  border-width: 2px;
+  border-radius: 3.5px;
 }
-
 .centered {
   margin: 0 auto;
-}
-.signin {
-  background-color: #2A7D76;
-  height: 300px;
-  padding: 1px;
-}
-.monkey {
-  background-color: brown;
-}
-.theFix {
-  padding-right: 20px;
 }
 .inputDiv {
   background-color: #749074;
@@ -43,3 +50,45 @@ input {
   border-radius: 6px;
   width: 100%;
 }
+
+
+.basil
+{
+    background-color:#749074 ;
+}
+
+
+.papyrus
+{
+    background-color:#E5DD9F;
+}
+
+.teal
+{
+    /*background-color:#2A7D76;*/
+    /*filter: alpha(opacity = 50);*/
+    background-color:rgba(42,125,118,0.5);
+   
+}
+
+/*#CDDBCD*/
+.sage
+{
+    background-color:rgba(125, 161, 125, 1);
+}
+
+
+
+
+
+/*.signin{
+
+    background-color:@seagreen;
+    height:300px;
+    padding:1px;
+}
+
+.monkey{
+
+  background-color:brown;  
+}*/

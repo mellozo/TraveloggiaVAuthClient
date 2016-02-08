@@ -10,7 +10,7 @@ angularTraveloggia.factory('DataFactory', function ($http) {
 
             var config = {
                 method:"post",
-                url: "http://localhost/TraveloggiaVAuthService/api/Members",
+                url: "http://localhost/TraveloggiaVAuthService/api/Members/Validate",
                 headers: {
                     'Content-Type': 'application/json'
                 },

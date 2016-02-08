@@ -11,21 +11,16 @@
     lesson: to make box sizing work, set margin to 0,  acheive margin using padding instead
  
 
-    
-    
-    
-
-
 <div style="background-color:red;width:100%;box-sizing:border-box;padding:16px;margin:0px">
     
     <input type="text" id="MyInput" style="box-sizing:border-box;width:100%; margin:0px;" />
 </div>-->
 
 <div id="maincontainer" ng-controller="SignInController as Ctrl">
-    {{ Ctrl.suck }}
+   
 
     <form id="SignInForm">
-
+  
 
 <div class="lightgreen centered goldtrim" style="padding:16px;margin-bottom:8px;border-radius:3.5px;">
     
@@ -42,13 +37,23 @@
 </div>
 
     <div   style="text-align:center;padding:16px;">
-        <div style="display:inline-block;background-color:lightgrey;opacity:0.6;padding:16px;border-radius:7px;" >
-            <a style="color:goldenrod;" href="" ng-click="Ctrl.signIn()" >sign in</a>
+        <div style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+            <a id="aSignIn"  href="" ng-click="Ctrl.signIn()" >Sign In</a>
+            </div>
+       
+             <div id="aCreateAccount"  style="display:none;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+
+            <a href="" ng-click="Ctrl.signIn()">Create Account</a>
         </div>
     </div>
 
-    </form>
 
+
+
+
+
+    </form>
+     {{ Ctrl.suck }}
 
 
 </div>
