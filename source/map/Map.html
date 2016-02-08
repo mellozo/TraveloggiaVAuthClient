@@ -1,13 +1,22 @@
-﻿<div id="mainContainer">
-
-    This is the new map page woo hoo
-<div ng-controller="SignInController as SignInCtrl"  style="background-color:#FF749074">
+﻿
+<div id="mainContainer"  class="sage">
+      
+    This is the new map page only showing maps created by you the signed in user !
+    
+            <div ng-controller="SignInController as SignInCtrl"  >
   
-    <a href="" ng-click="SignInCtrl.signOut">Sign Out</a>
+                <a  style="position:absolute;top:0;right:22px;
+                    background:transparent;z-index:99;font-family:Cinzel;color:goldenrod;" 
+                    href="" ng-click="SignInCtrl.signOut">Sign Out</a>
+
+            </div>
+
+
+    
+                    
+                <div id="map_canvas"/>
+                   
 
 </div>
 
-
-
-
-</div>
+  

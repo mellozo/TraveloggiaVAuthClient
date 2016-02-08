@@ -1,7 +1,7 @@
-﻿angularTraveloggia.controller('MapController', function('DataFactory')
+﻿angularTraveloggia.controller('MapController', function(DataFactory)
 {
 
 
 }
 
-)
+);

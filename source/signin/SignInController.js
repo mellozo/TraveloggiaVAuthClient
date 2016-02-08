@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function (DataFactory) {
+﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location) {
     var VM = this;
 
     VM.Member = new Member();
@@ -18,7 +18,7 @@
             {
 
                 VM.suck = " you dont suck"
-                
+                $location.path("/Map")
 
             },
             function (error) {
