@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location) {
+﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location,$rootScope) {
     var VM = this;
 
     VM.Member = new Member();
@@ -14,9 +14,9 @@
     VM.signIn = function () {
 
         DataFactory.getMember("acap@sd.net", "buster").then(
-            function (data,x, y, z, h)
+            function (result,x, y, z, h)
             {
-
+                $rootScope.MemberID = result.data.MemberID;
                 VM.suck = " you dont suck"
                 $location.path("/Map")
 
