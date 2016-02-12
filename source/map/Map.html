@@ -1,7 +1,7 @@
 ﻿
-<div id="mainContainer"  class="sage" ng-controller="MapController as MapCtrl">
+<div id="mainContainer" style="position:absolute;left:0;top:0;"  ng-controller="MapController as MapCtrl">
       
-    This is the new map page only showing maps created by you the signed in user !
+    <!--This is the new map page only showing maps created by you the signed in user !
     
             <div ng-controller="SignInController as SignInCtrl"  >
   
@@ -9,14 +9,16 @@
                     background:transparent;z-index:99;font-family:Cinzel;color:goldenrod;" 
                     href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
 
-            </div>
+            </div>-->
 
 
     
-                    
-                <div id="map_canvas" />
-                   
-
+               
+                <div id="map_canvas" style="border:0;margin:0;padding:0"  ng-style="mapdivstyle"  />
+                
+             
 </div>
 
-  
+     <button title="zoom to current location" style="position:absolute;left:50%;margin-left:-25px;height:50px;width:50px;bottom:5%;border-radius:90px">
+                    <img src="../../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
+               </button>    

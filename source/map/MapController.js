@@ -1,10 +1,11 @@
-﻿angularTraveloggia.controller('MapController', function (MapService)
+﻿angularTraveloggia.controller('MapController', function (MapService,$scope)
 {
 
-    angular.element(document).ready(function () {
-        MapService.initMap();
-        MapService.setMapSize();
-    });
+    
+    $scope.mapdivstyle = MapService.setMapSize();
+ 
+       $scope.map = MapService.initMap();
+    
 }
 
 );
