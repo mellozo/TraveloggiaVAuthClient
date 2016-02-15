@@ -10,7 +10,7 @@ angularTraveloggia.factory('DataFactory', function ($http) {
 
             var config = {
                 method:"post",
-                url: "http://localhost/TraveloggiaVAuthService/api/Members/Validate",
+                url: "http://localhost:52046/api/Members/Validate",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -20,6 +20,21 @@ angularTraveloggia.factory('DataFactory', function ($http) {
             }
 
             return $http(config);
+        },
+
+        addMember:function( member )
+        {
+            var config = {
+                method: "post",
+                url: "http://localhost:52046/api/Members",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: member
+            }
+
+            return $http(config);
+
         },
 
         test: function testDataFactory(msg) {

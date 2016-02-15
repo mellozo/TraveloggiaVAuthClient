@@ -3,15 +3,17 @@
 Member = function () {
 
     var scope_safe = this;
-    var recordDate = new Date();
-    scope_safe.AccountCreateDate = recordDate.getDay() + "/" + recordDate.getMonth() + "/" + recordDate.getFullYear();
+    var recordDate = new Date(Date.now());
+    scope_safe.AccountCreateDate = recordDate.toLocaleDateString();
     scope_safe.Email = null;
     scope_safe.Password = null;
-    scope_safe.OpenID = null;
+    scope_safe.OpenID = "";
     scope_safe.TraveloggiaEdition = 'TraveloggiaV';
-    scope_safe.FirstName = null;
-    scope_safe.LastName = null;
-
+    scope_safe.FirstName = "";
+    scope_safe.LastName = "";
+    scope_safe.TraveloggiaEditionID = 4;
+    scope_safe.CreatedByMapID = 8;
+   
 
 }
 
