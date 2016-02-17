@@ -7,6 +7,16 @@
     var MarkerArray = [];
     var bounds = null;
 
+
+    local_scope.onReceivePosition = function (position) {
+        map.setCenter(position.coords);
+    }
+
+    local_scope.getCurrentLocation = function ( ) {
+
+        $window.navigator.geolocation.getCurrentPosition(local_scope.onReceivePosition(position))
+    }
+
     var mapTypeControlOptions = {
         mapTypeIds: [google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP],
         position: google.maps.ControlPosition.BOTTOM_LEFT

@@ -1,5 +1,5 @@
 ﻿
-<div id="mainContainer" style="position:absolute;left:0;top:0;"  ng-controller="MapController as MapCtrl">
+<div id="mainContainer" style="position:absolute;left:0;top:0;"  ng-controller="MapController ">
    
 
       <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:0;right:22px;
@@ -11,6 +11,7 @@
              
 </div>
 
-     <button title="zoom to current location" style="position:absolute;left:50%;margin-left:-25px;height:50px;width:50px;bottom:5%;border-radius:90px">
+     <button title="zoom to current location" ng-click="getLocation()"
+             style="position:absolute;left:50%;margin-left:-25px;height:50px;width:50px;bottom:5%;border-radius:90px">
                     <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
                </button>    
