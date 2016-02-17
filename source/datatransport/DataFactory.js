@@ -1,32 +1,31 @@
-﻿//var dataService = angular.module("DataService", []);
-
-
-
-angularTraveloggia.factory('DataFactory', function ($http) {
+﻿
+angularTraveloggia.factory('DataFactory', function ($http, $rootScope) {
+    var baseURL = "http://traveloggiaservices.net"
 
     return {
    
-        getMember: function(email, password){
-
+        getMember: function (email, password) {
+            var endpoint = baseURL + "/api/Members/Validate"
             var config = {
                 method:"post",
-                url: "http://localhost:52046/api/Members/Validate",
+                url: endpoint,
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data:{ Email:email,
-                           Password:password
-                        }
+                data: {
+                        Email: email,
+                        Password:password
+                      }
             }
-
             return $http(config);
         },
 
         addMember:function( member )
         {
+            var endpoint = baseURL + "/api/Members"
             var config = {
                 method: "post",
-                url: "http://localhost:52046/api/Members",
+                url: endpoint,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -37,10 +36,17 @@ angularTraveloggia.factory('DataFactory', function ($http) {
 
         },
 
-        test: function testDataFactory(msg) {
-            alert(msg);
+        getMaps: function () {
+            var memberID = $rootScope.MemberID;
+            var endpoint = baseURL + "/api/Maps/" + memberID;
+            var config = {
+                method: "get",
+                url:endpoint
+            }
+            return $http(config);
         }
-
+       
+        
     }
 
 

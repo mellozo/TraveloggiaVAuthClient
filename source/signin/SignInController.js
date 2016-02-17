@@ -30,6 +30,7 @@
     VM.dismissSystemMessage = function () {
         $scope.systemMessageStyle = { "display": "none"};
     }
+
     VM.signIn = function () {
 
         DataFactory.getMember(VM.Member.Email, VM.Member.Password).then(
@@ -61,6 +62,9 @@
         DataFactory.addMember(VM.Member).then(
             function (result, x, y, z, h) {
                 $rootScope.MemberID = result.data.MemberID;
+                var defaultMap = new Map();
+                defaultMap.MemberID = $rootScope.MemberID;
+                $rootScope.currentMap = defaultMap;
                 $location.path("/Map")
             },
             function (error) {
