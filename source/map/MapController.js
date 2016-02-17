@@ -3,6 +3,7 @@
 
     
     $scope.mapdivstyle = MapService.setMapSize();
+    $scope.cursorStyle;
 
     $scope.map = MapService.initMap();
     $scope.getLocation = function(){
@@ -16,6 +17,18 @@
                     $scope.map.setZoom(14);
                 });
         });
+    }
+
+
+
+
+    $scope.getCrossHairCursor = function () {
+
+       
+            $scope.map.setOptions({ draggableCursor: 'crosshair' });
+       
+      
+
     }
     
 }

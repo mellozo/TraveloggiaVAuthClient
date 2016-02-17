@@ -6,12 +6,19 @@
                     background:transparent;z-index:99;font-family:Cinzel;color:black;" 
                     href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
                
-                <div id="map_canvas" style="border:0;margin:0;padding:0"  ng-style="mapdivstyle"  />
+                <div id="map_canvas"  style="border:0;margin:0;padding:0"  ng-style="mapdivstyle"  />
                 
              
 </div>
 
+<button title="enable click or tap to add location" ng-click="getCrossHairCursor()"
+        style="position:absolute;left:10px;top:60px;height:50px;width:50px;border-radius:6px">
+    <img src="../image/anchor.png" style="z-index:999;height:40px;width:40px;margin-left:auto;margin-right:auto" />
+</button>   
+
+
+
      <button title="zoom to current location" ng-click="getLocation()"
-             style="position:absolute;left:50%;margin-left:-25px;height:50px;width:50px;bottom:5%;border-radius:90px">
+             style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
                     <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
                </button>    

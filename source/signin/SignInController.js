@@ -1,7 +1,21 @@
-﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location,$rootScope,$scope) {
+﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location,$rootScope,$scope,$route) {
     var VM = this;
 
     VM.systemMessage = "monkey fun today";
+
+
+
+    VM.showCreate = function () {
+        var accountAnchor = window.document.getElementById("aCreateAccount");
+        accountAnchor.style.display = "inline-block";
+        var accountAnchor = window.document.getElementById("divSignIn");
+        accountAnchor.style.display = "none";
+    }
+
+
+    if ($route.current.isCreate == true)
+        VM.showCreate();
+
    
     $scope.systemMessageStyle = { "display": "none" };
     VM.Member = new Member();
@@ -52,7 +66,7 @@
             function (error) {
 
                 VM.Member = new Member();
-                if (error.data.Message == "member exists already")
+                if ( error.data != null && error.data.Message == "member exists already")
                 {
                     VM.systemMessage = "email already in use"
                     $scope.systemMessageStyle = { "display": "inline-block" }
