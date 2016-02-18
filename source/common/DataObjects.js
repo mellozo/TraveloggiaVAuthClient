@@ -1,8 +1,8 @@
 ﻿
 
 Member = function () {
-
     var scope_safe = this;
+    scope_safe.MemberID = null;
     var recordDate = new Date(Date.now());
     scope_safe.AccountCreateDate = recordDate.toLocaleDateString();
     scope_safe.Email = null;
@@ -32,16 +32,29 @@ Map = function () {
     scope_safe.LastRevision = null;
     scope_safe.HasLayers = null;
     scope_safe.SavedToDB = false;
-
+    scope_safe.Sites = [];
 }
 
 
-var Repo = function () {
-
-
-
-
-
-
-
+var Site = function () {
+    var scope_safe = this;
+    scope_safe.SiteID = null;
+    scope_safe.Longitude = null;
+    scope_safe.Latitude = null;
+    scope_safe.MapID = null;
+    scope_safe.MemberID = null;
+    scope_safe.Name = null;
+    scope_safe.Address = null;
+    scope_safe.Description = null;
+    scope_safe.Phone = null;
+    scope_safe.Email = null;
+    scope_safe.URL = null;
+    var recordDate = new Date(Date.now());
+    scope_safe.DateAdded = recordDate.toLocaleDateString();
+    scope_safe.RouteIndex = null;
+    scope_safe.Rating = null;
+    scope_safe.AverageRating = null;
+    scope_safe.VotesCast = null;
+    scope_safe.Photos = [];
+    scope_safe.Journals = [];
 }

@@ -1,23 +1,15 @@
 ﻿angularTraveloggia.controller('SignInController', function (SharedState,DataTransportService,$location,$scope,$route) {
     var VM = this;
 
-    VM.systemMessage = "monkey fun today";
-
-
-
     VM.showCreate = function () {
         var accountAnchor = window.document.getElementById("aCreateAccount");
         accountAnchor.style.display = "inline-block";
         var accountAnchor = window.document.getElementById("divSignIn");
         accountAnchor.style.display = "none";
     }
-
-
     if ($route.current.isCreate == true)
         VM.showCreate();
 
-   
-    $scope.systemMessageStyle = { "display": "none" };
     VM.Member = new Member();
 
     VM.signOut = function(){
@@ -27,17 +19,20 @@
        // and all the other stuff we will fool around with later like JWT
     }
 
-    VM.dismissSystemMessage = function () {
-        $scope.systemMessageStyle = { "display": "none"};
-    }
-
     VM.signIn = function () {
+
+
+       
+
+
         DataTransportService.getMember("acap@sd.net", "buster").then(
             function (result,x, y, z, h)
             {
                 SharedState.MemberID = result.data.MemberID;
                 SharedState.LoadMaps();
-                $location.path("/Map")
+                 $location.path("/Map")
+              
+               
             },
             function (error) {
                 VM.Member = new Member();
@@ -64,13 +59,12 @@
                 VM.Member = new Member();
                 if ( error.data != null && error.data.Message == "member exists already")
                 {
-                    VM.systemMessage = "email already in use"
-                    $scope.systemMessageStyle = { "display": "inline-block" }
+                    $scope.showSystemMessage("email already in use")
+                
                 }
                    
                 else
-                    VM.systemMessage = "error creating member"
-               
+                    $scope.showSystemMessage("error creating account")
             }
             );
 
