@@ -9,18 +9,30 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute"])
 
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
-    .when('/', {
-        templateUrl: 'signin/SignIn.html'
-        //controller: 'SignInController'
-    })
+        .when('/', {
+            templateUrl: 'signin/SignIn.html'
+          
+        })
 
         .when('/SignIn', {
           templateUrl: 'signin/SignIn.html'
-          //controller: 'SignInController'
-      })
-    .when('/Map', {
-        templateUrl: 'map/Map.html'
-        //controller: 'SignInController'
+          
+        })
+
+        .when('/CreateAccount', {
+            templateUrl: 'signin/SignIn.html',
+            isCreate:true
+        })
+
+        .when('/Map', {
+            templateUrl: 'map/Map.html'
+           
+        })
+
+    .when('/MapList', {
+        templateUrl: 'map/MapList.html',
+        controller: 'MapController'
+       
     });
   }
 ]);
