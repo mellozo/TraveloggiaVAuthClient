@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function (DataFactory,$location,$rootScope,$scope,$route) {
+﻿angularTraveloggia.controller('SignInController', function (SharedState,DataTransportService,$location,$scope,$route) {
     var VM = this;
 
     VM.systemMessage = "monkey fun today";
@@ -32,39 +32,31 @@
     }
 
     VM.signIn = function () {
-
-        DataFactory.getMember(VM.Member.Email, VM.Member.Password).then(
+        DataTransportService.getMember("acap@sd.net", "buster").then(
             function (result,x, y, z, h)
             {
-                $rootScope.MemberID = result.data.MemberID;
-             
+                SharedState.MemberID = result.data.MemberID;
+                SharedState.LoadMaps();
                 $location.path("/Map")
-
             },
             function (error) {
-
                 VM.Member = new Member();
                 var retryLink = window.document.getElementById("aSignIn");
                 retryLink.innerText = "Try Again";
                 var accountAnchor = window.document.getElementById("aCreateAccount");
                 accountAnchor.style.display = "inline-block";
-
-
-
             }
-
-            )
-
+        )
     }
    
 
     VM.createAccount = function () {
-        DataFactory.addMember(VM.Member).then(
+        DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {
-                $rootScope.MemberID = result.data.MemberID;
+                SharedState.MemberID = result.data.MemberID;
                 var defaultMap = new Map();
                 defaultMap.MemberID = $rootScope.MemberID;
-                $rootScope.currentMap = defaultMap;
+                SharedState.currentMap = defaultMap;
                 $location.path("/Map")
             },
             function (error) {

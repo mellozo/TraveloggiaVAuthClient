@@ -12,7 +12,7 @@ Member = function () {
     scope_safe.FirstName = "";
     scope_safe.LastName = "";
     scope_safe.TraveloggiaEditionID = 4;
-    scope_safe.CreatedByMapID = 8;
+    //scope_safe.CreatedByMapID = 8;
    
 
 }
@@ -20,16 +20,27 @@ Member = function () {
 Map = function () {
     var scope_safe = this;
     scope_safe.MapID = null;
-    scope_safe.MapName = null;
+    var recordDate = new Date(Date.now());
+    scope_safe.MapName = "Default Map " + recordDate.toLocaleString();
     scope_safe.MemberID = null;
     scope_safe.MinX = null;
     scope_safe.MaxX = null;
     scope_safe.MinY = null;
     scope_safe.MaxY = null;
-    scope_safe.CreateDate = null;
+    scope_safe.CreateDate = recordDate.toLocaleDateString();
     scope_safe.FromPhone = null;
     scope_safe.LastRevision = null;
     scope_safe.HasLayers = null;
+    scope_safe.SavedToDB = false;
+
+}
+
+
+var Repo = function () {
+
+
+
+
 
 
 

@@ -6,51 +6,21 @@
     var currentLocation;
     var MarkerArray = [];
     var bounds = null;
-
+    var mapTypeControlOptions = {
+        mapTypeIds: [google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP],
+        position: google.maps.ControlPosition.BOTTOM_LEFT
+    };
 
     local_scope.onReceivePosition = function (position) {
         map.setCenter(position.coords);
     }
 
     local_scope.getCurrentLocation = function ( ) {
-
         $window.navigator.geolocation.getCurrentPosition(local_scope.onReceivePosition(position))
     }
 
-    var mapTypeControlOptions = {
-        mapTypeIds: [google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP],
-        position: google.maps.ControlPosition.BOTTOM_LEFT
-    };
     local_scope.initMap = function () {
-        // this takes too long
-        //if (navigator.geolocation) {
-        //    // get the current location using html5 geocoding and pass coords to set opening map view
-
-        //    navigator.geolocation.getCurrentPosition(function (position) {
-        //        var lat = position.coords.latitude;
-        //        var lng = position.coords.longitude;
-        //        currentLocation = new google.maps.LatLng(lat, lng);
-
-
-        //        mapOptions = {
-        //            MapTypeControlOptions: mapTypeControlOptions,
-        //            center: currentLocation,
-        //            zoom: 13
-
-        //        }
-
-
-        //        if(!map)
-        //        map = new google.maps.Map(document.getElementById("map_canvas"),
-        //             mapOptions);
-
-        //    });
-
-
-        //}
-        //else {
-        // alert("Geolocation API is not supported in your browser.");
-        // hard code a place for the map to start
+      
         lat = 0;// 52.516274;
         lng = 0;//13.377678;
         currentLocation = new google.maps.LatLng(lat, lng);
@@ -70,12 +40,7 @@
 
         // }
 
-
-      
-
         return map;
-
-
     }
 
 
@@ -101,9 +66,6 @@
         var w = deviceWidth + "px"
         var styleString = {'height':h,'width':w}
         return styleString;
-
-
-
 }
 
 

@@ -1,6 +1,10 @@
 ﻿
-angularTraveloggia.factory('DataFactory', function ($http, $rootScope) {
-    var baseURL = "http://traveloggiaservices.net"
+angularTraveloggia.factory('DataTransportService', function ($http) {
+    var baseURL = "http://localhost:58143"
+
+    var unsavedMaps = [];
+
+  
 
     return {
    
@@ -36,8 +40,8 @@ angularTraveloggia.factory('DataFactory', function ($http, $rootScope) {
 
         },
 
-        getMaps: function () {
-            var memberID = $rootScope.MemberID;
+        getMaps: function (memberID) {
+      
             var endpoint = baseURL + "/api/Maps/" + memberID;
             var config = {
                 method: "get",
