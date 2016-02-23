@@ -19,7 +19,7 @@
         $window.navigator.geolocation.getCurrentPosition(local_scope.onReceivePosition(position))
     }
 
-    local_scope.initMap = function () {
+    local_scope.initMap = function() {
       
         lat = 0;// 52.516274;
         lng = 0;//13.377678;
@@ -29,22 +29,18 @@
             MapTypeControlOptions: mapTypeControlOptions,
             center: currentLocation,
             zoom: 2
-
         }
 
         // if(!map)
         map = new google.maps.Map(document.getElementById("map_canvas"),
              mapOptions);
-
-
-
         // }
 
         return map;
     }
 
 
-    local_scope.setMapSize =function () {
+    local_scope.setMapSize = function() {
 
         var deviceWidth = $window.innerWidth;
 
@@ -67,8 +63,6 @@
         var styleString = {'height':h,'width':w}
         return styleString;
 }
-
-
 
 
 

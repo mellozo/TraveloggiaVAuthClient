@@ -1,8 +1,8 @@
 ﻿angularTraveloggia.controller('SignInController', function (SharedStateService,DataTransportService,$location,$scope,$route) {
     var VM = this;
 
-   VM.authenticationStatus = {
-     
+    VM.authenticationStatus = {
+        firstAttempt:($route.current.isCreate != null)?false:true,
         failedSignin: false,
         createAccount:($route.current.isCreate != null)?true:false
 
@@ -11,6 +11,7 @@
 
     VM.Member = new Member();
 
+
     VM.signOut = function(){
 
         window.location.href = "http://html5.traveloggia.net/Default.html";
@@ -18,9 +19,10 @@
        // and all the other stuff we will fool around with later like JWT
     }
 
+
     VM.signIn = function () {
-     DataTransportService.getMember("acap@sd.net", "buster").then(
-          //    DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
+    // DataTransportService.getMember("acap@sd.net", "buster").then(
+              DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
             function (result, x, y, z, h) {
                 SharedStateService.authenticatedMember = result.data;
                 SharedStateService.LoadMaps();
@@ -29,6 +31,7 @@
             function (error) {
                 VM.Member = new Member();
                 VM.authenticationStatus.failedSignin = true;
+                VM.authenticationStatus.firstAttempt = false;
                 VM.authenticationStatus.createAccount = true;
             }
         );
@@ -38,10 +41,8 @@
     VM.createAccount = function () {
         DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {
-             //   SharedState.MemberID = result.data.MemberID;
-                var defaultMap = new Map();
-                defaultMap.MemberID = $rootScope.MemberID;
-               // SharedState.currentMap = defaultMap;
+                SharedStateService.authenticatedMember = result.data;
+                SharedStateService.LoadMaps();
                 $location.path("/Map")
             },
             function (error) {
@@ -57,7 +58,5 @@
         );
 
     }
-
-
 
 })

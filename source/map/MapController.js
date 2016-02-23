@@ -6,10 +6,13 @@
 
     VM.MapRecord = {};
     VM.map = MapService.initMap();
+
+
     // demonstrating use of promise ( dealing with the fact that we cant load data till we've authenticated
     SharedStateService.getCurrentMap().then(
         function (defaultMap) {
             VM.MapRecord = defaultMap;
+            if(defaultMap.Sites.length > 0)
             VM.drawSites(defaultMap.Sites);
         },
         function (error) { }
@@ -29,17 +32,19 @@
 
 
     VM.getLocation = function(){
-      navigator.geolocation.getCurrentPosition(function(pos){
-                $scope.$apply(function(){
-                    var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-                    VM.map.setCenter(geolocate);
-                    VM.map.setZoom(14);
-                });
-                $scope.$apply(function () {
-                    VM.addMarker( pos.coords.latitude, pos.coords.longitude );
-                });
-                VM.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
+        navigator.geolocation.getCurrentPosition(function (pos) {
+
+            VM.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
+
+            $scope.$apply(function(){
+                var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                VM.map.setCenter(geolocate);
+                VM.addMarker(pos.coords.latitude, pos.coords.longitude);
+                VM.map.setZoom(14);
             });
+         
+             
+        });
     }
 
 
@@ -61,11 +66,15 @@
     VM.createSiteRecord=function(lat, lng){
         var site = new Site();
         site.MapID = VM.MapRecord.MapID;
-    //    site.MemberID = VM.SharedState.MemberID;
+        site.MemberID = SharedStateService.authenticatedMember.MemberID;
         site.Latitude = lat;
         site.Longitude = lng;
-    //    SharedState.currentSite = site;
-    //    SharedState.currentMap.Sites.push(site);
+      // SharedStateService.currentSite = site;
+        var dirtyArray = SharedStateService.Repository.get('unsavedSites');
+        dirtyArray.push(site);
+        SharedStateService.Repository.put('unsavedSites', dirtyArray);
+
+
 
     }
 
@@ -78,15 +87,15 @@
         VM.MapRecord.MaxX = ne.lng();
         VM.MapRecord.MinY = sw.lat();
         VM.MapRecord.MaxY = ne.Lat();
+
     }
 
+// to do this is an optimization not using this yet
+    //$scope.$on('$locationChangeStart', function (event, next, current) {
+    //    VM.storeMapExtent();
+    //});
 
-    $scope.$on('$locationChangeStart', function (event, next, current) {
-       
-        VM.storeMapExtent();
-        if (VM.MapRecord.SavedToDB == false)
-            SharedState.unsavedMaps.push(VM.MapRecord);
-    });
+
 
     VM.getCrossHairCursor = function () {
             $scope.map.setOptions({ draggableCursor: 'crosshair' });

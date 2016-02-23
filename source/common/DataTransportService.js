@@ -2,9 +2,6 @@
 angularTraveloggia.factory('DataTransportService', function ($http) {
     var baseURL = "http://localhost:58143"
 
-    var unsavedMaps = [];
-
-  
 
     return {
    
@@ -47,6 +44,20 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
                 method: "get",
                 url:endpoint
             }
+            return $http(config);
+        },
+
+        addSite:function(site){
+            var endpoint = baseURL + "/api/Sites";
+            var config = {
+                method: "post",
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: site
+            }
+
             return $http(config);
         }
        
