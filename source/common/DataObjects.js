@@ -58,3 +58,19 @@ var Site = function () {
     scope_safe.Photos = [];
     scope_safe.Journals = [];
 }
+
+
+var Photo=function()
+{
+    var scope_safe = this;
+    scope_safe.PhotoID = null;
+    scope_safe.FileName = null;
+    scope_safe.Caption = null;
+    scope_safe.SiteID = null;
+    scope_safe.JournalID = null;
+    scope_safe.DateAdded = null;
+    scope_safe.DateTaken = null;
+    scope_safe.FromPhone = null;
+    scope_safe.StorageURL = null;
+    scope_safe.ThumbnailURL == null;
+    }

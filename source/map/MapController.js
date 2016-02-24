@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('MapController', function (MapService,SharedStateService,$scope)
+﻿angularTraveloggia.controller('MapController', function (MapService,SharedStateService,$scope,$location)
 {
     var VM = this;
     
@@ -6,6 +6,8 @@
 
     VM.MapRecord = {};
     VM.map = MapService.initMap();
+    VM.navigationService = $location;
+    VM.scopeService = $scope;
 
 
     // demonstrating use of promise ( dealing with the fact that we cant load data till we've authenticated
@@ -20,15 +22,37 @@
 
 
 
-   VM.drawSites = function (sites) {
+
+   VM.drawSites = function (sites,$scope) {
      var      bounds = new google.maps.LatLngBounds();
-           for (var i = 0; i < sites.length; i++) {
-               VM.addMarker(sites[i].Latitude,sites[i].Longitude,sites[i].Name)
-               var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
-               bounds.extend(latLong);
-           }
-           VM.map.fitBounds(bounds);
+     for (var i = 0; i < sites.length; i++) 
+     {
+
+        var     marker = new google.maps.Marker({
+             map: VM.map,
+             draggable: false,
+           //  animation: google.maps.Animation.DROP,
+             position: { lat: sites[i].Latitude, lng: sites[i].Longitude }
+        });
+
+         (function attachEventHandler(siteID) {
+             marker.addListener('click', function () {
+                 VM.scopeService.$apply(function () { VM.navigationService.path("/Album/" +siteID) })
+             });
+
+         })(sites[i].SiteID)
+
+         var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
+         bounds.extend(latLong);
+
+     }
+
+      VM.map.fitBounds(bounds);
    }
+
+
+
+
 
 
     VM.getLocation = function(){

@@ -59,6 +59,15 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             }
 
             return $http(config);
+        },
+
+        getPhotos: function (siteID) {
+            var endpoint = baseURL + "/api/Photos/" + siteID;
+            var config = {
+                method: "get",
+                url: endpoint
+            }
+            return $http(config);
         }
        
         

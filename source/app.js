@@ -28,11 +28,25 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
            
         })
 
-    .when('/MapList', {
-        templateUrl: 'map/MapList.html',
-        controller: 'MapController'
+// just to demonstrate use of resolve in routing
+// you must specify controller here - not optional as in html binding
+// note resolve = {} and the object has string property and promise value 
+         .when('/Album/:siteID', {
+             templateUrl: 'album/Album.html',
+             controller:'AlbumController',
+             resolve:{photos: globalBullshit}
+         })
+
+        .when('/MapList', {
+            templateUrl: 'map/MapList.html',
+            controller: 'MapController'
        
-    });
+        });
   }
 ]);
+
+
+function globalBullshit($route,DataTransportService) {
+    return DataTransportService.getPhotos($route.current.params.siteID)
+}
 
