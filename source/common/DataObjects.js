@@ -73,4 +73,19 @@ var Photo=function()
     scope_safe.FromPhone = null;
     scope_safe.StorageURL = null;
     scope_safe.ThumbnailURL == null;
-    }
+}
+
+var Journal = function () {
+    var scope_safe = this;
+    scope_safe.JournalID = null;
+    scope_safe.Text = null;
+    scope_safe.SiteID = null;
+    scope_safe.KeyWords = null;
+    scope_safe.DateAdded = null;
+    scope_safe.JournalDate = null;
+    scope_safe.FromPhone = null;
+    scope_safe.Title = null;
+    scope_safe.MemberID = null;
+
+
+}

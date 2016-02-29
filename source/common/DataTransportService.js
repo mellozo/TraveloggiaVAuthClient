@@ -68,9 +68,33 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
                 url: endpoint
             }
             return $http(config);
-        }
+        },
        
-        
+        uploadImage:function(imageFile){
+            var fd = new FormData();
+            fd.append(imageFile.name, imageFile);
+            var config = {
+                method: "post",
+                url: "http://www.traveloggia.net/upload/1/Maui/",
+                transformRequest: angular.identity,// overrides default serialization to json
+                headers: {
+                    'Content-Type': 'undefined'// multi-part form doesnt quite work, bounderies are not created 
+                },
+                data: fd
+            }
+            return $http(config);
+        },
+
+        getJournals:function(siteID){
+            var endpoint = baseURL + "/api/Journals/" + siteID;
+            var config = {
+                method: "get",
+                url: endpoint
+            }
+            return $http(config);
+
+    }
+
     }
 
 

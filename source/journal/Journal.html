@@ -1,0 +1,17 @@
+﻿<div ng-controller="JournalController">
+   <ul class="nav nav-tabs">
+  <li ng-repeat ="journal in JournalEntries"                  
+       role="presentation" class="active"><a href="" ng-click="loadContent({{$index}})">{{journal.Title}}</a></li>
+
+  <li role="presentation"><a href="#" ng-click="addNew()">Add New</a></li>
+</ul>
+
+
+  <div  ta-bind="text"  name="htmlcontent" ng-model="thewords" ta-disabled="{{readOnly}}"
+      style="margin-left:3px;margin-right:3px;min-height:600px;height:100%;background-color:white"></div>
+      <!--  <div text-angular ng-model="thewords" name="demo-editor" 
+                ta-text-editor-class="border-around container" 
+                ta-html-editor-class="border-around"></div>
+        </div>    --> 
+        
+</div>

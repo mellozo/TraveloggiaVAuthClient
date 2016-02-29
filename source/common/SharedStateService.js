@@ -2,6 +2,15 @@
 {
 
     var local_scope = this;
+    local_scope.Selected = {
+        MapID: null,
+        SiteID:22842,
+        MemberID: null,
+        PhotoID: null,
+        JournalID:null
+
+
+    }
 
     local_scope.Repository = $cacheFactory('Repository', {});
     local_scope.Repository.put('unsavedSites', []);
@@ -39,7 +48,10 @@
 
     }
 
+    local_scope.loadPhotos = function () {
+        var photos 
 
+    }
 
 
 
