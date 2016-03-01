@@ -54,6 +54,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
         DataTransportService.addJournal($scope.liveJournal).then(
             function (result) {
+                $scope.systemMessage.text = "new journal was saved successfully";
+                $scope.systemMessage.activate();
             },
             function (error) {
                 $scope.systemMessage.text = "error saving journal" + error.data.Message;
@@ -62,6 +64,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             );
         else DataTransportService.updateJournal($scope.liveJournal).then(
             function (result) {
+                $scope.systemMessage.text = "journal edit was saved successfully";
+                $scope.systemMessage.activate();
             },
             function (error) {
                 $scope.systemMessage.text = "error saving journal" + error.data.Message;
