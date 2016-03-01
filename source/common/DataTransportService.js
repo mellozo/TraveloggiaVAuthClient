@@ -106,7 +106,24 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             data: journal
         }
         return $http(config);
-    }
+        },
+
+
+        updateJournal: function (journal) {
+            var endpoint = baseURL + "/api/Journals/"+journal.JournalID
+            var config = {
+                method: "put",
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: journal
+            }
+            return $http(config);
+        },
+
+
+
 
     }
 
