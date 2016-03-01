@@ -18,6 +18,10 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
               templateUrl: 'journal/Journal.html'
 
           })
+           .when('/JournalEdit', {
+               templateUrl: 'journal/JournalEditCreate.html'
+
+           })
 
         .when('/SignIn', {
           templateUrl: 'signin/SignIn.html'
