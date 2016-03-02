@@ -1,10 +1,26 @@
-﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService) {
+﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService,SharedStateService) {
    
     //https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Camera_API/Introduction
   
     var baseURL = "www.traveloggia.net/upload/1/ny test/";
 
     $scope.PhotoList = photos.data;
+  
+
+    // may we say my what an inelegant syntax
+    $scope.$watch(
+        function (scope) {return SharedStateService.Selected.SiteID },
+        function (newValue, oldValue) {
+
+            if(newValue != oldValue)
+            DataTransportService.getPhotos(newValue).then(
+                function (result) {
+                        $scope.PhotoList = result.data;
+                },
+                function (error) { }
+                );
+        }
+        );
 
     var takePicture = document.querySelector("#take-picture"),
       showPicture = document.querySelector("#show-picture");

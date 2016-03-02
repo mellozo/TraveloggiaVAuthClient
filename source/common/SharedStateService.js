@@ -64,6 +64,7 @@
             function (result) {
                local_scope.MapList.resolve(result.data);
                local_scope.currentMap.resolve(result.data[0]);
+               local_scope.Repository.put('MapList', result.data)
             },
             function (error) {
                 $scope.systemMessage.text = "error loading map data";
