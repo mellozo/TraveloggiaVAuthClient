@@ -1,4 +1,12 @@
-﻿<div ng-controller="JournalController">
+﻿
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+
+<div ng-include="'common/ToolBar.html'"></div>
+
+
+<div ng-controller="JournalController">
    <ul class="nav nav-tabs">
           <li ng-repeat ="journal in JournalEntries"                  
                role="presentation" class="active"><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>

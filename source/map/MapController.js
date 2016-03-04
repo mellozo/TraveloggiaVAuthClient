@@ -1,54 +1,77 @@
-﻿angularTraveloggia.controller('MapController', function (MapService,SharedStateService,$scope,$location)
+﻿angularTraveloggia.controller('MapController', function (MapService,SharedStateService,$scope,$location,DataTransportService)
 {
     var VM = this;
-    
-    $scope.mapdivstyle = MapService.setMapSize();
-
     VM.MapRecord = {};
+    $scope.mapdivstyle = MapService.setMapSize();
     VM.map = MapService.initMap();
-    VM.navigationService = $location;
-    VM.scopeService = $scope;
 
 
-    // demonstrating use of promise ( dealing with the fact that we cant load data till we've authenticated
-    SharedStateService.getCurrentMap().then(
-        function (defaultMap) {
-            VM.MapRecord = defaultMap;
-            if(defaultMap.Sites.length > 0)
-            VM.drawSites(defaultMap.Sites);
-        },
-        function (error) { }
-        );
+    if (SharedStateService.Repository.get('Maps') == null) {
+
+        DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
+            function (result) {
+                VM.MapRecord = result.data[0];
+               // alert("got the maps")
+                SharedStateService.Repository.put('Maps', result.data);
+                SharedStateService.Repository.put('Sites', VM.MapRecord.Sites)
+                VM.drawSites(VM.MapRecord.Sites)
+            },
+            function (error) {
+                $scope.systemMessage.text = "error loading map data";
+                $scope.systemMessage.activate();
+            }
+        )// end then
+    }// end if Repository is empty
 
 
 
+   
+  
+    VM.drawSites = function (sites) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < sites.length; i++)
+        {
+            var marker = new google.maps.Marker({
+                map: VM.map,
+                draggable: false,
+                //  animation: google.maps.Animation.DROP,
+                position: { lat: sites[i].Latitude, lng: sites[i].Longitude }
+            });
 
-   VM.drawSites = function (sites,$scope) {
-     var      bounds = new google.maps.LatLngBounds();
-     for (var i = 0; i < sites.length; i++) 
-     {
+            (function attachEventHandler(siteID) {
+                marker.addListener('click', function () {
+                    SharedStateService.Selected.SiteID = siteID;
+                    $scope.$apply(function () { $location.path("/Album/" + siteID) })
+                });
 
-        var     marker = new google.maps.Marker({
-             map: VM.map,
-             draggable: false,
-           //  animation: google.maps.Animation.DROP,
-             position: { lat: sites[i].Latitude, lng: sites[i].Longitude }
-        });
+            })(sites[i].SiteID, $scope, $location)
 
-         (function attachEventHandler(siteID) {
-             marker.addListener('click', function () {
-                 VM.scopeService.$apply(function () { VM.navigationService.path("/Album/" +siteID) })
-             });
+            var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
+            bounds.extend(latLong);
+        }
 
-         })(sites[i].SiteID)
+        VM.map.fitBounds(bounds);
+    }
 
-         var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
-         bounds.extend(latLong);
 
-     }
+    //else {
+    //    VM.MapRecord = SharedStateService.Repository.get('MapList')[0];
+    //    if (VM.MapRecord.Sites.length > 0)
+    //    {
+    //        var sites = VM.MapRecord.Sites
+    //        try {
+    //            VM.drawSites(sites);
+    //        }
+    //        catch (error) {
+    //            $scope.systemMessage.text = "error " + error.data.Message;
+    //            $scope.systemMessage.activate();
+    //        }
+       
+    //    }
+            
+    //}
 
-      VM.map.fitBounds(bounds);
-   }
+
 
 
 

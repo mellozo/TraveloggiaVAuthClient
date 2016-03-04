@@ -4,8 +4,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
 
     $scope.JournalEntries = SharedStateService.Repository.get("Journals");
-    if ($scope.JournalEntries.length == 0)
-
+    if ($scope.JournalEntries.length == 0 )
         DataTransportService.getJournals(SharedStateService.Selected.SiteID).then(
             function (result) {
                 $scope.JournalEntries = result.data;
@@ -42,36 +41,33 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         journal.JournalDate = recordDate.toLocaleDateString();
         journal.MemberID = SharedStateService.authenticatedMember.MemberID;
         SharedStateService.Repository.put('liveJournal',journal)
-  
         $location.path("/JournalEdit");
-
-
     }
 
     $scope.saveJournal = function () {
   
-        if ($scope.liveJournal.JournalID == null)
-
-        DataTransportService.addJournal($scope.liveJournal).then(
-            function (result) {
-                $scope.systemMessage.text = "new journal was saved successfully";
-                $scope.systemMessage.activate();
-            },
-            function (error) {
-                $scope.systemMessage.text = "error saving journal" + error.data.Message;
-                $scope.systemMessage.activate();
-            }
-            );
-        else DataTransportService.updateJournal($scope.liveJournal).then(
-            function (result) {
-                $scope.systemMessage.text = "journal edit was saved successfully";
-                $scope.systemMessage.activate();
-            },
-            function (error) {
-                $scope.systemMessage.text = "error saving journal" + error.data.Message;
-                $scope.systemMessage.activate();
-            }
-            );
+        if ($scope.liveJournal.JournalID == null)// its create
+            DataTransportService.addJournal($scope.liveJournal).then(
+                function (result) {
+                    $scope.systemMessage.text = "new journal was saved successfully";
+                    $scope.systemMessage.activate();
+                },
+                function (error) {
+                    $scope.systemMessage.text = "error saving journal" + error.data.Message;
+                    $scope.systemMessage.activate();
+                }
+                );
+        else // its update
+            DataTransportService.updateJournal($scope.liveJournal).then(
+                function (result) {
+                    $scope.systemMessage.text = "journal edit was saved successfully";
+                    $scope.systemMessage.activate();
+                },
+                function (error) {
+                    $scope.systemMessage.text = "error saving journal" + error.data.Message;
+                    $scope.systemMessage.activate();
+                }
+                );
 
     }
 

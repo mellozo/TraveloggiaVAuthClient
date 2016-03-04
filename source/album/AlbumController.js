@@ -2,16 +2,15 @@
    
     //https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Camera_API/Introduction
   
-    var baseURL = "www.traveloggia.net/upload/1/ny test/";
 
     $scope.PhotoList = photos.data;
-  
 
-    // may we say my what an inelegant syntax
+    // may we say, what an inelegant syntax
     $scope.$watch(
-        function (scope) {return SharedStateService.Selected.SiteID },
+        function (scope) {
+            return SharedStateService.Selected.SiteID
+        },
         function (newValue, oldValue) {
-
             if(newValue != oldValue)
             DataTransportService.getPhotos(newValue).then(
                 function (result) {
@@ -22,80 +21,49 @@
         }
         );
 
-    var takePicture = document.querySelector("#take-picture"),
-      showPicture = document.querySelector("#show-picture");
-
-    if (takePicture && showPicture) {
-        // Set events
-        takePicture.onchange = function (event) {
-            // Get a reference to the taken picture or chosen file
-            var files = event.target.files, file;
-
-            if (files && files.length > 0) {
-                file = files[0];
-                try {
-
-
-
-                  var  xhr = new XMLHttpRequest();
-                   
-                  xhr.open("post", "/upload", true);
-                  
- 
-                 
-                    // Set appropriate headers
-                    
-                    xhr.setRequestHeader("Content-Type", "multipart/form-data");
-                  
-                    xhr.setRequestHeader("X-File-Name", file.name);
-                  
-                    xhr.setRequestHeader("X-File-Size", file.size);
-                   
-                    xhr.setRequestHeader("X-File-Type", file.type);
-                  
- 
-             
-                    // Send the file (doh)
-                        xhr.send(file);
-
-
-
-                    // Create ObjectURL
-                    var imgURL = window.URL.createObjectURL(file);
-
-                    //DataTransportService.uploadImage(file).then(
-                    //    function (result) {
-                    //                 alert("you rule");},
-                    //    function (error) {
-                    //        alert("you suck");}
-                    //    );
-
-                    // Set img src to ObjectURL
-                    showPicture.src = imgURL;
-
-                    // Revoke ObjectURL
-                    URL.revokeObjectURL(imgURL);
-                }
-                catch (e) {
+    $scope.previewImage = function () {
+        var takePicture = document.querySelector("#take-picture");
+        var showPicture = document.querySelector("#show-picture");
+        if (takePicture && showPicture) {
+            // Set events
+            takePicture.onchange = function (event) {
+                var files = event.target.files, file;
+                if (files && files.length > 0) {
+                    file = files[0];
                     try {
-                        // Fallback if createObjectURL is not supported
-                        var fileReader = new FileReader();
-                        fileReader.onload = function (event) {
-                            showPicture.src = event.target.result;
-                        };
-                        fileReader.readAsDataURL(file);
+                        // Create ObjectURL
+                        var imgURL = window.URL.createObjectURL(file);
+                        // Set img src to ObjectURL
+                        showPicture.src = imgURL;
+                        // Revoke ObjectURL
+                        URL.revokeObjectURL(imgURL);
                     }
                     catch (e) {
-                        //
-                        var error = document.querySelector("#error");
-                        if (error) {
-                            error.innerHTML = "Neither createObjectURL or FileReader are supported";
+                        try {
+                            // Fallback if createObjectURL is not supported
+                            var fileReader = new FileReader();
+                            fileReader.onload = function (event) {
+                                showPicture.src = event.target.result;
+                            };
+                            fileReader.readAsDataURL(file);
+                        }
+                        catch (e) {
+                            $scope.systemMessage.text = "Neither createObjectURL or FileReader are supported";
+                            $scope.systemMessage.activate();
+
                         }
                     }
                 }
             }
         };
+
+
+
     }
 
+   
+    $scope.uploadImage = function () {
+        DataTransportService.uploadImage(file)
+    }
 
 })

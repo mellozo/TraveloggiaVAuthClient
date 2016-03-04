@@ -21,11 +21,9 @@
 
 
     VM.signIn = function () {
-    // DataTransportService.getMember("acap@sd.net", "buster").then(
               DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
             function (result, x, y, z, h) {
                 SharedStateService.authenticatedMember = result.data;
-                SharedStateService.LoadMaps();
                 $location.path("/Map")
             },
             function (error) {

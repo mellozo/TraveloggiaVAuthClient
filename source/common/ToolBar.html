@@ -1,0 +1,72 @@
+﻿<!--the bootstrap way    style="background-image:url(../image/lightblue.jpg)"-->
+
+    <div class="bluenav"  ng-controller="NavigationController as navCtrl">
+<div class="container" >
+
+    <div class="row">
+
+<!--layout for phones-->
+      
+
+        <div class="col-xs-3 col-sm-2">
+               <button style="border-radius:8px;margin:4px;background-color:#DEE5F2" >
+                <img src="../../image/globe.png"  class="img-responsive" style="max-height:55px" />
+            </button>
+        </div>
+      <!--  <div class="col-sm-2 hidden-xs">
+            map
+        </div>-->
+
+         <div class="col-xs-3 col-sm-2">
+               <button  style="border-radius:8px;margin:4px;background-color:#DEE5F2" > 
+                <img src="../../image/sun.png"   class="img-responsive"style="max-height:55px"  />
+            </button>
+         </div>
+      <!--   <div class="col-sm-2 hidden-xs">
+           upload photo
+        </div>-->
+<!-- Single button -->
+        
+     <div class="col-xs-3 col-sm-2">
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
+                 aria-haspopup="true" aria-expanded="false">
+                  <img src="../../image/scroll.png"   class="img-responsive" style="max-height:55px" />
+              </button>
+                  <ul class="dropdown-menu">
+                      <li  ng-repeat="site in navCtrl.SiteList">
+                          <a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a></li>
+                   
+                 </ul>
+            </div>
+</div>
+        <!-- <div class="col-xs-3 col-sm-2">
+                <button  style="border-radius:8px;margin:4px;background-color:#DEE5F2"
+                    type="button" class="btn btn-default dropdown-toggle"  data-toggle="dropdown" >
+                    <img src="../../image/scroll.png"   class="img-responsive" style="max-height:55px" />
+              </button>
+              <ul class="dropdown-menu">
+          <li  ng-repeat="site in navCtrl.SiteList"><a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+         </div>
+ -->
+
+       
+    
+      <!--   <div class="col-sm-2 hidden-xs">
+          sites
+        </div>-->
+
+         <div class="col-xs-3 col-sm-2">
+                 <button  style="border-radius:8px;margin:4px;background-color:#DEE5F2" ng-click="navCtrl.goJournal()">
+                <img src="../../image/stack.png"   class="img-responsive" style="max-height:55px"  />
+            </button>
+         </div>
+     <!--    <div class="col-sm-2 hidden-xs">
+            journal
+        </div>-->
+
+    </div>
+        </div>
+</div>

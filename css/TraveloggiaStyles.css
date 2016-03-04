@@ -1,8 +1,36 @@
 /*this is the default - border-box means h/w include border and padding - as old ie*/
 body {
-  background-image: url("../image/turq.jpg");
+
   font-family: 'Cinzel', Verdana;
 }
+
+.turq {
+      background-image: url("../image/turq.jpg");
+}
+
+.bluenav {
+    background-image:url(../image/lightblue.jpg);
+    display:block;
+}
+
+
+.phoneNav{
+    width:23%;
+    display:inline;
+    background-color:magenta;
+}
+
+.phoneLabel{
+    display:none;
+    background:transparent;
+    color:darkgoldenrod;
+    font-family:Cinzel;
+}
+
+.phoneLabel:hover {
+    display:inline;
+}
+
 /* unvisited link */
 a:link {
     font-size:16px;
@@ -77,8 +105,15 @@ input {
     background-color:rgba(125, 161, 125, 1);
 }
 
-
-
+/*/*angularTextEditor*/
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    margin:20px 0;
+}*/
 
 
 /*.signin{

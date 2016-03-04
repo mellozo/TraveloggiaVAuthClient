@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('NavigationController',  function (SharedStateService) {
+﻿angularTraveloggia.controller('NavigationController',  function (SharedStateService,$location) {
 
 
     var VM = this;
@@ -11,7 +11,9 @@
 
     }
 
-
+    VM.goJournal = function () {
+        $location.path("/Journal");
+    }
 
 
 })

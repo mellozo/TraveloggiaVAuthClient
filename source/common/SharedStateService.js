@@ -22,8 +22,8 @@
 
     local_scope.authenticatedMember = {};
     local_scope.currentSite = {};
-    local_scope.currentMap = $q.defer();
-    local_scope.MapList = $q.defer();
+    //local_scope.currentMap = $q.defer();
+    //local_scope.MapList = $q.defer();
 
 
     $window.onbeforeunload = function () {
@@ -56,31 +56,31 @@
 
 
 
-    local_scope.LoadMaps = function () {
-        //$scope.systemMessage.text = "loading maps";
-        //$scope.systemMessage.activate();
+    //local_scope.LoadMaps = function () {
+    //    //$scope.systemMessage.text = "loading maps";
+    //    //$scope.systemMessage.activate();
 
-        DataTransportService.getMaps(local_scope.authenticatedMember.MemberID).then(
-            function (result) {
-               local_scope.MapList.resolve(result.data);
-               local_scope.currentMap.resolve(result.data[0]);
-               local_scope.Repository.put('MapList', result.data)
-            },
-            function (error) {
-                $scope.systemMessage.text = "error loading map data";
-                $scope.systemMessage.activate();
-            }
-        );
+    //    DataTransportService.getMaps(local_scope.authenticatedMember.MemberID).then(
+    //        function (result) {
+    //           local_scope.MapList.resolve(result.data);
+    //           local_scope.currentMap.resolve(result.data[0]);
+    //           local_scope.Repository.put('MapList', result.data)
+    //        },
+    //        function (error) {
+    //            $scope.systemMessage.text = "error loading map data";
+    //            $scope.systemMessage.activate();
+    //        }
+    //    );
 
-    }
+    //}
 
 
    
-    local_scope.getMapList= function(){
-        return local_scope.promise;
-    }
+    //local_scope.getMapList= function(){
+    //    return local_scope.promise;
+    //}
 
-    local_scope.getCurrentMap = function () {
-        return local_scope.currentMap.promise;
-    }
+    //local_scope.getCurrentMap = function () {
+    //    return local_scope.currentMap.promise;
+    //}
 })
