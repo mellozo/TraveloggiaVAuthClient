@@ -10,7 +10,7 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textA
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'journal/Journal.html'
+            templateUrl: 'signin/SignIn.html'
            
         })
 
@@ -41,7 +41,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 // just to demonstrate use of resolve in routing
 // you must specify controller here - not optional as in html binding
 // note resolve = {} and the object has string property and promise value 
-         .when('/Album/:siteID', {
+         .when('/Album', {
              templateUrl: 'album/Album.html',
              controller:'AlbumController',
              resolve:{photos: globalBullshit}
@@ -56,7 +56,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 ]);
 
 
-function globalBullshit($route,DataTransportService) {
-    return DataTransportService.getPhotos($route.current.params.siteID)
+function globalBullshit(SharedStateService,DataTransportService) {
+    return DataTransportService.getPhotos(SharedStateService.Selected.SiteID)
 }
 

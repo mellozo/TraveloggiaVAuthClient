@@ -2,8 +2,34 @@
 
 angularTraveloggia.controller('JournalController', function (DataTransportService, $scope,SharedStateService,$location,$route) {
 
+    $scope.JournalEntries = [];
 
-    $scope.JournalEntries = SharedStateService.Repository.get("Journals");
+    // may we say, what an inelegant syntax
+    $scope.$watch(
+        function (scope) {
+            return SharedStateService.Selected.SiteID
+        },
+        function (newValue, oldValue) {
+            if (newValue != oldValue) {
+                DataTransportService.getJournals(newValue).then(
+                 function (result) {
+                     $scope.JournalEntries = result.data;
+                     $scope.loadContent(0);
+                     SharedStateService.Repository.put("Journals", result.data);
+                 },
+                    function (error) { }
+                    );
+            }
+            else {
+                $scope.JournalEntries = SharedStateService.Repository.get("Journals");
+            }
+        });
+
+
+
+
+
+
     if ($scope.JournalEntries.length == 0 )
         DataTransportService.getJournals(SharedStateService.Selected.SiteID).then(
             function (result) {
@@ -18,21 +44,26 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             function (error) { }
             );
 
-    $scope.thewords = "you really really suck"
+    
 
   
+
+    // upon tab change
+    $scope.loadContent = function (index) {
+        if ($scope.JournalEntries.length > 0 && index != null)
+            $scope.thewords = $scope.JournalEntries[index].Text;
+        $scope.liveJournal = $scope.JournalEntries[index];
+    }
+
+
+
+
     var editable = SharedStateService.Repository.get('liveJournal')
     if (editable != null)
         $scope.liveJournal = editable;
   
   
     $scope.toolbarOptions = "[['h1', 'h2', 'h3'],['bold', 'italics', 'underline','clear'],  ['html',  'insertLink' ]]"
-
-    $scope.loadContent = function (index) {
-        if ($scope.JournalEntries.length > 0 && index != null)
-            $scope.thewords = $scope.JournalEntries[index].Text;
-        $scope.liveJournal = $scope.JournalEntries[index];
-    }
 
     $scope.addNew = function () {
         var journal = new Journal();

@@ -41,7 +41,7 @@
             (function attachEventHandler(siteID) {
                 marker.addListener('click', function () {
                     SharedStateService.Selected.SiteID = siteID;
-                    $scope.$apply(function () { $location.path("/Album/" + siteID) })
+                    $scope.$apply(function () { $location.path("/Album") })
                 });
 
             })(sites[i].SiteID, $scope, $location)

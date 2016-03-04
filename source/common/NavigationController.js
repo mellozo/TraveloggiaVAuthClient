@@ -15,5 +15,12 @@
         $location.path("/Journal");
     }
 
+    VM.goAlbum = function () {
+        $location.path("/Album");
+    }
+
+    VM.goMap = function () {
+        $location.path("/Map")
+    }
 
 })

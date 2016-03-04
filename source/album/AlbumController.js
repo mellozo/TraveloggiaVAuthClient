@@ -2,9 +2,11 @@
    
     //https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Camera_API/Introduction
   
-
+//loading the data with the router/resolve just to demo different was of doing things
     $scope.PhotoList = photos.data;
 
+
+    // loading the data if they change sites but stay on the page
     // may we say, what an inelegant syntax
     $scope.$watch(
         function (scope) {
