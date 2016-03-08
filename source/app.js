@@ -72,12 +72,9 @@ angularTraveloggia.directive('mapCanvas', function ( SharedStateService) {
                 center: scope.savedCenter,
                 zoom: scope.savedZoom
             };
-
-        
             scope.googleMap = new google.maps.Map(element[0], mapOptions);
             scope.loadMaps();
             scope.googleMap.setOptions({zoom:scope.savedZoom,center:scope.savedCenter})
-
         }
     };
 });

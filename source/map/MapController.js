@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('MapController', function (MapService,SharedStateService,$scope,$location,DataTransportService)
+﻿angularTraveloggia.controller('MapController', function (SharedStateService,$scope,$location,DataTransportService)
 {
 
     $scope.MapRecord = {};
@@ -37,7 +37,8 @@
        if (SharedStateService.Repository.get("Maps") == null) {
            DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
                function (result) {
-                  $scope.MapRecord = result.data[0];
+                   $scope.MapRecord = result.data[0];
+                 
                    SharedStateService.Repository.put('Maps', result.data);
                    SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                    $scope.drawSites($scope.MapRecord.Sites, $scope.googleMap)
@@ -66,41 +67,41 @@
    
 
 
-    $scope.getLocation = function(){
-        navigator.geolocation.getCurrentPosition(function (pos) {
-            $scope.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
-            $scope.$apply(function(){
-                var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-               $scope.googleMap.setCenter(geolocate);
-               $scope.addMarker(pos.coords.latitude, pos.coords.longitude);
-                $scope.googleMap.setZoom(14);
-            });
-        });
-    }
+    //$scope.getLocation = function(){
+    //    navigator.geolocation.getCurrentPosition(function (pos) {
+    //        $scope.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
+    //        $scope.$apply(function(){
+    //            var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    //           $scope.googleMap.setCenter(geolocate);
+    //           $scope.addMarker(pos.coords.latitude, pos.coords.longitude);
+    //            $scope.googleMap.setZoom(14);
+    //        });
+    //    });
+    //}
 
 
-    $scope.addMarker = function (latitude,longitude,title) {
-        var latlng = { lat:latitude,lng:longitude};
-            var marker = new google.maps.Marker({
-                position: latlng,
-                map: $scope.googleMap,
-                title: title
-            });
-    }
+    //$scope.addMarker = function (latitude,longitude,title) {
+    //    var latlng = { lat:latitude,lng:longitude};
+    //        var marker = new google.maps.Marker({
+    //            position: latlng,
+    //            map: $scope.googleMap,
+    //            title: title
+    //        });
+    //}
 
    
 
-    $scope.createSiteRecord=function(lat, lng){
-        var site = new Site();
-        site.MapID =$scope.MapRecord.MapID;
-        site.MemberID = SharedStateService.authenticatedMember.MemberID;
-        site.Latitude = lat;
-        site.Longitude = lng;
-      // SharedStateService.currentSite = site;
-        var dirtyArray = SharedStateService.Repository.get('unsavedSites');
-        dirtyArray.push(site);
-        SharedStateService.Repository.put('unsavedSites', dirtyArray);
-    }
+    //$scope.createSiteRecord=function(lat, lng){
+    //    var site = new Site();
+    //    site.MapID =$scope.MapRecord.MapID;
+    //    site.MemberID = SharedStateService.authenticatedMember.MemberID;
+    //    site.Latitude = lat;
+    //    site.Longitude = lng;
+    //  // SharedStateService.currentSite = site;
+    //    var dirtyArray = SharedStateService.Repository.get('unsavedSites');
+    //    dirtyArray.push(site);
+    //    SharedStateService.Repository.put('unsavedSites', dirtyArray);
+    //}
 
 //    VM.storeMapExtent= function(){
 //        var googleBounds = VM.map.getBounds();

@@ -1,8 +1,8 @@
-﻿angularTraveloggia.service('SharedStateService', function (DataTransportService,$q,$window,$cacheFactory)
+﻿angularTraveloggia.service('SharedStateService', function (DataTransportService,$cacheFactory,$window)
 {
 
     var local_scope = this;
-
+    local_scope.authenticatedMember = {};
     local_scope.center = new google.maps.LatLng(0, 0);
     local_scope.zoom = 2;
 
@@ -12,8 +12,6 @@
         MemberID: null,
         PhotoID: null,
         JournalID:null
-
-
     }
 
     local_scope.Repository = $cacheFactory('Repository', {});
@@ -24,8 +22,8 @@
     local_scope.unsavedMaps = [];
     local_scope.unsavedSites = [];
 
-    local_scope.authenticatedMember = {};
-    local_scope.currentSite = {};
+ 
+   // local_scope.currentSite = {};
     //local_scope.currentMap = $q.defer();
     //local_scope.MapList = $q.defer();
 
