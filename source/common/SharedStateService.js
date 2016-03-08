@@ -2,6 +2,10 @@
 {
 
     var local_scope = this;
+
+    local_scope.center = new google.maps.LatLng(0, 0);
+    local_scope.zoom = 2;
+
     local_scope.Selected = {
         MapID: null,
         SiteID:23840,

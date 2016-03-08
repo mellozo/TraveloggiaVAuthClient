@@ -1,19 +1,42 @@
 ﻿
-<div id="mainContainer" style="position:absolute;left:0;top:0;"  ng-controller="MapController as mapCtrl">
-   
 
-      <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:0;right:22px;
+
+
+<div id="mainContainer"   ng-controller="MapController"  >
+ <style>
+
+  html,
+body,
+
+
+#map {
+  height:100vh;
+    display: block;
+}
+
+</style>  
+
+    
+          <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:0;right:22px;
                     background:transparent;z-index:99;font-family:Cinzel;color:black;" 
                     href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
-               
+       
+    
+     <!--   
                 <div id="map_canvas"  style="border:0;margin:0;padding:0"  ng-style="mapdivstyle"  />
-                
-             
+                -->
+       
+ 
+ 
+    <map-canvas id="map"  ></map-canvas>
+
+    
+          
 </div>
 
 <div style="position:absolute;top:1px;left:70px;font-size:20px;color:goldenrod">
 
-    {{mapCtrl.MapRecord.MapName}}
+    {{MapRecord.MapName}}
 
 </div>
 
@@ -24,7 +47,7 @@
 
 
 
-     <button title="zoom to current location" ng-click="mapCtrl.getLocation()"
+     <button title="zoom to current location" ng-click="getLocation()"
              style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
                     <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
                </button>    

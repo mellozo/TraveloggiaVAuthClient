@@ -13,7 +13,11 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'signin/SignIn.html'
            
         })
+          .when('/Test', {
+              templateUrl: 'map/TestPage.html'
+          
 
+          })
           .when('/Journal', {
               templateUrl: 'journal/Journal.html'
 
@@ -34,8 +38,9 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
         })
 
         .when('/Map', {
-            templateUrl: 'map/Map.html'
-           
+            templateUrl: 'map/Map.html',
+            controller:'MapController'
+          
         })
 
 // just to demonstrate use of resolve in routing
@@ -56,7 +61,29 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 ]);
 
 
+angularTraveloggia.directive('mapCanvas', function ( SharedStateService) {
+    return {
+        restrict: 'E',
+       
+        link: function (scope, element) {
+          scope.savedZoom = SharedStateService.zoom;
+          scope.savedCenter = SharedStateService.center;
+            var mapOptions = {
+                center: scope.savedCenter,
+                zoom: scope.savedZoom
+            };
+
+        
+            scope.googleMap = new google.maps.Map(element[0], mapOptions);
+            scope.loadMaps();
+            scope.googleMap.setOptions({zoom:scope.savedZoom,center:scope.savedCenter})
+
+        }
+    };
+});
+
 function globalBullshit(SharedStateService,DataTransportService) {
     return DataTransportService.getPhotos(SharedStateService.Selected.SiteID)
 }
+
 
