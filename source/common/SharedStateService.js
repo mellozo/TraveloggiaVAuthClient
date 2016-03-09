@@ -2,17 +2,21 @@
 {
 
     var local_scope = this;
+    local_scope.readOnlyUser = false;
     local_scope.authenticatedMember = {};
-    local_scope.center = new google.maps.LatLng(0, 0);
-    local_scope.zoom = 2;
+    local_scope.center = null;
+    local_scope.zoom = null;
 
     local_scope.Selected = {
         MapID: null,
-        SiteID:23840,
+        SiteID:null,
         MemberID: null,
         PhotoID: null,
         JournalID:null
     }
+
+
+    local_scope.liveSite = {};
 
     local_scope.Repository = $cacheFactory('Repository', {});
     local_scope.Repository.put('Journals',[])
@@ -21,14 +25,11 @@
 
     local_scope.unsavedMaps = [];
     local_scope.unsavedSites = [];
-
+    
  
-   // local_scope.currentSite = {};
-    //local_scope.currentMap = $q.defer();
-    //local_scope.MapList = $q.defer();
-
 
     $window.onbeforeunload = function () {
+        if(local_scope.readOnlyUser == false)
         local_scope.addNewSites();
     }
 
@@ -42,7 +43,9 @@
         for (var i = 0; i < newSites.length; i++) {
 
             DataTransportService.addSite(newSites[i]).then(
-                function (result) { },
+                function (result) {
+                    alert("saved")
+            },
                 function (error) {
                     console.log("error inserting site")
                 }
@@ -51,38 +54,19 @@
 
     }
 
-    local_scope.loadPhotos = function () {
-        var photos 
+ 
 
-    }
-
-
+ 
+    //local_scope.MapList = $q.defer();
 
     //local_scope.LoadMaps = function () {
-    //    //$scope.systemMessage.text = "loading maps";
-    //    //$scope.systemMessage.activate();
-
+   
     //    DataTransportService.getMaps(local_scope.authenticatedMember.MemberID).then(
     //        function (result) {
     //           local_scope.MapList.resolve(result.data);
-    //           local_scope.currentMap.resolve(result.data[0]);
-    //           local_scope.Repository.put('MapList', result.data)
-    //        },
-    //        function (error) {
-    //            $scope.systemMessage.text = "error loading map data";
-    //            $scope.systemMessage.activate();
-    //        }
-    //    );
-
-    //}
-
-
    
     //local_scope.getMapList= function(){
     //    return local_scope.promise;
     //}
 
-    //local_scope.getCurrentMap = function () {
-    //    return local_scope.currentMap.promise;
-    //}
 })

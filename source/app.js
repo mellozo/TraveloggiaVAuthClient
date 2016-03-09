@@ -10,26 +10,11 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textA
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'signin/SignIn.html'
-           
+            templateUrl: 'signin/SignIn.html',
         })
-          .when('/Test', {
-              templateUrl: 'map/TestPage.html'
-          
-
-          })
-          .when('/Journal', {
-              templateUrl: 'journal/Journal.html'
-
-          })
-           .when('/JournalEdit', {
-               templateUrl: 'journal/JournalEditCreate.html'
-
-           })
 
         .when('/SignIn', {
-          templateUrl: 'signin/SignIn.html'
-          
+          templateUrl: 'signin/SignIn.html'          
         })
 
         .when('/CreateAccount', {
@@ -40,8 +25,12 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
         .when('/Map', {
             templateUrl: 'map/Map.html',
             controller:'MapController'
-          
         })
+
+           .when('/Site', {
+               templateUrl: 'site/Site.html',
+               controller: 'SiteController'
+           })
 
 // just to demonstrate use of resolve in routing
 // you must specify controller here - not optional as in html binding
@@ -52,6 +41,14 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
              resolve:{photos: globalBullshit}
          })
 
+          .when('/Journal', {
+              templateUrl: 'journal/Journal.html'
+          })
+
+        .when('/JournalEdit', {
+            templateUrl: 'journal/JournalEditCreate.html'
+        })
+
         .when('/MapList', {
             templateUrl: 'map/MapList.html',
             controller: 'MapController'
@@ -61,23 +58,6 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 ]);
 
 
-angularTraveloggia.directive('mapCanvas', function ( SharedStateService) {
-    return {
-        restrict: 'E',
-       
-        link: function (scope, element) {
-          scope.savedZoom = SharedStateService.zoom;
-          scope.savedCenter = SharedStateService.center;
-            var mapOptions = {
-                center: scope.savedCenter,
-                zoom: scope.savedZoom
-            };
-            scope.googleMap = new google.maps.Map(element[0], mapOptions);
-            scope.loadMaps();
-            scope.googleMap.setOptions({zoom:scope.savedZoom,center:scope.savedCenter})
-        }
-    };
-});
 
 function globalBullshit(SharedStateService,DataTransportService) {
     return DataTransportService.getPhotos(SharedStateService.Selected.SiteID)

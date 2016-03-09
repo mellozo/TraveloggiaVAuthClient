@@ -3,23 +3,23 @@
     <div class="bluenav"  ng-controller="NavigationController as navCtrl">
 <div class="container" >
 
-    <div class="row">
+<!--    <div class="row" style="min-height:90px;">-->
 
 <!--layout for phones-->
       
 
-        <div class="col-xs-3 col-sm-2">
-               <button style="border-radius:8px;margin:4px;background-color:#DEE5F2" ng-click="navCtrl.goMap()">
-                <img src="../../image/globe.png"  class="img-responsive" style="max-height:55px" />
+        <div  style="float:left">
+               <button style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goMap()">
+                <img src="../../image/globe.png"  class="image-responsive" style="max-height:40px" />
             </button>
         </div>
       <!--  <div class="col-sm-2 hidden-xs">
             map
         </div>-->
 
-         <div class="col-xs-3 col-sm-2">
-               <button  style="border-radius:8px;margin:4px;background-color:#DEE5F2" ng-click="navCtrl.goAlbum()"> 
-                <img src="../../image/sun.png"   class="img-responsive"style="max-height:55px"  />
+         <div style="float:left">
+               <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goAlbum()"> 
+                <img src="../../image/sun.png"   style="max-height:40px"  />
             </button>
          </div>
       <!--   <div class="col-sm-2 hidden-xs">
@@ -27,11 +27,11 @@
         </div>-->
 
         
-     <div class="col-xs-3 col-sm-2">
+     <div  style="float:left">
             <div class="btn-group">
               <button type="button" class="dropdown-toggle" 
-                  style="border-radius:8px;margin:4px;background-color:#DEE5F2" data-toggle="dropdown" >
-                  <img src="../../image/scroll.png"   class="img-responsive" style="max-height:55px" />
+                  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" data-toggle="dropdown" >
+                  <img src="../../image/scroll.png"    style="max-height:40px" />
               </button>
                   <ul class="dropdown-menu">
                       <li  ng-repeat="site in navCtrl.SiteList">
@@ -46,15 +46,20 @@
           sites
         </div>-->
 
-         <div class="col-xs-3 col-sm-2">
-                 <button  style="border-radius:8px;margin:4px;background-color:#DEE5F2" ng-click="navCtrl.goJournal()">
-                <img src="../../image/stack.png"   class="img-responsive" style="max-height:55px"  />
+         <div  style="float:left">
+                 <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goJournal()">
+                <img src="../../image/stack.png"   style="max-height:40px"  />
             </button>
          </div>
      <!--    <div class="col-sm-2 hidden-xs">
             journal
         </div>-->
+           <div style="float:left">
+                 <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goJournal()">
+                <img src="../../image/palms.png"    style="max-height:40px"  />
+            </button>
+         </div>
 
     </div>
-        </div>
+      <!--  </div>-->
 </div>

@@ -6,7 +6,7 @@
     $scope.systemMessage = {
 
         cover: false,
-        text: "you suck",
+        text: "",
         dismiss: function(){
             this.cover = false;
         },

@@ -1,0 +1,42 @@
+﻿<div ng-controller="SiteController as siteCtrl">
+<div ng-include="'common/ToolBar.html'"></div>
+
+
+<div class="container" style="background-color:#DEE5F2;font-family:Centaur;color:#12A5B5;font-size:18px;max-width:500px">
+  <form>
+   <div class="page-header" style="background-color:#8EBBDA;font-family:Cinzel">
+      Site Information
+   </div>
+        <div class="form-group">
+    <label  for="Name">name</label>
+          <!--  <span style="background-color:#3CBBC8"  class="label label-default">name</span>-->
+    <input type="text" ng-model="siteCtrl.Site.Name" class="form-control" id="Name" >
+  </div>
+  <div class="form-group">
+    <label   for="Address">address</label>
+    <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address" >
+  </div>
+        <div class="form-group">
+    <label for="description">description</label>
+    <textarea  rows="3" ng-model="siteCtrl.Description" class="form-control" id="description" />
+  </div>
+  <div class="form-group">
+    <label   for="phone">phone</label>
+    <input type="text" ng-model="siteCtrl.Phone" class="form-control" id="phone" >
+  </div>
+  <div class="form-group">
+    <label for="Email">email address</label>
+    <input type="email" ng-model="siteCtrl.Email" class="form-control" id="Email" >
+  </div>
+
+  <div class="form-group">
+    <label  for="URL">website</label>
+    <input type="text" ng-model="siteCtrl.URL" class="form-control" id="URL" >
+  </div>
+  <div style="margin-bottom:800px;overflow:hidden">
+  <button style="background-color:#3CBBC8" type="button" class="btn btn-default"  ng-click="siteCtrl.saveSite()">Save</button>
+      </div>
+</form>
+
+</div>
+</div>
