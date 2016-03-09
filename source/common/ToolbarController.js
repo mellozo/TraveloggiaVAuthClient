@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('NavigationController',  function (SharedStateService,$location) {
+﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,$location) {
 
 
     var VM = this;
@@ -21,6 +21,10 @@
 
     VM.goMap = function () {
         $location.path("/Map")
+    }
+
+    VM.goSite = function () {
+        $location.path("/Site")
     }
 
 })
