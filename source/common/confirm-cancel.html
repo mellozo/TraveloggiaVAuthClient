@@ -8,19 +8,19 @@
 
 
 
-<div class="container" style="width:200px">
+<div  class="container" style="z-index:99;width:200px">
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="box-shadow: 0 10px 6px -6px #777;">
   <div class="panel-body">
    
     <p>
-           <span style="font:Centaur;color:brown">{{question}}</span>
+           <span style="font:Centaur;color:brown">{{question.q}}</span>
     </p>
  
-
-    <button type="button" class="btn btn-primary" id="btnConfirm">Yes</button>
-     <button type="button" class="btn btn-danger" id="btnCancel"  >No</button>
-
+<div style="margin-left:auto;margin-right:auto;position:relative;text-align:center">
+    <button  ng-click="confirm()" type="button" class="btn btn-primary" id="btnConfirm" style="width:60px;position:relative">Yes</button>
+     <button  ng-click="cancel()" type="button" class="btn btn-danger" id="btnCancel"  style="width:60px;position:relative">No</button>
+</div>
   </div>
 </div>
 
