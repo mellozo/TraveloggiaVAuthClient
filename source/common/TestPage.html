@@ -1,9 +1,13 @@
 ﻿<div style="background-color:#DCE3EB;height:500px"  ng-controller="MapController">
 
 
-    <confirm-cancel  
-        question="Save location permanently to map?"
-        confirm="saveCurrentLocation()" cancel="dismiss()"></confirm-cancel>
+    <confirm-cancel ng-hide="dialogIsHidden" question="firstQuestion" on-confirm="saveCurrentLocation()"
+       
+    on-cancel="dismiss()" ></confirm-cancel>
    
+
+      <confirm-cancel  ng-hide="dialogIsHidden" question="secondQuestion" confirm="saveCurrentLocation()"
+       
+       ></confirm-cancel>
 
 </div>
