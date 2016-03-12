@@ -16,9 +16,9 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
                 center: scope.savedCenter,
                 zoom: scope.savedZoom
             };
-            scope.googleMap = new google.maps.Map(element[0], mapOptions);
-            scope.loadMaps();
-            scope.googleMap.setOptions({ zoom: scope.savedZoom, center: scope.savedCenter })
+            SharedStateService.googleMap = new google.maps.Map(element[0], mapOptions);
+            scope.loadMaps(SharedStateService.googleMap);
+            SharedStateService.googleMap.setOptions({ zoom: scope.savedZoom, center: scope.savedCenter })
 
             if (SharedStateService.readOnlyUser == false)
             {
@@ -35,7 +35,7 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
                     markerOptions: { icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png' },
 
                 });
-                drawingManager.setMap(scope.googleMap);
+                drawingManager.setMap(SharedStateService.googleMap);
 
                 google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
                     if (event.type == google.maps.drawing.OverlayType.MARKER) {

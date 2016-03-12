@@ -2,18 +2,17 @@
     angularTraveloggia.directive('confirmCancel', function () {
     return {
         restrict: 'E',
-      
-        scope:{
+        templateUrl: "common/confirm-cancel.html",
+        scope: {
             question: '=',
             'confirm':'&onConfirm' , // we love how camel caseing changes to lower case dash separated
             'cancel':'&onCancel'
-    },
+            }
 
-        templateUrl: "common/confirm-cancel.html"
-        //,
-      //  link: function (scope, element, attrs) 
-      //  {
-
+     
+       // ,
+        //link: function (scope, element, attrs) 
+        //{   
       //  per angular docs:
       //       Best Practice: use &attr in the scope option when you want your directive to expose an API for binding to behaviors.
       //       dont do whats below:
@@ -31,7 +30,7 @@
       //'<button type="button" class="btn btn-danger" id="btnCancel"  >No</button></div></div>'
       //           element.append( $compile(dhtml) (scope));
         
-      //  }//end link
+     // }//end link
     }// end return directive
 
 })

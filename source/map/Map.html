@@ -38,7 +38,14 @@ body,
     <img src="../image/anchor.png" style="z-index:999;height:40px;width:40px;margin-left:auto;margin-right:auto" />
 </button>-->   
 
-
+    
+    <confirm-cancel   
+        ng-show="dialogIsShowing"
+        style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px"
+        question="confirmCancelQuestion"
+        on-confirm="saveCurrentLocation()" 
+        on-cancel="dismiss()">
+    </confirm-cancel>
 
      <button title="zoom to current location" ng-click="getLocation()"
              style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
