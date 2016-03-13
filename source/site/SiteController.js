@@ -5,19 +5,22 @@
 
 
     VM.saveSite = function () {
+        var siteList = SharedStateService.Repository.get('Sites');
+        siteList.push(VM.Site);
+        SharedStateService.Repository.put('Sites', siteList);
 
-        SharedStateService.Repository.get('Sites').push(VM.Site)
-
-        DataTransportService.addSite(siteRecord).then(
+        DataTransportService.addSite(VM.Site).then(
         function (result) {
             $scope.systemMessage.text = "Location saved successfully"
+            $scope.systemMessage.activate();
         },
         function (error) {
             $scope.systemMessage.text = "Error saving location";
+            $scope.systemMessage.activate();
             //to do log error
         }
         );
-        $scope.systemMessage.activate();
+       
        // SharedStateService.unsavedSites.push(VM.Site);
     }
 

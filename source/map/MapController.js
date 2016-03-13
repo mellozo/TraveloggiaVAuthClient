@@ -21,8 +21,8 @@
             (function attachEventHandler(siteID) {
                 marker.addListener('click', function () {
                     SharedStateService.Selected.SiteID = siteID;
-                    SharedStateService.center = $scope.googleMap.getCenter();
-                    SharedStateService.zoom = $scope.googleMap.getZoom();
+                    SharedStateService.center = SharedStateService.googleMap.getCenter();
+                    SharedStateService.zoom = SharedStateService.googleMap.getZoom();
                     $scope.$apply(function () { $location.path("/Album") })
                 });
 

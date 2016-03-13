@@ -14,7 +14,6 @@
        // and all the other stuff we will fool around with later like JWT
     }
 
-
     VM.signIn = function (){
         if (VM.Member.Email == null && VM.Member.Password == null)
         {
@@ -38,7 +37,6 @@
         );
     }
    
-
     VM.createAccount = function () {
         DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {
@@ -48,7 +46,6 @@
                 $location.path("/Map")
             },
             function (error) {
-
                 VM.Member = new Member();
                 if ( error.data != null && error.data.Message == "member exists already")
                     $scope.systemMessage.text = "email already in use";
