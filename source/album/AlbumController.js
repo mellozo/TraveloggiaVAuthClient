@@ -1,9 +1,51 @@
-﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService,SharedStateService) {
-   
-    //https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Camera_API/Introduction
+﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService,SharedStateService,$window) {
   
 //loading the data with the router/resolve just to demo different was of doing things
     $scope.PhotoList = photos.data;
+   
+    $scope.fileToUpload = null;
+
+    $scope.fileNameChanged = function (mel) {
+            var files = mel.files;
+            var file = null;
+            if (files && files.length > 0)
+            {
+                file = files[0];
+                $scope.fileToUpload = file;
+               try {
+                        // Create ObjectURL
+                        var imgURL = $window.URL.createObjectURL(file);
+                        angular.element("#imagePreview").attr("src",   imgURL);
+                        // Revoke ObjectURL
+                        URL.revokeObjectURL(imgURL);
+                    }
+                    catch (e) {
+                        //try {
+                        //    // Fallback if createObjectURL is not supported
+                        //    var fileReader = new FileReader();
+                        //    fileReader.onload = function (event) {
+                        //        showPicture.src = event.target.result;
+                        //    };
+                        //    fileReader.readAsDataURL(file);
+                        //}
+                        //catch (e) {
+                        //    $scope.systemMessage.text = "Neither createObjectURL or FileReader are supported";
+                        //    $scope.systemMessage.activate();
+
+                        //}
+                    }
+             }
+    }
+
+    $scope.uploadFile = function () {
+
+        //uploadImage:function(memberID, mapName, siteName, imageFile){
+        var memberID = SharedStateService.authenticatedMember.MemberID;
+        var mapName = SharedStateService.Selected.Map.MapName;
+        var siteName = SharedStateService.Selected.Site.Name;// check that we havent allowed nulls already in which case need to use ids or prevent in all future etc.
+        DataTransportService.uploadImage(memberID,mapName,siteName,$scope.fileToUpload);
+
+    }
 
 
     // loading the data if they change sites but stay on the page
@@ -23,49 +65,7 @@
         }
         );
 
-    $scope.previewImage = function () {
-        var takePicture = document.querySelector("#take-picture");
-        var showPicture = document.querySelector("#show-picture");
-        if (takePicture && showPicture) {
-            // Set events
-            takePicture.onchange = function (event) {
-                var files = event.target.files, file;
-                if (files && files.length > 0) {
-                    file = files[0];
-                    try {
-                        // Create ObjectURL
-                        var imgURL = window.URL.createObjectURL(file);
-                        // Set img src to ObjectURL
-                        showPicture.src = imgURL;
-                        // Revoke ObjectURL
-                        URL.revokeObjectURL(imgURL);
-                    }
-                    catch (e) {
-                        try {
-                            // Fallback if createObjectURL is not supported
-                            var fileReader = new FileReader();
-                            fileReader.onload = function (event) {
-                                showPicture.src = event.target.result;
-                            };
-                            fileReader.readAsDataURL(file);
-                        }
-                        catch (e) {
-                            $scope.systemMessage.text = "Neither createObjectURL or FileReader are supported";
-                            $scope.systemMessage.activate();
-
-                        }
-                    }
-                }
-            }
-        };
-
-
-
-    }
-
    
-    $scope.uploadImage = function () {
-        DataTransportService.uploadImage(file)
-    }
 
 })
+

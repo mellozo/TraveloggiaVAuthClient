@@ -1,8 +1,7 @@
 ﻿
 angularTraveloggia.factory('DataTransportService', function ($http) {
     var baseURL = "http://localhost:58143"
-
-
+//    var baseURL = "http://traveloggiaservices.net"
     return {
    
         getMember: function (email, password) {
@@ -61,6 +60,20 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             return $http(config);
         },
 
+        updateSite: function (site) {
+            var endpoint = baseURL + "/api/Sites";
+            var config = {
+                method: "put",
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: site
+            }
+
+            return $http(config);
+        },
+
         getPhotos: function (siteID) {
             var endpoint = baseURL + "/api/Photos/" + siteID;
             var config = {
@@ -70,19 +83,33 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             return $http(config);
         },
        
-        uploadImage:function(imageFile){
-            var fd = new FormData();
-            fd.append(imageFile.name, imageFile);
-            var config = {
-                method: "post",
-                url: "http://www.traveloggia.net/upload/1/Maui/",
-                transformRequest: angular.identity,// overrides default serialization to json
-                headers: {
-                    'Content-Type': 'undefined'// multi-part form doesnt quite work, bounderies are not created 
-                },
-                data: fd
-            }
-            return $http(config);
+        uploadImage: function (memberID, mapName, siteName, imageFile) {
+// very primative for now data clean
+            var mapName = mapName.replace(' ', '').replace(',', '');
+            var siteName = siteName.replace(' ', '').replace(',', '');
+            //using the amazon javascript api
+            var bucketName = 'artemisbucket';
+            AWS.config.update({ accessKeyId: 'AKIAIER5RMXUR4346VGA', secretAccessKey: '5DIR5nffcS4YaKsS1wo6iRNKmvsxmuRE/M6tm1cm' })
+            AWS.config.region = 'us-west-2'
+            var objKey = memberID+"/" + mapName+"/" + siteName+"/" + imageFile.name;
+            var bucket = new AWS.S3({
+                params: {
+                    Bucket: bucketName
+                }
+            });
+            var params = {
+                Key: objKey,
+                ContentType: imageFile.type,
+                Body: imageFile
+            };
+            bucket.putObject(params, function (err, data) {
+                if (err) {
+                     // need to do a promise thing or notify or whatever but it works!!!
+                } else {
+                  
+                }
+               
+            });
         },
 
         getJournals:function(siteID){
@@ -121,9 +148,6 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             }
             return $http(config);
         },
-
-
-
 
     }
 

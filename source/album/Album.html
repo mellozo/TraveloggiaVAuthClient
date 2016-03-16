@@ -1,17 +1,53 @@
-﻿<div style="background-color:#0E7B83" >
+﻿<div style="background-color:#0E7B83; ng-controller="AlbumController" >
 
 <div ng-include="'common/ToolBar.html'"></div>
 
+    <style>
+
+        .panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+    </style>
 
 
-    <div id="uploadControl" style="display:none;">
-                <input type="file" accept="image/*" capture="camera" id="take-picture" />
-                <p>
-                    <img src="about:blank" alt="" id="show-picture">
-                </p>
+
+
+
+    <div class="panel-group" id="accordion" style="margin:25px;">
+   
+            <div class="panel panel-default" >
+                    <div class="panel-heading">
+                                     <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="" data-target="#collapseOne" >Upload a Photo</a>
+                                    </h4>
+                    </div>
+
+                <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                                         <input id="photoFileInput" type="file" accept="image/*" capture="camera"  
+                                             onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
+                                        <p>
+                                            <img id="imagePreview"  alt="" style="max-height:300px;max-width:100vh">
+                                        </p>
+
+                                <button style="width:150px;height:80px" ng-click="uploadFile()">Upload</button>
+                         </div>
+                </div>
+
+            </div>
+   
     </div>
 
-<!--    <button style="width:150px;height:80px" ng-click="uploadFile()">upload a photo</button>-->
+     
+
+
+
 <div style="margin-top:15px;">
    
 
@@ -25,6 +61,5 @@
 </div> 
 
 </div>
- 
-    </div>
+
 

@@ -8,11 +8,10 @@
     local_scope.zoom = null;
 
     local_scope.Selected = {
-        MapID: null,
-        SiteID:null,
-        MemberID: null,
-        PhotoID: null,
-        JournalID:null
+        Map:null,
+        Site:null,
+        Photo: null,
+        Journal:null
     }
 
 

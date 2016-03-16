@@ -18,15 +18,15 @@
                 position: { lat: sites[i].Latitude, lng: sites[i].Longitude }
             });
 
-            (function attachEventHandler(siteID) {
+            (function attachEventHandler(site) {
                 marker.addListener('click', function () {
-                    SharedStateService.Selected.SiteID = siteID;
+                    SharedStateService.Selected.Site = site;
                     SharedStateService.center = SharedStateService.googleMap.getCenter();
                     SharedStateService.zoom = SharedStateService.googleMap.getZoom();
                     $scope.$apply(function () { $location.path("/Album") })
                 });
 
-            })(sites[i].SiteID, $scope, $location)
+            })(sites[i], $scope, $location)
 
             var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
             bounds.extend(latLong);
@@ -41,6 +41,7 @@
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
                 function (result) {
                     $scope.MapRecord = result.data[0];
+                    SharedStateService.Selected.Map = $scope.MapRecord;
                     SharedStateService.Repository.put('Maps', result.data);
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0)
@@ -55,6 +56,7 @@
         }
         else {
             $scope.MapRecord = SharedStateService.Repository.get('Maps')[0];
+            SharedStateService.Selected.Map = $scope.MapRecord;
             if ($scope.MapRecord.Sites.length > 0) {
                 var sites = $scope.MapRecord.Sites
                 try {
