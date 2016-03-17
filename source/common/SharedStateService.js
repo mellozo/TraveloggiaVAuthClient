@@ -15,7 +15,7 @@
     }
 
 
-    local_scope.liveSite = {};
+    local_scope.liveSite = new Site();
 
     local_scope.Repository = $cacheFactory('Repository', {});
     local_scope.Repository.put('Journals',[])

@@ -54,7 +54,7 @@
   <div style="margin-left:8px;"> 
         <div  ng-repeat="Photo in PhotoList">
            
-            <img ng-src="http://www.traveloggia.net/upload/1/Lemnos/{{Photo.FileName}}" style="width:100%;max-width:300px;" >
+            <img ng-src="{{imageServer}}{{imagePath}}{{Photo.FileName}}" style="width:100%;max-width:300px;" >
             <div> {{Photo.FileName}}</div>
         </div>
    

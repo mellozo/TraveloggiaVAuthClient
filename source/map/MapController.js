@@ -44,8 +44,11 @@
                     SharedStateService.Selected.Map = $scope.MapRecord;
                     SharedStateService.Repository.put('Maps', result.data);
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
-                    if ($scope.MapRecord.Sites.length > 0)
+                    if ($scope.MapRecord.Sites.length > 0) {
+                        SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
                         $scope.drawSites($scope.MapRecord.Sites, map)
+                    }
+                       
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading map data";
@@ -59,6 +62,7 @@
             SharedStateService.Selected.Map = $scope.MapRecord;
             if ($scope.MapRecord.Sites.length > 0) {
                 var sites = $scope.MapRecord.Sites
+                SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
                 try {
                     $scope.drawSites(sites, map);
                 }
@@ -95,7 +99,7 @@
     $scope.getLocation = function () {
         navigator.geolocation.getCurrentPosition(function (pos) {
             var siteRecord = $scope.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
-            SharedStateService.liveSite = siteRecord;
+            SharedStateService.Selected.Site = siteRecord;
             $scope.$apply(function () {
                 var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 SharedStateService.googleMap.setCenter(geolocate);
@@ -115,11 +119,6 @@
         site.Latitude = lat;
         site.Longitude = lng;
         return site;
-
-        // to do this is an optimization for another day 
-        //var dirtyArray = SharedStateService.Repository.get('unsavedSites');
-        //dirtyArray.push(site);
-        //SharedStateService.Repository.put('unsavedSites', dirtyArray);
     }
 
     //    VM.storeMapExtent= function(){

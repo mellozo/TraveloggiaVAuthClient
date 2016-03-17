@@ -1,18 +1,30 @@
-﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService) {
+﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location) {
 
     var VM = this;
-    VM.Site = SharedStateService.liveSite;
+    VM.Site = SharedStateService.Selected.Site;
 
 
     VM.saveSite = function () {
-        var siteList = SharedStateService.Repository.get('Sites');
-        siteList.push(VM.Site);
-        SharedStateService.Repository.put('Sites', siteList);
+        if (VM.Site.SiteID == null)
+            VM.addSite();
+        else
+            VM.updateSite();
+    }
+
+    VM.addSite = function () {
 
         DataTransportService.addSite(VM.Site).then(
         function (result) {
+
+            var cachedSites = SharedStateService.Repository.get('Sites');
+            cachedSites.push(result.data);
+            SharedStateService.Repository.put('Sites', cachedSites);
+            SharedStateService.Selected.Site = result.data;
+
+
             $scope.systemMessage.text = "Location saved successfully"
             $scope.systemMessage.activate();
+            $location.path("/Album");
         },
         function (error) {
             $scope.systemMessage.text = "Error saving location";
@@ -20,8 +32,8 @@
             //to do log error
         }
         );
-       
-       // SharedStateService.unsavedSites.push(VM.Site);
+
+
     }
 
     VM.updateSite = function () {

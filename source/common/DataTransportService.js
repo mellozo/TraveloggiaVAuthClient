@@ -1,5 +1,5 @@
 ﻿
-angularTraveloggia.factory('DataTransportService', function ($http) {
+angularTraveloggia.factory('DataTransportService', function ($http,$q) {
     var baseURL = "http://localhost:58143"
 //    var baseURL = "http://traveloggiaservices.net"
     return {
@@ -82,11 +82,23 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             }
             return $http(config);
         },
+
+        addPhoto: function (photo) {
+            var endpoint = baseURL + "/api/Photos";
+            var config = {
+                method: "post",
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: photo
+            }
+
+            return $http(config);
+        },
        
         uploadImage: function (memberID, mapName, siteName, imageFile) {
-// very primative for now data clean
-            var mapName = mapName.replace(' ', '').replace(',', '');
-            var siteName = siteName.replace(' ', '').replace(',', '');
+            var uploadResult = $q.defer();
             //using the amazon javascript api
             var bucketName = 'artemisbucket';
             AWS.config.update({ accessKeyId: 'AKIAIER5RMXUR4346VGA', secretAccessKey: '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' })
@@ -104,12 +116,15 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             };
             bucket.putObject(params, function (err, data) {
                 if (err) {
-                     // need to do a promise thing or notify or whatever but it works!!!
+                    // need to do a promise thing or notify or whatever but it works!!!
+                    uploadResult.reject(err)
                 } else {
-                  
+                  uploadResult.resolve("success")
                 }
                
             });
+
+            return uploadResult.promise;
         },
 
         getJournals:function(siteID){
@@ -120,7 +135,6 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
             }
             return $http(config);
         },
-
 
         addJournal:function(journal){
         var endpoint = baseURL + "/api/Journals"
@@ -134,7 +148,6 @@ angularTraveloggia.factory('DataTransportService', function ($http) {
         }
         return $http(config);
         },
-
 
         updateJournal: function (journal) {
             var endpoint = baseURL + "/api/Journals/"+journal.JournalID

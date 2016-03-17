@@ -1,6 +1,10 @@
 ﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService,SharedStateService,$window) {
   
-//loading the data with the router/resolve just to demo different was of doing things
+    //loading the data with the router/resolve just to demo different was of doing things
+
+    $scope.imageServer = "https://s3-us-west-2.amazonaws.com/artemisbucket/";
+    $scope.imagePath = SharedStateService.authenticatedMember.MemberID + "/" + SharedStateService.Selected.Map.MapName + "/" + SharedStateService.Selected.Site.Name +"/";
+
     $scope.PhotoList = photos.data;
    
     $scope.fileToUpload = null;
@@ -12,6 +16,7 @@
             {
                 file = files[0];
                 $scope.fileToUpload = file;
+            
                try {
                         // Create ObjectURL
                         var imgURL = $window.URL.createObjectURL(file);
@@ -38,21 +43,40 @@
     }
 
     $scope.uploadFile = function () {
-
-        //uploadImage:function(memberID, mapName, siteName, imageFile){
         var memberID = SharedStateService.authenticatedMember.MemberID;
         var mapName = SharedStateService.Selected.Map.MapName;
         var siteName = SharedStateService.Selected.Site.Name;// check that we havent allowed nulls already in which case need to use ids or prevent in all future etc.
-        DataTransportService.uploadImage(memberID,mapName,siteName,$scope.fileToUpload);
-
+        DataTransportService.uploadImage(memberID, mapName, siteName, $scope.fileToUpload).then(
+            function (result) {
+                $scope.addPhotoRecord();
+            },
+            function (error) {
+                $scope.systemMessage.text = "error uploading photo";
+                $scope.systemMessage.activate();
+            } );
     }
 
+
+    $scope.addPhotoRecord = function () {
+        var photoRecord = new Photo();
+        photoRecord.SiteID = SharedStateService.Selected.Site.SiteID;
+        photoRecord.FileName = $scope.fileToUpload.name;
+        DataTransportService.addPhoto(photoRecord).then(
+            function (result) {
+                $scope.systemMessage.text = "photo saved successfully";
+                $scope.systemMessage.activate();
+            },
+            function (error) {
+                $scope.systemMessage.text = "error uploading photo";
+                $scope.systemMessage.activate();
+            });
+    }
 
     // loading the data if they change sites but stay on the page
     // may we say, what an inelegant syntax
     $scope.$watch(
         function (scope) {
-            return SharedStateService.Selected.SiteID
+            return SharedStateService.Selected.Site
         },
         function (newValue, oldValue) {
             if(newValue != oldValue)
