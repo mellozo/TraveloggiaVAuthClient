@@ -2,8 +2,8 @@
   
     //loading the data with the router/resolve just to demo different was of doing things
 
-    $scope.imageServer = "https://s3-us-west-2.amazonaws.com/artemisbucket/";
-    $scope.imagePath = SharedStateService.authenticatedMember.MemberID + "/" + SharedStateService.Selected.Map.MapName + "/" + SharedStateService.Selected.Site.Name +"/";
+    $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
+    $scope.imagePath = SharedStateService.authenticatedMember.MemberID + "/" + SharedStateService.Selected.Map.MapName + "/" 
 
     $scope.PhotoList = photos.data;
    
@@ -45,8 +45,7 @@
     $scope.uploadFile = function () {
         var memberID = SharedStateService.authenticatedMember.MemberID;
         var mapName = SharedStateService.Selected.Map.MapName;
-        var siteName = SharedStateService.Selected.Site.Name;// check that we havent allowed nulls already in which case need to use ids or prevent in all future etc.
-        DataTransportService.uploadImage(memberID, mapName, siteName, $scope.fileToUpload).then(
+        DataTransportService.uploadImage(memberID, mapName, $scope.fileToUpload).then(
             function (result) {
                 $scope.addPhotoRecord();
             },
@@ -60,9 +59,13 @@
     $scope.addPhotoRecord = function () {
         var photoRecord = new Photo();
         photoRecord.SiteID = SharedStateService.Selected.Site.SiteID;
+        photoRecord.StorageURL = $scope.imageServer;
         photoRecord.FileName = $scope.fileToUpload.name;
         DataTransportService.addPhoto(photoRecord).then(
             function (result) {
+                var cachedPhotos = SharedStateService.Repository.get('Photos');
+                cachedPhotos.push(result.data);
+                SharedStateService.Repository.put('Photos', cachedPhotos);
                 $scope.systemMessage.text = "photo saved successfully";
                 $scope.systemMessage.activate();
             },

@@ -10,8 +10,15 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textA
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'signin/SignIn.html',
+           templateUrl: 'signin/SignIn.html'      
+      
         })
+
+         .when('/Test', {
+           
+          templateUrl:'common/TestPage.html'
+         })
+
 
         .when('/SignIn', {
           templateUrl: 'signin/SignIn.html'          
@@ -37,8 +44,8 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 // note resolve = {} and the object has string property and promise value 
          .when('/Album', {
              templateUrl: 'album/Album.html',
-             controller:'AlbumController',
-             resolve:{photos: globalBullshit}
+             controller: 'AlbumController',
+             resolve: { photos: globalBullshit }
          })
 
           .when('/Journal', {
@@ -59,8 +66,25 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 
 
 
-function globalBullshit(SharedStateService,DataTransportService) {
-    return DataTransportService.getPhotos(SharedStateService.Selected.SiteID)
+function globalBullshit(SharedStateService, DataTransportService,$q) {
+    var photosDeferred = $q.defer();
+    var cachedPhotos = SharedStateService.Repository.get('Photos');
+    if (cachedPhotos.length >0) {
+        photosDeferred.resolve(cachedPhotos);
+    }
+    else {
+        DataTransportService.getPhotos(SharedStateService.Selected.Site.SiteID).then(
+            function (result) {
+                photosDeferred.resolve(result);
+                SharedStateService.Repository.put('Photos', result.data);
+            },
+            function (error) { })
+
+
+    }
+       
+ 
+    return photosDeferred.promise;
 }
 
 

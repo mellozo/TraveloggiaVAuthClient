@@ -37,7 +37,7 @@
     }
 
     $scope.loadMaps = function (map) {
-        if (SharedStateService.Repository.get("Maps") == null) {
+        if (SharedStateService.Repository.get("Maps").length==0) {
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
                 function (result) {
                     $scope.MapRecord = result.data[0];

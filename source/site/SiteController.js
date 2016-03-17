@@ -12,16 +12,12 @@
     }
 
     VM.addSite = function () {
-
         DataTransportService.addSite(VM.Site).then(
         function (result) {
-
             var cachedSites = SharedStateService.Repository.get('Sites');
             cachedSites.push(result.data);
             SharedStateService.Repository.put('Sites', cachedSites);
             SharedStateService.Selected.Site = result.data;
-
-
             $scope.systemMessage.text = "Location saved successfully"
             $scope.systemMessage.activate();
             $location.path("/Album");

@@ -97,13 +97,13 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             return $http(config);
         },
        
-        uploadImage: function (memberID, mapName, siteName, imageFile) {
+        uploadImage: function (memberID, mapName,  imageFile) {
             var uploadResult = $q.defer();
             //using the amazon javascript api
-            var bucketName = 'artemisbucket';
+            var bucketName = 'traveloggia-guests';
             AWS.config.update({ accessKeyId: 'AKIAIER5RMXUR4346VGA', secretAccessKey: '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' })
             AWS.config.region = 'us-west-2'
-            var objKey = memberID+"/" + mapName+"/" + siteName+"/" + imageFile.name;
+            var objKey = memberID+"/" + mapName+"/"  + imageFile.name;
             var bucket = new AWS.S3({
                 params: {
                     Bucket: bucketName

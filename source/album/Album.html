@@ -9,6 +9,7 @@
     content:"\e114";
     float: right;
     color: grey;
+    margin-right:30px;
 }
 .panel-heading a.collapsed:after {
     content:"\e080";
@@ -54,7 +55,17 @@
   <div style="margin-left:8px;"> 
         <div  ng-repeat="Photo in PhotoList">
            
-            <img ng-src="{{imageServer}}{{imagePath}}{{Photo.FileName}}" style="width:100%;max-width:300px;" >
+            <div ng-if ="Photo.StorageURL !=null ">
+                    <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="width:100%;max-width:300px;" >
+            </div>
+
+             <div ng-if ="Photo.StorageURL==null ">
+                   <img  ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}" style="width:100%;max-width:300px;" />
+         
+        
+            </div>
+
+                   
             <div> {{Photo.FileName}}</div>
         </div>
    
