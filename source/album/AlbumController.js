@@ -16,29 +16,36 @@
         return photoRecord;
     }
 
-    $scope.PhotoList = photos.data;
+    $scope.PhotoList = photos;
    
     $scope.filesToUpload = null;
 
     $scope.fileNameChanged = function (mel) {
             var files = mel.files;
-          //  var file = null;
             if (files && files.length > 0)
             {
                 $scope.filesToUpload = files;
                 var previewContainer = $window.document.getElementById("previewPanel");
                 for (var i = 0; i < files.length; i++)
                 {
-                    var file = files[i]
-                    var imgURL = $window.URL.createObjectURL(file);
+                    var file = files[i];
+                    var imgURL;
+                    try {
+                        imgURL = ($window.URL) ? $window.URL.createObjectURL(file) : $window.webkitURL.createObjectURL(file);
+                    }
+                    catch (error) {
+                        var fileReader = new FileReader();
+                        fileReader.readAsDataURL(file);
+                    }
                     var imageEl = $window.document.createElement('img');
                     imageEl.setAttribute("src", imgURL);
-                    imageEl.setAttribute("width","200px")
+                    imageEl.style.width = "200px"
+                    imageEl.style.margin="4px"
                     previewContainer.appendChild(imageEl);
                     // Revoke ObjectURL
-                    URL.revokeObjectURL(imgURL);
+                    //URL.revokeObjectURL(imgURL);
                 }
-             }
+            }
     }
 
     $scope.uploadFile = function () {
@@ -86,11 +93,16 @@
             {
                 if ($scope.filesUploadedCount >1)
                     $scope.systemMessage.text = $scope.filesUploadedCount + " photos uploaded successfuly";
-                else
-                    $scope.systemMessage.text =  "photo uploaded successfuly";
-                $scope.systemMessage.activate();
-                $scope.filesToUpload = null;
-                $scope.filesUploadedCount = 0;
+                else 
+                    $scope.systemMessage.text = "photo uploaded successfuly";
+
+                    $scope.systemMessage.activate();
+                      var previewContainer = $window.document.getElementById("previewPanel");
+                           while (previewContainer.firstChild)
+                               previewContainer.removeChild(previewContainer.firstChild);
+                    $scope.filesToUpload = null;
+                    $scope.filesUploadedCount = 0;
+                    angular.element("#photoFileInput").val("");
             }
         }
         );

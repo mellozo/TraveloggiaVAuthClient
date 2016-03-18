@@ -18,6 +18,7 @@
             cachedSites.push(result.data);
             SharedStateService.Repository.put('Sites', cachedSites);
             SharedStateService.Selected.Site = result.data;
+            SharedStateService.Selected.SiteID = result.data.SiteID;
             $scope.systemMessage.text = "Location saved successfully"
             $scope.systemMessage.activate();
             $location.path("/Album");

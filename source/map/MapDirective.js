@@ -46,8 +46,8 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
                         site.Latitude = lat;
                         site.Longitude = long;
                         site.MemberID = SharedStateService.authenticatedMember.MemberID;
-                        site.MapID = SharedStateService.Selected.MapID;
-                        SharedStateService.liveSite = site;
+                        site.MapID = SharedStateService.Selected.Map.MapID;
+                        SharedStateService.Selected.Site = site;
                         $location.path("/Site");
                         scope.$apply();
                     }

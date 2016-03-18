@@ -15,7 +15,6 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
         })
 
          .when('/Test', {
-           
           templateUrl:'common/TestPage.html'
          })
 
@@ -75,7 +74,7 @@ function globalBullshit(SharedStateService, DataTransportService,$q) {
     else {
         DataTransportService.getPhotos(SharedStateService.Selected.Site.SiteID).then(
             function (result) {
-                photosDeferred.resolve(result);
+                photosDeferred.resolve(result.data);
                 SharedStateService.Repository.put('Photos', result.data);
             },
             function (error) { })
