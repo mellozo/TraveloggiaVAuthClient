@@ -9,7 +9,8 @@
 
     local_scope.Selected = {
         Map:null,
-        Site:null,
+        Site: null,
+        SiteID:null,// this is cheaper to watch
         Photo: null,
         Journal:null
     }

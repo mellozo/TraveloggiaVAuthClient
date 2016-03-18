@@ -31,11 +31,11 @@
 
                 <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body">
-                                         <input id="photoFileInput" type="file" accept="image/*" capture="camera"  
+                                         <input id="photoFileInput" type="file" accept="image/*" capture="camera"   multiple=""
                                              onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
-                                        <p>
-                                            <img id="imagePreview"  alt="" style="max-height:300px;max-width:100vh">
-                                        </p>
+                                        <div id="previewPanel">
+                                          <!--  <img id="imagePreview"  alt="" style="max-height:300px;max-width:100vh">-->
+                                        </div>
 
                                 <button style="width:150px;height:80px" ng-click="uploadFile()">Upload</button>
                          </div>

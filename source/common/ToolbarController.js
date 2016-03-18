@@ -7,8 +7,8 @@
 
     VM.selectSite = function (index) {
         var selectedSite = VM.SiteList[index];
+        SharedStateService.Selected.Site = selectedSite;
         SharedStateService.Selected.SiteID = selectedSite.SiteID;
-
     }
 
     VM.goJournal = function () {
