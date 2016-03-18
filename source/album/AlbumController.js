@@ -16,12 +16,9 @@
         return photoRecord;
     }
 
-    $scope.photoRecord = $scope.createPhotoRecord();
-
     $scope.PhotoList = photos.data;
    
     $scope.filesToUpload = null;
-
 
     $scope.fileNameChanged = function (mel) {
             var files = mel.files;
@@ -43,7 +40,6 @@
                 }
              }
     }
-
 
     $scope.uploadFile = function () {
         var memberID = SharedStateService.authenticatedMember.MemberID;
@@ -67,7 +63,6 @@
         }
     }
 
-
     $scope.addPhotoRecord = function (photoRecord) {
         DataTransportService.addPhoto(photoRecord).then(
             function (result) {
@@ -81,7 +76,6 @@
                 $scope.systemMessage.activate();
             });
     }
-
 
     $scope.$watch(
         function (scope) {
@@ -100,9 +94,6 @@
             }
         }
         );
-
-
-
 
 
     // loading the data if they change sites but stay on the page
