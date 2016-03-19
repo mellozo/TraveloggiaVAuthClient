@@ -19,6 +19,9 @@
             SharedStateService.Repository.put('Sites', cachedSites);
             SharedStateService.Selected.Site = result.data;
             SharedStateService.Selected.SiteID = result.data.SiteID;
+            // invalidate cache of child records
+            SharedStateService.Repository.put('Photos', []);
+            SharedStateService.Repository.put('Journals', []);
             $scope.systemMessage.text = "Location saved successfully"
             $scope.systemMessage.activate();
             $location.path("/Album");
