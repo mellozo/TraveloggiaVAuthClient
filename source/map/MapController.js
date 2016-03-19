@@ -2,6 +2,8 @@
 
     $scope.dialogIsShowing = false;
 
+    $scope.searchAddress = null;
+
     $scope.confirmCancelQuestion = "Save location permanently to map?";
 
     $scope.dismiss = function () {
@@ -105,7 +107,7 @@
                 SharedStateService.googleMap.setCenter(geolocate);
                 var image = "../image/circle.png"
                 var marker = $scope.addMarker(pos.coords.latitude, pos.coords.longitude, "current location", image);
-                SharedStateService.googleMap.setZoom(14);
+                SharedStateService.googleMap.setZoom(13);
                 $scope.dialogIsShowing = true;
             });
         });
@@ -121,27 +123,31 @@
         return site;
     }
 
-    //    VM.storeMapExtent= function(){
-    //        var googleBounds = VM.map.getBounds();
-    //        var sw = googleBounds.getSouthWest();
-    //        var ne = googleBounds.getNorthEast();
-
-    //        VM.MapRecord.MinX = sw.lng();
-    //        VM.MapRecord.MaxX = ne.lng();
-    //        VM.MapRecord.MinY = sw.lat();
-    //        VM.MapRecord.MaxY = ne.Lat();
-
-    //    }
-
-    //// to do this is an optimization not using this yet
-    //    //$scope.$on('$locationChangeStart', function (event, next, current) {
-    //    //    VM.storeMapExtent();
-    //    //});
-
-
-
-    //    VM.getCrossHairCursor = function () {
-    //            $scope.map.setOptions({ draggableCursor: 'crosshair' });
-    //    }
+    $scope.geocodeAddress = function () {
+        var geocoder = SharedStateService.geocoder;
+        var address = $scope.searchAddress;
+        var resultsMap =  SharedStateService.googleMap;
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK)
+            {
+                var lat = results[0].geometry.location.lat();
+                var lng = results[0].geometry.location.lng();
+                var siteRecord = $scope.createSiteRecord(lat, lng);
+                siteRecord.Address = results[0].formatted_address;
+                SharedStateService.Selected.Site = siteRecord;
+                resultsMap.setCenter(results[0].geometry.location);
+                resultsMap.setZoom(13);
+                var marker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location
+                });
+                $scope.dialogIsShowing = true;
+                angular.element('#accordion .in').collapse('hide');
+                $scope.$apply();
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
 
 });

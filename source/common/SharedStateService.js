@@ -4,6 +4,8 @@
     var local_scope = this;
     local_scope.readOnlyUser = false;
     local_scope.authenticatedMember = {};
+    local_scope.geocoder = null;
+    local_scope.googleMap = null;
     local_scope.center = null;
     local_scope.zoom = null;
 

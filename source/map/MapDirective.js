@@ -18,18 +18,17 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
             };
             SharedStateService.googleMap = new google.maps.Map(element[0], mapOptions);
             scope.loadMaps(SharedStateService.googleMap);
-        //    SharedStateService.googleMap.setOptions({ zoom: scope.savedZoom, center: scope.savedCenter })
+            var googleGeocoder = new google.maps.Geocoder();
+            SharedStateService.geocoder = googleGeocoder;
 
             if (SharedStateService.readOnlyUser == false)
             {
                 var drawingManager = new google.maps.drawing.DrawingManager({
-                    //drawingMode: google.maps.drawing.OverlayType.MARKER,
                     drawingControl: true,
                     drawingControlOptions: {
                         position: google.maps.ControlPosition.TOP_CENTER,
                         drawingModes: [
                           google.maps.drawing.OverlayType.MARKER,
-
                         ]
                     },
                     markerOptions: { icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png' },

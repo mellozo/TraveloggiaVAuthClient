@@ -16,15 +16,54 @@ body,
 </style>  
 
     
-          <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:0;right:22px;
-                    background:transparent;z-index:99;font-family:Cinzel;color:goldenrod;font-size:18px;" 
+          <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:48px;right:22px;
+                    background:transparent;z-index:89;font-family:Cinzel;color:goldenrod;font-size:18px;" 
                     href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
 
  
-    <map-canvas id="map"  ></map-canvas>
-
     
-          
+
+     <style>
+
+        .panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+    margin-right:30px;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+    </style>
+
+
+
+      <img title="Traveloggia" src="../../image/ship.png" style="width:40px;height:40px;margin:0;padding:0;position:absolute;top:4px;left:8px;z-index:90;" />
+  
+    <div class="panel-group" id="accordion" >
+   
+            <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
+                    <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
+                            <h4 class="panel-title">    
+                                <a data-toggle="collapse" style="font-family:Centaur;padding-left:40px;font-size:20px;" data-parent="#accordion" href="" data-target="#collapseOne" >Search</a>
+                            </h4>
+                    </div>
+
+                <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body" style="padding-right:25px;padding-left:25px;">
+                                         <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;height:20px;" />
+                                       
+
+                                <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="geocodeAddress()">Get Coordinates</button>
+                         </div>
+                </div>
+
+            </div>
+   
+    </div>
+
+     <map-canvas id="map"  ></map-canvas>        
 
 
 <div style="position:absolute;bottom:2px;left:2px;font-size:18px;color:goldenrod;font-family:Cinzel;z-index:999">
