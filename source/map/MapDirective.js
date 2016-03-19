@@ -23,7 +23,7 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
             if (SharedStateService.readOnlyUser == false)
             {
                 var drawingManager = new google.maps.drawing.DrawingManager({
-                    drawingMode: google.maps.drawing.OverlayType.MARKER,
+                    //drawingMode: google.maps.drawing.OverlayType.MARKER,
                     drawingControl: true,
                     drawingControlOptions: {
                         position: google.maps.ControlPosition.TOP_CENTER,
