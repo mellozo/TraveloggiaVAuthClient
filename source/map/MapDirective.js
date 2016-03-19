@@ -18,7 +18,7 @@ angularTraveloggia.directive('mapCanvas', function (SharedStateService,$location
             };
             SharedStateService.googleMap = new google.maps.Map(element[0], mapOptions);
             scope.loadMaps(SharedStateService.googleMap);
-            SharedStateService.googleMap.setOptions({ zoom: scope.savedZoom, center: scope.savedCenter })
+        //    SharedStateService.googleMap.setOptions({ zoom: scope.savedZoom, center: scope.savedCenter })
 
             if (SharedStateService.readOnlyUser == false)
             {
