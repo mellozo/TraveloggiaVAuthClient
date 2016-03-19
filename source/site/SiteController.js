@@ -52,4 +52,15 @@
     }
 
 
+    $scope.$watch(
+       function (scope) {
+           return SharedStateService.Selected.SiteID;
+       },
+       function (newValue, oldValue) {
+           if (newValue != oldValue)
+
+               VM.Site = SharedStateService.Selected.Site;
+                
+       });
+
 })
