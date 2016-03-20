@@ -13,9 +13,10 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             if (newValue != oldValue) {
                 DataTransportService.getJournals(newValue).then(
                  function (result) {
+                     SharedStateService.Repository.put("Journals", result.data);
                      $scope.JournalEntries = result.data;
                      $scope.loadContent(0);
-                     SharedStateService.Repository.put("Journals", result.data);
+                   
                  },
                     function (error) { }
                     );
@@ -50,9 +51,14 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
     // upon tab change
     $scope.loadContent = function (index) {
-        if ($scope.JournalEntries.length > 0 && index != null)
+        if ($scope.JournalEntries.length > 0 && index != null) {
             $scope.thewords = $scope.JournalEntries[index].Text;
-        $scope.liveJournal = $scope.JournalEntries[index];
+            $scope.liveJournal = $scope.JournalEntries[index];
+        }
+        else {
+            $scope.thewords = "";
+        }
+           
     }
 
 

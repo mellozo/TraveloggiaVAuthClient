@@ -58,9 +58,7 @@
        },
        function (newValue, oldValue) {
            if (newValue != oldValue)
-
                VM.Site = SharedStateService.Selected.Site;
-                
        });
 
 })
