@@ -108,6 +108,7 @@
                 var image = "../image/circle.png"
                 var marker = $scope.addMarker(pos.coords.latitude, pos.coords.longitude, "current location", image);
                 SharedStateService.googleMap.setZoom(13);
+                if(SharedStateService.readOnlyUser == false)
                 $scope.dialogIsShowing = true;
             });
         });
@@ -141,6 +142,7 @@
                     map: resultsMap,
                     position: results[0].geometry.location
                 });
+                if (SharedStateService.readOnlyUser == false)
                 $scope.dialogIsShowing = true;
                 angular.element('#accordion .in').collapse('hide');
                 $scope.$apply();
