@@ -5,10 +5,17 @@
 
 
     VM.saveSite = function () {
-        if (VM.Site.SiteID == null)
-            VM.addSite();
-        else
-            VM.updateSite();
+        if (SharedStateService.readOnlyUser == false) {
+            if (VM.Site.SiteID == null)
+                VM.addSite();
+            else
+                VM.updateSite();
+        }
+        else {
+            $scope.systemMessage.text = "Not authorized to edit content"
+            $scope.systemMessage.activate();
+        }
+ 
     }
 
     VM.addSite = function () {
