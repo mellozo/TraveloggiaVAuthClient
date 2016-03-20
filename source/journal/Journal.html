@@ -6,20 +6,60 @@
 <div ng-include="'common/ToolBar.html'"></div>
 
 
-<div ng-controller="JournalController">
-   <ul class="nav nav-tabs">
-          <li ng-repeat ="journal in JournalEntries"                  
-               role="presentation" class="active"><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>
+<div ng-controller="JournalController"  >
 
-          <li role="presentation" class="active"><a href="" ng-click="addNew()">Add New</a></li>
+
+
+    <div class="panel panel-default">
+  <div class="panel-heading">
+
+       <ul class="nav nav-tabs">
+              <li ng-repeat ="journal in JournalEntries"                  
+                   role="presentation" class="active"><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>
+
+              <li role="presentation" class="active"><a href="" ng-click="addNew()">Add New</a></li>
         </ul>
 
-    <button style="position:absolute;right:2px;top:2px;width:60px;height:60px" ng-click="editJournal()">
-            <img src="../../image/pencil.png" style="width:100%" />
-    </button>
+  </div>
 
-  <text-angular     name="htmlcontent" ng-model="thewords" ta-disabled="true" ta-toolbar="[]"
-      style="margin-left:9px;margin-right:9px;height:100%;background-color:white"></text-angular >
-     
+  <div class="panel-body">
+           <div class="form-group">
         
+            <button ng-hide="editMode" title="Edit" style="float:right;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent" 
+                ng-click="editJournal()">
+                    <img src="../../image/pencil.png" style="width:100%" />
+            </button>
+               <label for="exampleInputEmail1" >Journal Date: {{Journal.DateAdded}}</label>
+        <span ng-show="editMode"> 
+            <br />
+            <label for="exampleInputEmail1">Title</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" ng-model="Journal.Title">
+            </span>
+
+       
+      
+          </div>
+
+      
+          <text-angular ng-hide="editMode"  id="textReader"   name="readhtmlcontent" ng-model="Journal.Text" ta-disabled="true"  ta-toolbar="[]">
+          </text-angular>
+
+
+          <text-angular ng-show="editMode"  id="textEditor"   name="edithtmlcontent" ng-model="Journal.Text" 
+               ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]";>
+          </text-angular>
+
+       <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                  <a   href="" ng-click="saveJournal()" >Save</a>
+        </div>
+        <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                  <a   href="" ng-click="deleteJournal()" >Delete</a>
+        </div>
+     
+  </div><!--end panel body-->
+
+</div><!--end panel-->
+
+
+
 </div>

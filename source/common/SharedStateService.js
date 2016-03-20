@@ -24,6 +24,8 @@
 
     local_scope.Repository.put('Sites', []);
 
+    // for now these are not multi - dimensional arrays
+    // but todo - store whatever we load from the same map
     local_scope.Repository.put('Photos', []);
 
     local_scope.Repository.put('Journals',[])
