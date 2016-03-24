@@ -1,31 +1,17 @@
 ﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location,$window) {
 
-  
-
-    //$scope.datepickerOptions ={
-    //    format: 'yyyy-mm-dd',
-    //    //language: 'fr',
-    //autoclose: true,
-    //weekStart: 0}
-    
-    //$scope.date = '2000-03-12'
-
 
     var VM = this;
     VM.SiteList = SharedStateService.Repository.get('Sites');
     VM.Site = SharedStateService.Selected.Site;
-   // VM.valuationDate = new Date();
+
+    $scope.editMode = (SharedStateService.readOnlyUser == false) ? true : false;
+
+
+
+
     VM.ArrivalDatePickerIsOpen = false;
     VM.DepartureDatePickerIsOpen = false;
-
-    //VM.opens = [];
-
-    //$scope.$watch(function () {
-    //    return VM.ArrivalDatePickerIsOpen;
-    //}, function (value) {
-    //    VM.opens.push("valuationDatePickerIsOpen: " + value + " at: " + new Date());
-    //});
-
     VM.ArrivalDatePickerOpen = function ($event) {
         if ($event) {
             $event.preventDefault();
@@ -45,17 +31,29 @@
   
 
     VM.saveSite = function () {
-        if (SharedStateService.readOnlyUser == false) {
+     //   VM.cleanupDates();
+     //   if (SharedStateService.readOnlyUser == false) {
             if (VM.Site.SiteID == null)
                 VM.addSite();
             else
                 VM.updateSite();
-        }
-        else {
-            $scope.systemMessage.text = "Not authorized to edit content"
-            $scope.systemMessage.activate();
-        }
+       // }
+        //else {
+        //    $scope.systemMessage.text = "Not authorized to edit content"
+        //    $scope.systemMessage.activate();
+        //}
  
+    }
+
+    VM.cleanupDates = function () {
+        if (VM.Site.Arrival != null) {
+            var momentCleanedDate = moment(VM.Site.Arrival)
+            VM.Site.Arrival = momentCleanedDate.format('MM-DD-YYYY');
+
+        }
+            
+
+
     }
 
     VM.addSite = function () {
@@ -84,9 +82,9 @@
     }
 
     VM.updateSite = function () {
-        DataTransportService.updateSite(siteRecord).then(
+        DataTransportService.updateSite(VM.Site).then(
                      function (result) {
-                         $scope.systemMessage.text = "Location saved successfully";
+                         $scope.systemMessage.text = "Location edits saved successfully";
                          $scope.systemMessage.activate();
                      },
                      function (error) {
@@ -95,6 +93,22 @@
                          //to do log error
                      }
          );
+
+    }
+
+    VM.deleteSite = function () {
+       
+        DataTransportService.deleteSite(VM.Site.SiteID).then(
+            function (result) {
+                $scope.systemMessage.text = "Location deleted successfully";
+                $scope.systemMessage.activate();
+            },
+            function (error) {
+                $scope.systemMessage.text = "Error deleteing location";
+                $scope.systemMessage.activate();
+            }
+
+            )
 
     }
 

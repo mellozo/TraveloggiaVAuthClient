@@ -1,13 +1,20 @@
 ﻿<div ng-controller ="SiteController as siteCtrl">
 
-
+    <div ng-include="'common/ToolBar.html'"></div>
 
     <div ng-repeat = "stopover in siteCtrl.SiteList">
 
-        <div ><span>{{stopover.Name}}</span></div>
-       <div ><span>{{stopover.Address}}</span></div>
-       <div ><span>{{stopover.Arrival}}</span></div>
-         <div ><span>{{stopover.RouteIndex}}</span></div>
+        <div class="panel panel-default">
+          <div class="panel-heading">{{stopover.Name}}</div>
+          <div class="panel-body">
+            <ul class="list-group">
+   
+            <li class="list-group-item">{{stopover.Address}}</li>
+            <li class="list-group-item">{{stopover.Arrival}}</li>
+            </ul>
+     
+          </div>
+        </div>
 
     </div>
 
