@@ -16,10 +16,84 @@
     <label   for="Address">address</label>
     <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address" >
   </div>
-        <div class="form-group">
-    <label for="description">description</label>
-    <textarea  rows="3" ng-model="siteCtrl.Description" class="form-control" id="description" />
-  </div>
+
+ 
+
+        
+            <div class="form-group">
+
+                 
+
+                           <label   for="Arrival">arrival</label>
+                            <input type="text" s class="form-control" id="Arrival"
+                                  datepicker-popup="mediumDate" 
+                                   is-open="siteCtrl.ArrivalDatePickerIsOpen" 
+                                    ng-click="siteCtrl.ArrivalDatePickerOpen()" 
+                                   ng-model="siteCtrl.Site.Arrival" />
+
+                              <button type="button" class="btn btn-default" 
+                                      ng-click="siteCtrl.ArrivalDatePickerOpen($event)">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                              </button>
+                     
+       
+       </div>
+
+        
+            <div class="form-group">
+           <label   for="Departure">departure</label>
+            <input type="text" class="form-control" id="Departure"
+               datepicker-popup="mediumDate" 
+                is-open="siteCtrl.DepartureDatePickerIsOpen" 
+                   ng-click="siteCtrl.DepartureDatePickerOpen()" 
+                   ng-model="siteCtrl.Site.Departure" />
+ 
+              <button type="button" class="btn btn-default" 
+                      ng-click="siteCtrl.DepartureDatePickerOpen($event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+               
+              </button>
+            
+       
+       </div>
+
+
+       <div class="form-group">
+                <label for="description">description</label>
+                <textarea  rows="3" ng-model="siteCtrl.Description" class="form-control" id="description" />
+</div>
+
+
+
+
+
+
+
+
+     <!-- <div class="form-group">
+
+            <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
+                       href="#">
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-ng-model="data.dateDropDownInputNoFormatting">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="data.dateDropDownInputNoFormatting"
+                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+                    </ul>
+                </div>
+            </div>
+
+      </div>-->
+
+
+
+
+
+
   <div class="form-group">
     <label   for="phone">phone</label>
     <input type="text" ng-model="siteCtrl.Phone" class="form-control" id="phone" >

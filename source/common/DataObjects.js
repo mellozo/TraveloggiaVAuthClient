@@ -55,6 +55,8 @@ var Site = function () {
     scope_safe.Rating = null;
     scope_safe.AverageRating = null;
     scope_safe.VotesCast = null;
+    scope_safe.Arrival = null;
+    scope_safe.Departure = null;
     scope_safe.Photos = [];
     scope_safe.Journals = [];
 }

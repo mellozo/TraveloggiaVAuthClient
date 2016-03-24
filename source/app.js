@@ -1,7 +1,7 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textAngular'])
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textAngular', 'ui.bootstrap'])
 
 
 
@@ -10,7 +10,8 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textA
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
-           templateUrl: 'signin/SignIn.html'      
+         //  templateUrl: 'site/Site.html'
+          templateUrl: 'signin/SignIn.html'      
       
         })
 
