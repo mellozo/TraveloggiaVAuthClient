@@ -11,6 +11,10 @@
         SharedStateService.Selected.SiteID = selectedSite.SiteID;
     }
 
+    VM.beNice = function () {
+        x = y
+    }
+
     VM.goJournal = function () {
         $location.path("/Journal");
     }
@@ -25,6 +29,10 @@
 
     VM.goSite = function () {
         $location.path("/Site")
+    }
+
+    VM.goSiteList = function () {
+        $location.path("/SiteList")
     }
 
 })

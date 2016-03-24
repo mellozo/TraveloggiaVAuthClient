@@ -10,8 +10,8 @@ var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textA
 angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
-         //  templateUrl: 'site/Site.html'
-          templateUrl: 'signin/SignIn.html'      
+          // templateUrl: 'site/Site.html'
+         templateUrl: 'signin/SignIn.html'      
       
         })
 
@@ -60,7 +60,13 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'map/MapList.html',
             controller: 'MapController'
        
-        });
+        })
+
+    .when('/SiteList', {
+        templateUrl: 'site/SiteList.html',
+        controller: 'SiteController'
+       
+    });
   }
 ]);
 

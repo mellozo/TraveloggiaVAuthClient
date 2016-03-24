@@ -12,6 +12,7 @@
 
 
     var VM = this;
+    VM.SiteList = SharedStateService.Repository.get('Sites');
     VM.Site = SharedStateService.Selected.Site;
    // VM.valuationDate = new Date();
     VM.ArrivalDatePickerIsOpen = false;
@@ -40,6 +41,8 @@
         }
         this.DepartureDatePickerIsOpen = true;
     };
+
+  
 
     VM.saveSite = function () {
         if (SharedStateService.readOnlyUser == false) {
