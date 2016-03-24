@@ -1,7 +1,7 @@
 ﻿
 angularTraveloggia.factory('DataTransportService', function ($http,$q) {
-    var baseURL = "http://localhost:58143"
-  // var baseURL = "http://traveloggiaservices.net"
+   // var baseURL = "http://localhost:58143"
+  var baseURL = "http://traveloggiaservices.net"
     return {
    
         getMember: function (email, password) {
@@ -151,7 +151,7 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
         updateJournal: function (journal) {
             var endpoint = baseURL + "/api/Journals/"+journal.JournalID
             var config = {
-                method: "put",
+                method: "PUT",
                 url: endpoint,
                 headers: {
                     'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
         deleteJournal: function (JournalID) {
             var endpoint = baseURL + "/api/Journals/" + JournalID
             var config = {
-                method: "delete",
+                method: "DELETE",
                 url: endpoint,
                 headers: {
                     'Content-Type': 'application/json'
