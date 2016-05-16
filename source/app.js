@@ -75,7 +75,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
 function globalBullshit(SharedStateService, DataTransportService,$q) {
     var photosDeferred = $q.defer();
     var cachedPhotos = SharedStateService.Repository.get('Photos');
-    if (cachedPhotos.length >0) {
+    if (cachedPhotos.length >0 && cachedPhotos[0].SiteID == SharedStateService.Selected.Site.SiteID) {
         photosDeferred.resolve(cachedPhotos);
     }
     else {
