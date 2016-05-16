@@ -1,5 +1,7 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService) {
 
+    $scope.mapInstance = null;
+
     $scope.dialogIsShowing = false;
 
     $scope.searchAddress = null;
@@ -42,6 +44,7 @@
 
     // called by the map directive declared on map.html
     $scope.loadMaps = function (map) {
+        $scope.mapInstance = map;
         var cachedMaps = SharedStateService.Repository.get("Maps");
         if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.authenticatedMember.MemberID) {
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
@@ -155,5 +158,18 @@
             }
         });
     }
+
+    $scope.$watch(
+       function (scope) {
+           return SharedStateService.authenticatedMember.MemberID;
+       },
+       function (newValue, oldValue){
+           if (newValue != oldValue)
+               $scope.loadMaps($scope.mapInstance);
+      }
+    );
+    
+
+
 
 });
