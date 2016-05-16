@@ -2,6 +2,8 @@
 
 angularTraveloggia.controller('JournalController', function (DataTransportService, $scope,SharedStateService,$location,$route) 
 {
+
+    $scope.Site = SharedStateService.Selected.Site;
     $scope.JournalEntries = [];
     if (SharedStateService.readOnlyUser == true)
         $scope.canEdit = false;
@@ -50,6 +52,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
+                $scope.Site = SharedStateService.Selected.Site;
                 DataTransportService.getJournals(newValue).then(
                  function (result) {
                      SharedStateService.Repository.put("Journals", result.data);
