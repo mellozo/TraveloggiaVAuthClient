@@ -40,9 +40,10 @@
 
     }
 
-    // called by the map controller declared on this page
+    // called by the map directive declared on map.html
     $scope.loadMaps = function (map) {
-        if (SharedStateService.Repository.get("Maps").length==0) {
+        var cachedMaps = SharedStateService.Repository.get("Maps");
+        if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.authenticatedMember.MemberID) {
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
                 function (result) {
                     $scope.MapRecord = result.data[0];

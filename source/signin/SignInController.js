@@ -16,7 +16,7 @@
           function (result, x, y, z, h) {
               SharedStateService.authenticatedMember = result.data;
               SharedStateService.readOnlyUser = false;
-              window.sessionStorage.setItem('memberID', result.data.MemberID)
+            //  window.sessionStorage.setItem('memberID', result.data.MemberID)
               $location.path("/Map")
           },
           function (error) {
