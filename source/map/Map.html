@@ -17,7 +17,7 @@ body,
 
   <div ng-controller="SignInController as SignInCtrl"   id="signInDiv">
        <a  ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
-      <a  ng-hide="SignInCtrl.rauthenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a> 
+      <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a> 
        <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
 
   </div>  

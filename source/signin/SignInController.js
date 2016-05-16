@@ -15,6 +15,7 @@
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
           function (result, x, y, z, h) {
               SharedStateService.authenticatedMember = result.data;
+              SharedStateService.readOnlyUser = false;
               window.sessionStorage.setItem('memberID', result.data.MemberID)
               $location.path("/Map")
           },
@@ -30,15 +31,18 @@
 
 
 
-    var alreadyLoggedIn = window.sessionStorage.getItem("memberID")
-    if (alreadyLoggedIn != null) {
-        VM.Member.MemberID = alreadyLoggedIn;
-        VM.authenticate();
-    }
+    //var alreadyLoggedIn = window.sessionStorage.getItem("memberID")
+    //if (alreadyLoggedIn != null) {
+    //    VM.Member.MemberID = alreadyLoggedIn;
+    //    VM.authenticate();
+    //}
 
 
     VM.signOut = function(){
-        window.location.href = "http://html5.traveloggia.net/Default.html";
+        //  window.location.href = "http://html5.traveloggia.net/Default.html";
+        SharedStateService.authenticatedMember = { MemberID: 1 };
+        SharedStateService.readOnlyUser = true;
+        VM.authenticationStatus.signedIn=false; 
        // and all the other stuff we will fool around with later like JWT
     }
 

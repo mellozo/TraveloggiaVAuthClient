@@ -18,9 +18,9 @@
 
 <div id="maincontainer" ng-controller="SignInController as Ctrl" style="font-family:Cinzel;  ">
      
- <!--  <img src="../image/paper_ship.png" alt="Traveloggia"  title="Traveloggia" style="z-index:99;
-position:absolute;top:30px;left:10px;width:50px;height:50px;border:0;padding:0;margin:0" />-->
-
+   <img src="../image/paper_ship.png" alt="Traveloggia"  title="Traveloggia" style="z-index:99;
+position:absolute;top:30px;left:10px;width:50px;height:50px;border:0;padding:0;margin:0" />
+<form>
 <div class="container-fluid" style="font-size:24px">
     <div class ="row">
          <div class="col-xs-12 col-md-4 col-md-offset-4">
@@ -32,30 +32,30 @@ position:absolute;top:30px;left:10px;width:50px;height:50px;border:0;padding:0;m
 
         <div class="lightgreen centered goldtrim" style="padding:16px;margin-bottom:8px;border-radius:3.5px;">
     
-                <input ng-model = "Ctrl.Member.Email" placeholder="email address" type="text" 
+                <input required ng-model = "Ctrl.Member.Email" placeholder="email address" type="text" 
                         style="z-index:2;font-family:inherit;box-sizing:border-box;width:100%; margin:0px;padding:6px" />
         </div>
 
 
         <div class="lightgreen centered goldtrim"  style="padding:16px;margin-bottom:8px;border-radius:3.5px">   
                 
-            <input ng-model="Ctrl.Member.Password"  placeholder="password" type="password" 
+            <input required ng-model="Ctrl.Member.Password"  placeholder="password" type="password" 
                         style="font-family:inherit;box-sizing:border-box;width:100%; margin:0px;padding:6px" />
         </div>
 
 
         <div id="buttonDiv"  style="text-align:center;padding:16px;">
-
+          
             <div ng-show="Ctrl.authenticationStatus.firstAttempt" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                  <a   href="" ng-click="Ctrl.signIn()" >Sign In</a>
+                  <input type="submit" ng-click="Ctrl.signIn()" value="Sign In"/>
             </div>
 
             <div ng-show="Ctrl.authenticationStatus.failedSignin" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                <a  href="" ng-click="Ctrl.signIn()"  >Try Again</a>  
+                <input type="submit" ng-click="Ctrl.signIn()"  value="Try Again"/> 
             </div>
                    
             <div ng-show="Ctrl.authenticationStatus.createAccount" id="aCreateAccount"  style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                <a href="" ng-click="Ctrl.createAccount()">Create Account</a>
+                <input type="submit" ng-click="Ctrl.createAccount()" value="Create Account"/>
             </div>
 
         </div>
@@ -69,6 +69,6 @@ position:absolute;top:30px;left:10px;width:50px;height:50px;border:0;padding:0;m
    
     
    </div>     
-
+</form>
 </div>
   
