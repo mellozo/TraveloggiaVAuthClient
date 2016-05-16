@@ -17,7 +17,8 @@
                 map: map,
                 draggable: false,
                 //  animation: google.maps.Animation.DROP,
-                position: { lat: sites[i].Latitude, lng: sites[i].Longitude }
+                position: { lat: sites[i].Latitude, lng: sites[i].Longitude },
+                title: sites[i].Name + " location: " + sites[i].Address
             });
 
             (function attachEventHandler(site) {
