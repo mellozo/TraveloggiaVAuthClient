@@ -2,8 +2,8 @@
 {
 
     var local_scope = this;
-    local_scope.readOnlyUser = false;
-    local_scope.authenticatedMember = {};
+    local_scope.readOnlyUser = true;
+    local_scope.authenticatedMember = {MemberID:1};
     local_scope.geocoder = null;
     local_scope.googleMap = null;
     local_scope.center = null;
@@ -15,6 +15,12 @@
         SiteID:null,// this is cheaper to watch
         Photo: null,
         Journal:null
+    }
+
+    local_scope.Authorization = {
+        canEdit:false
+
+
     }
 
 

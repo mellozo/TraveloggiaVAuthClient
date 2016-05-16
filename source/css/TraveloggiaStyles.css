@@ -113,7 +113,24 @@ input {
     font-family: inherit;
     font-size: 100%;
     margin:20px 0;
-}*/
+}
+
+#signInDiv  {
+    position:absolute;
+    top:10px;
+    z-index:99;
+    right:5px;
+      background-color:lightgray;
+      font-family:Cinzel;
+}
+
+#signInDiv a {
+    z-index:100;
+    position:relative;
+    float:right;
+    color:goldenrod;
+     font-size:18px;
+}
 
 
 /*.signin{

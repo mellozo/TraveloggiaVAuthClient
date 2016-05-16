@@ -1,42 +1,71 @@
 ﻿angularTraveloggia.controller('SignInController', function (SharedStateService,DataTransportService,$location,$scope,$route) {
     var VM = this;
+    VM.Member = new Member();
+   
 
     VM.authenticationStatus = {
         firstAttempt:($route.current.isCreate != null)?false:true,
         failedSignin: false,
-        createAccount:($route.current.isCreate != null)?true:false
+        createAccount: ($route.current.isCreate != null) ? true : false,
+        signedIn:(SharedStateService.readOnlyUser ==false)?true:false
+
     };
    
-    VM.Member = new Member();
+    VM.authenticate = function () {
+        DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
+          function (result, x, y, z, h) {
+              SharedStateService.authenticatedMember = result.data;
+              window.sessionStorage.setItem('memberID', result.data.MemberID)
+              $location.path("/Map")
+          },
+          function (error) {
+              VM.Member = new Member();
+              VM.authenticationStatus.failedSignin = true;
+              VM.authenticationStatus.firstAttempt = false;
+              VM.authenticationStatus.createAccount = true;
+          }
+      );
+
+    }
+
+
+
+    var alreadyLoggedIn = window.sessionStorage.getItem("memberID")
+    if (alreadyLoggedIn != null) {
+        VM.Member.MemberID = alreadyLoggedIn;
+        VM.authenticate();
+    }
+
 
     VM.signOut = function(){
         window.location.href = "http://html5.traveloggia.net/Default.html";
        // and all the other stuff we will fool around with later like JWT
     }
 
+
+    VM.goSignInPage=function(){
+        $location.path("/SignIn");
+    }
+
+    VM.goCreateAccount = function () {
+        $location.path("/CreateAccount");
+    }
+
     VM.signIn = function (){
-        if (VM.Member.Email == null && VM.Member.Password == null)
-        {
+        if (VM.Member.Email == null && VM.Member.Password == null) {
             SharedStateService.readOnlyUser = true;
+            VM.member.MemberID = 1;
             $scope.systemMessage.text = "As you have not provided email or password you can navigate the site with read only privledges. Please create an account, to develop your own content.";
             $scope.systemMessage.activate();
             // to do add db logging date time referrer for attempted illegal access
+            VM.authenticate();
         }
-      
-            DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
-            function (result, x, y, z, h) {
-                SharedStateService.authenticatedMember = result.data;
-                $location.path("/Map")
-            },
-            function (error) {
-                VM.Member = new Member();
-                VM.authenticationStatus.failedSignin = true;
-                VM.authenticationStatus.firstAttempt = false;
-                VM.authenticationStatus.createAccount = true;
-            }
-        );
+        else
+            VM.authenticate();
+          
     }
-   
+
+
     VM.createAccount = function () {
         DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {

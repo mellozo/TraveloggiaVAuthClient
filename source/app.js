@@ -11,7 +11,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/', {
           // templateUrl: 'site/Site.html'
-         templateUrl: 'signin/SignIn.html'      
+         templateUrl: 'map/Map.html'      
       
         })
 

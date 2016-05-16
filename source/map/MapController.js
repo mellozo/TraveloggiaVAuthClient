@@ -39,6 +39,7 @@
 
     }
 
+    // called by the map controller declared on this page
     $scope.loadMaps = function (map) {
         if (SharedStateService.Repository.get("Maps").length==0) {
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(

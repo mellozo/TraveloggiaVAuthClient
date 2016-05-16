@@ -15,15 +15,18 @@ body,
 
 </style>  
 
-    
-          <a ng-controller="SignInController as SignInCtrl"  style="position:absolute;top:48px;right:22px;
-                    background:transparent;z-index:89;font-family:Cinzel;color:goldenrod;font-size:18px;" 
-                    href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
+  <div ng-controller="SignInController as SignInCtrl"   id="signInDiv">
+       <a  ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
+      <a  ng-hide="SignInCtrl.rauthenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a> 
+       <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
+
+  </div>  
+        
 
  
     
 
-     <style>
+<!--     <style>
 
         .panel-heading a:after {
     font-family:'Glyphicons Halflings';
@@ -36,18 +39,16 @@ body,
     content:"\e080";
 }
     </style>
-
+-->
 
 
       <img title="Traveloggia" src="../image/ship.png" style="width:40px;height:40px;margin:0;padding:0;position:absolute;top:4px;left:8px;z-index:90;" />
   
-    <div class="panel-group" id="accordion" >
+<!--    <div class="panel-group" id="accordion" >
    
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
                     <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
-                            <h4 class="panel-title">    
-                                <a data-toggle="collapse" style="font-family:Centaur;padding-left:40px;font-size:20px;" data-parent="#accordion" href="" data-target="#collapseOne" >Search</a>
-                            </h4>
+                            
                     </div>
 
                 <div id="collapseOne" class="panel-collapse collapse">
@@ -61,7 +62,7 @@ body,
 
             </div>
    
-    </div>
+    </div>-->
 
      <map-canvas id="map"  ></map-canvas>        
 
