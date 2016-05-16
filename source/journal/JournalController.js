@@ -3,12 +3,18 @@
 angularTraveloggia.controller('JournalController', function (DataTransportService, $scope,SharedStateService,$location,$route) 
 {
     $scope.JournalEntries = [];
-    $scope.editMode = false;
-    $scope.Journal = null;
-    $scope.journalIndex = 0;// whats yucky about json
+    if (SharedStateService.readOnlyUser == true)
+        $scope.canEdit = false;
+    else
+        $scope.canEdit = true;
 
-// initialize 
-    if (SharedStateService.Repository.get('Journals').length > 0)
+    $scope.action = "read";
+    $scope.Journal = null;
+    $scope.journalIndex = 0;
+
+    // initialize 
+    var existingJournals = SharedStateService.Repository.get('Journals');
+    if (existingJournals.length > 0 && existingJournals[0].SiteID == SharedStateService.Selected.Site.SiteID )
     {
         $scope.JournalEntries = SharedStateService.Repository.get('Journals')
         if ($scope.JournalEntries.length > 0) 
@@ -70,29 +76,26 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
 
     $scope.addNew = function () {
+        $scope.action = "create";
         var journal = new Journal();
         journal.SiteID = SharedStateService.Selected.SiteID;
         var recordDate = new Date(Date.now());
         journal.JournalDate = recordDate.toLocaleDateString();
         journal.MemberID = SharedStateService.authenticatedMember.MemberID;
-        $scope.Journal = journal;
-        if (SharedStateService.readOnlyUser == false)
-            $scope.editMode = true;
-        else {
-            $scope.systemMessage.text = "sign in to edit content";
-            $scope.systemMessage.activate();
-        }
+        $scope.Journal = journal;        
     }
 
     $scope.saveJournal = function () {
-        if ($scope.Journal.JournalID == null)// its create
+        if ($scope.action=="create")
             DataTransportService.addJournal($scope.Journal).then(
                 function (result) {
-                    $scope.JournalEntries.push(result.data);
-                    $scope.journalIndex = $scope.JournalEntries.length - 1;
-                    $scope.Journal = JournalEntries[journalIndex];
                     $scope.systemMessage.text = "new journal was saved successfully";
                     $scope.systemMessage.activate();
+                    $scope.action = "read";
+                    $scope.JournalEntries.push(result.data);
+                    $scope.journalIndex = $scope.JournalEntries.length - 1;
+                    $scope.Journal = $scope.JournalEntries[$scope.journalIndex];
+              
                 },
                 function (error) {
                     $scope.systemMessage.text = "error saving journal " + error.data.Message;
@@ -104,24 +107,25 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                 function (result) {
                     $scope.systemMessage.text = "journal edit was saved successfully";
                     $scope.systemMessage.activate();
+                    $scope.action = "read";
                 },
                 function (error) {
                     $scope.systemMessage.text = "error saving journal " + error.data.Message;
                     $scope.systemMessage.activate();
                 });
 
-        $scope.editMode = false;
+       
 
     }
 
     $scope.editJournal = function () {
 
-        if (SharedStateService.readOnlyUser == false)
-            $scope.editMode = true;
-        else {
+        if (SharedStateService.readOnlyUser == true) {
             $scope.systemMessage.text = "sign in to edit content";
             $scope.systemMessage.activate();
         }
+        else
+            $scope.action = "edit";
     }
 
     $scope.deleteJournal = function () {
@@ -134,13 +138,20 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                     SharedStateService.Repository.put("Journals", $scope.JournalEntries);
                     $scope.systemMessage.text = "journal deleted successfully";
                     $scope.systemMessage.activate();
+                    $scope.action = "read";
                 },
                 function (error) {
                     $scope.systemMessage.text = "error deleteing journal " + error.data.Message;
                     $scope.systemMessage.activate();
                 });
 
-        $scope.editMode = false;
+       
+    }
+
+    $scope.cancelJournal = function () {
+         $scope.Journal = $scope.JournalEntries[$scope.journalIndex];
+
+
     }
 
 
