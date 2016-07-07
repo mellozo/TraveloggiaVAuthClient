@@ -17,7 +17,7 @@
               <li ng-repeat ="journal in JournalEntries"                  
                    role="presentation" class="active"><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>
 
-              <li ng-show="canEdit" role="presentation" class="active"><a href="" ng-click="addNew()">Add New</a></li>
+              <li  role="presentation" class="active"><a href="" ng-click="addNew()">Add New</a></li>
         </ul>
 
   </div>
@@ -45,19 +45,24 @@
           <text-angular ng-show="action == 'read'"  id="textReader"   name="readhtmlcontent" ng-model="Journal.Text" ta-disabled="true"  ta-toolbar="[]">
           </text-angular>
 
-
           <text-angular ng-hide="action == 'read' "  id="textEditor"   name="edithtmlcontent" ng-model="Journal.Text"  
               style="font-size:20px;min-height:260px;"
                ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]";>
           </text-angular>
 
-       <div ng-hide="action == 'read'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+
+
+
+
+
+
+       <div ng-show="action=='edit' || action=='create' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="saveJournal()" >Save</a>
         </div>
         <div ng-show="action == 'edit'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="deleteJournal()" >Delete</a>
         </div>
-       <div ng-show="action == 'create'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+       <div ng-show="action=='create' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="cancelJournal()" >Cancel</a>
         </div>
      

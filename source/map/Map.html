@@ -64,8 +64,17 @@ body,
    
     </div>-->
 
-     <map-canvas id="map"  ></map-canvas>        
+  <!--   <map-canvas id="map"  ></map-canvas>        -->
+<!--<bing-map id="crudera"
+    center="mapOptions.center"
+                zoom="mapOptions.zoom"
+                map-type="mapOptions.mapType"
+                options="mapOptions.options"
+                on-map-ready="onMapReady(map)"></bing-map>-->
 
+    <div id="bingMapRaw">
+
+    </div>
 
 <div style="position:absolute;bottom:2px;left:2px;font-size:18px;color:goldenrod;font-family:Cinzel;z-index:999">
 
@@ -79,13 +88,13 @@ body,
 </button>-->   
 
     
-    <confirm-cancel   
+    <!--<confirm-cancel   
         ng-show="dialogIsShowing"
         style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px"
         question="confirmCancelQuestion"
         on-confirm="saveCurrentLocation()" 
         on-cancel="dismiss()">
-    </confirm-cancel>
+    </confirm-cancel>-->
 
      <button title="zoom to current location" ng-click="getLocation()"
              style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">

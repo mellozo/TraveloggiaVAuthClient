@@ -3,6 +3,32 @@
 angularTraveloggia.controller('JournalController', function (DataTransportService, $scope,SharedStateService,$location,$route) 
 {
 
+
+    if ($location.search().MapID != null)
+    {
+        var mapid = $location.search().MapID;
+        var siteid = $location.search().SiteID;
+        SharedStateService.readOnlyUser = true;
+        SharedStateService.Selected.SiteID = siteid;
+        $location.search('MapID', null);
+        $location.search('SiteID', null);
+
+        DataTransportService.getMap(mapid).then(
+            function (result) {
+              var MapRecord = result.data[0];
+                SharedStateService.Selected.Map =MapRecord;
+                SharedStateService.Repository.put('Maps', result.data);
+                SharedStateService.Repository.put('Sites', MapRecord.Sites)
+            },
+        function(error){
+            $scope.systemMessage.text = "error fetching journals" + error.data.Message;
+            $scope.systemMessage.activate();
+        }
+
+            )
+ }
+      
+
     $scope.Site = SharedStateService.Selected.Site;
     $scope.JournalEntries = [];
     if (SharedStateService.readOnlyUser == true)
@@ -33,8 +59,12 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                             SharedStateService.Repository.put("Journals", result.data);
                             $scope.Journal = $scope.JournalEntries[0];
                         }
-                        else
-                            $scope.addNew();
+                        else{
+                          
+                                $scope.addNew();
+
+                        }
+                           
 
                     },
                     function (error) {
@@ -52,7 +82,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
-                $scope.Site = SharedStateService.Selected.Site;
+                //$scope.Site = SharedStateService.Selected.Site;
                 DataTransportService.getJournals(newValue).then(
                  function (result) {
                      SharedStateService.Repository.put("Journals", result.data);
@@ -79,7 +109,9 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
 
     $scope.addNew = function () {
-        $scope.action = "create";
+        if (SharedStateService.readOnlyUser == false)
+            $scope.action = "create";
+
         var journal = new Journal();
         journal.SiteID = SharedStateService.Selected.SiteID;
         var recordDate = new Date(Date.now());

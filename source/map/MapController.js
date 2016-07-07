@@ -1,6 +1,32 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService) {
 
-    $scope.mapInstance = null;
+
+    if($scope.mapInstance == null)
+    $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
+        credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+        center: new Microsoft.Maps.Location(51.50632, -0.12714),
+        mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+        zoom: 10
+    }
+    );
+
+    //$scope.mapOptions = {
+      
+    //    zoom: 6,
+    //    mapType: 'a',
+    //    options: {
+    //        //disablePanning: true,
+    //        //disableZooming:true
+    //    }
+    //};
+    //$scope.onMapReady = function(map) {
+    //    //This will return (0,0) because we havn't set the center yet
+    //    console.log('Map loaded with center:' + map.getCenter());
+    //}
+
+
+
+
 
     $scope.dialogIsShowing = false;
 
@@ -12,39 +38,76 @@
         $scope.dialogIsShowing = false;
     }
 
-    $scope.drawSites = function (sites, map) {
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < sites.length; i++) {
-            var marker = new google.maps.Marker({
-                map: map,
-                draggable: false,
-                //  animation: google.maps.Animation.DROP,
-                position: { lat: sites[i].Latitude, lng: sites[i].Longitude },
-                title: sites[i].Name + " location: " + sites[i].Address
-            });
 
-            (function attachEventHandler(site) {
-                marker.addListener('click', function () {
+    $scope.drawSites = function (sites) {
+        var arrayOfMsftLocs = [];
+        for (var i = 0; i < sites.length; i++) 
+        {
+
+            var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
+         
+            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false });
+         
+            (function attachEventHandlers(site) {
+
+                pin.text = site.Name;
+                var pinInfobox = new Microsoft.Maps.Infobox(loc,
+                    {
+                        visible: false,
+                        offset: new Microsoft.Maps.Point(20, 20),
+                        title: site.Name,
+                        description:site.Address
+                    });
+              
+                 
+                // Add handler for the pushpin click event.
+                Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
+                    pinInfobox.setOptions({ visible: true });
+                });
+
+                // Hide the infobox when the map is moved.
+                Microsoft.Maps.Events.addHandler(pin, 'mouseout', function () {
+                    pinInfobox.setOptions({ visible: false });
+                });
+
+                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                     SharedStateService.Selected.Site = site;
                     SharedStateService.Selected.SiteID = site.SiteID;
-                    SharedStateService.center = SharedStateService.googleMap.getCenter();
-                    SharedStateService.zoom = SharedStateService.googleMap.getZoom();
                     $scope.$apply(function () { $location.path("/Album") })
                 });
 
-            })(sites[i], $scope, $location)
+                $scope.mapInstance.entities.push(pinInfobox);
 
-            var latLong = new google.maps.LatLng(sites[i].Latitude, sites[i].Longitude);
-            bounds.extend(latLong);
+            })(sites[i],$scope,$location)
+
+            $scope.mapInstance.entities.push(pin);
+            arrayOfMsftLocs.push(loc)
         }
 
-        map.fitBounds(bounds);
+        var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
+        $scope.mapInstance.setView({ bounds: viewRect });
+
+        Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) 
+        {
+                // get the HTML DOM Element that represents the Map
+                var mapElem = $scope.mapInstance.getRootElement();
+                if (e.targetType === "map") {
+                    // Mouse is over Map
+                 //   mapElem.style.cursor = "crosshair";
+                } else {
+                    // Mouse is over Pushpin, Polyline, Polygon
+                    mapElem.style.cursor = "pointer";
+                }
+            });
 
     }
 
-    // called by the map directive declared on map.html
-    $scope.loadMaps = function (map) {
-        $scope.mapInstance = map;
+
+  
+
+
+    $scope.loadMaps = function () {
+  
         var cachedMaps = SharedStateService.Repository.get("Maps");
         if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.authenticatedMember.MemberID) {
             DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
@@ -55,7 +118,7 @@
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
-                        $scope.drawSites($scope.MapRecord.Sites, map)
+                        $scope.drawSites($scope.MapRecord.Sites)
                     }
                        
                 },
@@ -71,9 +134,21 @@
             SharedStateService.Selected.Map = $scope.MapRecord;
             if ($scope.MapRecord.Sites.length > 0) {
                 var sites = $scope.MapRecord.Sites
-                SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
+                if(SharedStateService.Selected.SiteID == null)
+                    SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
+                else
+                {
+                    for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
+
+                        if($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
+                            SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
+                        break;
+
+                    }
+
+                }
                 try {
-                    $scope.drawSites(sites, map);
+                    $scope.drawSites(sites);
                 }
                 catch (error) {
                     $scope.systemMessage.text = "error " + error.data.Message;
@@ -82,6 +157,8 @@
             }
         }
     }
+
+    $scope.loadMaps();
 
     $scope.addMarker = function (latitude, longitude, title, imagePath) {
         var image = {
@@ -169,6 +246,16 @@
       }
     );
     
+    $scope.$watch(
+     function (scope) {
+         return SharedStateService.Selected.Map.MapID;
+     },
+     function (newValue, oldValue) {
+         if (newValue != oldValue)
+             $scope.loadMaps($scope.mapInstance);
+     }
+  );
+
 
 
 

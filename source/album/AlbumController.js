@@ -115,7 +115,8 @@
             return SharedStateService.Selected.SiteID;
         },
         function (newValue, oldValue) {
-            if(newValue != oldValue)
+            if (newValue != oldValue)
+                $scope.PhotoList = [];
             DataTransportService.getPhotos(newValue).then(
                 function (result) {
                         $scope.PhotoList = result.data;

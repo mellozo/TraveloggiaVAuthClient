@@ -1,13 +1,19 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textAngular', 'ui.bootstrap'])
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textAngular',  'angulartics', 'angulartics.google.analytics'])
 
-
+//angularTraveloggia.config(['angularBingMapsProvider', function (angularBingMapsProvider) {
+//    angularBingMapsProvider.setDefaultMapOptions({
+//        credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+//        enableClickableLogo: false
+//    });
+//    angularBingMapsProvider.bindCenterRealtime(false);
+//}]);
 
 // consider file path from the start page AngularMain.html
 
-angularTraveloggia.config(['$routeProvider', function ($routeProvider) {
+angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analyticsProvider) {
     $routeProvider
         .when('/', {
           // templateUrl: 'site/Site.html'
