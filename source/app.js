@@ -1,7 +1,7 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'textAngular',  'angulartics', 'angulartics.google.analytics'])
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'angulartics', 'angulartics.google.analytics'])
 
 //angularTraveloggia.config(['angularBingMapsProvider', function (angularBingMapsProvider) {
 //    angularBingMapsProvider.setDefaultMapOptions({
@@ -50,9 +50,13 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
 // note resolve = {} and the object has string property and promise value 
          .when('/Album', {
              templateUrl: 'album/Album.html',
-             controller: 'AlbumController',
-             resolve: { photos: globalBullshit }
+             controller: 'AlbumController'
          })
+
+           .when('/Photo', {
+               templateUrl: 'album/Photo.html',
+               controller: 'AlbumController'            
+           })
 
           .when('/Journal', {
               templateUrl: 'journal/Journal.html'
@@ -75,28 +79,4 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
     });
   }
 ]);
-
-
-
-function globalBullshit(SharedStateService, DataTransportService,$q) {
-    var photosDeferred = $q.defer();
-    var cachedPhotos = SharedStateService.Repository.get('Photos');
-    if (cachedPhotos.length >0 && cachedPhotos[0].SiteID == SharedStateService.Selected.Site.SiteID) {
-        photosDeferred.resolve(cachedPhotos);
-    }
-    else {
-        DataTransportService.getPhotos(SharedStateService.Selected.Site.SiteID).then(
-            function (result) {
-                photosDeferred.resolve(result.data);
-                SharedStateService.Repository.put('Photos', result.data);
-            },
-            function (error) { })
-
-
-    }
-       
- 
-    return photosDeferred.promise;
-}
-
 

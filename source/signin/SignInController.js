@@ -14,9 +14,9 @@
     VM.authenticate = function () {
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
           function (result, x, y, z, h) {
-              SharedStateService.authenticatedMember = result.data;
+              SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.readOnlyUser = false;
-            //  window.sessionStorage.setItem('memberID', result.data.MemberID)
+          
               $location.path("/Map")
           },
           function (error) {
@@ -40,7 +40,7 @@
 
     VM.signOut = function(){
         //  window.location.href = "http://html5.traveloggia.net/Default.html";
-        SharedStateService.authenticatedMember = { MemberID: 1 };
+        SharedStateService.setAuthenticatedMember( { MemberID: 1 });
         SharedStateService.readOnlyUser = true;
         VM.authenticationStatus.signedIn=false; 
        // and all the other stuff we will fool around with later like JWT
@@ -73,7 +73,7 @@
     VM.createAccount = function () {
         DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {
-                SharedStateService.authenticatedMember = result.data;
+                SharedStateService.setAuthenticatedMember(result.data);
                 $scope.systemMessage.text = "Account created successfully. You have full access to develop content.";
                 $scope.systemMessage.activate();
                 $location.path("/Map")
