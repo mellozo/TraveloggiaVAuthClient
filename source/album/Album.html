@@ -1,6 +1,9 @@
-﻿<div style="background-color:#0E7B83; ng-controller="AlbumController" >
+﻿<div class="container-fluid" style="background-color:#0E7B83; ng-controller="AlbumController" >
+<div class="row">
+    <div ng-include="'common/ToolBar.html'"></div>
 
-<div ng-include="'common/ToolBar.html'"></div>
+</div>
+
 
     <style>
 
@@ -18,60 +21,73 @@
 
 
 
+<div class="row">
+    <div class="col-xs-12">
 
+        <div class="panel-group" id="accordion" style="margin:25px;">
 
-    <div class="panel-group" id="accordion" style="margin:25px;">
-   
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;">
-                    <div class="panel-heading" style="background-color:#8EBBDA;">
-                                     <h4 class="panel-title">
-                                            <a data-toggle="collapse" style="font-family:Cinzel" data-parent="#accordion" href="" data-target="#collapseOne" >Add Photos</a>
-                                    </h4>
-                    </div>
+                <div class="panel-heading" style="background-color:#8EBBDA;">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" style="font-family:Cinzel" data-parent="#accordion" href="" data-target="#collapseOne">Add Photos</a>
+                    </h4>
+                </div>
 
                 <div id="collapseOne" class="panel-collapse collapse">
-                        <div class="panel-body">
-                                         <input id="photoFileInput" type="file" accept="image/*" capture="camera"   multiple=""
-                                             onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
-                                        <div id="previewPanel" style="margin-top:10px;padding-top:10px;">
-                                         
-                                        </div>
+                    <div class="panel-body">
+                        <input id="photoFileInput" type="file" accept="image/*" capture="camera" multiple=""
+                               onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
+                        <div id="previewPanel" style="margin-top:10px;padding-top:10px;">
 
-                                <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
-                         </div>
+                        </div>
+
+                        <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
+                    </div>
                 </div>
 
             </div>
-   
+
+        </div>
+
+
+
     </div>
 
-     
-
-
-
-<div style="margin-top:15px;">
-   
-
-  <div style="margin-left:8px;"> 
-        <div  ng-repeat="Photo in PhotoList">
-           
-            <div ng-if ="Photo.StorageURL !=null ">
-                    <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="width:100%;max-width:300px;" >
-            </div>
-
-             <div ng-if ="Photo.StorageURL==null ">
-                   <img  ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}" 
-                       style="width:100%;" />
-         
-        
-            </div>
-
-                   
-            <div> {{Photo.FileName}}</div>
-        </div>
-   
-</div> 
-
 </div>
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div style="margin-top:15px;">
+
+
+            <div style="margin-left:8px;" id="photoList">
+
+                <div ng-repeat="Photo in PhotoList">
+                    <a href="" ng-click="selectPhoto(Photo)">
+                        <div ng-if="Photo.StorageURL !=null ">
+
+                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="width:100%;max-width:300px;">
+
+                        </div>
+
+                        <div ng-if="Photo.StorageURL==null ">
+                            <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
+                                 style="width:100%;" />
+
+
+                        </div>
+
+                    </a>
+                    <div> {{Photo.FileName}}</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 

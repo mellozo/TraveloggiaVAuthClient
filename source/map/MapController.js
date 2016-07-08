@@ -71,8 +71,8 @@
                 });
 
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    SharedStateService.Selected.Site = site;
-                    SharedStateService.Selected.SiteID = site.SiteID;
+                    SharedStateService.setSelected("Site", site);
+                    SharedStateService.setSelected("SiteID",site.SiteID);
                     $scope.$apply(function () { $location.path("/Album") })
                 });
 
@@ -109,15 +109,15 @@
     $scope.loadMaps = function () {
   
         var cachedMaps = SharedStateService.Repository.get("Maps");
-        if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.authenticatedMember.MemberID) {
-            DataTransportService.getMaps(SharedStateService.authenticatedMember.MemberID).then(
+        if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.getAuthenticatedMemberID() ) {
+            DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data[0];
-                    SharedStateService.Selected.Map = $scope.MapRecord;
+                    SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
-                        SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
+                        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
                         $scope.drawSites($scope.MapRecord.Sites)
                     }
                        
@@ -131,15 +131,14 @@
         }
         else {
             $scope.MapRecord = SharedStateService.Repository.get('Maps')[0];
-            SharedStateService.Selected.Map = $scope.MapRecord;
+            SharedStateService.setSelected("Map", $scope.MapRecord);         
             if ($scope.MapRecord.Sites.length > 0) {
                 var sites = $scope.MapRecord.Sites
                 if(SharedStateService.Selected.SiteID == null)
-                    SharedStateService.Selected.Site = $scope.MapRecord.Sites[0];
+                   SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
                 else
                 {
-                    for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
-
+                    for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {//?
                         if($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
                             SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
                         break;
@@ -158,7 +157,7 @@
         }
     }
 
-    $scope.loadMaps();
+
 
     $scope.addMarker = function (latitude, longitude, title, imagePath) {
         var image = {
@@ -185,7 +184,7 @@
     $scope.getLocation = function () {
         navigator.geolocation.getCurrentPosition(function (pos) {
             var siteRecord = $scope.createSiteRecord(pos.coords.latitude, pos.coords.longitude);
-            SharedStateService.Selected.Site = siteRecord;
+            SharedStateService.setSelected("Site", siteRecord);
             $scope.$apply(function () {
                 var geolocate = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 SharedStateService.googleMap.setCenter(geolocate);
@@ -202,7 +201,7 @@
     $scope.createSiteRecord = function (lat, lng) {
         var site = new Site();
         site.MapID = $scope.MapRecord.MapID;
-        site.MemberID = SharedStateService.authenticatedMember.MemberID;
+        site.MemberID = SharedStateService.getAuthenticatedMemberID();
         site.Latitude = lat;
         site.Longitude = lng;
         return site;
@@ -219,7 +218,7 @@
                 var lng = results[0].geometry.location.lng();
                 var siteRecord = $scope.createSiteRecord(lat, lng);
                 siteRecord.Address = results[0].formatted_address;
-                SharedStateService.Selected.Site = siteRecord;
+                SharedStateService.setSelected("Site", siteRecord);
                 resultsMap.setCenter(results[0].geometry.location);
                 resultsMap.setZoom(13);
                 var marker = new google.maps.Marker({
@@ -238,25 +237,28 @@
 
     $scope.$watch(
        function (scope) {
-           return SharedStateService.authenticatedMember.MemberID;
+           return SharedStateService.getAuthenticatedMemberID();
        },
        function (newValue, oldValue){
-           if (newValue != oldValue)
-               $scope.loadMaps($scope.mapInstance);
+           if  (newValue != oldValue)
+               $scope.loadMaps();
       }
     );
     
-    $scope.$watch(
-     function (scope) {
-         return SharedStateService.Selected.Map.MapID;
-     },
-     function (newValue, oldValue) {
-         if (newValue != oldValue)
-             $scope.loadMaps($scope.mapInstance);
-     }
-  );
+  //  $scope.$watch(
+  //   function (scope) {
+        
+  //           return SharedStateService.getSelectedID("Map");
+  //   },
+  //   function (newValue, oldValue) {
+  //       if (oldValue != null && (newValue != oldValue))
+  //           $scope.loadMaps($scope.mapInstance);
+  //   }
+  //);
 
 
+    // the kickoff
+   $scope.loadMaps();
 
 
 });

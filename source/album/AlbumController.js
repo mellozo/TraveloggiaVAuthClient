@@ -1,22 +1,49 @@
-﻿angularTraveloggia.controller('AlbumController', function ( photos,$scope,DataTransportService,SharedStateService,$window) {
-  
-    //loading the data with the router/resolve just to demo different was of doing things
+﻿
+
+angularTraveloggia.controller('AlbumController', function ($scope, $location, DataTransportService, SharedStateService, $window) {
+
+ 
+
+    var cachedPhotos = SharedStateService.Repository.get('Photos');
+    if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site")) {
+        $scope.PhotoList = cachedPhotos;
+        $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+    }
+    else {
+        DataTransportService.getPhotos(SharedStateService.getSelectedID("Site")).then(
+            function (result) {
+                $scope.PhotoList = result.data;
+                SharedStateService.Repository.put('Photos', result.data);
+                $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+            },
+            function (error) { })
+    }
+
+
+    
+
+    $scope.selectPhoto = function (photo) {
+        SharedStateService.setSelected("Photo", photo);
+      //  $scope.selectedPhoto = photo;
+        $location.path("/Photo");
+    }
+
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
-    $scope.imagePath = SharedStateService.authenticatedMember.MemberID + "/" + SharedStateService.Selected.Map.MapName + "/";
+    $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedMapName() + "/";
 
     $scope.filesUploadedCount = 0;
 
     $scope.createPhotoRecord = function (fileName) {
         var photoRecord = new Photo();
-        photoRecord.SiteID = SharedStateService.Selected.Site.SiteID;
+        photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
         photoRecord.FileName = fileName;
         return photoRecord;
     }
 
-    $scope.PhotoList = photos;
+
    
     $scope.filesToUpload = null;
 
@@ -84,6 +111,17 @@
             });
     }
 
+    $scope.deletePhoto = function () {
+        DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
+            function (result) {
+                $scope.systemMessage.text = "selected photo has been deleted";
+                $scope.systemMessage.activate();
+                $location.path("/Album");
+            }
+            )
+
+    }
+
     $scope.$watch(
         function (scope) {
             return $scope.filesUploadedCount
@@ -112,7 +150,7 @@
     // may we say, what an inelegant syntax
     $scope.$watch(
         function (scope) {
-            return SharedStateService.Selected.SiteID;
+            return SharedStateService.getSelected("SiteID");
         },
         function (newValue, oldValue) {
             if (newValue != oldValue)
@@ -124,5 +162,8 @@
                 function (error) { }
                 );
         });
+
+    
+
 })
 

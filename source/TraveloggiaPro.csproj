@@ -63,6 +63,7 @@
   <ItemGroup>
     <Content Include="album\Album.html" />
     <Content Include="album\AlbumController.js" />
+    <Content Include="album\Photo.html" />
     <Content Include="app.js" />
     <Content Include="common\confirm-cancel.html" />
     <Content Include="common\ConfirmCancelDirective.js" />
@@ -82,6 +83,7 @@
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
     <Content Include="image\lightgreen.jpg" />
+    <Content Include="image\minus.png" />
     <Content Include="image\pencil.png" />
     <Content Include="image\scroll.png" />
     <Content Include="image\ship.png" />
@@ -92,10 +94,12 @@
     <Content Include="Index.html" />
     <Content Include="journal\Journal.html" />
     <Content Include="journal\JournalController.js" />
-    <Content Include="lib\angular.js" />
+    <Content Include="lib\angular.min.js" />
+    <Content Include="lib\angulartics-ga.min.js" />
+    <Content Include="lib\angulartics.js" />
     <Content Include="lib\bootstrap.min.js" />
+    <Content Include="lib\extensions\angular-cookies.js" />
     <Content Include="lib\extensions\angular-mocks.js" />
-    <Content Include="lib\extensions\angular-route.js" />
     <Content Include="lib\extensions\angular-route.min.js" />
     <Content Include="lib\extensions\angular.min.js" />
     <Content Include="lib\textAngular-rangy.min.js" />
@@ -103,7 +107,6 @@
     <Content Include="lib\textAngular.min.js" />
     <Content Include="map\Map.html" />
     <Content Include="map\MapController.js" />
-    <Content Include="map\MapDirective.js" />
     <Content Include="map\MapList.html" />
     <Content Include="lib\extensions\angular-route.min.js.map" />
     <Content Include="lib\extensions\angular.min.js.map" />

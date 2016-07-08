@@ -1,0 +1,34 @@
+﻿<div class="container-fluid"  ng-controller="AlbumController">
+    <div class="row">
+        <div ng-include="'common/ToolBar.html'"></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12" >
+          
+
+            <div ng-if="selectedPhoto.StorageURL !=null " >
+                    <img src="{{  imageServer + imagePath + selectedPhoto.FileName}}" style="width:auto;height:80vh;"    />
+            </div>
+
+            <div ng-if="selectedPhoto.StorageURL==null ">
+                <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" style="width:auto;height:100vh;" />
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="row" >
+        <div class="col-xs-12">
+            <div class="panel-default">
+                <a href="" ng-click="deletePhoto()">
+                    <img src="../image/minus.png" style="height:40px;width:40px;" />
+                    </a>
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
+  
+

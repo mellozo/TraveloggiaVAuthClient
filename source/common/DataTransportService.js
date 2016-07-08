@@ -98,14 +98,24 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             var config = {
                 method: "post",
                 url: endpoint,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json' },
                 data: photo
             }
 
             return $http(config);
         },
+
+        deletePhoto: function (photoID) {
+            var endpoint = baseURL + "/api/Photos/" + photoID
+            var config = {
+                method: "DELETE",
+                url: endpoint,
+                headers: { 'Content-Type': 'application/json' }
+            }
+
+            return $http(config);
+        },
+
        
         uploadImage: function (memberID, mapName,  imageFile) {
             var uploadResult = $q.defer();
