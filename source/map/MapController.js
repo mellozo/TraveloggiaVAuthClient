@@ -1,14 +1,21 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService) {
+﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout) {
 
 
     if($scope.mapInstance == null)
     $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
         credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-        center: new Microsoft.Maps.Location(51.50632, -0.12714),
+      //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
         mapTypeId: Microsoft.Maps.MapTypeId.aerial,
         zoom: 10
     }
     );
+
+    //$timeout(function () {
+
+    //    var mapContainer = angular.element("#bingMapRaw");
+    //    mapContainer.attribute
+
+    //}, 0);
 
     //$scope.mapOptions = {
       
