@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function (SharedStateService,DataTransportService,$location,$scope,$route) {
+﻿angularTraveloggia.controller('SignInController', function (SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route) {
     var VM = this;
     VM.Member = new Member();
    
@@ -15,8 +15,9 @@
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
           function (result, x, y, z, h) {
               SharedStateService.setAuthenticatedMember(result.data);
+              SharedStateService.setAuthorizationState(canEdit);
+              // we will depricate this
               SharedStateService.readOnlyUser = false;
-          
               $location.path("/Map")
           },
           function (error) {
@@ -40,7 +41,9 @@
 
     VM.signOut = function(){
         //  window.location.href = "http://html5.traveloggia.net/Default.html";
-        SharedStateService.setAuthenticatedMember( { MemberID: 1 });
+        SharedStateService.setAuthenticatedMember({ MemberID: 1 });
+        SharedStateService.setAuthorizationState(readOnly);
+        // this will be deprecated
         SharedStateService.readOnlyUser = true;
         VM.authenticationStatus.signedIn=false; 
        // and all the other stuff we will fool around with later like JWT

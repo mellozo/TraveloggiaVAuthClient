@@ -1,7 +1,15 @@
-﻿angularTraveloggia.service('SharedStateService', function (DataTransportService,$cacheFactory,$window,$cookies)
+﻿angularTraveloggia.service('SharedStateService',function ( DataTransportService,isEditing,readOnly,canEdit,$cacheFactory,$window,$cookies)
 {
 
     var local_scope = this;
+
+    local_scope.Authorization = {
+        state: readOnly
+
+
+    }
+
+ 
     local_scope.readOnlyUser = true;
     // bootstrap to a demo user - this may go away
     if ($cookies.get("AuthenticatedMemberID") == null)
@@ -11,9 +19,23 @@
     local_scope.center = null;
     local_scope.zoom = null;
     local_scope.Selected = {}
+
    
     
-   
+    local_scope.setAuthorizationState = function (constValue) {
+        local_scope.Authorization.state = constValue;
+        $cookies.put("AuthorizationState", constValue);
+    }
+
+    local_scope.getAuthorizationState = function () {
+        var constvalue = local_scope.Authorization.state;
+    
+        if (constvalue == null)
+            constvalue = $cookies.get("AuthorizationState") != null ? $cookies.get("AuthorizationState") : readOnly;
+
+        return constvalue;
+
+    }
 
     local_scope.setSelected = function (key, value) {
         local_scope.Selected[key] = value;
@@ -84,11 +106,6 @@
 
 
 
-    local_scope.Authorization = {
-        canEdit:false
-
-
-    }
 
 
     local_scope.Repository = $cacheFactory('Repository', {});

@@ -2,7 +2,7 @@
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, DataTransportService, SharedStateService, $window) {
 
- 
+    $scope.authorizationState = SharedStateService.getAuthorizationState();
 
     var cachedPhotos = SharedStateService.Repository.get('Photos');
     if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site")) {

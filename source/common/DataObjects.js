@@ -74,7 +74,9 @@ var Photo=function()
     scope_safe.DateTaken = null;
     scope_safe.FromPhone = null;
     scope_safe.StorageURL = null;
-    scope_safe.ThumbnailURL == null;
+    scope_safe.ThumbnailURL = null;
+    scope_safe.height = null;
+    scope_safe.width = null;
 }
 
 var Journal = function () {

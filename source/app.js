@@ -80,3 +80,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
   }
 ]);
 
+angularTraveloggia.constant("readOnly", "READ_ONLY");
+angularTraveloggia.constant("canEdit", "CAN_EDIT");
+angularTraveloggia.constant("isEditing", "IS_EDITING")
+

@@ -11,7 +11,7 @@
             </div>
 
             <div ng-if="selectedPhoto.StorageURL==null ">
-                <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" style="width:auto;height:100vh;" />
+                <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" style="width:auto;height:80vh;" />
             </div>
 
 
@@ -21,12 +21,14 @@
 
     <div class="row" >
         <div class="col-xs-12">
-            <div class="panel-default">
-                <a href="" ng-click="deletePhoto()">
-                    <img src="../image/minus.png" style="height:40px;width:40px;" />
+            <div class="panel panel-default" ng-show="selectedPhoto.Caption != null">
+                <div class="panel-body" ng-show="authorizationState == 'CAN_EDIT'">
+                    <a href="" ng-click="deletePhoto()">
+                        <img src="../image/minus.png" style="height:40px;width:40px;" />
                     </a>
+                </div>
             </div>
-            </a>
+           
         </div>
     </div>
 </div>
