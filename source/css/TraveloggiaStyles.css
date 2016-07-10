@@ -117,9 +117,9 @@ input {
 
 
 .mapLabel {
-      position:absolute;
-  
+   position:absolute;
     z-index:99;
+    font-family:Cinzel;
 }
 
 #mapLogo{
@@ -128,14 +128,19 @@ width:40px;
 height:40px;
 margin:0;
 padding:0; 
+}
 
+#mapNameDiv {
+  top:10px;left:45px;font-size:18px;color:goldenrod;
+  background-color:lightgray;
+  padding:2px;
 }
 
 #signInDiv  {
-  top:10px;
-   left:45px;
+bottom:36px;
+left:5px;
       background-color:lightgray;
-      font-family:Cinzel;
+      
 }
 
 #signInDiv a {

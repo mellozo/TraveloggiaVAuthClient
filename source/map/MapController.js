@@ -1,48 +1,4 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout) {
-
-
-    //if($scope.mapInstance == null)
-    //$scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-    //    credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-    //  //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
-    //    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-    //    zoom: 10
-    //}
-    //);
-
-    $timeout(function () {
-    if ($scope.mapInstance == null)
-        $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-            credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-            //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
-            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-            showTermsLink: false,
-            enableClickableLogo:false
-        });
-
-    $scope.mapInstance.setOptions({
-        maxZoom: 12,
-        minZoom: 5
-    });
-
-  }, 0);
-
-    //$scope.mapOptions = {
-      
-    //    zoom: 6,
-    //    mapType: 'a',
-    //    options: {
-    //        //disablePanning: true,
-    //        //disableZooming:true
-    //    }
-    //};
-    //$scope.onMapReady = function(map) {
-    //    //This will return (0,0) because we havn't set the center yet
-    //    console.log('Map loaded with center:' + map.getCenter());
-    //}
-
-
-
+﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout,$http) {
 
 
     $scope.dialogIsShowing = false;
@@ -56,17 +12,16 @@
     }
 
 
-    $scope.drawSites = function (sites) {
+    $scope.drawSites = function () {
+        var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
         for (var i = 0; i < sites.length; i++) 
         {
 
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-         
             var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false });
          
             (function attachEventHandlers(site) {
-
                 pin.text = site.Name;
                 var pinInfobox = new Microsoft.Maps.Infobox(loc,
                     {
@@ -75,8 +30,7 @@
                         title: site.Name,
                         description:site.Address
                     });
-              
-                 
+ 
                 // Add handler for the pushpin click event.
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
                     pinInfobox.setOptions({ visible: true });
@@ -120,7 +74,25 @@
     }
 
 
-  
+    $scope.afterLoaded = function () {
+        if ($http.pendingRequests.length > 0) {
+            $timeout($scope.afterRender); // Wait for all templates to be loaded
+        }
+        else {
+            if ($scope.mapInstance == null) {
+                $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
+                    credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+                    //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
+                    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                    showTermsLink: false,
+                    enableClickableLogo: false,
+                    navigationBarMode: Microsoft.Maps.NavigationBarMode.minified
+                });
+
+                $scope.drawSites()
+            }
+        }
+    };
 
 
     $scope.loadMaps = function () {
@@ -135,7 +107,7 @@
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-                        $scope.drawSites($scope.MapRecord.Sites)
+                        $scope.afterLoaded();
                     }
                        
                 },
@@ -164,7 +136,7 @@
 
                 }
                 try {
-                    $scope.drawSites(sites);
+                    $scope.afterLoaded();
                 }
                 catch (error) {
                     $scope.systemMessage.text = "error " + error.data.Message;

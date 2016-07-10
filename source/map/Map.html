@@ -6,15 +6,9 @@
  
     <img id="mapLogo" title="Traveloggia" src="../image/ship.png" class="mapLabel" />
 
-  <div ng-controller="SignInController as SignInCtrl"   id="signInDiv" class="mapLabel">
-
-     
-       <a  ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
-      <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
-       <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
-
-  </div>  
-        
+    <div ng-cloak class="mapLabel" id="mapNameDiv">
+        {{MapRecord.MapName}}
+    </div>
 
  
     
@@ -67,11 +61,17 @@
 
     </div>
 
-<div ng-cloak style="position:absolute;bottom:2px;left:20px;font-size:18px;color:goldenrod;font-family:Cinzel;z-index:999">
 
-    {{MapRecord.MapName}}
 
-</div>
+    <div ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
+
+
+        <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
+        <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
+        <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
+
+    </div>
+
 
 <!--<button title="enable click or tap to add location" ng-click="getCrossHairCursor()"
         style="position:absolute;left:10px;top:60px;height:50px;width:50px;border-radius:6px">
