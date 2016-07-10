@@ -3,21 +3,14 @@
 
 
 <div id="mainContainer"   ng-controller="MapController"  >
- <style>
+ 
+    <img id="mapLogo" title="Traveloggia" src="../image/ship.png" class="mapLabel" />
 
-  html,
-body,
+  <div ng-controller="SignInController as SignInCtrl"   id="signInDiv" class="mapLabel">
 
-#map {
-  height:100vh;
-    display: block;
-}
-
-</style>  
-
-  <div ng-controller="SignInController as SignInCtrl"   id="signInDiv">
+     
        <a  ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
-      <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a> 
+      <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
        <a  ng-hide="SignInCtrl.authenticationStatus.signedIn"  href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
 
   </div>  
@@ -42,8 +35,6 @@ body,
 -->
 
 
-      <img title="Traveloggia" src="../image/ship.png" style="width:40px;height:40px;margin:0;padding:0;position:absolute;top:4px;left:8px;z-index:90;" />
-  
 <!--    <div class="panel-group" id="accordion" >
    
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
@@ -76,7 +67,7 @@ body,
 
     </div>
 
-<div style="position:absolute;bottom:2px;left:2px;font-size:18px;color:goldenrod;font-family:Cinzel;z-index:999">
+<div ng-cloak style="position:absolute;bottom:2px;left:20px;font-size:18px;color:goldenrod;font-family:Cinzel;z-index:999">
 
     {{MapRecord.MapName}}
 
@@ -96,9 +87,9 @@ body,
         on-cancel="dismiss()">
     </confirm-cancel>-->
 
-     <button title="zoom to current location" ng-click="getLocation()"
-             style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
+                <!--<button title="zoom to current location" ng-click="getLocation()"
+                        style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
                     <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
-               </button>    
+               </button>-->    
 
     </div>

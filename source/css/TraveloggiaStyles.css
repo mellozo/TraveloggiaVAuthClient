@@ -115,25 +115,46 @@ input {
     margin:20px 0;
 }
 
-#signInDiv  {
-    position:absolute;
-    top:10px;
+
+.mapLabel {
+      position:absolute;
+  
     z-index:99;
-    right:5px;
+}
+
+#mapLogo{
+left:5px;
+width:40px;
+height:40px;
+margin:0;
+padding:0; 
+
+}
+
+#signInDiv  {
+  top:10px;
+   left:45px;
       background-color:lightgray;
       font-family:Cinzel;
 }
 
 #signInDiv a {
     z-index:100;
-    position:relative;
-    float:right;
+    position:relative;  
     color:goldenrod;
-     font-size:18px;
+     font-size:16px;
 }
 
 .journalTitle {
     font-size:13px;
+}
+
+#photoList a:link { color: purple;}
+#photoList a:visited {color: blue;}
+#photoList a:hover {color: red;}
+#photoList a:active {color: yellow;}
+
+
 }
 
 
