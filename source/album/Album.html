@@ -5,7 +5,7 @@
 </div>
 
 
-    <style>
+    <!--<style>
 
         .panel-heading a:after {
     font-family:'Glyphicons Halflings';
@@ -17,19 +17,17 @@
 .panel-heading a.collapsed:after {
     content:"\e080";
 }
-    </style>
+    </style>-->
 
 
 
-<div class="row">
-    <div class="col-xs-12">
-
-        <div class="panel-group" id="accordion" style="margin:25px;">
-
-            <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;">
-                <div class="panel-heading" style="background-color:#8EBBDA;">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" style="font-family:Cinzel" data-parent="#accordion" href="" data-target="#collapseOne">Add Photos</a>
+<div ng-show="authorizationState=='CAN_EDIT' " class="row" style="margin-bottom:0px;padding-bottom:0px">
+    <div  class="col-xs-12" style="margin-bottom:0px;padding-bottom:0px">
+        <div class="panel-group" id="accordion" style="margin-top:10px;margin-bottom:0px;padding-bottom:0px;">
+            <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;margin-bottom:0px;padding-bottom:0px;">
+                <div class="panel-heading" style="background-color:#8EBBDA;text-align:right;">
+                    <h4 class="panel-title" >
+                        <a data-toggle="collapse" style="font-family:Cinzel;position:relative;right:46px;" data-parent="#accordion" href="" data-target="#collapseOne">Add Photos</a>
                     </h4>
                 </div>
 
@@ -46,46 +44,31 @@
                 </div>
 
             </div>
-
         </div>
-
-
-
     </div>
-
 </div>
 
 
 
-<div class="row">
-    <div class="col-xs-12">
-        <div style="margin-top:15px;">
+<div class="row"  style="margin-top:0px;padding-top:0px;">
+    <div class="col-xs-12" style="margin-top:0px;padding-top:0px;"> 
+   
 
-
-            <div style="margin-left:8px;" id="photoList">
-
-                <div ng-repeat="Photo in PhotoList">
+                <div ng-repeat="Photo in PhotoList" style="margin-top:0px;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
                         <div ng-if="Photo.StorageURL !=null ">
-
-                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="width:100%;max-width:300px;">
-
+                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="max-height:76vh;max-width:300px;">
                         </div>
 
                         <div ng-if="Photo.StorageURL==null ">
                             <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                 style="width:100%;" />
-
-
+                                 style="max-height:76vh" />
                         </div>
 
                     </a>
                     <div> {{Photo.FileName}}</div>
                 </div>
 
-            </div>
-
-        </div>
     </div>
 </div>
 

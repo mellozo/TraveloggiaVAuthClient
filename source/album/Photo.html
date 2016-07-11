@@ -3,9 +3,7 @@
         <div ng-include="'common/ToolBar.html'"></div>
     </div>
     <div class="row">
-        <div class="col-xs-12" >
-          
-
+        <div class="col-xs-12" style="margin-top:15px;">
             <div ng-if="selectedPhoto.StorageURL !=null " >
                     <img src="{{  imageServer + imagePath + selectedPhoto.FileName}}" style="width:auto;height:80vh;overflow:auto"    />
             </div>
@@ -13,9 +11,6 @@
             <div ng-if="selectedPhoto.StorageURL==null ">
                 <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" style="width:auto;height:80vh;overflow:auto" />
             </div>
-
-
-
         </div>
     </div>
 

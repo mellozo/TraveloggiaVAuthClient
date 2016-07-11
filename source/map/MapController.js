@@ -11,43 +11,21 @@
         $scope.dialogIsShowing = false;
     }
 
-
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
         for (var i = 0; i < sites.length; i++) 
         {
-
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false });
-         
+            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false ,title:sites[i].Address, subTitle:sites[i].Name});
             (function attachEventHandlers(site) {
-                pin.text = site.Name;
-                var pinInfobox = new Microsoft.Maps.Infobox(loc,
-                    {
-                        visible: false,
-                        offset: new Microsoft.Maps.Point(20, 20),
-                        title: site.Name,
-                        description:site.Address
-                    });
- 
-                // Add handler for the pushpin click event.
-                Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
-                    pinInfobox.setOptions({ visible: true });
-                });
-
-                // Hide the infobox when the map is moved.
-                Microsoft.Maps.Events.addHandler(pin, 'mouseout', function () {
-                    pinInfobox.setOptions({ visible: false });
-                });
-
+            
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                     SharedStateService.setSelected("Site", site);
                     SharedStateService.setSelected("SiteID",site.SiteID);
                     $scope.$apply(function () { $location.path("/Album") })
                 });
 
-                $scope.mapInstance.entities.push(pinInfobox);
 
             })(sites[i],$scope,$location)
 
@@ -79,6 +57,7 @@
             $timeout($scope.afterRender); // Wait for all templates to be loaded
         }
         else {
+           // $scope.mapInstance = SharedStateService.Repository.get("MapInstance");
             if ($scope.mapInstance == null) {
                 $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                     credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
@@ -88,15 +67,14 @@
                     enableClickableLogo: false,
                     navigationBarMode: Microsoft.Maps.NavigationBarMode.minified
                 });
-
-                $scope.drawSites()
+             //   SharedStateService.Repository.put("MapInstance", $scope.mapInstance);
             }
+            $scope.drawSites();
         }
     };
 
 
     $scope.loadMaps = function () {
-  
         var cachedMaps = SharedStateService.Repository.get("Maps");
         if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.getAuthenticatedMemberID() ) {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
@@ -108,13 +86,11 @@
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
                         $scope.afterLoaded();
-                    }
-                       
+                    }                     
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading map data";
                     $scope.systemMessage.activate();
-
                 }
             )// end then
         }
@@ -131,12 +107,10 @@
                         if($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
                             SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
                         break;
-
                     }
-
                 }
                 try {
-                    $scope.afterLoaded();
+                   $scope.afterLoaded();
                 }
                 catch (error) {
                     $scope.systemMessage.text = "error " + error.data.Message;
