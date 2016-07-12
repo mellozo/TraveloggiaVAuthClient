@@ -1,9 +1,13 @@
 ﻿
 
-angularTraveloggia.controller('JournalController', function (DataTransportService, $scope,SharedStateService,$location,$route) 
+angularTraveloggia.controller('JournalController', function (DataTransportService,canEdit,readOnly,isEditing, $scope,SharedStateService,$location,$route,$timeout) 
 {
 
-
+    $scope.stateMachine = {
+        state:SharedStateService.getAuthorizationState()
+}
+    
+    // this is if we are redirecting from html5.traveloggia.net which doesnt have its own journal page
     if ($location.search().MapID != null)
     {
         var mapid = $location.search().MapID;
@@ -23,13 +27,12 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         function(error){
             $scope.systemMessage.text = "error fetching journals" + error.data.Message;
             $scope.systemMessage.activate();
-        }
-
-            )
- }
+        } )
+    }
       
 
-    $scope.Site = SharedStateService.Selected.Site;
+  //  $scope.Site = SharedStateService.Selected.Site;
+
     $scope.JournalEntries = [];
     if (SharedStateService.readOnlyUser == true)
         $scope.canEdit = false;
@@ -42,47 +45,49 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
     // initialize 
     var existingJournals = SharedStateService.Repository.get('Journals');
-    if (existingJournals.length > 0 && existingJournals[0].SiteID == SharedStateService.Selected.Site.SiteID )
+    if (existingJournals.length > 0 && existingJournals[0].SiteID == SharedStateService.getSelectedID("Site") )
     {
         $scope.JournalEntries = SharedStateService.Repository.get('Journals')
         if ($scope.JournalEntries.length > 0) 
             $scope.Journal = $scope.JournalEntries[0];
-        else
-            $scope.addNew();
+       // else
+           // $scope.addNew();
     }
     else
     {
-        DataTransportService.getJournals(SharedStateService.Selected.SiteID).then(
+        DataTransportService.getJournals(SharedStateService.getSelectedID("Site")).then(
                     function (result) {
                         $scope.JournalEntries = result.data;
                         if ($scope.JournalEntries.length > 0) {
                             SharedStateService.Repository.put("Journals", result.data);
                             $scope.Journal = $scope.JournalEntries[0];
                         }
-                        else{
-                          
-                                $scope.addNew();
-
-                        }
-                           
-
+                        //else {
+                        //    if(SharedStateService.authorizationState == canEdit)
+                        //        $scope.addNew();
+                        //}
                     },
                     function (error) {
                         $scope.systemMessage.text = "error fetching journals" + error.data.Message;
                         $scope.systemMessage.activate();
                     });
-
     }
 
 
     $scope.$watch(
         function (scope) {
-            return SharedStateService.Selected.SiteID
+            return SharedStateService.getSelectedID("Site")
         },
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
                 //$scope.Site = SharedStateService.Selected.Site;
+                if (SharedStateService.getAuthorizationState() == 'IS_EDITING')
+                {
+                    SharedStateService.setAuthorizationState(canEdit);
+                    $scope.stateMachine.state = canEdit;
+                }
+                    
                 DataTransportService.getJournals(newValue).then(
                  function (result) {
                      SharedStateService.Repository.put("Journals", result.data);
@@ -91,8 +96,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                          SharedStateService.Repository.put("Journals", result.data);
                          $scope.Journal = $scope.JournalEntries[0];
                      }
-                     else
-                         $scope.addNew();
+                     //else
+                     //    $scope.addNew();
                  },
                 function (error) {
                     $scope.systemMessage.text = "error fetching journals" + error.data.Message;
@@ -108,17 +113,20 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             $scope.journalIndex = index;
     }
 
-    $scope.addNew = function () {
-        if (SharedStateService.readOnlyUser == false)
-            $scope.action = "create";
 
+    $scope.addNew = function () {
+       $scope.action = "create"; // as opposed to update
         var journal = new Journal();
-        journal.SiteID = SharedStateService.Selected.SiteID;
+        journal.SiteID = SharedStateService.getSelectedID("Site");
         var recordDate = new Date(Date.now());
         journal.JournalDate = recordDate.toLocaleDateString();
-        journal.MemberID = SharedStateService.authenticatedMember.MemberID;
-        $scope.Journal = journal;        
+        journal.MemberID = SharedStateService.getAuthenticatedMemberID();
+        $scope.Journal = journal;
+        SharedStateService.setAuthorizationState(isEditing);
+        $scope.stateMachine.state = isEditing;
+       
     }
+
 
     $scope.saveJournal = function () {
         if ($scope.action=="create")
@@ -127,6 +135,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                     $scope.systemMessage.text = "new journal was saved successfully";
                     $scope.systemMessage.activate();
                     $scope.action = "read";
+                    SharedStateService.setAuthorizationState(canEdit);
+                    $scope.stateMachine.state = canEdit;
                     $scope.JournalEntries.push(result.data);
                     $scope.journalIndex = $scope.JournalEntries.length - 1;
                     $scope.Journal = $scope.JournalEntries[$scope.journalIndex];
@@ -143,25 +153,22 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                     $scope.systemMessage.text = "journal edit was saved successfully";
                     $scope.systemMessage.activate();
                     $scope.action = "read";
+                    SharedStateService.setAuthorizationState(canEdit);
+                    $scope.stateMachine.state = canEdit;
                 },
                 function (error) {
-                    $scope.systemMessage.text = "error saving journal " + error.data.Message;
+                    $scope.systemMessage.text = "error saving journal " + error.statusText;
                     $scope.systemMessage.activate();
                 });
-
-       
-
     }
+
 
     $scope.editJournal = function () {
-
-        if (SharedStateService.readOnlyUser == true) {
-            $scope.systemMessage.text = "sign in to edit content";
-            $scope.systemMessage.activate();
-        }
-        else
             $scope.action = "edit";
+            SharedStateService.setAuthorizationState(isEditing);
+            $scope.stateMachine.state = isEditing;
     }
+
 
     $scope.deleteJournal = function () {
         DataTransportService.deleteJournal($scope.Journal.JournalID).then(
@@ -173,19 +180,21 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                     SharedStateService.Repository.put("Journals", $scope.JournalEntries);
                     $scope.systemMessage.text = "journal deleted successfully";
                     $scope.systemMessage.activate();
-                    $scope.action = "read";
+                 //   $scope.action = "read"; deprecated
+                    SharedStateService.setAuthorizationState(canEdit);
+                    $scope.stateMachine.state = canEdit;
                 },
                 function (error) {
                     $scope.systemMessage.text = "error deleteing journal " + error.data.Message;
                     $scope.systemMessage.activate();
                 });
-
-       
     }
+
 
     $scope.cancelJournal = function () {
          $scope.Journal = $scope.JournalEntries[$scope.journalIndex];
-
+         SharedStateService.setAuthorizationState(canEdit);
+         $scope.stateMachine.state = canEdit;
 
     }
 

@@ -89,7 +89,7 @@ var Journal = function () {
     scope_safe.DateAdded = recordDate.toLocaleDateString();  
     scope_safe.JournalDate = null;
     scope_safe.FromPhone = null;
-    scope_safe.Title = null;
+    scope_safe.Title = "untitled";
     scope_safe.MemberID = null;
 
 

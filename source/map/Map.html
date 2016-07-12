@@ -63,7 +63,7 @@
 
 
 
-    <div ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
+    <div ng-cloak ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
 
 
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>

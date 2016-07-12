@@ -57,12 +57,13 @@
                 <div ng-repeat="Photo in PhotoList" style="margin-top:0px;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
                         <div ng-if="Photo.StorageURL !=null ">
-                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" style="max-height:76vh;max-width:300px;">
+                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" 
+                                 style="max-height:76vh;max-width:95vw;">
                         </div>
 
                         <div ng-if="Photo.StorageURL==null ">
                             <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                 style="max-height:76vh" />
+                                 style="max-height:76vh;max-width:95vw" />
                         </div>
 
                     </a>

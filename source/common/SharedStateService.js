@@ -2,18 +2,18 @@
 {
 
     var local_scope = this;
-
     local_scope.Authorization = {
-        state: readOnly
-
-
+        state: null
     }
+  
 
  
     local_scope.readOnlyUser = true;
     // bootstrap to a demo user - this may go away
     if ($cookies.get("AuthenticatedMemberID") == null)
         $cookies.put("AuthenticatedMemberID", 1);
+
+
     local_scope.geocoder = null;
     local_scope.googleMap = null;
     local_scope.center = null;
@@ -29,13 +29,12 @@
 
     local_scope.getAuthorizationState = function () {
         var constvalue = local_scope.Authorization.state;
-    
         if (constvalue == null)
             constvalue = $cookies.get("AuthorizationState") != null ? $cookies.get("AuthorizationState") : readOnly;
-
         return constvalue;
-
     }
+
+    
 
     local_scope.setSelected = function (key, value) {
         local_scope.Selected[key] = value;
@@ -51,7 +50,6 @@
       //  alert(key + propName + test + "=" + idValue);
 
     }
-
 
     local_scope.getSelectedID = function (key) {
         var ID = null;
@@ -103,10 +101,6 @@
         $cookies.put("AuthenticatedMemberID", member.MemberID);
 
     }
-
-
-
-
 
     local_scope.Repository = $cacheFactory('Repository', {});
 

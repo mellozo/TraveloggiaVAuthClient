@@ -10,42 +10,58 @@
 
 
 
-    <div class="panel panel-default">
-  <div class="panel-heading">
+<div class="panel panel-default">
+ 
 
-       <ul class="nav nav-tabs">
-              <li ng-repeat ="journal in JournalEntries"                  
-                   role="presentation" class="active"><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>
+  <div class="panel-body" style="background-color:transparent">
 
-              <li  role="presentation" class="active"><a href="" ng-click="addNew()">Add New</a></li>
-        </ul>
+      <nav class="navbar navbar-default">
+          <div class="container-fluid">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" 
+                          data-toggle="collapse" 
+                          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+              </div>
 
-  </div>
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                        <li ng-repeat="journal in JournalEntries" ng-class="{active : Journal.JournalID == journal.JournalID }"
+                           ><a href="" ng-click="loadContent($index)">{{journal.Title}}</a></li>
+                        <li ng-show="stateMachine.state=='CAN_EDIT'"><a href="" ng-click="addNew()">Add New</a></li>
+                 
+                  </ul>
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
 
-  <div class="panel-body">
-           <div class="form-group" style="font-size:20px">
-        
-            <button ng-show="canEdit" title="Edit" style="float:right;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent" 
+             
+            <button ng-show="stateMachine.state=='CAN_EDIT' " title="Edit" style="float:right;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent" 
                 ng-click="editJournal()">
                     <img src="../image/pencil.png" style="width:100%" />
             </button>
-         <label  class ="journalTitle"> {{Site.Name  }}</label><br />
-       <label  class ="journalTitle">Journal Date: {{Journal.DateAdded  | date:'MM/dd/yyyy @ h:mma'}}</label>
-        <span ng-hide="action=='read'"> 
-            <br />
-            <label for="journalTitle">Title</label>
-            <input type="text" class="form-control" id="journalTitle" ng-model="Journal.Title">
-      </span>
+     <!--   <div  class ="journalLabel">Site: {{Site.Name  }}</div><br /> -->  
+         <div  class ="journalLabel">Journal Date: {{Journal.DateAdded  | date:'MM/dd/yyyy @ h:mma'}}</div>
 
-       
-      
-          </div>
 
-      
-          <text-angular ng-show="action == 'read'"  id="textReader"   name="readhtmlcontent" ng-model="Journal.Text" ta-disabled="true"  ta-toolbar="[]">
+        <div ng-show="stateMachine.state=='IS_EDITING' "> 
+            <div  class="journalLabel" style="display:inline-block">Title:</div>
+            <input type="text" class="form-control"   id="journalTitle" ng-model="Journal.Title">
+      </div>
+
+
+          <text-angular ng-hide="stateMachine.state=='IS_EDITING'"  id="textReader"   
+                        name="readhtmlcontent" 
+                        ng-model="Journal.Text" ta-disabled="true"  ta-toolbar="[]">
           </text-angular>
 
-          <text-angular ng-hide="action == 'read' "  id="textEditor"   name="edithtmlcontent" ng-model="Journal.Text"  
+          <text-angular ng-show="stateMachine.state=='IS_EDITING'  "  id="textEditor"   
+                        name="edithtmlcontent" 
+                        ng-model="Journal.Text"  
               style="font-size:20px;min-height:260px;"
                ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]";>
           </text-angular>
@@ -56,13 +72,13 @@
 
 
 
-       <div ng-show="action=='edit' || action=='create' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+       <div ng-show="stateMachine.state=='IS_EDITING' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="saveJournal()" >Save</a>
         </div>
-        <div ng-show="action == 'edit'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+        <div ng-show="stateMachine.state=='IS_EDITING' && action=='edit'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="deleteJournal()" >Delete</a>
         </div>
-       <div ng-show="action=='create' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+       <div ng-show="stateMachine.state=='IS_EDITING' && action=='edit'  " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                   <a   href="" ng-click="cancelJournal()" >Cancel</a>
         </div>
      
