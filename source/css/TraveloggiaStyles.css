@@ -105,6 +105,18 @@ input {
     background-color:rgba(125, 161, 125, 1);
 }
 
+.skyBlue {
+    background-color:#DEE5F2;
+}
+
+.cloudBlue {
+    background-color:#8EBBDA;
+}
+
+.infoText {
+    font-family:Centaur;
+}
+
 /*/*angularTextEditor*/
 .ta-editor {
     min-height: 300px;
