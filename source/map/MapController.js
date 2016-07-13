@@ -17,16 +17,14 @@
         for (var i = 0; i < sites.length; i++) 
         {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false ,title:sites[i].Address, subTitle:sites[i].Name});
+            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false, title: sites[i].Address, subTitle: sites[i].Name });
+
             (function attachEventHandlers(site) {
-            
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                     SharedStateService.setSelected("Site", site);
                     SharedStateService.setSelected("SiteID",site.SiteID);
                     $scope.$apply(function () { $location.path("/Album") })
                 });
-
-
             })(sites[i],$scope,$location)
 
             $scope.mapInstance.entities.push(pin);
@@ -36,18 +34,17 @@
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         $scope.mapInstance.setView({ bounds: viewRect });
 
-        Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) 
-        {
-                // get the HTML DOM Element that represents the Map
-                var mapElem = $scope.mapInstance.getRootElement();
-                if (e.targetType === "map") {
-                    // Mouse is over Map
-                 //   mapElem.style.cursor = "crosshair";
-                } else {
-                    // Mouse is over Pushpin, Polyline, Polygon
-                    mapElem.style.cursor = "pointer";
-                }
-            });
+        //Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) {
+        //        // get the HTML DOM Element that represents the Map
+        //        var mapElem = $scope.mapInstance.getRootElement();
+        //        if (e.targetType === "map") {
+        //            // Mouse is over Map
+        //         //   mapElem.style.cursor = "crosshair";
+        //        } else {
+        //            // Mouse is over Pushpin, Polyline, Polygon
+        //            mapElem.style.cursor = "pointer";
+        //        }
+        //    });
 
     }
 

@@ -156,13 +156,23 @@ left:5px;
     
 }
 
+@media (max-width: 446px) {
+    #bigToolbar{display:none !important}
+   #smallToolbar{display:block !important}
+}
+@media (min-width: 447px) {
+  #bigToolbar{display:block !important}
+   #smallToolbar{display:none !important}
+
+}
+
 #photoList a:link { color: purple;}
 #photoList a:visited {color: blue;}
 #photoList a:hover {color: red;}
 #photoList a:active {color: yellow;}
 
 
-}
+
 
 
 /*.signin{

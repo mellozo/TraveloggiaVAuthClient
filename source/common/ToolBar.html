@@ -1,84 +1,90 @@
 ﻿<!--the bootstrap way    style="background-image:url(../image/lightblue.jpg)"-->
 
-<div class="col-xs-12 bluenav"  ng-controller="ToolbarController as navCtrl" >
+<div id="smallToolbar" class="col-xs-12  bluenav"   ng-controller="ToolbarController as navCtrl" style="width:100%;height:10vh;padding-top:2px;" >
 
-<!--    <div class="row" style="min-height:90px;">-->
-
-<!--layout for phones-->
-      
-
-        <div  style="float:left">
-               <button style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goMap()" title="Map View">
-                <img src="/../image/globe.png"  class="image-responsive" style="max-height:40px" />
-            </button>
+       <div  style="float:left">
+               <button style="height:14vw;max-height:11vh;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goMap()" title="Map View">
+                        <img src="/../image/globe.png"  class="image-responsive"   style="max-height:100%"/>
+                </button>
         </div>
-      <!--  <div class="col-sm-2 hidden-xs">
-            map
-        </div>-->
 
-         <div style="float:left">
-               <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goAlbum()" title="Photo Album"> 
-                <img src="../image/sun.png"   style="max-height:40px"  />
-            </button>
-         </div>
-      <!--   <div class="col-sm-2 hidden-xs">
-           upload photo
-        </div>-->
-<!--    ng-click="navCtrl.goSiteList()"        -->       
-        
-     <div  style="float:left">
-         <div class="btn-group">
-                 <button   type="button"  class="dropdown-toggle"  data-toggle="dropdown" title="Site List"
-                  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" >
-                 <img src="../image/scroll.png"    style="max-height:40px"  />
-              </button>
-                        <ul class="dropdown-menu">
-                              <li  ng-repeat="site in navCtrl.SiteList">
-                                  <a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a></li>
-                   
-                         </ul>
-             </div>
-         </div>
-         
-           <!--   <button   type="button"  
-
-                  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8"  title="Site List">
-                 <img src="../image/scroll.png"    style="max-height:40px"  />
-              </button>
-          <div class="btn-group">
-           <button  class="dropdown-toggle" 
-                  style="position:absolute;left:-30px;z-index:2;background-color:transparent;border:none;padding:0px;margin:0px;"
-                data-toggle="dropdown" title="Site List">
-                 <i class="glyphicon glyphicon-chevron-down"></i>
-              </button>
-                              
-            </div> 
-</div>
-               
-               
-               -->
-            
-
-    
-    
-      <!--   <div class="col-sm-2 hidden-xs">
-          sites
-        </div>-->
+        <div style="float:left">
+                <button  style="height:14vw;max-height:11vh;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goAlbum()" title="Photo Album"> 
+                    <img src="../image/sun.png"    style="max-height:100%"/>
+                </button>
+        </div>
 
          <div  style="float:left">
-                 <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goJournal()" title="Journal">
-                <img src="../image/stack.png"   style="max-height:40px"  />
-            </button>
+             <div class="btn-group">
+                     <button   style="height:14vw;max-height:11vh;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" >
+                     <img src="../image/scroll.png"  style="max-height:100%"   />
+                  </button>
+                            <ul class="dropdown-menu">
+                                  <li  ng-repeat="site in navCtrl.SiteList">
+                                      <a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a></li>
+                   
+                             </ul>
+                 </div>
+             </div>
+
+         <div  style="float:left">
+                 <button  style="height:14vw;max-height:11vh;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goJournal()" title="Journal">
+                        <img src="../image/stack.png"   style="max-height:100%" />
+                    </button>
          </div>
-     <!--    <div class="col-sm-2 hidden-xs">
-            journal
-        </div>-->
-           <div style="float:left">
-                 <button  style="border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goSite()"  title="Site Information">
-                <img src="../image/largepalm.png"    style="max-height:40px"  />
-            </button>
-         </div>
+    
+        <div style="float:left">
+                <button  style="height:14vw;max-height:11vh;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goSite()"  title="Site Information">
+                    <img src="../image/largepalm.png" style="max-height:100%"    />
+                </button>
+        </div>
 
     </div>
-      <!--  </div>-->
+     
+
+
+
+
+
+<div id="bigToolbar" class="col-xs-12  bluenav" ng-controller="ToolbarController as navCtrl" >
+
+    <div style="float:left">
+        <button style="height:40px;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goMap()" title="Map View">
+            <img src="/../image/globe.png" class="image-responsive" style="max-height:100%" />
+        </button>
+    </div>
+
+    <div style="float:left">
+        <button style="height:40px;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goAlbum()" title="Photo Album">
+            <img src="../image/sun.png" style="max-height:100%" />
+        </button>
+    </div>
+
+    <div style="float:left">
+        <div class="btn-group">
+            <button style="height:40px;border-radius:40px;margin:4px 0px;background-color:#3CBBC8">
+                <img src="../image/scroll.png" style="max-height:100%" />
+            </button>
+            <ul class="dropdown-menu">
+                <li ng-repeat="site in navCtrl.SiteList">
+                    <a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div style="float:left">
+        <button style="height:40px;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goJournal()" title="Journal">
+            <img src="../image/stack.png" style="max-height:100%" />
+        </button>
+    </div>
+
+    <div style="float:left">
+        <button style="height:40px;border-radius:40px;margin:4px 0px;background-color:#3CBBC8" ng-click="navCtrl.goSite()" title="Site Information">
+            <img src="../image/largepalm.png" style="max-height:100%" />
+        </button>
+    </div>
+
 </div>
+

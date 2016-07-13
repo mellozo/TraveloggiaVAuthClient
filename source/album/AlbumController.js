@@ -20,11 +20,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
     }
 
 
-    
-
     $scope.selectPhoto = function (photo) {
         SharedStateService.setSelected("Photo", photo);
-      //  $scope.selectedPhoto = photo;
         $location.path("/Photo");
     }
 
@@ -42,8 +39,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
         photoRecord.FileName = fileName;
         return photoRecord;
     }
-
-
    
     $scope.filesToUpload = null;
 
@@ -147,7 +142,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
 
 
     // loading the data if they change sites but stay on the page
-    // may we say, what an inelegant syntax
     $scope.$watch(
         function (scope) {
             return SharedStateService.getSelected("SiteID");
