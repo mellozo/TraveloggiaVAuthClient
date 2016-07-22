@@ -13,6 +13,52 @@ body {
     display:block;
 }
 
+/*toolbarstyles*/
+
+.clickableDiv {
+  width:17%;
+      max-width:62px;
+  height:auto;
+  display:inline-block;
+  padding:2px
+
+}
+
+.poppedUp {
+
+ -webkit-box-shadow:5px 5px 5px #999999;
+ -moz-box-shadow: 5px 5px 5px #999999;
+ box-shadow:5px 5px 5px #999999;
+}
+
+
+.glow:hover {
+  box-shadow: 0 0 5px 2px #f00;
+  -webkit-box-shadow: 0 0 5px 2px #f00; 
+  -moz-box-shadow: 0 0 5px 2px #f00; 
+}
+
+.dottedBorderRed {
+  width:100%;
+  border:dotted 2px red;
+}
+
+
+/*@media (max-width: 446px) {
+    #bigToolbar{display:none !important}
+   #smallToolbar{display:block !important}
+}
+@media (min-width: 447px) {
+  #bigToolbar{display:block !important}
+   #smallToolbar{display:none !important}
+
+}*/
+
+.imageButton {
+    max-width:17%; 
+    height:auto;
+}
+
 
 .phoneNav{
     width:23%;
@@ -168,15 +214,6 @@ left:5px;
     
 }
 
-@media (max-width: 446px) {
-    #bigToolbar{display:none !important}
-   #smallToolbar{display:block !important}
-}
-@media (min-width: 447px) {
-  #bigToolbar{display:block !important}
-   #smallToolbar{display:none !important}
-
-}
 
 #photoList a:link { color: purple;}
 #photoList a:visited {color: blue;}
