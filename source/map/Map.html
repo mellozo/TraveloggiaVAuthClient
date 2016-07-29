@@ -1,18 +1,4 @@
 ﻿
-
-
-
-<div id="mainContainer"   ng-controller="MapController"  >
- 
-    <img id="mapLogo" title="Traveloggia" src="../image/ship.png" class="mapLabel" />
-
-    <div ng-cloak class="mapLabel" id="mapNameDiv">
-        {{MapRecord.MapName}}
-    </div>
-
- 
-    
-
 <!--     <style>
 
         .panel-heading a:after {
@@ -28,6 +14,21 @@
     </style>
 -->
 
+
+
+<div id="mainContainer"   ng-controller="MapController"  >
+ 
+    <div  class="clickableDiv mapLabel " ng-controller="ToolbarController as navCtrl" ng-click="navCtrl.goMapList()" >
+        <img id="mapLogo" title="Traveloggia"
+              src="../image/ship.png" 
+             class="dottedBorderRed glow " 
+            />
+    </div>
+    <div ng-cloak class="mapLabel" id="mapNameDiv">
+        {{MapRecord.MapName}}
+    </div>
+
+ 
 
 <!--    <div class="panel-group" id="accordion" >
    

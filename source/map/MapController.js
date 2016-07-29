@@ -1,5 +1,17 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout,$http) {
 
+// load a map right away
+    if ($scope.mapInstance == null) {
+        $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
+            credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+            //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
+            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            showTermsLink: false,
+            enableClickableLogo: false,
+            navigationBarMode: Microsoft.Maps.NavigationBarMode.minified
+        });
+        //   SharedStateService.Repository.put("MapInstance", $scope.mapInstance);
+    }
 
     $scope.dialogIsShowing = false;
 
@@ -13,6 +25,7 @@
 
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
+        SharedStateService.Repository.put("Sites", sites)
         var arrayOfMsftLocs = [];
         for (var i = 0; i < sites.length; i++) 
         {
@@ -55,17 +68,7 @@
         }
         else {
            // $scope.mapInstance = SharedStateService.Repository.get("MapInstance");
-            if ($scope.mapInstance == null) {
-                $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-                    credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                    //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
-                    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-                    showTermsLink: false,
-                    enableClickableLogo: false,
-                    navigationBarMode: Microsoft.Maps.NavigationBarMode.minified
-                });
-             //   SharedStateService.Repository.put("MapInstance", $scope.mapInstance);
-            }
+          
             $scope.drawSites();
         }
     };
@@ -79,6 +82,7 @@
                     $scope.MapRecord = result.data[0];
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
+                    $scope.MapList = result.data;
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
@@ -92,29 +96,50 @@
             )// end then
         }
         else {
-            $scope.MapRecord = SharedStateService.Repository.get('Maps')[0];
-            SharedStateService.setSelected("Map", $scope.MapRecord);         
-            if ($scope.MapRecord.Sites.length > 0) {
-                var sites = $scope.MapRecord.Sites
-                if(SharedStateService.Selected.SiteID == null)
-                   SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-                else
-                {
-                    for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {//?
-                        if($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
-                            SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
-                        break;
+            $scope.MapList = SharedStateService.Repository.get('Maps');
+
+            if ($location.path() == "/Map") {
+
+                if (SharedStateService.getSelectedID("Map") == null) {
+                    $scope.MapRecord = SharedStateService.Repository.get('Maps')[0];
+                    SharedStateService.setSelected("Map", $scope.MapRecord);
+                }
+                else {
+                            for (var i = 0; i < $scope.MapList.length; i++) {
+                                mapid = $scope.MapList[i].map
+                                if ($scope.MapList[i].MapID == SharedStateService.getSelectedID("Map")) {
+                                    $scope.MapRecord = $scope.MapList[i];
+                                    break;
+                                }
+                            }
+                }
+
+
+
+                if ($scope.MapRecord.Sites.length > 0) {
+                    var sites = $scope.MapRecord.Sites
+                    if (SharedStateService.Selected.SiteID == null)
+                        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+                    else {
+                        for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {//?
+                            if ($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
+                                SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
+                            break;
+                        }
+                    }
+                    try {
+                        $scope.afterLoaded();
+                    }
+                    catch (error) {
+                        $scope.systemMessage.text = "error " + error.data.Message;
+                        $scope.systemMessage.activate();
                     }
                 }
-                try {
-                   $scope.afterLoaded();
-                }
-                catch (error) {
-                    $scope.systemMessage.text = "error " + error.data.Message;
-                    $scope.systemMessage.activate();
-                }
+
             }
-        }
+
+            }
+               
     }
 
 
@@ -195,6 +220,16 @@
         });
     }
 
+
+    $scope.selectMap = function (index) {
+        $scope.MapRecord = $scope.MapList[index];
+        SharedStateService.setSelected("Map", $scope.MapRecord)
+        $location.path("/Map");
+    }
+
+
+
+
     $scope.$watch(
        function (scope) {
            return SharedStateService.getAuthenticatedMemberID();
@@ -204,18 +239,9 @@
                $scope.loadMaps();
       }
     );
-    
-  //  $scope.$watch(
-  //   function (scope) {
-        
-  //           return SharedStateService.getSelectedID("Map");
-  //   },
-  //   function (newValue, oldValue) {
-  //       if (oldValue != null && (newValue != oldValue))
-  //           $scope.loadMaps($scope.mapInstance);
-  //   }
-  //);
 
+ 
+ 
 
     // the kickoff
    $scope.loadMaps();

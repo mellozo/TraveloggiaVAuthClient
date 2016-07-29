@@ -84,3 +84,17 @@ angularTraveloggia.constant("readOnly", "READ_ONLY");
 angularTraveloggia.constant("canEdit", "CAN_EDIT");
 angularTraveloggia.constant("isEditing", "IS_EDITING")
 
+angularTraveloggia.directive('onLoad', ['$parse', function ($parse) {
+     return {
+         restrict: 'A',
+         link: function (scope, elem, attrs) {
+             var fn = $parse(attrs.onLoad);
+             elem.on('load', function (event) {
+                 scope.$apply(function () {
+                     fn(scope, { $event: event });
+                 });
+             });
+         }
+     };
+ }]);
+

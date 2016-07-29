@@ -1,98 +1,102 @@
-﻿<div ng-controller="SiteController as siteCtrl">
-<div ng-include="'common/ToolBar.html'"></div>
+﻿
+
+<div class="container-fluid" ng-controller="SiteController as siteCtrl">
+  
+  <div class="row">
+      <div ng-include="'common/ToolBar.html'"></div>
+  </div>  
+    
+    <div class="row">
+        <div class="col-xs-12 " style="margin:0px;padding:0px;" >
 
 
-<div class="container" style="background-color:#DEE5F2;font-family:Centaur;color:#12A5B5;font-size:18px;max-width:500px">
-  <form>
-   <div class="page-header" style="background-color:#8EBBDA;font-family:Cinzel">
-      Site Information
-   </div>
-        <div class="form-group">
-    <label  for="Name">name</label>
-          <!--  <span style="background-color:#3CBBC8"  class="label label-default">name</span>-->
-    <input type="text" ng-model="siteCtrl.Site.Name" class="form-control" id="Name" >
-  </div>
-  <div class="form-group">
-    <label   for="Address">address</label>
-    <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address" >
-  </div>
-
- 
-
-        
-            <div class="form-group">
-
-                 
-
-                           <label   for="Arrival">arrival</label>
-                            <input type="text" s class="form-control" id="Arrival"
-                                  datepicker-popup="mediumDate" 
-                                   is-open="siteCtrl.ArrivalDatePickerIsOpen" 
-                                    ng-click="siteCtrl.ArrivalDatePickerOpen()" 
-                                   ng-model="siteCtrl.Site.Arrival" />
-
-                              <button type="button" class="btn btn-default" 
-                                      ng-click="siteCtrl.ArrivalDatePickerOpen($event)">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                              </button>
-                     
-       
-       </div>
-
-        
-            <div class="form-group">
-           <label   for="Departure">departure</label>
-            <input type="text" class="form-control" id="Departure"
-               datepicker-popup="mediumDate" 
-                is-open="siteCtrl.DepartureDatePickerIsOpen" 
-                   ng-click="siteCtrl.DepartureDatePickerOpen()" 
-                   ng-model="siteCtrl.Site.Departure" />
- 
-              <button type="button" class="btn btn-default" 
-                      ng-click="siteCtrl.DepartureDatePickerOpen($event)">
-                <i class="glyphicon glyphicon-calendar"></i>
+            <form class="skyBlue infoText listColumn" >
                
-              </button>
-            
-       
-       </div>
+                 <div class="cloudBlue menuText listHeader">
+                    Site Information
+                </div>
+
+                <div class="form-group">
+                    <div class="infoText"><b>name:</b></div>
+                    <!--  <span style="background-color:#3CBBC8"  class="label label-default">name</span>-->
+                    <input type="text" ng-model="siteCtrl.Site.Name" class="form-control" id="Name">
+                </div>
+
+                <div class="form-group">
+                    <div class="infoText"><b>address:</b></div>
+                    <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address">
+                </div>
+
+                <div class="form-group">
+
+                    <label for="Arrival">arrival</label>
+                    <input type="text" s class="form-control" id="Arrival"
+                           datepicker-popup="mediumDate"
+                           is-open="siteCtrl.ArrivalDatePickerIsOpen"
+                           ng-click="siteCtrl.ArrivalDatePickerOpen()"
+                           ng-model="siteCtrl.Site.Arrival" />
+
+                    <button type="button" class="btn btn-default"
+                            ng-click="siteCtrl.ArrivalDatePickerOpen($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
 
 
-       <div class="form-group">
-                <label for="description">description</label>
-                <textarea  rows="3" ng-model="siteCtrl.Site.Description" class="form-control" id="description" />
+                </div>
+
+
+                <div class="form-group">
+                    <div class="infoGroup"><b>departure:</b></div>
+                    <input type="text" class="form-control" id="Departure"
+                           ng-model="siteCtrl.Site.Departure" />
+
+                    <button type="button" class="btn btn-default"
+                            ng-click="siteCtrl.DepartureDatePickerOpen($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+
+                    </button>
+
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="description">description</label>
+                    <textarea rows="3" ng-model="siteCtrl.Site.Description" class="form-control" id="description" />
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">phone</label>
+                    <input type="text" ng-model="siteCtrl.Site.Phone" class="form-control" id="phone">
+                </div>
+                <div class="form-group">
+                    <label for="Email">email address</label>
+                    <input type="email" ng-model="siteCtrl.Site.Email" class="form-control" id="Email">
+                </div>
+
+                <div class="form-group">
+                    <label for="URL">website</label>
+                    <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
+                </div>
+                <div style="margin-bottom:400px;">
+
+
+                    <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
+                        <a href="" ng-click="siteCtrl.saveSite()">Save</a>
+                    </div>
+                    <!--    <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                          <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
+                </div>
+             -->
+                    <!--  <button style="background-color:#3CBBC8" type="button" class="btn btn-default"  ng-click="siteCtrl.saveSite()">Save</button>-->
+                </div>
+            </form>
+
+
+        </div>
+
     </div>
 
 
-  <div class="form-group">
-    <label   for="phone">phone</label>
-    <input type="text" ng-model="siteCtrl.Site.Phone" class="form-control" id="phone" >
-  </div>
-  <div class="form-group">
-    <label for="Email">email address</label>
-    <input type="email" ng-model="siteCtrl.Site.Email" class="form-control" id="Email" >
-  </div>
-
-  <div class="form-group">
-    <label  for="URL">website</label>
-    <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL" >
-  </div>
-  <div style="margin-bottom:400px;">
-
-      
-       <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                  <a   href="" ng-click="siteCtrl.saveSite()" >Save</a>
-        </div>
-    <!--    <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                  <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
-        </div>
-     -->
-
-
-
-<!--  <button style="background-color:#3CBBC8" type="button" class="btn btn-default"  ng-click="siteCtrl.saveSite()">Save</button>-->
-      </div>
-</form>
-
-</div>
 </div>

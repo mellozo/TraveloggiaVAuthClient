@@ -13,15 +13,29 @@ body {
     display:block;
 }
 
+
+.mapLabel {
+   position:absolute;
+    z-index:99;
+    font-family:Cinzel;
+}
+
+#mapLogo{
+left:5px;
+/*width:40px;
+height:40px;*/
+/*margin:0;
+padding:0;*/ 
+}
+
 /*toolbarstyles*/
 
 .clickableDiv {
   width:17%;
-      max-width:62px;
+  max-width:62px;
   height:auto;
   display:inline-block;
   padding:2px
-
 }
 
 .poppedUp {
@@ -163,6 +177,53 @@ input {
     font-family:Centaur;
 }
 
+.listHeader {
+    padding:12px;
+    font-size:18px;
+    margin-top:6px;
+    margin-bottom:10px;
+}
+
+.listColumn{
+   padding:16px 26px;
+   margin-left:auto;
+   margin-right:auto;
+   color:#12A5B5;
+   font-size:18px;
+    max-width:500px;
+    height:100%;
+  
+}
+
+.greenMud {
+    background-color:#0E7B83;
+}
+
+#mapList a {
+    font-size:22px;
+     color:#0E7B83;
+   z-index:4;
+   opacity:1;
+}
+
+
+.seeThrough{
+background-color:#e1dddd;
+opacity:1;
+padding:4px;
+border-radius:7px;
+margin-bottom:10px;
+margin-right:auto;
+margin-left:auto;
+z-index:2;
+}
+
+
+.menuText {
+    font-family: 'Cinzel', Verdana;
+    color:darkgoldenrod;
+}
+
 /*/*angularTextEditor*/
 .ta-editor {
     min-height: 300px;
@@ -174,19 +235,6 @@ input {
 }
 
 
-.mapLabel {
-   position:absolute;
-    z-index:99;
-    font-family:Cinzel;
-}
-
-#mapLogo{
-left:5px;
-width:40px;
-height:40px;
-margin:0;
-padding:0; 
-}
 
 #mapNameDiv {
   top:10px;left:45px;font-size:18px;color:goldenrod;

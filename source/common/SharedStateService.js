@@ -60,7 +60,6 @@
 
     local_scope.getSelectedPhoto = function () {
         var photo = local_scope.Selected.Photo;
-
         if (photo == null)
         {
             var id = $cookies.get("PhotoID");
@@ -74,12 +73,8 @@
                 }
                     
             }
-
         }
-            
-
         return photo;
-
     }
 
     local_scope.getSelectedMapName = function () {

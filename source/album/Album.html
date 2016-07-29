@@ -1,4 +1,5 @@
-﻿<div class="container-fluid" style="width:100%;background-color:#0E7B83;" ng-controller="AlbumController" >
+﻿<script src="../lib/load-image.all.min.js"></script>
+<div class="container-fluid greenMud"  ng-controller="AlbumController" >
 <div class="row">
     <div ng-include="'common/ToolBar.html'"></div>
 
@@ -20,7 +21,7 @@
                         <input id="photoFileInput" type="file" accept="image/*" capture="camera" multiple=""
                                onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
                         <div id="previewPanel" style="margin-top:10px;padding-top:10px;">
-
+                            <p>preview image </p>
                         </div>
 
                         <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
@@ -34,21 +35,42 @@
 
 
 <div class="row"  style="margin-top:0px;padding-top:0px;">
-    <div class="col-xs-12" style="margin-top:0px;padding-top:0px;"> 
+    <div class="col-xs-12" style="margin-top:0px;padding-top:0px;" id="photoListContainer"> 
    
 
                 <div ng-repeat="Photo in PhotoList" style="margin-top:0px;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
                         <div ng-if="Photo.StorageURL !=null ">
-                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}" 
-                                 style="max-height:76vh;max-width:90vw;">
+                                   <div ng-if="Photo.orientationID == null">
+                                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
+                                            style="max-height:76vh;max-width:90vw;">
+                                   </div>
+
+                                    <div ng-if="Photo.orientationID != null">
+                                            <img 
+                                                on-load="onImageLoad($event, Photo.orientationID)"
+                                                 style="position:absolute;height:auto;width:90vh;visibility:hidden"
+                                                 src="{{  imageServer + imagePath + Photo.FileName}}" />
+
+                                            <canvas id="canvas" style="display:block;"></canvas>
+                                    </div>
                         </div>
 
                         <div ng-if="Photo.StorageURL==null ">
-                            <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                 style="max-height:76vh;max-width:90vw" />
-                        </div>
+                                <div ng-if="Photo.orientationID == null">
+                                        <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
+                                                style="max-height:76vh;max-width:90vw" />
+                                </div>
 
+                                <div ng-if="Photo.orientationID != null">
+                                        <img 
+                                                 on-load="onImageLoad($event)"
+                                             style="position:absolute;height:auto;width:90vh;visibility:hidden"
+                                             src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}" />
+                                        <canvas id="canvas" style="display:block;"></canvas>
+                                </div>
+
+                        </div>
                     </a>
                     <div> {{Photo.FileName}}</div>
                 </div>

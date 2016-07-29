@@ -1,8 +1,34 @@
 ﻿
-<div ng-controller="MapListController as mlCtrl">
-    <h2>Map List</h2>
-    <ul >
-        <li value="{{map.MapID}}" ng-repeat="map in mlCtrl.MapList">{{map.MapName}}</li>
-    </ul>
-</div>
 
+<div class="container-fluid"  ng-controller="MapController ">
+
+    <div class="row">
+        <div ng-include="'common/ToolBar.html'"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 " style="margin:0px;padding:0px;">
+
+            <div class="skyBlue infoText listColumn">
+               
+                    <div class="cloudBlue menuText listHeader">
+                        Map List
+                    </div>
+
+                    <div id="mapList" style="position:relative;list-style:none;margin-left:auto;margin-right:auto;">
+                       
+                            <div ng-repeat="map in MapList" class="seeThrough">
+                                <a href="" ng-click="selectMap($index)">
+                                     {{map.MapName}}
+                                </a>
+                            </div>
+                     
+                    </div>
+               
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

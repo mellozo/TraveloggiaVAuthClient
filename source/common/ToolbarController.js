@@ -47,51 +47,16 @@
     };
 
 
-   $scope.afterLoadAndRender = function () {
-       if ($http.pendingRequests.length > 0) {
-           $timeout($scope.afterLoadAndRender); // Wait for all templates to be loaded
-       }
-       else {
-     // 
-           //var w = angular.element($window);
-           //w.bind('resize', VM.debounce($scope.redrawData,40));
-           //$scope.redrawData();
-       }
-   };
 
-
-   $scope.redrawData = function () {
-       $scope.Diagnostics.innerHeight = $window.innerHeight;
-       $scope.Diagnostics.innerWidth = $window.innerWidth;
-
-       var x = ( 16 * $window.innerWidth )/ 100;
-       var buttonWidth = Math.round(x);
-       buttonWidth = (buttonWidth < 62) ? buttonWidth : 62;
-       buttonWidth = buttonWidth + "px";
-       
-       $scope.Diagnostics.toolButtonStyle = {
-           'max-width': buttonWidth,
-           'height': 'auto',
-           'margin': '0px',
-           'padding':'0px'
-       }
-
-       $scope.Diagnostics.buttonWidth = buttonWidth;
-       $scope.$digest();
-    
-   }
 
     VM.SiteList = SharedStateService.Repository.get('Sites')
 
     VM.selectSite = function (index) {
         var selectedSite = VM.SiteList[index];
-        SharedStateService.Selected.Site = selectedSite;
-        SharedStateService.Selected.SiteID = selectedSite.SiteID;
+        SharedStateService.setSelected("Site",selectedSite);
     }
 
-    VM.beNice = function () {
-        x = y
-    }
+    
 
     VM.goJournal = function () {
         $location.path("/Journal");
@@ -106,14 +71,17 @@
     }
 
     VM.goSite = function () {
-        $location.path("/Site")
+        $location.path("/Site");
     }
 
     VM.goSiteList = function () {
-        $location.path("/SiteList")
+        $location.path("/SiteList");
+    }
+
+    VM.goMapList = function () {
+        $location.path("/MapList");
     }
 
 
-    $scope.afterLoadAndRender();
 
 })
