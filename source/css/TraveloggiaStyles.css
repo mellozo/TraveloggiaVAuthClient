@@ -13,6 +13,12 @@ body {
     display:block;
 }
 
+.papyrus
+{
+    background-color:#E5DD9F;
+}
+
+
 
 .mapLabel {
    position:absolute;
@@ -26,6 +32,14 @@ left:5px;
 height:40px;*/
 /*margin:0;
 padding:0;*/ 
+}
+
+/*image styles*/
+.imageFrame{
+padding:5px;
+ background-color:#E5DD9F;
+ display:inline-block;
+  border:dotted 2px red;
 }
 
 /*toolbarstyles*/
@@ -145,11 +159,6 @@ input {
     background-color:#749074 ;
 }
 
-
-.papyrus
-{
-    background-color:#E5DD9F;
-}
 
 .teal
 {

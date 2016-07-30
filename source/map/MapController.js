@@ -2,6 +2,8 @@
 
 // load a map right away
     if ($scope.mapInstance == null) {
+
+
         $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
             credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
             //  center: new Microsoft.Maps.Location(51.50632, -0.12714),

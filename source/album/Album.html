@@ -38,38 +38,29 @@
     <div class="col-xs-12" style="margin-top:0px;padding-top:0px;" id="photoListContainer"> 
    
 
-                <div ng-repeat="Photo in PhotoList" style="margin-top:0px;padding-top:0px;">
+                <div ng-repeat="Photo in PhotoList" style="margin-top:15px;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
-                        <div ng-if="Photo.StorageURL !=null ">
-                                   <div ng-if="Photo.orientationID == null">
+                        <div ng-if="Photo.StorageURL !=null " class="imageFrame">
+                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
                                             style="max-height:76vh;max-width:90vw;">
                                    </div>
 
-                                    <div ng-if="Photo.orientationID != null">
+                                    <div ng-if="Photo.orientationID != null && Photo.orientationID > 4"  class="imageFrame">
                                             <img 
                                                 on-load="onImageLoad($event, Photo.orientationID)"
                                                  style="position:absolute;height:auto;width:90vh;visibility:hidden"
-                                                 src="{{  imageServer + imagePath + Photo.FileName}}" />
+                                                 src="{{  imageServer + imagePath + Photo.FileName }}" />
 
                                             <canvas id="canvas" style="display:block;"></canvas>
                                     </div>
                         </div>
 
-                        <div ng-if="Photo.StorageURL==null ">
+                        <div ng-if="Photo.StorageURL==null " class="imageFrame">
                                 <div ng-if="Photo.orientationID == null">
                                         <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
                                                 style="max-height:76vh;max-width:90vw" />
                                 </div>
-
-                                <div ng-if="Photo.orientationID != null">
-                                        <img 
-                                                 on-load="onImageLoad($event)"
-                                             style="position:absolute;height:auto;width:90vh;visibility:hidden"
-                                             src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}" />
-                                        <canvas id="canvas" style="display:block;"></canvas>
-                                </div>
-
                         </div>
                     </a>
                     <div> {{Photo.FileName}}</div>

@@ -239,7 +239,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 cachedPhotos.push(result.data);
                 SharedStateService.Repository.put('Photos', cachedPhotos);
                 $scope.filesUploadedCount = $scope.filesUploadedCount + 1;
-                $route.reload();
+               // $route.reload();
             },
             function (error) {
                 $scope.systemMessage.text = "error adding photo record";
@@ -248,8 +248,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     $scope.deletePhoto = function () {
+
         DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
             function (result) {
+             
+                var cachedPhotos = SharedStateService.Repository.get('Photos');
+                for (var i = 0; i < cachedPhotos.length; i++) {
+                    if (cachedPhotos[i].PhotoID == $scope.selectedPhoto.PhotoID) {
+                        cachedPhotos.splice(i, 1);
+                        break;
+                    }
+                }
+
                 $scope.systemMessage.text = "selected photo has been deleted";
                 $scope.systemMessage.activate();
                 $location.path("/Album");
@@ -266,17 +276,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             if ($scope.filesToUpload && newValue == $scope.filesToUpload.length)
             {
                 if ($scope.filesUploadedCount >1)
-                    $scope.systemMessage.text = $scope.filesUploadedCount +  "photos uploaded successfully";
+                    $scope.systemMessage.text = $scope.filesUploadedCount +  " photos uploaded successfully";
                 else 
                     $scope.systemMessage.text =" photo uploaded successfully";
 
                     $scope.systemMessage.activate();
-                      var previewContainer = $window.document.getElementById(previewPanel);
-                           while (previewContainer.firstChild)
-                               previewContainer.removeChild(previewContainer.firstChild);
                     $scope.filesToUpload = null;
                     $scope.filesUploadedCount = 0;
-                    angular.element("#photoFileInput").val();
+                    $route.reload();
             }
         }
         );
