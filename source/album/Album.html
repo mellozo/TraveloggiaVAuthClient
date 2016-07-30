@@ -1,6 +1,6 @@
 ﻿<script src="../lib/load-image.all.min.js"></script>
-<div class="container-fluid greenMud"  ng-controller="AlbumController" >
-<div class="row">
+<div class="container-fluid greenMud" style="margin:0px;padding:0px;"  ng-controller="AlbumController" >
+<div class="row" style="padding-left:16px;">
     <div ng-include="'common/ToolBar.html'"></div>
 
 </div>
@@ -38,7 +38,7 @@
     <div class="col-xs-12" style="margin-top:0px;padding-top:0px;" id="photoListContainer"> 
    
 
-                <div ng-repeat="Photo in PhotoList" style="margin-top:15px;padding-top:0px;">
+                <div ng-repeat="Photo in PhotoList" style="margin-top:15px;margin-left:5px;margin-right:auto;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
                         <div ng-if="Photo.StorageURL !=null " class="imageFrame">
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
