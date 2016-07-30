@@ -2,25 +2,35 @@
 {
 
     var local_scope = this;
+
     local_scope.Authorization = {
         state: null
     }
-  
-
- 
-    local_scope.readOnlyUser = true;
-    // bootstrap to a demo user - this may go away
-    if ($cookies.get("AuthenticatedMemberID") == null)
-        $cookies.put("AuthenticatedMemberID", 1);
 
 
-    local_scope.geocoder = null;
-    local_scope.googleMap = null;
     local_scope.center = null;
     local_scope.zoom = null;
     local_scope.Selected = {}
 
-   
+    // bootstrap to a demo user - this may go away 
+    if ($cookies.get("AuthenticatedMemberID") == null) {
+        $cookies.put("AuthenticatedMemberID", 1);
+       // local_scope.readOnlyUser = true;
+    }
+       
+
+
+    local_scope.getAuthenticatedMemberID = function () {
+        var id = null;
+       id= local_scope.authenticatedMember == null ? $cookies.get("AuthenticatedMemberID") : local_scope.authenticatedMember.MemberID;
+       return id;
+    }
+
+    local_scope.setAuthenticatedMember = function (member) {
+        local_scope.authenticatedMember = member;
+        $cookies.put("AuthenticatedMemberID", member.MemberID);
+
+    }
     
     local_scope.setAuthorizationState = function (constValue) {
         local_scope.Authorization.state = constValue;
@@ -87,15 +97,7 @@
         return local_scope.Selected[key];
     }
 
-    local_scope.getAuthenticatedMemberID = function () {
-        return local_scope.authenticatedMember == null ? $cookies.get("AuthenticatedMemberID") : local_scope.authenticatedMember.MemberID;
-    }
-
-    local_scope.setAuthenticatedMember = function (member) {
-        local_scope.authenticatedMember = member;
-        $cookies.put("AuthenticatedMemberID", member.MemberID);
-
-    }
+ 
 
     local_scope.Repository = $cacheFactory('Repository', {});
 

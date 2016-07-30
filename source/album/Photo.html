@@ -4,25 +4,71 @@
     </div>
     <div class="row">
         <div class="col-xs-12" style="margin-top:15px;">
-            <div ng-if="selectedPhoto.StorageURL !=null " >
+
+            <div ng-if="selectedPhoto.StorageURL !=null ">
+
+                <!--<div>
+                    <img ng-src="{{  imageServer + imagePath + selectedPhoto.FileName}}"
+                        style="width:auto;height:80vh;overflow:auto">
+                </div>-->
+
+                <div ng-if="selectedPhoto.orientationID != null ">
+                    <img on-load="onImageLoad($event, selectedPhoto.orientationID)"
+                         style="position:absolute;height:auto;width:80vh;visibility:hidden"
+                         src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
+
+                    <canvas id="canvas" style="display:block;"></canvas>
+                </div>
+            </div>
+
+            <div ng-if="selectedPhoto.StorageURL==null ">
+                <div ng-if="selectedPhoto.orientationID == null">
+                    <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}"
+                         style="width:auto;height:80vh;overflow:auto" />
+                </div>
+
+                <div ng-if="selectedPhoto.orientationID != null ">
+                    <img on-load="onImageLoad($event)"
+                         style="position:absolute;height:auto;width:90vh;visibility:hidden"
+                         src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" />
+                    <canvas id="canvas" style="display:block;"></canvas>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <!--<div ng-if="selectedPhoto.StorageURL !=null " >
                     <img src="{{  imageServer + imagePath + selectedPhoto.FileName}}" style="width:auto;height:80vh;overflow:auto"    />
             </div>
 
             <div ng-if="selectedPhoto.StorageURL==null ">
                 <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}" style="width:auto;height:80vh;overflow:auto" />
-            </div>
+            </div>-->
         </div>
     </div>
 
+
+
+
+
     <div class="row" >
         <div class="col-xs-12">
-            <div class="panel panel-default" >
-                <div class="panel-body" ng-show="authorizationState == 'CAN_EDIT'">
+            
+                <div  ng-show="authorizationState == 'CAN_EDIT'"  style="padding:5px;">
                     <a href="" ng-click="deletePhoto()">
                         <img src="../image/minus.png" style="height:40px;width:40px;" />
                     </a>
                 </div>
-            </div>
+          
            
         </div>
     </div>

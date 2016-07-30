@@ -68,21 +68,21 @@
         }
         else {
            // $scope.mapInstance = SharedStateService.Repository.get("MapInstance");
-          
             $scope.drawSites();
         }
     };
 
 
     $scope.loadMaps = function () {
-        var cachedMaps = SharedStateService.Repository.get("Maps");
-        if (cachedMaps.length==0 || cachedMaps[0].MemberID != SharedStateService.getAuthenticatedMemberID() ) {
+        var cachedMap = SharedStateService.Repository.get("Maps");
+        if (cachedMap==null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
+        {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
-                    $scope.MapRecord = result.data[0];
+                    $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
-                    $scope.MapList = result.data;
+                   // $scope.MapList = result.data;
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
@@ -95,50 +95,18 @@
                 }
             )// end then
         }
-        else {
-            $scope.MapList = SharedStateService.Repository.get('Maps');
-
-            if ($location.path() == "/Map") {
-
-                if (SharedStateService.getSelectedID("Map") == null) {
-                    $scope.MapRecord = SharedStateService.Repository.get('Maps')[0];
-                    SharedStateService.setSelected("Map", $scope.MapRecord);
-                }
-                else {
-                            for (var i = 0; i < $scope.MapList.length; i++) {
-                                mapid = $scope.MapList[i].map
-                                if ($scope.MapList[i].MapID == SharedStateService.getSelectedID("Map")) {
-                                    $scope.MapRecord = $scope.MapList[i];
-                                    break;
-                                }
-                            }
-                }
-
-
-
-                if ($scope.MapRecord.Sites.length > 0) {
-                    var sites = $scope.MapRecord.Sites
-                    if (SharedStateService.Selected.SiteID == null)
-                        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-                    else {
-                        for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {//?
-                            if ($scope.MapRecord.Sites[i].SiteID == SharedStateService.Selected.SiteID)
-                                SharedStateService.Selected.Site = $scope.MapRecord.Sites[i];
-                            break;
-                        }
-                    }
-                    try {
+        else 
+        {
+                if ($location.path() == "/Map") {
+                    $scope.MapRecord = SharedStateService.Repository.get('Maps');    
+                    if ($scope.MapRecord.Sites.length > 0) 
                         $scope.afterLoaded();
-                    }
-                    catch (error) {
-                        $scope.systemMessage.text = "error " + error.data.Message;
-                        $scope.systemMessage.activate();
-                    }
                 }
-
-            }
-
-            }
+                else if(location.path()=="/MapList")
+                {
+                    // to do load the list of maps
+                }
+        }
                
     }
 
@@ -228,20 +196,6 @@
     }
 
 
-
-
-    $scope.$watch(
-       function (scope) {
-           return SharedStateService.getAuthenticatedMemberID();
-       },
-       function (newValue, oldValue){
-           if  (newValue != oldValue)
-               $scope.loadMaps();
-      }
-    );
-
- 
- 
 
     // the kickoff
    $scope.loadMaps();

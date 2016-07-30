@@ -1,6 +1,6 @@
 ﻿
 
-angularTraveloggia.controller('AlbumController', function ($scope, $location, DataTransportService, SharedStateService, $window) {
+angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
 
@@ -11,6 +11,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
     $scope.imagePath = SharedStateService.getAuthenticatedMemberID() +"/" + SharedStateService.getSelectedMapName() + "/";
+
+    $scope.imageRefresher = "?reload=" + new Date().getMiliseconds;
 
     var cachedPhotos = SharedStateService.Repository.get('Photos');
 
@@ -165,12 +167,16 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
         }
      
         loadImage.parseMetaData(file, function (data) {
+            var exifData = null;
+            var orientationID = null;
             if (data.exif) {
-                options.orientation = data.exif.get('Orientation')
-                var dbRecord = createPhotoRecord(file.name, data.exif.getAll(), options.orientation);
-                // store in associative array so that at the right time ( after sucessful upload) we can post the record to db 
-                $scope.photoRecords.push(dbRecord);
+                options.orientation = data.exif.get('Orientation');
+                exifData = data.exif.getAll();
+                orientationID = options.orientation
             }
+            var dbRecord = createPhotoRecord(file.name, exifData, orientationID);
+            // store in associative array so that at the right time ( after sucessful upload) we can post the record to db 
+            $scope.photoRecords.push(dbRecord);
             displayImage(file, options)
         })
     }
@@ -183,9 +189,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
         photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
         photoRecord.FileName = fileName;
-        photoRecord.orientation = exif.orientation;
-        photoRecord.orientationID = orientationID;
-        photoRecord.DateTaken = exif.DateTimeOriginal;
+        if (exif != null) {
+            photoRecord.orientation = exif.orientation;
+            photoRecord.orientationID = orientationID;
+            photoRecord.DateTaken = exif.DateTimeOriginal;
+        }
         return photoRecord;
     }
    
@@ -231,6 +239,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, Da
                 cachedPhotos.push(result.data);
                 SharedStateService.Repository.put('Photos', cachedPhotos);
                 $scope.filesUploadedCount = $scope.filesUploadedCount + 1;
+                $route.reload();
             },
             function (error) {
                 $scope.systemMessage.text = "error adding photo record";

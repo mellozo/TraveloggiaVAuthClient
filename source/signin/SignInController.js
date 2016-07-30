@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function (SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route) {
+﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route) {
     var VM = this;
     VM.Member = new Member();
    
@@ -43,8 +43,9 @@
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
         // this will be deprecated
-        SharedStateService.readOnlyUser = true;
-        VM.authenticationStatus.signedIn=false; 
+    //    SharedStateService.readOnlyUser = true;
+        VM.authenticationStatus.signedIn = false;
+        $route.reload();
        // and all the other stuff we will fool around with later like JWT
     }
 
