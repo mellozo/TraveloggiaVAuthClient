@@ -1,6 +1,5 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout,$http) {
 
-
     $scope.dialogIsShowing = false;
 
     $scope.searchAddress = null;
@@ -11,29 +10,57 @@
         $scope.dialogIsShowing = false;
     }
 
+    $scope.setView = function () {
+        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+    }
+
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
-        SharedStateService.Repository.put("Sites", sites)
+        SharedStateService.Repository.put("Sites", sites);
         var arrayOfMsftLocs = [];
-        for (var i = 0; i < sites.length; i++) 
-        {
-            var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-            var pin = new Microsoft.Maps.Pushpin(loc, { draggable: false, title: sites[i].Address, subTitle: sites[i].Name });
 
-            (function attachEventHandlers(site) {
-                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    SharedStateService.setSelected("Site", site);
-                    SharedStateService.setSelected("SiteID",site.SiteID);
-                    $scope.$apply(function () { $location.path("/Album") })
-                });
-            })(sites[i],$scope,$location)
+            var pushpinCollection = new Microsoft.Maps.Layer();
+            for (var i = 0; i < sites.length; i++) {
+                var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
+                var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: sites[i].Name, subTitle: sites[i].Address });
 
-            $scope.mapInstance.entities.push(pin);
-            arrayOfMsftLocs.push(loc)
-        }
+                (function attachEventHandlers(site) {
+                    Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                        SharedStateService.setSelected("Site", site);
+                        SharedStateService.setSelected("SiteID", site.SiteID);
+                        $scope.$apply(function () { $location.path("/Album") })
+                    });
+                })(sites[i], $scope, $location)
 
-        var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
-        $scope.mapInstance.setView({ bounds: viewRect });
+                pushpinCollection.add(pin);
+                arrayOfMsftLocs.push(loc)
+            }
+            $scope.mapInstance.layers.insert(pushpinCollection);
+
+
+
+            if (SharedStateService.getSelectedID("Site") == null) {
+                var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
+                $scope.mapInstance.setView({ bounds: viewRect });
+                SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+            }
+            else {
+                var selectedSiteID = SharedStateService.getSelectedID("Site");
+                var selectedSite = null;
+                for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
+                    if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
+                        selectedSite = $scope.MapRecord.Sites[i];
+                        break;
+                    }
+
+                }
+                var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+                $scope.mapInstance.setView({ center: loc, zoom: 19 });
+            }
+
+
+      
+     
 
         //Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) {
         //        // get the HTML DOM Element that represents the Map
@@ -49,30 +76,22 @@
 
     }
 
-
     $scope.afterLoaded = function () {
         if ($http.pendingRequests.length > 0) {
             $timeout($scope.afterRender); // Wait for all templates to be loaded
         }
         else {
-
-
             if ($scope.mapInstance == null) {
                 $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                     credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                     center: new Microsoft.Maps.Location(51.50632, -0.12714),
                     mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-                   showTermsLink: false,
-                 enableClickableLogo: false,
-                    navigationBarMode: Microsoft.Maps.NavigationBarMode.minified
+                  //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
+                    showTermsLink: false,
+                    enableClickableLogo: false,
+                    navigationBarMode: Microsoft.Maps.NavigationBarMode.compact
                 });
-                //   SharedStateService.Repository.put("MapInstance", $scope.mapInstance);
             }
-
             $scope.loadMaps();
-
-           // $scope.mapInstance = SharedStateService.Repository.get("MapInstance");
-           // $scope.drawSites();
         }
     };
 
@@ -86,12 +105,9 @@
                     $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
-                   // $scope.MapList = result.data;
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
-                        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
                         $scope.drawSites();
-                      //  $scope.afterLoaded();
                     }                     
                 },
                 function (error) {
@@ -104,17 +120,15 @@
         {
                 if ($location.path() == "/Map") {
                     $scope.MapRecord = SharedStateService.Repository.get('Maps');    
-                    if ($scope.MapRecord.Sites.length > 0) 
-                        $scope.afterLoaded();
+                    if ($scope.MapRecord.Sites.length > 0)
+                        $scope.drawSites();
                 }
                 else if(location.path()=="/MapList")
                 {
                     // to do load the list of maps
                 }
-        }
-               
+        }               
     }
-
 
 
     $scope.addMarker = function (latitude, longitude, title, imagePath) {
