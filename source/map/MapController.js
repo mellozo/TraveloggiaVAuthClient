@@ -69,10 +69,10 @@
                 //   SharedStateService.Repository.put("MapInstance", $scope.mapInstance);
             }
 
-
+            $scope.loadMaps();
 
            // $scope.mapInstance = SharedStateService.Repository.get("MapInstance");
-            $scope.drawSites();
+           // $scope.drawSites();
         }
     };
 
@@ -90,7 +90,8 @@
                     SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-                        $scope.afterLoaded();
+                        $scope.drawSites();
+                      //  $scope.afterLoaded();
                     }                     
                 },
                 function (error) {
@@ -202,7 +203,7 @@
 
 
     // the kickoff
-   $scope.loadMaps();
-
+ //  $scope.loadMaps();
+    $scope.afterLoaded();
 
 });
