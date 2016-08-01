@@ -48,15 +48,15 @@
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4"  class="imageFrame">
                                             <img 
-                                                on-load="onImageLoad($event, Photo.orientationID)"
+                                              on-load="onImageLoad($event, Photo.orientationID)"
                                                  style="position:absolute;height:auto;width:90vh;visibility:hidden"
-                                                 src="{{  imageServer + imagePath + Photo.FileName }}" />
+                                                 ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
 
                                             <canvas id="canvas" style="display:block;"></canvas>
                                     </div>
                         </div>
 
-                        <div ng-if="Photo.StorageURL==null " class="imageFrame">
+                        <div ng-if="Photo.StorageURL==null ">
                                 <div ng-if="Photo.orientationID == null">
                                         <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
                                                 style="max-height:76vh;max-width:90vw" />
