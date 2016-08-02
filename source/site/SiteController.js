@@ -5,7 +5,10 @@
     VM.SiteList = SharedStateService.Repository.get('Sites');
     VM.Site = SharedStateService.Selected.Site;
 
-    $scope.editMode = (SharedStateService.readOnlyUser == false) ? true : false;
+    $scope.stateMachine = {
+        state: SharedStateService.getAuthorizationState()
+    }
+  //  $scope.editMode = (SharedStateService.readOnlyUser == false) ? true : false;
 
 
 
@@ -115,11 +118,13 @@
 
     $scope.$watch(
        function (scope) {
-           return SharedStateService.Selected.SiteID;
+           if (SharedStateService.Selected.Site != null)
+               return SharedStateService.Selected.Site.SiteID;
        },
        function (newValue, oldValue) {
-           if (newValue != oldValue)
+           if (newValue != null && newValue != oldValue) {
                VM.Site = SharedStateService.Selected.Site;
+           }
        });
 
 })

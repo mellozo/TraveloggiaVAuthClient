@@ -19,6 +19,14 @@ body {
 }
 
 
+.infoText {
+    font-family:Centaur;
+}
+
+
+.readableText {
+    font-size:2.5em;
+}
 
 .mapLabel {
    position:absolute;
@@ -180,10 +188,6 @@ input {
 
 .cloudBlue {
     background-color:#8EBBDA;
-}
-
-.infoText {
-    font-family:Centaur;
 }
 
 .listHeader {
