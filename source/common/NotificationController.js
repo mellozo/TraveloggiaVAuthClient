@@ -12,7 +12,8 @@
         },
         activate:function(){
             this.cover=true;
-    }
+        },
+        loadComplete:false
     };
 
 

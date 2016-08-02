@@ -59,7 +59,7 @@
             }
 
 
-      
+            $scope.systemMessage.loadComplete = true;
      
 
         //Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) {
