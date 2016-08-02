@@ -217,7 +217,6 @@
 
 
     // the kickoff
- //  $scope.loadMaps();
     $scope.afterLoaded();
 
 });
