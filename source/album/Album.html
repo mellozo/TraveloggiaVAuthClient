@@ -41,16 +41,18 @@
                 <div ng-repeat="Photo in PhotoList" style="margin-top:15px;margin-left:5px;margin-right:auto;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
                         <div ng-if="Photo.StorageURL !=null " class="imageFrame">
-
+                            <!-- use when ios 9 is commonly used and vh is therefore supported 
+                                style="max-height:76vh;max-width:90vw;"-->
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                            style="max-height:76vh;max-width:90vw;">
+                                                 ng-style="landscapeImageStyle">
                                    </div>
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
                                             <img 
                                               on-load="onImageLoad($event, Photo.orientationID)"
-                                                 style="position:absolute;height:auto;width:90vh;visibility:hidden"
+                                                 style="position:absolute;visibility:hidden"
+                                                 ng-style="portraitImageStyle"
                                                  ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
                                             <canvas id="canvas" style="display:block;"></canvas>
                                     </div>
@@ -60,7 +62,7 @@
                         <div ng-if="Photo.StorageURL==null " class="imageFrame">
                                 <div ng-if="Photo.orientationID == null">
                                         <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                                style="max-height:76vh;max-width:90vw" />
+                                                  ng-style="landscapeImageStyle" />
                                 </div>
                         </div>
                     </a>

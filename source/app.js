@@ -68,7 +68,7 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
 
         .when('/MapList', {
             templateUrl: 'map/MapList.html',
-            controller: 'MapController'
+            controller: 'MapListController'
        
         })
 

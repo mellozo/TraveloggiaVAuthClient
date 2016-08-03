@@ -1,7 +1,7 @@
 ﻿
 angularTraveloggia.factory('DataTransportService', function ($http,$q) {
-//  var baseURL = "http://localhost:51316"
- var baseURL = "http://traveloggiaservices.net"
+var baseURL = "http://localhost:51316"
+ //var baseURL = "http://traveloggiaservices.net"
     return {
    
         getMember: function (email, password) {
@@ -45,6 +45,26 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             }
             return $http(config);
         },
+
+
+        getMapList: function (memberID) {
+            var endpoint = baseURL + "/api/MapList/" + memberID;
+            var config = {
+                method: "get",
+                url: endpoint
+            }
+            return $http(config);
+        },
+
+        getMapByID: function (mapID) {
+            var endpoint = baseURL + "/api/SelectMap/" + mapID;
+            var config = {
+                method: "get",
+                url: endpoint
+            }
+            return $http(config);
+        },
+
 
         addSite:function(site){
             var endpoint = baseURL + "/api/Sites";

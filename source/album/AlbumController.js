@@ -3,6 +3,19 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
+    //max-height:76vh;max-width:90vw;
+    var vhseventysix = $window.innerHeight * .76;
+    var vweighty = $window.innerWidth * .8;
+    $scope.landscapeImageStyle = {
+        "max-height": vhseventysix,
+        "max-width": vweighty
+    };
+    //width:90vh;
+    var vheighty = $window.innerHeight * .8;
+    $scope.portaitImageStyle = {
+        "height":"auto",
+        "max-width:":vheighty
+    }
 
     $scope.filesToUpload = null;
 
@@ -43,15 +56,24 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.onImageLoad = function (e, orientationID) {
         var loadedImage = e.target;
         var degrees = 0;
+        var maxHeight = $window.innerHeight * .76
+        var scaledWidth = maxHeight;
         var height = loadedImage.height;
+
         var width = loadedImage.width;
+        var x;
+
+        //   height/width = x/scaledWidth;
+      //  height * scaledWidth = x * width;
+        x= (height * scaledWidth)/width;
         var canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
         var ctx = canvas.getContext("2d");
-      //  ctx.save();
+       ctx.save();
         // make canvas a big square for now
-        canvas.width = width;
-        canvas.height = width;
-
+        canvas.width = scaledWidth;
+        canvas.height =scaledWidth;
+       // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
+        ctx.restore();
 
         switch (orientationID) {
             case 1:
@@ -75,30 +97,58 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
                 break;
             case 6:
+                ctx.save();
                 degrees = 90;
-                ctx.translate(width / 2, height / 2);
+                ctx.translate(scaledWidth / 2, x / 2);
                 ctx.rotate(degrees * Math.PI / 180);
-                var moveLeft = ((width / 2) - (height / 2)) * 2
+                var moveLeft = ((scaledWidth / 2) - (x / 2)) * 2
                 ctx.translate(0, moveLeft)
-                ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+                ctx.restore();
                 break;
+                //degrees = 90;
+                //ctx.translate(width / 2, height / 2);
+                //ctx.rotate(degrees * Math.PI / 180);
+                //var moveLeft = ((width / 2) - (height / 2)) * 2
+                //ctx.translate(0, moveLeft)
+                //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+                //break;
             case 7:
+                ctx.save();
                 degrees = -90;
                 degrees = -90;
-                ctx.translate(width / 2, height / 2);
+                ctx.translate(scaledWidth / 2, x / 2);
                 ctx.rotate(degrees * Math.PI / 180);
-                var moveDown = ((width / 2) - (height / 2)) * 2
+                var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
                 ctx.translate(-moveDown, 0)
-                ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+                ctx.restore();
                 break;
+                //degrees = -90;
+                //degrees = -90;
+                //ctx.translate(width / 2, height / 2);
+                //ctx.rotate(degrees * Math.PI / 180);
+                //var moveDown = ((width / 2) - (height / 2)) * 2
+                //ctx.translate(-moveDown, 0)
+                //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+                //break;
             case 8:
+                ctx.save();
                 degrees = -90;
-                ctx.translate(width / 2, height / 2);
+                ctx.translate(scaledWidth / 2, x / 2);
                 ctx.rotate(degrees * Math.PI / 180);
-                var moveDown = ((width / 2) - (height / 2)) * 2
+                var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
                 ctx.translate(-moveDown, 0)
-                ctx.drawImage(loadedImage, -height/2, -width/2, width, height);
+                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+                ctx.restore();
                 break;
+                //degrees = -90;
+                //ctx.translate(width / 2, height / 2);
+                //ctx.rotate(degrees * Math.PI / 180);
+                //var moveDown = ((width / 2) - (height / 2)) * 2
+                //ctx.translate(-moveDown, 0)
+                //ctx.drawImage(loadedImage, -height/2, -width/2, width, height);
+                //break;
         }
 
       

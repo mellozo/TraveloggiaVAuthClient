@@ -1,4 +1,11 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, $scope, $location, DataTransportService,$timeout,$http) {
+﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $scope, $location, DataTransportService,$timeout,$http) {
+
+    var vpHeight = $window.innerHeight;
+    var vpWidth = $window.innerWidth;
+    $scope.mapStyle = {
+        "height": vpHeight,
+       "width":vpWidth
+    }
 
     $scope.dialogIsShowing = false;
 
@@ -37,9 +44,9 @@
             }
             $scope.mapInstance.layers.insert(pushpinCollection);
 
+            var selectedSiteID = SharedStateService.getSelectedID("Site")
 
-
-            if (SharedStateService.getSelectedID("Site") == null) {
+            if (selectedSiteID == "null" || selectedSiteID == null) {
                 var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
                 $scope.mapInstance.setView({ bounds: viewRect });
                 SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
@@ -84,11 +91,11 @@
             if ($scope.mapInstance == null) {
                 $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                     credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                    mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                    mapTypeId: "a",
                   //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
                     showTermsLink: false,
-                    enableClickableLogo: false,
-                    navigationBarMode: Microsoft.Maps.NavigationBarMode.compact
+                    enableClickableLogo: false
+                   
                 });
             }
             $scope.loadMaps();
@@ -98,14 +105,14 @@
 
     $scope.loadMaps = function () {
         var cachedMap = SharedStateService.Repository.get("Maps");
-        if (cachedMap==null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
+        if (cachedMap.length==0 || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
         {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
-                    SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
+                 //   SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
                     if ($scope.MapRecord.Sites.length > 0) {
                         $scope.drawSites();
                     }                     
@@ -118,15 +125,32 @@
         }
         else 
         {
-                if ($location.path() == "/Map") {
-                    $scope.MapRecord = SharedStateService.Repository.get('Maps');    
-                    if ($scope.MapRecord.Sites.length > 0)
-                        $scope.drawSites();
-                }
-                else if(location.path()=="/MapList")
-                {
-                    // to do load the list of maps
-                }
+            var selectedMapID = SharedStateService.getSelectedID("Map")
+                            if (selectedMapID != null && (cachedMap.MapID == selectedMapID))
+                            {
+                                $scope.MapRecord = cachedMap;
+                                if ($scope.MapRecord.Sites.length > 0)
+                                    $scope.drawSites();
+                            }
+                            else// we selected a map from the map list and now need to load its sites and put it in the repository
+                            {
+                                        DataTransportService.getMapByID(selectedMapID).then(
+                                            function (result) {
+                                                $scope.MapRecord = result.data;
+                                                SharedStateService.Repository.put('Maps', result.data);
+                                                SharedStateService.setSelected("Site",null)
+                                                if ($scope.MapRecord.Sites.length > 0)
+                                                    $scope.drawSites();
+
+                                            },
+                                            function (error) {
+                                                $scope.systemMessage.text = "error loading selected map";
+                                                $scope.systemMessage.activate();
+                                            }
+                                            )
+                            }
+
+              
         }               
     }
 
@@ -208,12 +232,7 @@
     }
 
 
-    $scope.selectMap = function (index) {
-        $scope.MapRecord = $scope.MapList[index];
-        SharedStateService.setSelected("Map", $scope.MapRecord)
-        $location.path("/Map");
-    }
-
+   
 
 
     // the kickoff

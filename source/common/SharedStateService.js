@@ -49,7 +49,10 @@
     local_scope.setSelected = function (key, value) {
         local_scope.Selected[key] = value;
         var propName = key + "ID";
-        var idValue = value[propName]
+        if (value != null)
+            var idValue = value[propName];
+        else
+            idValue = null;
         $cookies.put(propName, idValue)
         // this is messy indeed because we use the mapname in the photo path - probably shouldnt - human readable though
         if (key == "Map")
