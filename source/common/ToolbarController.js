@@ -14,7 +14,7 @@
 
 
     }
-
+  
 
     $scope.selectedState = {
         mapSelected: $location.path() == "/Map" ? true:false,
@@ -27,7 +27,19 @@
 
     var VM = this;
 
+    VM.selectedSite = {  };
 
+    VM.SiteList = SharedStateService.Repository.get('Sites');
+
+    var selectedSiteID = SharedStateService.getSelectedID("Site");
+    for (var i = 0; i < VM.SiteList.length; i++) {
+        if (VM.SiteList[i].SiteID == selectedSiteID)
+            VM.selectedSite = VM.SiteList[i];
+        break;
+    }
+
+
+   
 
 
     // this is an actual utility function 
@@ -49,11 +61,11 @@
 
 
 
-    VM.SiteList = SharedStateService.Repository.get('Sites')
-
     VM.selectSite = function (index) {
         var selectedSite = VM.SiteList[index];
-        SharedStateService.setSelected("Site",selectedSite);
+        VM.selectedSite = selectedSite;
+        SharedStateService.setSelected("Site", selectedSite);
+        $scope.apply();
     }
 
     
@@ -82,6 +94,25 @@
         $location.path("/MapList");
     }
 
+
+
+    // loading the data if they change sites but stay on the page
+    $scope.$watch(
+        function (scope) {
+            if (SharedStateService.Selected.Site != null)
+                return SharedStateService.Selected.Site.SiteID;
+        },
+        function (newValue, oldValue) {
+            if (newValue != null && newValue != oldValue) {
+                for (var i = 0; i < VM.SiteList.length; i++) {
+                    if (VM.SiteList[i].SiteID == newValue)
+                        VM.selectedSite = VM.SiteList[i];
+                    break;
+                }
+
+            }
+
+        });
 
 
 })

@@ -26,9 +26,11 @@
                          class="dottedBorderRed glow" 
                             ng-class="{'poppedUp' : selectedState.sitelistSelected == true}"   />
                 </div>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" id="siteListDropDown">
                     <li ng-repeat="site in navCtrl.SiteList">
-                        <a href="" ng-click="navCtrl.selectSite($index)">{{site.Name}}</a>
+                        <a href="" ng-click="navCtrl.selectSite($index)"
+                           ng-class="{'siteListDropDownSelected': site.Name==navCtrl.selectedSite.Name}"
+                           >{{site.Name}}</a>
                     </li>
                 </ul>
         </div>

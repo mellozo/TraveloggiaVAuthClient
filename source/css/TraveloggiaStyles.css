@@ -79,6 +79,10 @@ padding:5px;
   border:dotted 2px red;
 }
 
+.siteListDropDownSelected {
+    background-color:#E5DD9F;
+}
+
 
 /*@media (max-width: 446px) {
     #bigToolbar{display:none !important}
