@@ -46,7 +46,7 @@
                            
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                                 style="max-width:80%;height:auto">
+                                                 ng-style="landscapeImageStyle">
                                    </div>
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
