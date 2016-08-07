@@ -3,6 +3,8 @@
 
     var local_scope = this;
 
+  
+  
     local_scope.Authorization = {
         state: null
     }
