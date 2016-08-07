@@ -112,7 +112,7 @@
                     $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
-                 //   SharedStateService.Repository.put('Sites', $scope.MapRecord.Sites)
+                    SharedStateService.setSelected("Site", null);// clear any previous settings
                     if ($scope.MapRecord.Sites.length > 0) {
                         $scope.drawSites();
                     }                     

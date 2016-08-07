@@ -3,14 +3,14 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
-    //max-height:76vh;max-width:90vw;
+
     var vhseventysix = $window.innerHeight * .76;
     var vweighty = $window.innerWidth * .8;
     $scope.landscapeImageStyle = {
         "max-height": vhseventysix,
         "max-width": vweighty
     };
-    //width:90vh;
+
     var vheighty = $window.innerHeight * .8;
     $scope.portaitImageStyle = {
         "height":"auto",
@@ -187,7 +187,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
               .attr('href', img.src || img.toDataURL())
         }
         var previewContainer = angular.element("#previewPanel");
-        previewContainer.children().replaceWith(content, null)
+        previewContainer.append(content);
 
     }
 
@@ -209,8 +209,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 // displays in preview pane and creates record with exif data
     function onFileSelected(file) {
         var options = {
-            maxWidth: 350,
-            maxHeight:500,
+            maxWidth: 80,
+            maxHeight:80,
             canvas: true,
             pixelRatio: window.devicePixelRatio,
             downsamplingRatio: 0.5

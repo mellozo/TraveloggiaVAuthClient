@@ -17,14 +17,16 @@
                 </div>
 
                 <div id="collapseOne" class="panel-collapse collapse">
-                    <div class="panel-body">
+                    <div class="panel-body" style="height:270px">
                         <input id="photoFileInput" type="file" accept="image/*" capture="camera" multiple=""
                                onchange="angular.element(this).scope().fileNameChanged(this)" style="width:90%" />
                         <div id="previewPanel" style="margin-top:10px;padding-top:10px;">
                             <p>preview image </p>
                         </div>
-
-                        <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
+                        <div>
+                            <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
+                        </div>
+                    
                     </div>
                 </div>
 
@@ -44,7 +46,7 @@
                            
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                                 ng-style="landscapeImageStyle">
+                                                 style="max-width:80%;height:auto">
                                    </div>
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
