@@ -24,7 +24,11 @@
                             <p>preview image </p>
                         </div>
                         <div>
-                            <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="uploadFile()">Upload</button>
+                            <button 
+                                    ng-disabled="BusyWith.uploading"
+                                    style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
+                                     ng-click="handleUploadClick()">Upload
+                            </button>
                         </div>
                     
                     </div>

@@ -3,7 +3,7 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
-
+   
     var vhseventysix = $window.innerHeight * .76;
     var vweighty = $window.innerWidth * .8;
     $scope.landscapeImageStyle = {
@@ -234,7 +234,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.filesUploadedCount = 0;
 
-    createPhotoRecord = function (fileName, exif, orientationID) {
+   var createPhotoRecord = function (fileName, exif, orientationID) {
         var photoRecord = new Photo();
         photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
@@ -246,15 +246,20 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
         return photoRecord;
     }
-   
+
+   $scope.handleUploadClick = function () {
+       $scope.systemMessage.text = "working...";
+       $scope.systemMessage.activate();
  
-
-
-    $scope.uploadFile = function () {
+       uploadFile();
+     
+    }
+   
+    var uploadFile = function () {     
         var memberID = SharedStateService.getAuthenticatedMemberID();
         var mapName = SharedStateService.getSelectedMapName();
-
-        for (var i = 0; i < $scope.filesToUpload.length; i++) {
+        for (var i = 0; i < $scope.filesToUpload.length; i++)
+        {
             (  function(imageFile,fileName,photoRecord){
                 var fileName = imageFile.name
                 var photoRecord = getObjectByProperty( $scope.photoRecords, "FileName", fileName);
@@ -269,7 +274,17 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
           })($scope.filesToUpload[i])
 
         }
+        if ($scope.filesToUpload.length == $scope.filesUploadedCount) {
+            if($scope.filesUploadedCount == 1)
+                $scope.systemMessage.text = "photo was uploaded successfuly"
+            else if ($scope.filesUploadedCount > 1)
+                $scope.systemMessage.text =$scope.filesUploadedCount +  " photos were uploaded successfuly"
+            $scope.systemMessage.activate();
+        }
+        $scope.BusyWith.uploading = false;
     }
+
+
 
     getObjectByProperty = function (list, property, value) {
         var obj = null;
@@ -298,10 +313,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     $scope.deletePhoto = function () {
-
         DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
             function (result) {
-             
                 var cachedPhotos = SharedStateService.Repository.get('Photos');
                 for (var i = 0; i < cachedPhotos.length; i++) {
                     if (cachedPhotos[i].PhotoID == $scope.selectedPhoto.PhotoID) {
@@ -309,13 +322,15 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                         break;
                     }
                 }
-
                 $scope.systemMessage.text = "selected photo has been deleted";
                 $scope.systemMessage.activate();
                 $location.path("/Album");
+            },
+            function (error) {
+                $scope.systemMessage.text = "error deleting photo record";
+                $scope.systemMessage.activate();
             }
             )
-
     }
 
     $scope.$watch(
@@ -358,8 +373,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             }
                
         });
-
-    
 
 })
 
