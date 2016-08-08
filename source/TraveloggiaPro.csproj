@@ -61,8 +61,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="album\Album - Copy.html" />
     <Content Include="album\Album.html" />
     <Content Include="album\AlbumController.js" />
+    <Content Include="album\demo.js" />
+    <Content Include="album\ImageUtil.js" />
     <Content Include="album\Photo.html" />
     <Content Include="app.js" />
     <Content Include="common\confirm-cancel.html" />
@@ -79,6 +82,7 @@
     <Content Include="css\lib\textAngular.css" />
     <Content Include="css\TraveloggiaStyles.css" />
     <Content Include="image\circle.png" />
+    <Content Include="image\compass.gif" />
     <Content Include="image\globe.png" />
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
@@ -102,9 +106,12 @@
     <Content Include="lib\extensions\angular-mocks.js" />
     <Content Include="lib\extensions\angular-route.min.js" />
     <Content Include="lib\extensions\angular.min.js" />
+    <Content Include="lib\jquery-3.1.0.min.js" />
+    <Content Include="lib\load-image.all.min.js" />
     <Content Include="lib\textAngular-rangy.min.js" />
     <Content Include="lib\textAngular-sanitize.min.js" />
     <Content Include="lib\textAngular.min.js" />
+    <Content Include="lib\ua-parser.js" />
     <Content Include="map\Map.html" />
     <Content Include="map\MapController.js" />
     <Content Include="map\MapList.html" />
@@ -119,6 +126,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="map\MapListController.js" />
     <Content Include="signin\SignIn.html" />
     <Content Include="signin\SignInController.js" />
     <Content Include="site\Site.html" />

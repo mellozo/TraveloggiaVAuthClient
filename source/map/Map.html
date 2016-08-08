@@ -68,8 +68,8 @@
 
 
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
-        <a ng-show="systemMessage.loadComplete" ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
-        <a ng-show="systemMessage.loadComplete" ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
+        <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
+        <a  ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
 
     </div>
 
@@ -80,17 +80,17 @@
 </button>-->   
 
     
-    <!--<confirm-cancel   
+    <confirm-cancel   
         ng-show="dialogIsShowing"
         style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px"
         question="confirmCancelQuestion"
         on-confirm="saveCurrentLocation()" 
         on-cancel="dismiss()">
-    </confirm-cancel>-->
+    </confirm-cancel>
 
-                <!--<button title="zoom to current location" ng-click="getLocation()"
+                <button title="zoom to current location" ng-click="getLocation()"
                         style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
                     <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
-               </button>-->    
+               </button>    
 
     </div>
