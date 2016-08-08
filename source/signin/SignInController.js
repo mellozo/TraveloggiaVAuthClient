@@ -1,7 +1,6 @@
 ﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route) {
     var VM = this;
     VM.Member = new Member();
-   
 
     VM.authenticationStatus = {
         firstAttempt:($route.current.isCreate != null)?false:true,
