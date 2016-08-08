@@ -14,9 +14,6 @@
 
 
 // INIT SEQUENCE
-    // this is the first function thats called to start the init - we need bing maps to be downloaded before we draw it
- 
-
 
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;

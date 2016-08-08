@@ -30,33 +30,20 @@
 
  
 
-<!--    <div class="panel-group" id="accordion" >
-   
+<!--    <div class="panel-group" id="accordion" >   
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
                     <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
-                            
                     </div>
-
                 <div id="collapseOne" class="panel-collapse collapse">
                         <div class="panel-body" style="padding-right:25px;padding-left:25px;">
-                                         <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;height:20px;" />
-                                       
-
+                                         <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;height:20px;" />                                       
                                 <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="geocodeAddress()">Get Coordinates</button>
                          </div>
                 </div>
-
             </div>
-   
     </div>-->
 
-  <!--   <map-canvas id="map"  ></map-canvas>        -->
-<!--<bing-map id="crudera"
-    center="mapOptions.center"
-                zoom="mapOptions.zoom"
-                map-type="mapOptions.mapType"
-                options="mapOptions.options"
-                on-map-ready="onMapReady(map)"></bing-map>-->
+
 
     <div id="bingMapRaw" ng-style="mapStyle" style='position:relative;'>
 
@@ -85,11 +72,10 @@
         on-cancel="dismiss()">
     </confirm-cancel>
 
-                <button
-                       
-                         title="zoom to current location" ng-click="getLocation()"
-                        style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
-                    <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
-               </button>    
+    <button
+                title="zoom to current location" ng-click="getLocation()"
+                style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
+        <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
+    </button>    
 
     </div>

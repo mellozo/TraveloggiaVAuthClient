@@ -26,12 +26,24 @@
     }
 
     var VM = this;
+    VM.selectedSite = {};
+    var cachedSites =  SharedStateService.Repository.get('Sites');
+    if (cachedSites != null)
+        VM.SiteList = cachedSites;
+    else {
+        var selectedMapID = SharedStateService.getSelectedID("Map")
+        DataTransportService.getMapByID(selectedMapID).then(
+                    function (result) {
+                        SharedStateService.setSelected("Map", $scope.MapRecord);
+                        SharedStateService.Repository.put('Maps', result.data);
+                        SharedStateService.Repository.put("Sites", result.data.Sites)
+                        VM.SiteList = SharedStateService.Repository.get('Sites');
+                    },
+                    function (error) {
 
-    VM.selectedSite = {  };
-
-    VM.SiteList = SharedStateService.Repository.get('Sites');
-
-    var selectedSiteID = SharedStateService.getSelectedID("Site");
+                    }
+            );
+    }    var selectedSiteID = SharedStateService.getSelectedID("Site");
     for (var i = 0; i < VM.SiteList.length; i++) {
         if (VM.SiteList[i].SiteID == selectedSiteID)
             VM.selectedSite = VM.SiteList[i];
