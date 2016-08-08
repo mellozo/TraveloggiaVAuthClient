@@ -12,6 +12,7 @@
     $scope.searchAddress = null;
     $scope.confirmCancelQuestion = "Save location permanently to map?";
 
+
 // INIT SEQUENCE
     // this is the first function thats called to start the init - we need bing maps to be downloaded before we draw it
  
@@ -21,7 +22,6 @@
         var sites = $scope.MapRecord.Sites;
         SharedStateService.Repository.put("Sites", sites);
         var arrayOfMsftLocs = [];
-
         pushpinCollection = new Microsoft.Maps.Layer();
 
         for (var i = 0; i < sites.length; i++) {
@@ -143,7 +143,6 @@
                     //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
                     showTermsLink: false,
                     enableClickableLogo: false
-
                 });
             }
             $scope.loadMaps();
@@ -154,8 +153,9 @@
 
 
     $scope.getLocation = function () {
+        $scope.systemMessage.text = "working...";
+        $scope.systemMessage.activate();
 
-        try {
             navigator.geolocation.getCurrentPosition(function (pos) {
                 var siteRecord = createSiteRecord(pos.coords.latitude, pos.coords.longitude);
                 SharedStateService.setSelected("Site", siteRecord);             
@@ -170,14 +170,12 @@
                     $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
                     if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
                         $scope.dialogIsShowing = true;
+
+                    $scope.systemMessage.dismiss();
                 });
             });
 
-        }
-        catch (error) {
-alert("bad")
-        }
-      
+     
 
     }
 

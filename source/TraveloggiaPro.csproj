@@ -61,11 +61,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="album\Album - Copy.html" />
     <Content Include="album\Album.html" />
     <Content Include="album\AlbumController.js" />
-    <Content Include="album\demo.js" />
-    <Content Include="album\ImageUtil.js" />
     <Content Include="album\Photo.html" />
     <Content Include="app.js" />
     <Content Include="common\confirm-cancel.html" />
