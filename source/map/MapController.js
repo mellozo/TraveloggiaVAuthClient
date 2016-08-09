@@ -18,6 +18,7 @@
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
         SharedStateService.Repository.put("Sites", sites);
+    
         var arrayOfMsftLocs = [];
         pushpinCollection = new Microsoft.Maps.Layer();
 
@@ -28,7 +29,6 @@
             (function attachEventHandlers(site) {
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                     SharedStateService.setSelected("Site", site);
-                    SharedStateService.setSelected("SiteID", site.SiteID);
                     $scope.$apply(function () { $location.path("/Album") })
                 });
             })(sites[i], $scope, $location)

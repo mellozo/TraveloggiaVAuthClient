@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,$scope,$location,$window,$http,$timeout) {
+﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout) {
 
     $scope.Diagnostics={
         innerHeight: $window.innerHeight,
@@ -26,28 +26,41 @@
     }
 
     var VM = this;
-    VM.selectedSite = {};
+    VM.selectedSite = {
+        name:""
+    }
+    VM.SiteList = [];
+
     var cachedSites =  SharedStateService.Repository.get('Sites');
-    if (cachedSites != null)
+    if (cachedSites.length > 0 )
         VM.SiteList = cachedSites;
     else {
         var selectedMapID = SharedStateService.getSelectedID("Map")
+        if(selectedMapID != null)
         DataTransportService.getMapByID(selectedMapID).then(
                     function (result) {
                         SharedStateService.setSelected("Map", $scope.MapRecord);
                         SharedStateService.Repository.put('Maps', result.data);
-                        SharedStateService.Repository.put("Sites", result.data.Sites)
-                        VM.SiteList = SharedStateService.Repository.get('Sites');
+                        if (result.data.Sites.length > 0) {
+                            SharedStateService.Repository.put("Sites", result.data.Sites)
+                            VM.SiteList = result.data.Sites();
+                        }
                     },
                     function (error) {
 
                     }
             );
-    }    var selectedSiteID = SharedStateService.getSelectedID("Site");
+    }
+
+
+    var selectedSiteID = SharedStateService.getSelectedID("Site");
+
+    if(selectedSiteID != null)
     for (var i = 0; i < VM.SiteList.length; i++) {
-        if (VM.SiteList[i].SiteID == selectedSiteID)
+        if (VM.SiteList[i].SiteID == selectedSiteID) {
             VM.selectedSite = VM.SiteList[i];
-        break;
+            //break;
+        }
     }
 
 
