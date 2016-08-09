@@ -77,7 +77,7 @@
         var selectedSite = VM.SiteList[index];
         VM.selectedSite = selectedSite;
         SharedStateService.setSelected("Site", selectedSite);
-        $scope.apply();
+       
     }
 
     

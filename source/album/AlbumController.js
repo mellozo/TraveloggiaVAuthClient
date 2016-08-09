@@ -25,7 +25,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.imagePath = SharedStateService.getAuthenticatedMemberID() +"/" + SharedStateService.getSelectedMapName() + "/";
 
-    $scope.imageRefresher = "?reload=" + new Date().getMiliseconds;
+    var randomDate = new Date();
+    $scope.imageRefresher = "?reload=" + randomDate.getMilliseconds().toString();
 
     var cachedPhotos = SharedStateService.Repository.get('Photos');
 

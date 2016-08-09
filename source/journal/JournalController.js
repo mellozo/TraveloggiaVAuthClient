@@ -76,10 +76,11 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
     $scope.$watch(
         function (scope) {
-            return SharedStateService.getSelectedID("Site")
+         if(SharedStateService.Selected.Site != null)
+            return SharedStateService.Selected.Site.SiteID;
         },
         function (newValue, oldValue) {
-            if (newValue != oldValue)
+            if (newValue !=null && newValue != oldValue)
             {
                 //$scope.Site = SharedStateService.Selected.Site;
                 if (SharedStateService.getAuthorizationState() == 'IS_EDITING')
@@ -96,8 +97,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                          SharedStateService.Repository.put("Journals", result.data);
                          $scope.Journal = $scope.JournalEntries[0];
                      }
-                     //else
-                     //    $scope.addNew();
+                     else
+                         $scope.Journal = null;
                  },
                 function (error) {
                     $scope.systemMessage.text = "error fetching journals" + error.data.Message;
