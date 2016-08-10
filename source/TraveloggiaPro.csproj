@@ -73,7 +73,7 @@
     <Content Include="common\SharedStateService.js" />
     <Content Include="common\ToolBar.html" />
     <Content Include="common\ToolbarController.js" />
-    <Content Include="css\lib\angular-bootstrap-datepicker.css" />
+    <Content Include="css\lib\bootstrap-3.3.7.css" />
     <Content Include="css\lib\bootstrap.css" />
     <Content Include="css\lib\marc Antoine Charpentierdownload.jpg" />
     <Content Include="css\lib\textAngular.css" />
@@ -98,6 +98,7 @@
     <Content Include="lib\angular.min.js" />
     <Content Include="lib\angulartics-ga.min.js" />
     <Content Include="lib\angulartics.js" />
+    <Content Include="lib\bootstrap-3.3.7.min.js" />
     <Content Include="lib\bootstrap.min.js" />
     <Content Include="lib\extensions\angular-cookies.js" />
     <Content Include="lib\extensions\angular-mocks.js" />

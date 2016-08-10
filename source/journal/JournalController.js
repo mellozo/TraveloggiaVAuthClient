@@ -110,6 +110,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
     // upon tab change
     $scope.loadContent = function (index) {
+        angular.element("#menuToggle").click();
             $scope.Journal = $scope.JournalEntries[index];
             $scope.journalIndex = index;
     }
