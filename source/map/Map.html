@@ -16,17 +16,30 @@
 
 
 
-<div id="mainContainer"   ng-controller="MapController"  >
+<div id="mainContainer"  style="width:100%" ng-controller="MapController"  >
  
-    <div  class="clickableDiv mapLabel bluenav " ng-controller="ToolbarController as navCtrl" ng-click="navCtrl.goMapList()" >
-        <img id="mapLogo" title="Traveloggia"
-              src="../image/ship.png" 
-             class="dottedBorderRed glow " 
-            />
+    <div class="clickableDiv" style="position:absolute;z-index:99" >
+        
+        <div class="bluenav" style="padding:2px"
+             ng-controller="ToolbarController as navCtrl" ng-click="navCtrl.goMapList()">
+            <img title="Map List"
+                 src="../image/ship.png"
+                 class="dottedBorderRed glow "
+                />
+        </div>
+
+        <div class="bluenav" style="padding:2px"
+            
+             ng-click="enterEdit()">
+            <img title="enable add pushpin"
+                 src="../image/anchor.png"
+                 class="dottedBorderRed glow " />
+        </div>
     </div>
-    <div ng-cloak class="mapLabel" id="mapNameDiv">
+
+    <!--<div ng-cloak class="mapLabel" id="mapNameDiv">
         {{MapRecord.MapName}}
-    </div>
+    </div>-->
 
  
 
@@ -51,17 +64,12 @@
 
 
 
-    <div ng-cloak  ng-show="systemMessage.loadComplete" ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
+    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
         <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
         <a  ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
     </div>
 
-
-<!--<button title="enable click or tap to add location" ng-click="getCrossHairCursor()"
-        style="position:absolute;left:10px;top:60px;height:50px;width:50px;border-radius:6px">
-    <img src="../image/anchor.png" style="z-index:999;height:40px;width:40px;margin-left:auto;margin-right:auto" />
-</button>-->   
 
     
     <confirm-cancel   
@@ -72,9 +80,9 @@
         on-cancel="dismiss()">
     </confirm-cancel>
 
-    <button
+    <button class="bluenav glow"
                 title="zoom to current location" ng-click="getLocation()"
-                style="position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:5%;border-radius:90px">
+                style="border:dotted 2px red;position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:6%;border-radius:90px">
         <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
     </button>    
 

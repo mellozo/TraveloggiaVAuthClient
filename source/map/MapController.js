@@ -1,8 +1,8 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $scope, $location, DataTransportService,$timeout,$http) {
 
     //safari no likey viewport units
-    var vpHeight = $window.innerHeight;
-    var vpWidth = $window.innerWidth;
+    var vpHeight = $window.document.documentElement.clientHeight;
+    var vpWidth = $window.document.documentElement.clientWidth;
     $scope.mapStyle = {
         "height": vpHeight,
        "width":vpWidth
@@ -14,7 +14,6 @@
 
 
 // INIT SEQUENCE
-
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
         SharedStateService.Repository.put("Sites", sites);
@@ -59,21 +58,7 @@
         }
 
 
-        $scope.systemMessage.loadComplete = true;
-
-
-        //Microsoft.Maps.Events.addHandler($scope.mapInstance, "mousemove", function (e) {
-        //        // get the HTML DOM Element that represents the Map
-        //        var mapElem = $scope.mapInstance.getRootElement();
-        //        if (e.targetType === "map") {
-        //            // Mouse is over Map
-        //         //   mapElem.style.cursor = "crosshair";
-        //        } else {
-        //            // Mouse is over Pushpin, Polyline, Polygon
-        //            mapElem.style.cursor = "pointer";
-        //        }
-        //    });
-
+    
     }
 
     $scope.loadMaps = function () {
@@ -129,30 +114,38 @@
 
     $scope.afterLoaded = function () {
         if ($http.pendingRequests.length > 0) {
-            $timeout($scope.afterRender); // Wait for all templates to be loaded
+            $timeout($scope.afterLoaded); // Wait for all templates to be loaded
         }
         else {
-            if ($scope.mapInstance == null) {
-                $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-                    credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                    mapTypeId: "a",
-                    showLocateMeButton:false,
-                    //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
-                    showTermsLink: false,
-                    enableClickableLogo: false
-                });
-            }
-            $scope.loadMaps();
+         
+                try {
+                    $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
+                        credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+                        mapTypeId: "a",
+                        showLocateMeButton: false,
+                        //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
+                        showTermsLink: false,
+                        enableClickableLogo: false
+                    });
+
+                    if ($scope.mapInstance != null)
+                        $scope.loadMaps();
+                    else
+                        $timeout($scope.afterLoaded);
+
+                }
+                catch (error) {
+                    $timeout($scope.afterLoaded);
+
+                }
+          
         }
     };
 
-    //ADD CURRENT LOCATIONS
-
-
+    //ADD CURRENT LOCATION
     $scope.getLocation = function () {
         $scope.systemMessage.text = "working...";
         $scope.systemMessage.activate();
-
             navigator.geolocation.getCurrentPosition(function (pos) {
                 var siteRecord = createSiteRecord(pos.coords.latitude, pos.coords.longitude);
                 SharedStateService.setSelected("Site", siteRecord);             
@@ -176,7 +169,6 @@
 
     }
 
-
     var createSiteRecord = function (lat, lng) {
         var site = new Site();
         site.MapID = $scope.MapRecord.MapID;
@@ -196,7 +188,6 @@
         $scope.dialogIsShowing = false;
     }
 
-
     $scope.saveCurrentLocation = function () {
         $location.path("/Site");
     }
@@ -204,6 +195,23 @@
     setView = function () {
         SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
     }
+
+  // CLICK TO ADD LOCATION
+    $scope.enterEdit = function () {
+        // add crosshair cursor
+         $scope.mapInstance.addHandler($scope.mapInstance, "mousemove", function (e) {
+            // get the HTML DOM Element that represents the Map
+            var mapElem = $scope.mapInstance.getRootElement();
+            if (e.targetType === "map") {
+                // Mouse is over Map
+                mapElem.style.cursor = "crosshair";
+            } else {
+                // Mouse is over Pushpin, Polyline, Polygon
+                mapElem.style.cursor = "pointer";
+            }
+        });
+    }
+
 
 
 
