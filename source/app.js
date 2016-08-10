@@ -1,7 +1,7 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'angulartics', 'angulartics.google.analytics'])
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics'])
 
 //angularTraveloggia.config(['angularBingMapsProvider', function (angularBingMapsProvider) {
 //    angularBingMapsProvider.setDefaultMapOptions({

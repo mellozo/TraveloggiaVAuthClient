@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $scope, $location, DataTransportService,$timeout,$http) {
+﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $route, $scope, $location, DataTransportService,$timeout,$http,debounce) {
 
     //safari no likey viewport units
     var vpHeight = $window.document.documentElement.clientHeight;
@@ -57,11 +57,12 @@
             $scope.mapInstance.setView({ center: loc, zoom: 19 });
         }
 
-
+       
     
     }
 
     $scope.loadMaps = function () {
+     
         var cachedMap = SharedStateService.Repository.get("Maps");
         if (cachedMap.length==0 || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
         {
@@ -73,6 +74,7 @@
                     SharedStateService.setSelected("Site", null);// clear any previous settings
                     if ($scope.MapRecord.Sites.length > 0) {
                         $scope.drawSites();
+                       
                     }                     
                 },
                 function (error) {
@@ -245,9 +247,16 @@
 
 
    
-
+      var redraw = debounce(500,function () {
+          console.log("debounced resize")
+          $route.reload();
+      });
+       
+  
 
     // the kickoff
-    $scope.afterLoaded();
+      $scope.afterLoaded();
 
-});
+    $window.addEventListener("resize", redraw)
+
+}); 
