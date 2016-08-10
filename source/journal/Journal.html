@@ -19,7 +19,7 @@
 
                     <div class="navbar navbar-default">
 
-                        <div class="container-fluid cloudBlue infoText">
+                        <div class="container-fluid cloudBlue">
                             <div class="navbar-header">
 
 
@@ -27,7 +27,7 @@
                                      id="menuToggle"  class="navbar-toggle"
                                            data-toggle="collapse"
                                        data-target="#myNavbar" >
-                                  <span style="font-size:18px;">{{Journal.Title}}</span> 
+                                  <span class="menuText listHeader" >{{Journal.Title}}</span> 
                                     <button 
                                             style="margin-top:0px;margin-bottom:0px;"
                                             type="button" 
@@ -45,7 +45,7 @@
                             </div>
                           
                             <div class="collapse navbar-collapse" id="myNavbar">
-                                <ul class="nav navbar-nav  infoText">
+                                <ul class="nav navbar-nav menuText listHeader">
                                     <li ng-repeat="journal in JournalEntries" 
                                         ng-class="{active : Journal.JournalID == journal.JournalID }">
                                     <a href="" ng-click="loadContent($index)">{{journal.Title}}</a>
