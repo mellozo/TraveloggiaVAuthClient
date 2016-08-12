@@ -282,7 +282,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 $scope.systemMessage.text =$scope.filesUploadedCount +  " photos were uploaded successfuly"
             $scope.systemMessage.activate();
         }
-        $scope.BusyWith.uploading = false;
+        
     }
 
 

@@ -28,12 +28,13 @@
                 />
         </div>
 
-        <div class="bluenav" style="padding:2px"
+        <div ng-cloak ng-show="stateMachine.state=='CAN_EDIT' " class="bluenav" style="padding:2px"
             
              ng-click="enterEdit()">
             <img title="enable add pushpin"
                  src="../image/anchor.png"
-                 class="dottedBorderRed glow " />
+                 class="dottedBorderRed glow "
+                 ng-class="{'poppedUp' : selectedState.editSelected == true}"   />
         </div>
     </div>
 

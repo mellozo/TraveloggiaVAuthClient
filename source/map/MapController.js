@@ -1,4 +1,13 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $route, $scope, $location, DataTransportService,$timeout,$http,debounce) {
+    $scope.stateMachine = {
+        state: SharedStateService.getAuthorizationState()
+    }
+
+    $scope.selectedState = {
+        editSelected:false
+    }
+
+    var clickHandler = null;
 
     //safari no likey viewport units
     var vpHeight = $window.document.documentElement.clientHeight;
@@ -56,7 +65,7 @@
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
             $scope.mapInstance.setView({ center: loc, zoom: 19 });
         }
-
+        $scope.systemMessage.loadComplete = true;
        
     
     }
@@ -75,7 +84,9 @@
                     if ($scope.MapRecord.Sites.length > 0) {
                         $scope.drawSites();
                        
-                    }                     
+                    }
+                    else
+                        $scope.systemMessage.loadComplete = true;
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading map data";
@@ -91,6 +102,8 @@
                                 $scope.MapRecord = cachedMap;
                                 if ($scope.MapRecord.Sites.length > 0)
                                     $scope.drawSites();
+                                else
+                                    $scope.systemMessage.loadComplete = true;
                             }
                             else// we selected a map from the map list and now need to load its sites and put it in the repository
                             {
@@ -101,6 +114,8 @@
                                                 SharedStateService.setSelected("Site",null)
                                                 if ($scope.MapRecord.Sites.length > 0)
                                                     $scope.drawSites();
+                                                else
+                                                    $scope.systemMessage.loadComplete = true;
 
                                             },
                                             function (error) {
@@ -123,7 +138,7 @@
                 try {
                     $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                         credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                        mapTypeId: "a",
+                        mapTypeId: "r",
                         showLocateMeButton: false,
                         //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
                         showTermsLink: false,
@@ -148,26 +163,35 @@
     $scope.getLocation = function () {
         $scope.systemMessage.text = "working...";
         $scope.systemMessage.activate();
-            navigator.geolocation.getCurrentPosition(function (pos) {
-                var siteRecord = createSiteRecord(pos.coords.latitude, pos.coords.longitude);
-                SharedStateService.setSelected("Site", siteRecord);             
-                $scope.$apply(function () {
-                    var currentPosition = new Microsoft.Maps.Location(pos.coords.latitude, pos.coords.longitude);
-                    var marker = createMarker(pos.coords.latitude, pos.coords.longitude);
-                    if (pushpinCollection == null) {
-                        pushpinCollection = new Microsoft.Maps.Layer();
-                        $scope.mapInstance.layers.insert(pushpinCollection);
-                    }
-                    pushpinCollection.add(marker);
-                    $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
-                    if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
-                        $scope.dialogIsShowing = true;
-
-                    $scope.systemMessage.dismiss();
-                });
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            $scope.systemMessage.dismiss();
+                addLocation(pos.coords);
+             
             });
 
-     
+    }
+
+
+    var addLocation = function (pos) {
+        var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
+        SharedStateService.setSelected("Site", siteRecord);
+        $scope.$apply(function () {
+            var currentPosition = new Microsoft.Maps.Location(pos.latitude, pos.longitude);
+            var marker = createMarker(pos.latitude, pos.longitude);
+            if (pushpinCollection == null) {
+                pushpinCollection = new Microsoft.Maps.Layer();
+                $scope.mapInstance.layers.insert(pushpinCollection);
+            }
+            pushpinCollection.add(marker);
+
+            $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
+
+            if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
+                $scope.dialogIsShowing = true;
+
+         
+        });
+
 
     }
 
@@ -201,20 +225,26 @@
   // CLICK TO ADD LOCATION
     $scope.enterEdit = function () {
         // add crosshair cursor
-         $scope.mapInstance.addHandler($scope.mapInstance, "mousemove", function (e) {
-            // get the HTML DOM Element that represents the Map
-            var mapElem = $scope.mapInstance.getRootElement();
+        $scope.selectedState.editSelected = true;
+       // angular.element("#bingMapRaw").style.cursor = "crosshair";
+     clickHandler =   Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
+
             if (e.targetType === "map") {
                 // Mouse is over Map
-                mapElem.style.cursor = "crosshair";
+                var loc = e.location;
+                addLocation(loc)
+                exitEdit();
             } else {
                 // Mouse is over Pushpin, Polyline, Polygon
-                mapElem.style.cursor = "pointer";
+              
             }
         });
     }
 
-
+    var exitEdit = function () {
+        $scope.selectedState.editSelected = false;
+        Microsoft.Maps.Events.removeHandler(clickHandler);
+    }
 
 
     $scope.geocodeAddress = function () {

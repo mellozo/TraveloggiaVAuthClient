@@ -4,8 +4,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 {
 
     $scope.stateMachine = {
-        state:SharedStateService.getAuthorizationState()
-}
+            state:SharedStateService.getAuthorizationState()
+            }
     
     // this is if we are redirecting from html5.traveloggia.net which doesnt have its own journal page
     if ($location.search().MapID != null)

@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" ng-app="AngularTraveloggia">
 <head>
     <title>Traveloggia Pro</title>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="css/TraveloggiaStyles.css" type="text/css" />
@@ -64,8 +65,7 @@
     </div>
 
 
-    <!--demonstrating use of ng-show since making dom modifications in controller= you => strait.toHell() 
-        though few pa's would forgo the oportunity for bloat aka creating a directive  -->
+
     <div id="divSystemMessage"  ng-cloak ng-show="systemMessage.cover"
         style="position: absolute; z-index: 99; top: 45px; left: 0px; width: 100%; height: 400px; background-color: lightgray; opacity: .9">
         <div style="padding: 12px; font-size: 26px; color: brown; font-family: Centaur; max-width: 80%">{{systemMessage.text}}</div>
@@ -80,7 +80,7 @@
 
 
     
-    <div  ng-hide="systemMessage.loadComplete || $location.path() !='/Map'"
+    <div  ng-hide="systemMessage.loadComplete"
           style="position:absolute;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
         >
         <img src="image/compass.gif" style="width:110px;height:110px;z-index:91;display:block;margin:auto" />
