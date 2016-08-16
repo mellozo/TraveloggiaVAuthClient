@@ -25,7 +25,7 @@
 // INIT SEQUENCE
     $scope.drawSites = function () {
         var sites = $scope.MapRecord.Sites;
-        SharedStateService.Repository.put("Sites", sites);
+      
     
         var arrayOfMsftLocs = [];
         pushpinCollection = new Microsoft.Maps.Layer();
@@ -41,20 +41,21 @@
                 });
             })(sites[i], $scope, $location)
 
-            pushpinCollection.add(pin);
-            arrayOfMsftLocs.push(loc)
+          //  pushpinCollection.add(pin);
+            arrayOfMsftLocs.push(loc);
+            $scope.mapInstance.entities.push(pin);
         }
-        $scope.mapInstance.layers.insert(pushpinCollection);
+
+    //    $scope.mapInstance.layers.insert(pushpinCollection);
 
         var selectedSiteID = SharedStateService.getSelectedID("Site")
-
         if (selectedSiteID == "null" || selectedSiteID == null) {
             var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
             $scope.mapInstance.setView({ bounds: viewRect });
+            if (selectedSiteID == "null" || selectedSiteID == null)
             SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
         }
         else {
-            var selectedSiteID = SharedStateService.getSelectedID("Site");
             var selectedSite = null;
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
                 if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
@@ -66,8 +67,6 @@
             $scope.mapInstance.setView({ center: loc, zoom: 19 });
         }
         $scope.systemMessage.loadComplete = true;
-       
-    
     }
 
     $scope.loadMaps = function () {
@@ -80,8 +79,10 @@
                     $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
                     SharedStateService.Repository.put('Maps', result.data);
+                   
                     SharedStateService.setSelected("Site", null);// clear any previous settings
                     if ($scope.MapRecord.Sites.length > 0) {
+                        SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
                         $scope.drawSites();
                        
                     }
@@ -134,7 +135,9 @@
             $timeout($scope.afterLoaded); // Wait for all templates to be loaded
         }
         else {
-         
+            // for some creepy angular type reason this code is re-entrant when you navigate back to the map
+            // after the initial load, when it is not re-entrant :(
+            if ($scope.mapInstance == null) {
                 try {
                     $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                         credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
@@ -155,7 +158,7 @@
                     $timeout($scope.afterLoaded);
 
                 }
-          
+            }
         }
     };
 
@@ -279,7 +282,7 @@
    
       var redraw = debounce(500,function () {
           console.log("debounced resize")
-          $route.reload();
+        
       });
        
   
@@ -287,6 +290,6 @@
     // the kickoff
       $scope.afterLoaded();
 
-    $window.addEventListener("resize", redraw)
+   // $window.addEventListener("resize", redraw)
 
 }); 
