@@ -1,20 +1,6 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout) {
 
-    $scope.Diagnostics={
-        innerHeight: $window.innerHeight,
-        innerWidth: $window.innerWidth,
-        buttonWidth:null,
-        vpHeight: null,
-        toolButtonStyle: {
-            'width': '17%',
-            'height': 'auto',
-            'max-width': '62px'//,
-            //'outline':'dotted 2px red'
-        }
-
-
-    }
-  
+ 
 
     $scope.selectedState = {
         mapSelected: $location.path() == "/Map" ? true:false,
@@ -62,11 +48,6 @@
             //break;
         }
     }
-
-
-   
-
-
 
 
 
