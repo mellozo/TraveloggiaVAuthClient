@@ -17,7 +17,7 @@
          
                 <div class="panel-body papyrus" >
 
-                    <div class="navbar navbar-default">
+                    <div class="navbar navbar-default"  ng-show="stateMachine.state !='IS_EDITING'">
 
                         <div class="container-fluid cloudBlue">
                             <div class="navbar-header">
@@ -58,7 +58,7 @@
                     </div>
 
                
-                    <button ng-show="stateMachine.state=='CAN_EDIT' " title="Edit" style="float:right; vertical-align:top;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent"
+                    <button ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null" title="Edit" style="float:right; vertical-align:top;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent"
                             ng-click="editJournal()">
                         <img src="../image/pencil.png" style="width:100%" />
                     </button>
@@ -91,10 +91,10 @@
                         <div ng-show="stateMachine.state=='IS_EDITING' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
                             <a href="" ng-click="saveJournal()">Save</a>
                         </div>
-                        <div ng-show="stateMachine.state=='IS_EDITING' && action=='edit'" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
+                        <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
                             <a href="" ng-click="deleteJournal()">Delete</a>
                         </div>
-                        <div ng-show="stateMachine.state=='IS_EDITING' && action=='edit'  " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
+                        <div ng-show="stateMachine.state=='IS_EDITING'  " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
                             <a href="" ng-click="cancelJournal()">Cancel</a>
                         </div>
 

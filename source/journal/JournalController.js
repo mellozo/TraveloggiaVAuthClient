@@ -117,7 +117,6 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
 
     $scope.addNew = function () {
-       $scope.action = "create"; // as opposed to update
         var journal = new Journal();
         journal.SiteID = SharedStateService.getSelectedID("Site");
         var recordDate = new Date(Date.now());
@@ -131,7 +130,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
 
     $scope.saveJournal = function () {
-        if ($scope.action=="create")
+        if ($scope.Journal.JournalID == null)
             DataTransportService.addJournal($scope.Journal).then(
                 function (result) {
                     $scope.systemMessage.text = "new journal was saved successfully";
