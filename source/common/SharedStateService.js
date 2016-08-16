@@ -33,6 +33,7 @@
        
 
 
+
     local_scope.getAuthenticatedMemberID = function () {
         var id = null;
        id= local_scope.authenticatedMember == null ? $cookies.get("AuthenticatedMemberID") : local_scope.authenticatedMember.MemberID;
@@ -46,7 +47,6 @@
 
     }
  
-    
 
     local_scope.setSelected = function (key, value) {
         local_scope.Selected[key] = value;
@@ -59,11 +59,6 @@
         // this is messy indeed because we use the mapname in the photo path - probably shouldnt - human readable though
         if (key == "Map")
             $cookies.put("MapName", value.MapName);
-     
-
-     //   var test = $cookies.get(propName);
-      //  alert(key + propName + test + "=" + idValue);
-
     }
 
     local_scope.getSelectedID = function (key) {
@@ -72,6 +67,7 @@
         ID = local_scope.Selected[key] == null ? $cookies.get(propName) : local_scope.Selected[key][propName];
         return ID;
     }
+
 
     local_scope.getSelectedPhoto = function () {
         var photo = local_scope.Selected.Photo;
@@ -102,7 +98,28 @@
         return local_scope.Selected[key];
     }
 
- 
+
+//ridiculous that angular doesnt have this already
+    local_scope.deleteFromCache=function(collectionName,propName, itemID){
+        var collection = local_scope.Repository.get(collectionName);
+        var spliceIndex = 0;
+
+        try{
+            for (var i = 0; i < collection.length; i++) {
+                if (collection[i][propName]== itemID) {
+                    spliceIndex = i;
+                    break;
+                }
+            }
+            collection.splice(i, 1);
+        }
+        catch (error) {
+
+            alert(error.message)
+        }
+      
+        local_scope.Repository.put(collectionName, collection);
+    }
 
     local_scope.Repository = $cacheFactory('Repository', {});
 

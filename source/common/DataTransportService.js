@@ -62,6 +62,14 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             return $http(config);
         },
 
+        getSiteByID: function (siteID) {
+            var endpoint = baseURL + "/api/SelectSite/" + siteID;
+            var config = {
+                method: "get",
+                url: endpoint
+            }
+            return $http(config);
+        },
 
         addSite:function(site){
             var endpoint = baseURL + "/api/Sites";
@@ -110,6 +118,7 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             return $http(config);
         },
 
+      
         addPhoto: function (photo) {
             var endpoint = baseURL + "/api/Photos";
             var config = {

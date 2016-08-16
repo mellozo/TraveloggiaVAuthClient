@@ -2,62 +2,43 @@
 
 
     var VM = this;
-    VM.SiteList = SharedStateService.Repository.get('Sites');
+   
+    //  in future all the accessors to shared state, should handle requery db if empty, 
+    // not the client controlers but I guess its this way because of async and having the then
+    // on the controller
+
+
     VM.Site = SharedStateService.Selected.Site;
+
+    if (VM.Site == null) {
+        var siteID = SharedStateService.getSelectedID("Site");
+        DataTransportService.getSiteByID(siteID).then(
+            function (result)
+            {
+                VM.Site = result.data;
+            },
+            function (error)
+            {
+                $scope.systemMessage.text = "error reloading site data"
+                $scope.systemMessage.activate();
+            })
+
+
+    }
 
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
-  //  $scope.editMode = (SharedStateService.readOnlyUser == false) ? true : false;
+ 
 
-
-
-
-    VM.ArrivalDatePickerIsOpen = false;
-    VM.DepartureDatePickerIsOpen = false;
-    VM.ArrivalDatePickerOpen = function ($event) {
-        if ($event) {
-            $event.preventDefault();
-            $event.stopPropagation(); // This is the magic
-        }
-        this.ArrivalDatePickerIsOpen = true;
-    };
-
-    VM.DepartureDatePickerOpen = function ($event) {
-        if ($event) {
-            $event.preventDefault();
-            $event.stopPropagation(); // This is the magic
-        }
-        this.DepartureDatePickerIsOpen = true;
-    };
-
-  
 
     VM.saveSite = function () {
-     //   VM.cleanupDates();
-     //   if (SharedStateService.readOnlyUser == false) {
-            if (VM.Site.SiteID == null)
-                VM.addSite();
-            else
-                VM.updateSite();
-       // }
-        //else {
-        //    $scope.systemMessage.text = "Not authorized to edit content"
-        //    $scope.systemMessage.activate();
-        //}
+        if (VM.Site.SiteID == null)
+            VM.addSite();
+        else
+            VM.updateSite();
+    }
  
-    }
-
-    VM.cleanupDates = function () {
-        if (VM.Site.Arrival != null) {
-            var momentCleanedDate = moment(VM.Site.Arrival)
-            VM.Site.Arrival = momentCleanedDate.format('MM-DD-YYYY');
-
-        }
-            
-
-
-    }
 
     VM.addSite = function () {
         DataTransportService.addSite(VM.Site).then(
@@ -65,8 +46,7 @@
             var cachedSites = SharedStateService.Repository.get('Sites');
             cachedSites.push(result.data);
             SharedStateService.Repository.put('Sites', cachedSites);
-            SharedStateService.Selected.Site = result.data;
-            SharedStateService.Selected.SiteID = result.data.SiteID;
+            SharedStateService.setSelected("Site", result.data);
             // invalidate cache of child records
             SharedStateService.Repository.put('Photos', []);
             SharedStateService.Repository.put('Journals', []);
@@ -77,12 +57,12 @@
         function (error) {
             $scope.systemMessage.text = "Error saving location";
             $scope.systemMessage.activate();
-            //to do log error
         }
         );
 
 
     }
+
 
     VM.updateSite = function () {
         DataTransportService.updateSite(VM.Site).then(
@@ -99,12 +79,14 @@
 
     }
 
+
     VM.deleteSite = function () {
-       
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
+                SharedStateService.deleteFromCache("Sites", "SiteID", VM.Site.SiteID);
                 $scope.systemMessage.text = "Location deleted successfully";
                 $scope.systemMessage.activate();
+                VM.Site = null;
             },
             function (error) {
                 $scope.systemMessage.text = "Error deleteing location";

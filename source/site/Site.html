@@ -85,11 +85,11 @@
                     <div ng-show="stateMachine.state=='CAN_EDIT' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
                         <a href="" ng-click="siteCtrl.saveSite()">Save</a>
                     </div>
-                    <!--    <div ng-show="editMode" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                        <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                           <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
                 </div>
-             -->
-                    <!--  <button style="background-color:#3CBBC8" type="button" class="btn btn-default"  ng-click="siteCtrl.saveSite()">Save</button>-->
+             
+                    
                 </div>
             </form>
 
