@@ -26,7 +26,9 @@
     var drawSites = function () {
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
-        for (var i = 0; i < sites.length; i++) {
+
+        for (var i = 0; i < sites.length; i++)
+        {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
             var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: sites[i].Name, subTitle: sites[i].Address });
 
@@ -40,15 +42,14 @@
             arrayOfMsftLocs.push(loc);
             $scope.mapInstance.entities.push(pin);
         }
+        var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
-        if (selectedSiteID == "null" || selectedSiteID == null) {
-            var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
-            $scope.mapInstance.setView({ bounds: viewRect });
-            if (selectedSiteID == "null" || selectedSiteID == null)
-            SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+        if (selectedSiteID == "null" || selectedSiteID == null)
+        {
+            $scope.mapInstance.setView({ bounds: viewRect, padding: 10 });
+            $scope.mapInstance.setView({ bounds: viewRect, padding: 20 });
         }
         else {
-            var selectedSite = null;
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
                 if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
                     selectedSite = $scope.MapRecord.Sites[i];
@@ -278,9 +279,10 @@
 
 
    
-      var redraw = debounce(500,function () {
-          console.log("debounced resize")
-        
+      var redraw = debounce(300,function () {
+          console.log("debounced resize");
+          $scope.mapInstance = null;
+          $route.reload();
       });
        
   
@@ -288,6 +290,6 @@
     // the kickoff
      afterLoaded();
 
-   // $window.addEventListener("resize", redraw)
+    $window.addEventListener("resize", redraw)
 
 }); 
