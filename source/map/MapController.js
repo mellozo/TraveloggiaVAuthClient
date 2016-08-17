@@ -23,13 +23,9 @@
 
 
 // INIT SEQUENCE
-    $scope.drawSites = function () {
+    var drawSites = function () {
         var sites = $scope.MapRecord.Sites;
-      
-    
         var arrayOfMsftLocs = [];
-        pushpinCollection = new Microsoft.Maps.Layer();
-
         for (var i = 0; i < sites.length; i++) {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
             var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: sites[i].Name, subTitle: sites[i].Address });
@@ -41,13 +37,9 @@
                 });
             })(sites[i], $scope, $location)
 
-          //  pushpinCollection.add(pin);
             arrayOfMsftLocs.push(loc);
             $scope.mapInstance.entities.push(pin);
         }
-
-    //    $scope.mapInstance.layers.insert(pushpinCollection);
-
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         if (selectedSiteID == "null" || selectedSiteID == null) {
             var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
@@ -69,11 +61,10 @@
         $scope.systemMessage.loadComplete = true;
     }
 
-    $scope.loadMaps = function () {
-     
-        var cachedMap = SharedStateService.Repository.get("Map");
-        if ( cachedMap==null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
-        {
+
+
+
+  var loadDefaultMap = function () {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data;
@@ -82,8 +73,7 @@
                     SharedStateService.setSelected("Site", null);// clear any previous settings
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
-                        $scope.drawSites();
-                       
+                        drawSites();
                     }
                     else
                         $scope.systemMessage.loadComplete = true;
@@ -93,49 +83,57 @@
                     $scope.systemMessage.activate();
                 }
             )// end then
-        }
-        else 
-        {
-            var selectedMapID = SharedStateService.getSelectedID("Map")
-                            if (selectedMapID != null && cachedMap != null && (cachedMap.MapID == selectedMapID))
-                            {
-                                $scope.MapRecord = cachedMap;
-                                if ($scope.MapRecord.Sites.length > 0)
-                                    $scope.drawSites();
-                                else
-                                    $scope.systemMessage.loadComplete = true;
-                            }
-                            else// we selected a map from the map list and now need to load its sites and put it in the repository
-                            {
-                                        DataTransportService.getMapByID(selectedMapID).then(
-                                            function (result) {
-                                                $scope.MapRecord = result.data;
-                                                SharedStateService.Repository.put('Map', result.data);
-                                                SharedStateService.setSelected("Site",null)
-                                                if ($scope.MapRecord.Sites.length > 0)
-                                                    $scope.drawSites();
-                                                else
-                                                    $scope.systemMessage.loadComplete = true;
 
-                                            },
-                                            function (error) {
-                                                $scope.systemMessage.text = "error loading selected map";
-                                                $scope.systemMessage.activate();
-                                            }
-                                            )
-                            }
-
-              
-        }               
+    }
+    
+    var reloadMap = function () {
+        var cachedMap = SharedStateService.Repository.get("Map");
+        $scope.MapRecord = cachedMap;
+        if ($scope.MapRecord.Sites.length > 0)
+            drawSites();
+        else
+            $scope.systemMessage.loadComplete = true;
     }
 
-    $scope.afterLoaded = function () {
+    var loadSelectedMap = function () {
+        var selectedMapID = SharedStateService.getSelectedID("Map")
+            DataTransportService.getMapByID(selectedMapID).then(
+                function (result) {
+                    $scope.MapRecord = result.data;
+                    SharedStateService.Repository.put('Map', result.data);
+                    SharedStateService.setSelected("Site",null)
+                    if ($scope.MapRecord.Sites.length > 0)
+                        drawSites();
+                    else
+                        $scope.systemMessage.loadComplete = true;
+
+                },
+                function (error) {
+                    $scope.systemMessage.text = "error loading selected map";
+                    $scope.systemMessage.activate();
+                }
+                )
+    }
+
+
+    var loadMap = function () {
+        var cachedMap = SharedStateService.Repository.get("Map");
+        var selectedMapID = SharedStateService.getSelectedID("Map");
+        if (cachedMap == null && selectedMapID == null)
+            loadDefaultMap();
+        else if (cachedMap == null && selectedMapID != null)
+            loadSelectedMap();
+        else if (cachedMap != null && selectedMapID !== null && cachedMap.MapID == selectedMapID)
+            reloadMap();
+        else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
+            loadSelectedMap();
+    }
+
+  var  afterLoaded = function () {
         if ($http.pendingRequests.length > 0) {
             $timeout($scope.afterLoaded); // Wait for all templates to be loaded
         }
         else {
-            // for some creepy angular type reason this code is re-entrant when you navigate back to the map
-            // after the initial load, when it is not re-entrant :(
             if ($scope.mapInstance == null) {
                 try {
                     $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
@@ -147,11 +145,10 @@
                         enableClickableLogo: false
                     });
 
-                    if ($scope.mapInstance != null)
-                        $scope.loadMaps();
+                    if ($scope.mapInstance != null)// of course its not, just checking
+                        loadMap();
                     else
                         $timeout($scope.afterLoaded);
-
                 }
                 catch (error) {
                     $timeout($scope.afterLoaded);
@@ -287,7 +284,7 @@
   
 
     // the kickoff
-      $scope.afterLoaded();
+     afterLoaded();
 
    // $window.addEventListener("resize", redraw)
 
