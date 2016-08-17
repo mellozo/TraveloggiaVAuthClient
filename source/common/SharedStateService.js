@@ -30,9 +30,7 @@
     {
         local_scope.setAuthorizationState("CAN_EDIT")
     }
-       
-
-
+     
 
     local_scope.getAuthenticatedMemberID = function () {
         var id = null;
@@ -57,8 +55,10 @@
             idValue = null;
         $cookies.put(propName, idValue)
         // this is messy indeed because we use the mapname in the photo path - probably shouldnt - human readable though
-        if (key == "Map")
+        if (key == "Map" && value != null)
             $cookies.put("MapName", value.MapName);
+        else if (key=="Map" && value == null)
+            $cookies.put("MapName", null);
     }
 
     local_scope.getSelectedID = function (key) {

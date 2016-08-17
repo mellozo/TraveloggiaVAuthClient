@@ -56,7 +56,7 @@
                 }
             }
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-            $scope.mapInstance.setView({ center: loc, zoom: 19 });
+            $scope.mapInstance.setView({ center: loc, zoom: 17 });
         }
         $scope.systemMessage.loadComplete = true;
     }
@@ -119,7 +119,7 @@
     var loadMap = function () {
         var cachedMap = SharedStateService.Repository.get("Map");
         var selectedMapID = SharedStateService.getSelectedID("Map");
-        if (cachedMap == null && selectedMapID == null)
+        if (cachedMap == null && (selectedMapID == null || selectedMapID =="null"))
             loadDefaultMap();
         else if (cachedMap == null && selectedMapID != null)
             loadSelectedMap();
@@ -128,6 +128,8 @@
         else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
             loadSelectedMap();
     }
+
+
 
   var  afterLoaded = function () {
         if ($http.pendingRequests.length > 0) {

@@ -12,10 +12,13 @@
     VM.authenticate = function () {
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
           function (result, x, y, z, h) {
+              // clear default map loaded with default display user's data
+              SharedStateService.Repository.put("Map", null);
+              SharedStateService.setSelected("Map", null);
               SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.setAuthorizationState(canEdit);
               // we will depricate this
-              SharedStateService.readOnlyUser = false;
+             // SharedStateService.readOnlyUser = false;
               $location.path("/Map")
           },
           function (error) {
@@ -41,6 +44,8 @@
         //  window.location.href = "http://html5.traveloggia.net/Default.html";
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
+        SharedStateService.Repository.put("Map", null);
+        SharedStateService.setSelected("Map", null);
         // this will be deprecated
     //    SharedStateService.readOnlyUser = true;
         VM.authenticationStatus.signedIn = false;
