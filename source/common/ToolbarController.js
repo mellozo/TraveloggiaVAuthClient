@@ -18,15 +18,16 @@
     VM.SiteList = [];
 
     var cachedSites =  SharedStateService.Repository.get('Sites');
-    if (cachedSites.length > 0 )
+    if (cachedSites != null && cachedSites.length > 0 )
         VM.SiteList = cachedSites;
     else {
         var selectedMapID = SharedStateService.getSelectedID("Map")
         if(selectedMapID != null)
         DataTransportService.getMapByID(selectedMapID).then(
                     function (result) {
-                        SharedStateService.setSelected("Map", $scope.MapRecord);
-                        SharedStateService.Repository.put('Maps', result.data);
+                        
+                        SharedStateService.setSelected("Map", result.data);
+                        SharedStateService.Repository.put('Map', result.data);
                         if (result.data.Sites.length > 0) {
                             SharedStateService.Repository.put("Sites", result.data.Sites)
                             VM.SiteList = result.data.Sites;

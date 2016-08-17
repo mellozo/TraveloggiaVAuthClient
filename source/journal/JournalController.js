@@ -21,7 +21,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             function (result) {
               var MapRecord = result.data[0];
                 SharedStateService.Selected.Map =MapRecord;
-                SharedStateService.Repository.put('Maps', result.data);
+                SharedStateService.Repository.put('Map', result.data);
                 SharedStateService.Repository.put('Sites', MapRecord.Sites)
             },
         function(error){

@@ -123,7 +123,7 @@
 
     local_scope.Repository = $cacheFactory('Repository', {});
 
-    local_scope.Repository.put('Maps', []);
+    local_scope.Repository.put('Map', null);
 
     local_scope.Repository.put('Sites', []);
 

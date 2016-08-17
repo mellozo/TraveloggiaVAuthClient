@@ -22,7 +22,11 @@
 
     $scope.selectMap = function (index) {
         var selectedMap = $scope.MapList[index];
-        SharedStateService.setSelected("Map", selectedMap)
+        SharedStateService.setSelected("Map", selectedMap);
+        SharedStateService.Repository.put("Sites", []);
+        SharedStateService.Repository.put("Map", null);
+        SharedStateService.Repository.put("Journals", []);
+        SharedStateService.Repository.put("Photos",[])
         $location.path("/Map");
     }
 

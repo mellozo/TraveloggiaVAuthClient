@@ -71,15 +71,14 @@
 
     $scope.loadMaps = function () {
      
-        var cachedMap = SharedStateService.Repository.get("Maps");
-        if (cachedMap.length==0 || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
+        var cachedMap = SharedStateService.Repository.get("Map");
+        if ( cachedMap==null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID() ) 
         {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data;
                     SharedStateService.setSelected("Map", $scope.MapRecord);
-                    SharedStateService.Repository.put('Maps', result.data);
-                   
+                    SharedStateService.Repository.put('Map', result.data);                   
                     SharedStateService.setSelected("Site", null);// clear any previous settings
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
@@ -98,7 +97,7 @@
         else 
         {
             var selectedMapID = SharedStateService.getSelectedID("Map")
-                            if (selectedMapID != null && (cachedMap.MapID == selectedMapID))
+                            if (selectedMapID != null && cachedMap != null && (cachedMap.MapID == selectedMapID))
                             {
                                 $scope.MapRecord = cachedMap;
                                 if ($scope.MapRecord.Sites.length > 0)
@@ -111,7 +110,7 @@
                                         DataTransportService.getMapByID(selectedMapID).then(
                                             function (result) {
                                                 $scope.MapRecord = result.data;
-                                                SharedStateService.Repository.put('Maps', result.data);
+                                                SharedStateService.Repository.put('Map', result.data);
                                                 SharedStateService.setSelected("Site",null)
                                                 if ($scope.MapRecord.Sites.length > 0)
                                                     $scope.drawSites();
