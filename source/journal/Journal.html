@@ -16,13 +16,11 @@
 
          
                 <div class="panel-body papyrus" >
+                 
+                    <div class="navbar navbar-default" style="background:transparent" ng-hide="JournalEntries.length ==0 && stateMachine.state == 'READ_ONLY'" >
 
-                    <div class="navbar navbar-default"  ng-show="stateMachine.state !='IS_EDITING'">
-
-                        <div class="container-fluid cloudBlue">
+                        <div class="container-fluid cloudBlue" >
                             <div class="navbar-header">
-
-
                                 <div style="float:left;width:100%;margin:0px 10px;border:none;"  
                                      id="menuToggle"  class="navbar-toggle"
                                            data-toggle="collapse"
@@ -48,9 +46,9 @@
                                 <ul class="nav navbar-nav menuText listHeader">
                                     <li ng-repeat="journal in JournalEntries" 
                                         ng-class="{active : Journal.JournalID == journal.JournalID }">
-                                    <a href="" ng-click="loadContent($index)">{{journal.Title}}</a>
+                                    <a style="padding-top:0px;padding-bottom:0px;" href="" ng-click="loadContent($index)">{{journal.Title}}</a>
                                     </li>
-                                    <li ng-show="stateMachine.state=='CAN_EDIT'"><a href="" ng-click="addNew()">Add New</a></li>
+                                    <li ng-show="stateMachine.state=='CAN_EDIT' "><a style="padding-top:0px;padding-bottom:0px;"  href="" ng-click="addNew()">Add New</a></li>
 
                                 </ul>
                             </div>
@@ -103,11 +101,13 @@
             </div>
     </div>   
         <script>
-
+// hack to close the burger after selection, 
             $(document).ready(function () {
                 $(".navbar-nav li a").click(function (event) {
                     $(".navbar-collapse").collapse('hide');
                 });
+                // kill the idiotic transition animation built into bootstrap navbar
+                $.support.transition = false
             });
         </script>
 </div>
