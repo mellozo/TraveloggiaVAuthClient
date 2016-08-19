@@ -218,6 +218,20 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             }
             return $http(config);
         },
+
+        addDevice: function (device) {
+            var endpoint = baseURL + "/api/Devices";
+            var config = {
+                method: "post",
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: device
+            }
+
+            return $http(config);
+        },
        
     }
 

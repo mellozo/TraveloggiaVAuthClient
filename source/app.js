@@ -3,16 +3,7 @@
 
 var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics'])
 
-//angularTraveloggia.config(['angularBingMapsProvider', function (angularBingMapsProvider) {
-//    angularBingMapsProvider.setDefaultMapOptions({
-//        credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-//        enableClickableLogo: false
-//    });
-//    angularBingMapsProvider.bindCenterRealtime(false);
-//}]);
-
 // consider file path from the start page AngularMain.html
-
 angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analyticsProvider) {
     $routeProvider
         .when('/', {
@@ -21,8 +12,8 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
       
         })
 
-         .when('/Test', {
-          templateUrl:'common/TestPage.html'
+         .when('/Monitor', {
+          templateUrl:'diagnostics/Monitor.html'
          })
 
 

@@ -46,8 +46,8 @@
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         if (selectedSiteID == "null" || selectedSiteID == null)
         {
+          
             $scope.mapInstance.setView({ bounds: viewRect, padding: 10 });
-            $scope.mapInstance.setView({ bounds: viewRect, padding: 20 });
         }
         else {
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
@@ -282,7 +282,14 @@
       var redraw = debounce(300,function () {
           console.log("debounced resize");
           $scope.mapInstance = null;
-          $route.reload();
+          var vpHeight = $window.document.documentElement.clientHeight;
+          var vpWidth = $window.document.documentElement.clientWidth;
+          $scope.mapStyle = {
+              "height": vpHeight,
+              "width": vpWidth
+          }
+          // when in doubt use a timeout :(
+          $timeout(afterLoaded, 200);
       });
        
   
@@ -290,6 +297,7 @@
     // the kickoff
      afterLoaded();
 
+    if($scope.Capabilities.cantResize == false)
     $window.addEventListener("resize", redraw)
 
 }); 
