@@ -3,7 +3,7 @@
 <div class="container-fluid"  ng-controller="MapListController">
 
     <div class="row">
-        <div ng-include="'common/ToolBar.html'"></div>
+        <div ng-include="'map/MapListToolBar.html'"></div>
     </div>
 
     <div class="row">
@@ -18,7 +18,9 @@
                     <div id="mapList" style="position:relative;list-style:none;margin-left:auto;margin-right:auto;">
                        
                             <div ng-repeat="map in MapList" class="seeThrough">
-                                <a href="" ng-click="selectMap($index)">
+                                <input ng-click="selectMap(map)"
+                                        style="margin:3px;position:relative;left:4px;height:30px;width:30px;display:inline-block"type="checkbox"  ng-click="select($index)"/>
+                                <a href="" ng-click="switchMap($index)">
                                      {{map.MapName}}
                                 </a>
                             </div>

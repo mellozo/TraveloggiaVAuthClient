@@ -1,6 +1,29 @@
 ﻿angularTraveloggia.controller("MapListController", function (SharedStateService, $scope, $location, DataTransportService) {
 
 
+    $scope.selectedState = {
+        addSelected: false,
+        editSelected: false,
+        deleteSelected:  false,
+        siteSelected: false,
+        facebookSelected:  false,
+        emailSelected:  false
+    }
+
+    $scope.selectedMap = null;
+
+    $scope.selectMap=function(map){
+        $scope.selectedMap= map;
+
+
+    }
+
+    $scope.shareFaceBook = function () {
+
+
+    }
+
+
     $scope.loadMapList = function () {
         var cachedMapList = SharedStateService.Repository.get("MapList");
         if (cachedMapList == null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID()) {
@@ -20,7 +43,7 @@
     }
 
 
-    $scope.selectMap = function (index) {
+    $scope.switchMap = function (index) {
         var selectedMap = $scope.MapList[index];
         SharedStateService.setSelected("Map", selectedMap);
         SharedStateService.Repository.put("Sites", []);

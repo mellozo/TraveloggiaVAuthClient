@@ -1,0 +1,57 @@
+﻿
+
+<div id="smallToolbar" class="col-xs-12  bluenav"   
+   
+     style="width:100%;padding:0px;" >
+    <div style="width:100%;overflow-x:visible;">
+
+        <div class="clickableDiv" ng-click="" title="New Map">
+            <img src="../image/plus.png"
+                 class="dottedBorderRed glow"
+                 ng-class="{'poppedUp' : selectedState.addSelected == true}" />
+        </div>
+
+  
+        <div class="clickableDiv"  title="Edit Map">
+            <img ng-class="{'poppedUp' : selectedState.editSelected == true}"  
+                   class="dottedBorderRed glow" src="/../image/pencil.png"    />
+
+        </div>
+
+
+                <div class="clickableDiv"  title="Delete Map">
+                    <img
+                         ng-class="{'poppedUp' : selectedState.deleteSelected == true}"  
+                          src="../image/minus.png"  class="dottedBorderRed glow"  />
+                </div>
+
+                <div class="clickableDiv"  
+                     socialshare 
+                     socialshare-provider="facebook" 
+                     socialshare-url="http://www.traveloggia.pro/?MapID={{selectedMap.MapID}}"
+                     social-share-text="check out my map/photo album/journal"
+                     social-share-media="https://s3-us-west-2.amazonaws.com/traveloggia-guests/41914/DefaultMap%208/8/2016/WP_20160808_16_30_44_Pro.jpg"
+                     social-share-caption="selectedMap.Name"
+                     title="Share Facebook">
+                    <img src="../image/fb.png"  
+                         class="dottedBorderRed glow"
+                         ng-class="{'poppedUp' : selectedState.facebookSelected == true}"  />
+                </div>
+        
+         
+        <div class="clickableDiv" ng-click="" title="Share Email">
+            <img src="../image/email.png"
+                 class="dottedBorderRed glow"
+                 ng-class="{'poppedUp' : selectedState.emailSelected == true}" />
+        </div>
+               
+                 
+
+       
+    </div>
+  
+
+</div>    
+     
+
+

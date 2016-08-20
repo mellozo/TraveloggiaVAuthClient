@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, $window, $route, $scope, $location, DataTransportService,$timeout,$http,debounce) {
+﻿angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce) {
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
@@ -87,7 +87,7 @@
 
     }
     
-    var reloadMap = function () {
+  var reloadMap = function () {
         var cachedMap = SharedStateService.Repository.get("Map");
         $scope.MapRecord = cachedMap;
         if ($scope.MapRecord.Sites.length > 0)
@@ -96,31 +96,57 @@
             $scope.systemMessage.loadComplete = true;
     }
 
-    var loadSelectedMap = function () {
-        var selectedMapID = SharedStateService.getSelectedID("Map")
-            DataTransportService.getMapByID(selectedMapID).then(
-                function (result) {
-                    $scope.MapRecord = result.data;
-                    SharedStateService.Repository.put('Map', result.data);
-                    SharedStateService.setSelected("Site",null)
-                    if ($scope.MapRecord.Sites.length > 0)
-                        drawSites();
-                    else
-                        $scope.systemMessage.loadComplete = true;
+  var loadSelectedMap = function (mapID) {
+      var selectedMapID=null;
+      if (mapID == null)
+          selectedMapID = SharedStateService.getSelectedID("Map")
+      else
+          selectedMapID = mapID;
+        DataTransportService.getMapByID(selectedMapID).then(
+            function (result) {
+                if (mapID != null)// this is passed by a query string param on a shareable link
+                {
+                    SharedStateService.setAuthorizationState(readOnly);
+                    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
+                    SharedStateService.setSelected("Map", result.data);
+                    SharedStateService.Repository.put("Sites", []);
+                    SharedStateService.Repository.put("Map", null);
+                    SharedStateService.Repository.put("Journals", []);
+                    SharedStateService.Repository.put("Photos", [])
 
-                },
-                function (error) {
-                    $scope.systemMessage.text = "error loading selected map";
-                    $scope.systemMessage.activate();
+
                 }
-                )
-    }
+
+                $scope.MapRecord = result.data;
+                SharedStateService.Repository.put('Map', result.data);
+                SharedStateService.setSelected("Site",null)
+                if ($scope.MapRecord.Sites.length > 0)
+                    drawSites();
+                else
+                    $scope.systemMessage.loadComplete = true;
+
+            },
+            function (error) {
+                $scope.systemMessage.text = "error loading selected map";
+                $scope.systemMessage.activate();
+            }
+            )
+}
 
 
     var loadMap = function () {
+        var requestedMap = null;
+        var searchObject = $location.search();
+        if (searchObject != null) {
+            requestedMap = searchObject["MapID"];
+
+        }
+           
         var cachedMap = SharedStateService.Repository.get("Map");
         var selectedMapID = SharedStateService.getSelectedID("Map");
-        if (cachedMap == null && (selectedMapID == null || selectedMapID =="null"))
+        if (requestedMap != null)
+            loadSelectedMap(requestedMap);
+       else if (cachedMap == null && (selectedMapID == null || selectedMapID =="null"))
             loadDefaultMap();
         else if (cachedMap == null && selectedMapID != null)
             loadSelectedMap();
