@@ -3,15 +3,25 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
-   
-    var vhseventysix = $window.innerHeight * .76;
-    var vweighty = $window.innerWidth * .8;
+    var toolbarHeight = 62; $window.document.getElementById("toolbarRow");
+    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
+    $scope.scrollWindowStyle = {
+        "height": viewFrameHeight,
+       "max-height": viewFrameHeight
+    }
+    //var vhseventysix = $window.innerHeight * .76;
+    //var vweighty = $window.innerWidth * .8;
+    $scope.viewFrameWidth = $window.document.getElementById("viewFrame").offsetWidth;
+    $scope.viewFrameHeight = $window.document.getElementById("viewFrame").offsetHeight;
+    var vhseventysix = $scope.viewFrameHeight * .76;
+    var vweighty = $scope.viewFrameWidth * .8;
+
     $scope.landscapeImageStyle = {
         "max-height": vhseventysix,
         "max-width": vweighty
     };
 
-    var vheighty = $window.innerHeight * .8;
+    var vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
     $scope.portaitImageStyle = {
         "height":"auto",
         "max-width:":vheighty
@@ -35,7 +45,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $scope.PhotoList = cachedPhotos;
         $scope.selectedPhoto = SharedStateService.getSelectedPhoto();    
     }
-    else {
+    else if (SharedStateService.getSelectedID("Site") != null ){
         DataTransportService.getPhotos(SharedStateService.getSelectedID("Site")).then(
             function (result) {
                 $scope.PhotoList = result.data;

@@ -2,17 +2,19 @@
 
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
-<div class="container-fluid" ng-controller="JournalController" style="width:100%">
+<div  ng-controller="JournalController" style="width:100%">
 
-    <div class="row" >
+    <div id="toolbarRow">
         <div ng-include="'common/ToolBar.html'"></div>
     </div>
 
  
     
-    <div class="row" >
-        <div class="col-xs-12" style="margin-left:0px;padding-left:0px;padding-right:0px;margin-right:0px;"> 
-            <div class="panel panel-default"  >
+    <div  >
+        <div 
+          ng-style="scrollWindowStyle"
+            style="padding-right:0px;margin-right:0px;overflow-y:scroll"> 
+            <div class="panel panel-default "   style="margin-bottom:0px">
 
          
                 <div class="panel-body papyrus" >

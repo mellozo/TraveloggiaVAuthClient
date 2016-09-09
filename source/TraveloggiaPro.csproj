@@ -64,6 +64,7 @@
     <Content Include="album\Album.html" />
     <Content Include="album\AlbumController.js" />
     <Content Include="album\Photo.html" />
+    <Content Include="album\AlbumPreview.html" />
     <Content Include="app.js" />
     <Content Include="common\confirm-cancel.html" />
     <Content Include="common\ConfirmCancelDirective.js" />
@@ -74,10 +75,12 @@
     <Content Include="common\ToolBar.html" />
     <Content Include="common\ToolbarController.js" />
     <Content Include="css\lib\bootstrap-3.3.7.css" />
-    <Content Include="css\lib\bootstrap.css" />
+    <Content Include="css\lib\bootstrap-3.3.7.min.css" />
     <Content Include="css\lib\marc Antoine Charpentierdownload.jpg" />
     <Content Include="css\lib\textAngular.css" />
     <Content Include="css\TraveloggiaStyles.css" />
+    <Content Include="diagnostics\Monitor.html" />
+    <Content Include="diagnostics\MonitorController.js" />
     <Content Include="image\circle.png" />
     <Content Include="image\compass.gif" />
     <Content Include="image\globe.png" />
@@ -116,6 +119,7 @@
     <Content Include="lib\extensions\angular-route.min.js.map" />
     <Content Include="lib\extensions\angular.min.js.map" />
     <Content Include="css\TraveloggiaStyles.less" />
+    <Content Include="css\lib\bootstrap.css.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -127,6 +131,7 @@
     <Content Include="map\MapListController.js" />
     <Content Include="signin\SignIn.html" />
     <Content Include="signin\SignInController.js" />
+    <Content Include="site\SitePreview.html" />
     <Content Include="site\Site.html" />
     <Content Include="site\SiteController.js" />
     <Content Include="site\SiteList.html" />

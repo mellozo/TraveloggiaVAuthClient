@@ -3,19 +3,24 @@
         state: SharedStateService.getAuthorizationState()
     }
 
+    var vpHeight = $window.document.documentElement.clientHeight;
+    var vpWidth = $window.document.documentElement.clientWidth;
+    if (vpWidth > 768)
+    vpWidth = vpWidth * .7;
+
+    $scope.mapStyle = {
+        "height": vpHeight,
+        "width": vpWidth
+    }
+    
+
     $scope.selectedState = {
         editSelected:false
     }
 
     var clickHandler = null;
 
-    //safari no likey viewport units
-    var vpHeight = $window.document.documentElement.clientHeight;
-    var vpWidth = $window.document.documentElement.clientWidth;
-    $scope.mapStyle = {
-        "height": vpHeight,
-       "width":vpWidth
-    }
+  
     var pushpinCollection = null;
     $scope.dialogIsShowing = false;
     $scope.searchAddress = null;
@@ -46,8 +51,11 @@
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         if (selectedSiteID == "null" || selectedSiteID == null)
         {
-          
-            $scope.mapInstance.setView({ bounds: viewRect, padding: 10 });
+          // softy hack because they love me :)
+            $scope.mapInstance.setView({ bounds: viewRect, padding: 30 });
+            var badZoom = $scope.mapInstance.getZoom();
+          //  badZoom = badZoom - 2;
+           // $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
         }
         else {
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
@@ -134,10 +142,10 @@
 }
 
 
-    var loadMap = function () {
+ var loadMap = function () {
         var requestedMap = null;
         var searchObject = $location.search();
-        if (searchObject != null) {
+        if (searchObject["MapID"]) {
             requestedMap = searchObject["MapID"];
 
         }
@@ -156,35 +164,54 @@
             loadSelectedMap();
     }
 
+ var redraw = debounce(100, function () {
+        console.log("debounced resize");
+        var vpHeight = $window.document.documentElement.clientHeight;
+        var vpWidth = $window.document.documentElement.clientWidth;
+     if(vpWidth > 768)
+        vpWidth = vpWidth * .7;
+
+        $scope.mapStyle = {
+            "height": vpHeight,
+            "width": vpWidth
+        }
+        // when in doubt use a timeout :(
+        $timeout(afterLoaded, 0);
+    });
 
 
   var  afterLoaded = function () {
         if ($http.pendingRequests.length > 0) {
-            $timeout($scope.afterLoaded); // Wait for all templates to be loaded
+            $timeout(afterLoaded,200); // Wait for all templates to be loaded
         }
         else {
-            if ($scope.mapInstance == null) {
-                try {
-                    $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-                        credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                        mapTypeId: "r",
-                        showLocateMeButton: false,
-                        //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
-                        showTermsLink: false,
-                        enableClickableLogo: false
-                    });
+                    if ($scope.mapInstance == null) 
+                    {
+              
+                        var vpHeight = $window.document.documentElement.clientHeight;
+                        var vpWidth = $window.document.documentElement.clientWidth;
+                        vpWidth = vpWidth * .7;
 
-                    if ($scope.mapInstance != null)// of course its not, just checking
-                        loadMap();
-                    else
-                        $timeout($scope.afterLoaded);
-                }
-                catch (error) {
-                    $timeout($scope.afterLoaded);
+                            $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
+                                //   $scope.mapInstance = new Microsoft.Maps.Map(mapContainer, {
+                                credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
+                                mapTypeId: "r",
+                                showLocateMeButton: false,
+                                //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
+                                showTermsLink: false,
+                                enableClickableLogo: false
+                                ,
+                                height:vpHeight,
+                                width:vpWidth
+                            });
+                        }
 
-                }
+                        if ($scope.mapInstance != null)// of course its not, just checking
+                            loadMap();
+                        else
+                            $timeout($scope.afterLoaded);
+
             }
-        }
     };
 
     //ADD CURRENT LOCATION
@@ -304,21 +331,7 @@
     }
 
 
-   
-      var redraw = debounce(300,function () {
-          console.log("debounced resize");
-          $scope.mapInstance = null;
-          var vpHeight = $window.document.documentElement.clientHeight;
-          var vpWidth = $window.document.documentElement.clientWidth;
-          $scope.mapStyle = {
-              "height": vpHeight,
-              "width": vpWidth
-          }
-          // when in doubt use a timeout :(
-          $timeout(afterLoaded, 200);
-      });
-       
-  
+
 
     // the kickoff
      afterLoaded();

@@ -1,6 +1,13 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout) {
 
- 
+
+    $scope.preview = {
+
+        windowOne: "album/AlbumPreivew.html",
+        windowTwo: "site/SitePreview.html",
+        windowThree:"journal/JournalPreview.html"
+    }
+  
 
     $scope.selectedState = {
         mapSelected: $location.path() == "/Map" ? true:false,

@@ -1,6 +1,6 @@
 ﻿<script src="../lib/load-image.all.min.js"></script>
-<div class="container-fluid greenMud" style="margin:0px;padding:0px;"  ng-controller="AlbumController" >
-<div class="row" style="padding-left:16px;">
+<div class=" greenMud"   ng-controller="AlbumController" >
+<div id="toolbarRow">
     <div ng-include="'common/ToolBar.html'"></div>
 
 </div>
@@ -40,8 +40,10 @@
 </div>
 
 
-<div class="row"  style="margin-top:0px;padding-top:0px;">
-    <div class="col-xs-12" style="margin-top:0px;padding-top:0px;" id="photoListContainer"> 
+<div   style="margin-top:0px;padding-top:0px;">
+    <div  
+           ng-style="scrollWindowStyle" 
+        style="margin-top:0px;padding-top:0px;overflow-y:scroll;" id="photoListContainer"> 
    
 
                 <div ng-repeat="Photo in PhotoList" style="margin-top:15px;margin-left:5px;margin-right:auto;padding-top:0px;">

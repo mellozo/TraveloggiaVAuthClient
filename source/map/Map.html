@@ -16,7 +16,7 @@
 
 
 
-<div id="mainContainer"  style="width:100%" ng-controller="MapController"  >
+<div id="mainContainer"   ng-controller="MapController"  >
  
     <div class="clickableDiv" style="position:absolute;z-index:99" >
         
@@ -59,7 +59,7 @@
 
 
 
-    <div id="bingMapRaw" ng-style="mapStyle" style='position:relative;'>
+    <div id="bingMapRaw" ng-style="mapStyle"  style="position:relative">
 
     </div>
 
@@ -73,18 +73,18 @@
 
 
     
-    <confirm-cancel   
+   <!-- <confirm-cancel   
         ng-show="dialogIsShowing"
         style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px"
         question="confirmCancelQuestion"
         on-confirm="saveCurrentLocation()" 
         on-cancel="dismiss()">
-    </confirm-cancel>
+    </confirm-cancel>-->
 
-    <button class="bluenav glow"
+   <!-- <button class="bluenav glow"
                 title="zoom to current location" ng-click="getLocation()"
                 style="border:dotted 2px red;position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:6%;border-radius:90px">
         <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
-    </button>    
+    </button>   --> 
 
     </div>

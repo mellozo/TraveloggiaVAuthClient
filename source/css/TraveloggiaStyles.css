@@ -285,8 +285,30 @@ left:5px;
 #photoList a:hover {color: red;}
 #photoList a:active {color: yellow;}
 
+@media (max-width: 768px) {
 
+    .desktop {
+        display: none;
+        width:0px;
+    }
+  .phone{
+            width:100%;
+           
+        }
+    
+}
 
+@media (min-width: 769px) {
+
+    .desktop {
+        
+         width:30%;
+    }
+  .phone{
+            width:70%;
+        }
+    
+}
 
 
 /*.signin{

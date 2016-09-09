@@ -1,6 +1,25 @@
 ﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window) {
 
+    $scope.reliableHeight = $window.innerHeight;
+    $scope.reliableWidth = $window.document.documentElement.clientWidth;
 
+    $scope.previewPaneStyle = {
+        "height":$scope.reliableHeight *.32
+    }
+ 
+   
+    $scope.tableStyle = {
+        "height": $scope.reliableHeight
+       
+    }
+
+    $scope.previewStyle = {
+        "height": $scope.reliableHeight,
+        "max-height": $scope.reliableHeight,
+       
+    }
+
+  
 
     // demonstrating use of inherited scope via nested controllers
     // even though some people think this is a big no no
@@ -23,6 +42,7 @@
     
 
     $scope.Capabilities = {
+        height:$scope.reliableHeight,
         alreadyKnowsHow: false,
         currentDevice: device,
         cantResize:false

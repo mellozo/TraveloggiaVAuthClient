@@ -1,12 +1,19 @@
 ﻿
 
-angularTraveloggia.controller('JournalController', function (DataTransportService,canEdit,readOnly,isEditing, $scope,SharedStateService,$location,$route,$timeout) 
+angularTraveloggia.controller('JournalController', function (DataTransportService,canEdit,readOnly,isEditing, $scope,SharedStateService,$location,$route,$timeout,$window) 
 {
 
     $scope.stateMachine = {
             state:SharedStateService.getAuthorizationState()
             }
     
+
+    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow");
+    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
+    $scope.scrollWindowStyle = {
+        "height": viewFrameHeight,
+        "max-height":viewFrameHeight
+    }
     // this is if we are redirecting from html5.traveloggia.net which doesnt have its own journal page
     if ($location.search().MapID != null)
     {

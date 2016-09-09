@@ -1,6 +1,11 @@
 ﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location,$window) {
 
-
+    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow").innerHeight;
+    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
+    $scope.scrollWindowStyle = {
+        "height": viewFrameHeight,
+        "max-height":viewFrameHeight
+    }
     var VM = this;
    
     //  in future all the accessors to shared state, should handle requery db if empty, 

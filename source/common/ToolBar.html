@@ -1,9 +1,9 @@
 ﻿<!--the bootstrap way    style="background-image:url(../image/lightblue.jpg)"-->
 
-<div id="smallToolbar" class="col-xs-12  bluenav"   
+<div  class="bluenav"   
      ng-controller="ToolbarController as navCtrl" 
-     style="width:100%;padding:0px;" >
-    <div style="width:100%;overflow-x:visible;">
+     style="padding:0px;" >
+    <div >
   
         <div class="clickableDiv" ng-click="navCtrl.goMap()" title="Map">
             <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  

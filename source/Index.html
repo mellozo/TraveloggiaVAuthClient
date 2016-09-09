@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="css/TraveloggiaStyles.css" type="text/css" />
-    
-    <link rel="stylesheet" href="css/lib/bootstrap-3.3.7.css" />
-    <!--   required by the absurd calendar control-->
-    <link rel ="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" />
+      <link rel="stylesheet" href="css/lib/bootstrap.css.map" />
+    <link rel="stylesheet" href="css/lib/bootstrap-3.3.7.min.css" />
+   
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Cinzel" />
     <link rel="stylesheet" href="css/lib/textAngular.css" type="text/css" />
 
@@ -56,17 +55,57 @@
 
 
 </head>
-<body ng-controller="NotificationController" style="background-image: url('image/turq.jpg'); height: 100%">
+<body ng-controller="NotificationController" style="background-image: url('image/turq.jpg'); ">
 
     <!--    0E7B83          07595D-->
 
 
+<table ng-style="tableStyle" style="width:100%;">
+    <tr >
+        <td id="viewFrame"  class="phone" style="vertical-align:top;">
+            <div  ng-hide="systemMessage.loadComplete"
+                  style="position:relative;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
+                >
+                <img src="image/compass.gif" style="width:110px;height:110px;z-index:91;display:block;margin:auto" />
+                loading...
+            </div>
+            
+            <table style="width:100%;height:100%">
+                <tr>
+                    <td  style="vertical-align:top;">
+                           <div ng-view  style="border: none; padding: 0px; margin: 0px; display: inline;">
+                            </div>
+
+                    </td>
+                </tr>
+            </table>
+         
+        </td>
+        <td ng-controller="ToolbarController" class ="desktop bluenav" style ="width:30%;vertical-align:top;padding-right:6px;padding-top:3px;padding-bottom:6px;">
+            <table  style="width:100%;height:100%;padding:0px;border:none;margin:0px;">
+                <tr>
+                    <td style="vertical-align:top;padding:6px;">
+                                <div class="dottedBorderRed glow" style  ="height:33%;margin: 0px 2px 6px;padding:2px;">
+                                       <div ng-include ="preview.windowOne" ></div>
+                                </div>
+                                <div class="dottedBorderRed glow" style="height:33%;max-height:33%;margin:0px 2px 6px;padding:2px;">
+                                    <div ng-include ="preview.windowTwo" ></div>
+                                </div>
+                                <div class="dottedBorderRed glow" style="height:33%;margin:0px 2px 3px;padding:2px;">
+                                    <div ng-include ="preview.windowThree" ></div>
+                                </div>
+                    </td>
+                </tr>
+            </table>
+         
+
+        </td>
+ 
+    </tr>
+</table>
 
 
-    <div ng-view style="border: none; padding: 0px; margin: 0px; display: inline">
-    </div>
-
-
+    <!-- 
 
     <div id="divSystemMessage"  ng-cloak ng-show="systemMessage.cover"
         style="position: absolute; z-index: 99; top: 45px; left: 0px; width: 100%; height: 400px; background-color: lightgray; opacity: .9">
@@ -77,17 +116,12 @@
                 X
             </div>
         </a>
-    </div>
+    </div>-->
 
 
 
     
-    <div  ng-hide="systemMessage.loadComplete"
-          style="position:absolute;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
-        >
-        <img src="image/compass.gif" style="width:110px;height:110px;z-index:91;display:block;margin:auto" />
-        loading...
-    </div>
+   
 
 </body>
 </html>
