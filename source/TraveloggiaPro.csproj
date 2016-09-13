@@ -96,6 +96,7 @@
     <Content Include="image\sun.png" />
     <Content Include="image\turq.jpg" />
     <Content Include="Index.html" />
+    <Content Include="journal\JournalPreview.html" />
     <Content Include="journal\Journal.html" />
     <Content Include="journal\JournalController.js" />
     <Content Include="lib\angular.min.js" />
@@ -129,6 +130,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="map\MapListController.js" />
+    <Content Include="map\MapListToolBar.html" />
+    <Content Include="map\MapPreview.html" />
     <Content Include="signin\SignIn.html" />
     <Content Include="signin\SignInController.js" />
     <Content Include="site\SitePreview.html" />

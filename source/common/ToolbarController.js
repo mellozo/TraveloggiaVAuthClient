@@ -2,10 +2,9 @@
 
 
     $scope.preview = {
-
-        windowOne: "album/AlbumPreivew.html",
-        windowTwo: "site/SitePreview.html",
-        windowThree:"journal/JournalPreview.html"
+        windowOne: "site/SitePreview.html",
+        windowTwo: "album/AlbumPreview.html",
+        windowThree: "journal/JournalPreview.html"
     }
   
 
@@ -17,6 +16,57 @@
         maplistSelected: $location.path() == "/MapList" ? true : false,
         sitelistSelected:$location.path()=="/SiteList"?true:false
     }
+
+
+    $scope.navigateWindowOne = function () {
+        if ($scope.preview.windowOne == "site/SitePreview.html") {
+            $scope.preview.windowOne = "map/MapPreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";
+             $scope.preview.windowThree = "journal/JournalPreview.html";    
+            $location.path("/Site")
+        }
+        else if ($scope.preview.windowOne == "map/MapPreview.html") {
+            $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            $location.path("/Map")
+        }
+
+    }
+
+    $scope.navigateWindowTwo = function () {
+        if ($scope.preview.windowTwo == "album/AlbumPreview.html") {
+            $scope.preview.windowTwo= "map/MapPreview.html";
+            $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            $location.path("/Album")
+        }
+       else if ($scope.preview.windowTwo == "map/MapPreview.html") {
+           $scope.preview.windowOne = "site/SitePreview.html";
+           $scope.preview.windowTwo = "album/AlbumPreview.html";
+           $scope.preview.windowThree = "journal/JournalPreview.html";
+            $location.path("/Map");
+        }
+
+    }
+
+    $scope.navigateWindowThree = function () {
+        if ($scope.preview.windowThree == "journal/JournalPreview.html") {
+            $scope.preview.windowThree = "map/MapPreview.html";
+            $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";        
+            $location.path("/Journal");
+        }
+       else if ($scope.preview.windowOne == "map/MapPreview.html") {
+            $scope.preview.windowOne = "journal/JournalPreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            $location.path("/Map")
+        }
+
+    }
+
+
 
     var VM = this;
     VM.selectedSite = {
@@ -69,19 +119,35 @@
     
 
     VM.goJournal = function () {
+        $scope.preview.windowThree = "map/MapPreview.html";
+        $scope.preview.windowOne = "site/SitePreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
         $location.path("/Journal");
+        $scope.$apply();
     }
 
     VM.goAlbum = function () {
+        $scope.preview.windowTwo = "map/MapPreview.html";
+        $scope.preview.windowOne = "site/SitePreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Album");
+        $scope.$apply();
     }
 
     VM.goMap = function () {
-        $location.path("/Map")
+        $scope.preview.windowOne = "site/SitePreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
+        $location.path("/Map");
+        $scope.$apply();
     }
 
     VM.goSite = function () {
+        $scope.preview.windowOne = "map/MapPreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Site");
+        $scope.$apply();
     }
 
     VM.goSiteList = function () {
@@ -90,6 +156,10 @@
 
     VM.goMapList = function () {
         $location.path("/MapList");
+        $scope.preview.windowOne = "map/MapPreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
+        $scope.$apply();
     }
 
 

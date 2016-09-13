@@ -1,0 +1,46 @@
+﻿<div ng-controller="AlbumController"    ng-style="previewPaneStyle" style="overflow:scroll;">
+      <div class=" greenMud"   style="margin-left:auto;margin-right:auto;padding:0px;height:100%;vertical-align:middle">
+
+    <div ng-if="selectedPhoto.StorageURL !=null " style="vertical-align:middle">
+
+        <div ng-if="selectedPhoto.orientationID==null || selectedPhoto.orientationID < 5">
+            <img ng-src="{{  imageServer + imagePath + selectedPhoto.FileName}}"
+                ng-style="landscapeImageStyle" style="vertical-align:middle">
+        </div>
+
+        <div ng-if="selectedPhoto.orientationID != null && selectedPhoto.orientationID >4 ">
+            <div ng-if="Capabilities.alreadyKnowsHow==false">
+                    <img on-load="onImageLoad($event, selectedPhoto.orientationID)"
+                            style="position:absolute;visibility:hidden"
+                            ng-style="portraitImageStyle"
+                            src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
+                    <canvas id="canvas" style="display:block;"></canvas>
+
+            </div>
+            <div ng-if="Capabilities.alreadyKnowsHow==true">
+                <img style="max-width:90%;visibility:visible;vertical-align:middle"
+                     ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
+            </div>
+
+          
+        </div>
+    </div>
+
+
+
+    <div ng-if="selectedPhoto.StorageURL==null " style="vertical-align:middle">
+
+            <div ng-if="selectedPhoto.orientationID == null">
+                    <img 
+                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}"
+                         ng-style="landscapeImageStyle" />
+            </div>
+
+    </div>
+
+
+    
+
+      </div>
+    
+</div>

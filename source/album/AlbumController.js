@@ -1,35 +1,48 @@
 ﻿
 
-angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window) {
+angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
-    var toolbarHeight = 62; $window.document.getElementById("toolbarRow");
+   // $scope.setDimensions();
+    var toolbarHeight = 62;// $window.document.getElementById("toolbarRow");
     var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
     $scope.scrollWindowStyle = {
         "height": viewFrameHeight,
        "max-height": viewFrameHeight
     }
-    //var vhseventysix = $window.innerHeight * .76;
-    //var vweighty = $window.innerWidth * .8;
-    $scope.viewFrameWidth = $window.document.getElementById("viewFrame").offsetWidth;
-    $scope.viewFrameHeight = $window.document.getElementById("viewFrame").offsetHeight;
-    var vhseventysix = $scope.viewFrameHeight * .76;
-    var vweighty = $scope.viewFrameWidth * .8;
 
-    $scope.landscapeImageStyle = {
-        "max-height": vhseventysix,
-        "max-width": vweighty
-    };
-
-    var vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
-    $scope.portaitImageStyle = {
-        "height":"auto",
-        "max-width:":vheighty
+    if ($location.path() == "/Album") {
+                $scope.viewFrameWidth = $window.document.getElementById("viewFrame").offsetWidth;
+                $scope.viewFrameHeight = $window.document.getElementById("viewFrame").offsetHeight;
+                // this is funky and will change
+                $scope.vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
+                var vhseventysix = $scope.viewFrameHeight * .76;
+                var vweighty = $scope.viewFrameWidth * .8;
+                var vheighty = $scope.viewFrameHeight * .8;
+                $scope.landscapeImageStyle = {
+                    "max-height": vhseventysix,
+                    "max-width": vweighty
+                };
+                $scope.portaitImageStyle = {
+                    "height": "auto",
+                    "max-width:": vheighty
+                }
     }
-
-    $scope.filesToUpload = null;
-
-    $scope.photoRecords = [];
+    else {
+                $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
+                $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
+                $scope.landscapeImageStyle = {
+                    "max-height": "auto",
+                    "max-width": Math.round($scope.viewFrameWidth * .90)
+                };
+                $scope.portaitImageStyle = {
+                    "height": Math.round($scope.viewFrameHeight *.90),
+                    "max-width:": "auto"
+                }
+    }
+  
+  
+  
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
@@ -43,7 +56,12 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site"))
     {
         $scope.PhotoList = cachedPhotos;
-        $scope.selectedPhoto = SharedStateService.getSelectedPhoto();    
+        $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+        if ($scope.selectedPhoto == null) {
+            SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+            $scope.selectedPhoto = $scope.PhotoList[0];
+
+        }
     }
     else if (SharedStateService.getSelectedID("Site") != null ){
         DataTransportService.getPhotos(SharedStateService.getSelectedID("Site")).then(
@@ -51,23 +69,26 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 $scope.PhotoList = result.data;
                 SharedStateService.Repository.put('Photos', result.data);
                 $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+                if ($scope.selectedPhoto == null) {
+                    SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+                    $scope.selectedPhoto = $scope.PhotoList[0];
+                }
             },
             function (error) { })
     }
 
-
-    $scope.selectPhoto = function (photo) {
-        SharedStateService.setSelected("Photo", photo);
-        $scope.selectedPhoto = photo;
-        $location.path("/Photo");
-    }
 
 
     // rotates image if nescessary 
     $scope.onImageLoad = function (e, orientationID) {
         var loadedImage = e.target;
         var degrees = 0;
-        var maxHeight = $window.innerHeight * .76
+
+        if($location.path() =="/Album")
+            var maxHeight = $window.innerHeight * .76
+        else
+            var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .3)
+
         var scaledWidth = maxHeight;
         var height = loadedImage.height;
 
@@ -167,24 +188,117 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
-// upon selecting file to upload
-    $scope.fileNameChanged = function (mel) {
-            var files = mel.files;
-            if (files && files.length > 0)
-            {
-                // store file objects to be passed to http => aws
-                $scope.filesToUpload = files;
 
-                //display selected files in preview pane ( this will change ) 
-                for (var i = 0; i < files.length; i++)
-                {
-                    var file = files[i];
-                    // use the image loader componenet
-                    onFileSelected(file);
-                }
-            }
+    $scope.selectPhoto = function (photo) {
+        SharedStateService.setSelected("Photo", photo);
+        $scope.selectedPhoto = photo;
+        $location.path("/Photo");
     }
 
+    var albumRedraw = debounce(500, function () {
+        if ($location.path() != "/Album")
+            return;
+
+        $window.location.reload();
+    });
+
+
+    if ($scope.Capabilities.cantResize == false)
+        $window.addEventListener("resize", albumRedraw)
+
+
+  
+    // loading the data if they change sites but stay on the page
+    $scope.$watch(
+        function (scope) {
+            if(SharedStateService.Selected.Site != null)
+            return SharedStateService.Selected.Site.SiteID;
+        },
+        function (newValue, oldValue) {
+            if (newValue != null && newValue != oldValue)
+            {
+                $scope.PhotoList = [];
+                DataTransportService.getPhotos(newValue).then(
+                function (result) {
+                    $scope.PhotoList = result.data;
+                
+                        SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+                        $scope.selectedPhoto = $scope.PhotoList[0];
+                
+                },
+                function (error) { }
+                );
+            }
+               
+        });
+
+
+    $scope.$watch(
+         function (scope) {
+             if (SharedStateService.Selected.Map != null)
+                 return SharedStateService.Selected.Map.MapName;
+         },
+         function (newValue, oldValue) {
+             if (newValue != null && newValue != oldValue) 
+                 $scope.imagePath = SharedStateService.getAuthenticatedMemberID() +"/" + SharedStateService.getSelectedMapName() + "/";
+            
+         });
+
+
+
+
+    //******************single photo edit page 
+
+    $scope.deletePhoto = function () {
+        DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
+            function (result) {
+                var cachedPhotos = SharedStateService.Repository.get('Photos');
+                for (var i = 0; i < cachedPhotos.length; i++) {
+                    if (cachedPhotos[i].PhotoID == $scope.selectedPhoto.PhotoID) {
+                        cachedPhotos.splice(i, 1);
+                        break;
+                    }
+                }
+                $scope.systemMessage.text = "selected photo has been deleted";
+                $scope.systemMessage.activate();
+                $location.path("/Album");
+            },
+            function (error) {
+                $scope.systemMessage.text = "error deleting photo record";
+                $scope.systemMessage.activate();
+            }
+            )
+    }
+
+
+
+
+
+
+
+
+
+
+    //**************************upload functionality todo:move to its own page
+    $scope.filesToUpload = null;
+
+    $scope.photoRecords = [];
+
+    // upon selecting file to upload
+    $scope.fileNameChanged = function (mel) {
+        var files = mel.files;
+        if (files && files.length > 0) {
+            // store file objects to be passed to http => aws
+            $scope.filesToUpload = files;
+
+            //display selected files in preview pane ( this will change ) 
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                // use the image loader componenet
+                onFileSelected(file);
+            }
+        }
+    }
 
     // used to display in preview pane
     function replaceResults(img) {
@@ -192,7 +306,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         if (!(img.src || img instanceof HTMLCanvasElement)) {
             content = $('<span>Loading image file failed</span>')
         } else {
-            
+
             content = $('<a target=_blank>').append(img)
               .attr('download', currentFile.name)
               .attr('href', img.src || img.toDataURL())
@@ -217,16 +331,16 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-// displays in preview pane and creates record with exif data
+    // displays in preview pane and creates record with exif data
     function onFileSelected(file) {
         var options = {
             maxWidth: 80,
-            maxHeight:80,
+            maxHeight: 80,
             canvas: true,
             pixelRatio: window.devicePixelRatio,
             downsamplingRatio: 0.5
         }
-     
+
         loadImage.parseMetaData(file, function (data) {
             var exifData = null;
             var orientationID = null;
@@ -242,10 +356,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         })
     }
 
-
     $scope.filesUploadedCount = 0;
 
-   var createPhotoRecord = function (fileName, exif, orientationID) {
+    var createPhotoRecord = function (fileName, exif, orientationID) {
         var photoRecord = new Photo();
         photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
@@ -258,22 +371,21 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         return photoRecord;
     }
 
-   $scope.handleUploadClick = function () {
-       $scope.systemMessage.text = "working...";
-       $scope.systemMessage.activate();
- 
-       uploadFile();
-     
+    $scope.handleUploadClick = function () {
+        $scope.systemMessage.text = "working...";
+        $scope.systemMessage.activate();
+
+        uploadFile();
+
     }
-   
-    var uploadFile = function () {     
+
+    var uploadFile = function () {
         var memberID = SharedStateService.getAuthenticatedMemberID();
         var mapName = SharedStateService.getSelectedMapName();
-        for (var i = 0; i < $scope.filesToUpload.length; i++)
-        {
-            (  function(imageFile,fileName,photoRecord){
+        for (var i = 0; i < $scope.filesToUpload.length; i++) {
+            (function (imageFile, fileName, photoRecord) {
                 var fileName = imageFile.name
-                var photoRecord = getObjectByProperty( $scope.photoRecords, "FileName", fileName);
+                var photoRecord = getObjectByProperty($scope.photoRecords, "FileName", fileName);
                 DataTransportService.uploadImage(memberID, mapName, imageFile).then(
                                  function (result) {
                                      $scope.addPhotoRecord(photoRecord);
@@ -282,20 +394,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                                      $scope.systemMessage.text = "error uploading photo";
                                      $scope.systemMessage.activate();
                                  });
-          })($scope.filesToUpload[i])
+            })($scope.filesToUpload[i])
 
         }
         if ($scope.filesToUpload.length == $scope.filesUploadedCount) {
-            if($scope.filesUploadedCount == 1)
+            if ($scope.filesUploadedCount == 1)
                 $scope.systemMessage.text = "photo was uploaded successfuly"
             else if ($scope.filesUploadedCount > 1)
-                $scope.systemMessage.text =$scope.filesUploadedCount +  " photos were uploaded successfuly"
+                $scope.systemMessage.text = $scope.filesUploadedCount + " photos were uploaded successfuly"
             $scope.systemMessage.activate();
         }
-        
+
     }
-
-
 
     getObjectByProperty = function (list, property, value) {
         var obj = null;
@@ -315,7 +425,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 cachedPhotos.push(result.data);
                 SharedStateService.Repository.put('Photos', cachedPhotos);
                 $scope.filesUploadedCount = $scope.filesUploadedCount + 1;
-               // $route.reload();
+                // $route.reload();
             },
             function (error) {
                 $scope.systemMessage.text = "error adding photo record";
@@ -323,67 +433,27 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             });
     }
 
-    $scope.deletePhoto = function () {
-        DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
-            function (result) {
-                var cachedPhotos = SharedStateService.Repository.get('Photos');
-                for (var i = 0; i < cachedPhotos.length; i++) {
-                    if (cachedPhotos[i].PhotoID == $scope.selectedPhoto.PhotoID) {
-                        cachedPhotos.splice(i, 1);
-                        break;
-                    }
-                }
-                $scope.systemMessage.text = "selected photo has been deleted";
-                $scope.systemMessage.activate();
-                $location.path("/Album");
-            },
-            function (error) {
-                $scope.systemMessage.text = "error deleting photo record";
-                $scope.systemMessage.activate();
-            }
-            )
-    }
 
     $scope.$watch(
-        function (scope) {
-            return $scope.filesUploadedCount
-        },
-        function (newValue, oldValue) {
-            if ($scope.filesToUpload && newValue == $scope.filesToUpload.length)
-            {
-                if ($scope.filesUploadedCount >1)
-                    $scope.systemMessage.text = $scope.filesUploadedCount +  " photos uploaded successfully";
-                else 
-                    $scope.systemMessage.text =" photo uploaded successfully";
+       function (scope) {
+           return $scope.filesUploadedCount
+       },
+       function (newValue, oldValue) {
+           if ($scope.filesToUpload && newValue == $scope.filesToUpload.length) {
+               if ($scope.filesUploadedCount > 1)
+                   $scope.systemMessage.text = $scope.filesUploadedCount + " photos uploaded successfully";
+               else
+                   $scope.systemMessage.text = " photo uploaded successfully";
 
-                    $scope.systemMessage.activate();
-                    $scope.filesToUpload = null;
-                    $scope.filesUploadedCount = 0;
-                    $route.reload();
-            }
-        }
-        );
+               $scope.systemMessage.activate();
+               $scope.filesToUpload = null;
+               $scope.filesUploadedCount = 0;
+               $route.reload();
+           }
+       }
+       );
 
 
-    // loading the data if they change sites but stay on the page
-    $scope.$watch(
-        function (scope) {
-            if(SharedStateService.Selected.Site != null)
-            return SharedStateService.Selected.Site.SiteID;
-        },
-        function (newValue, oldValue) {
-            if (newValue != null && newValue != oldValue)
-            {
-                $scope.PhotoList = [];
-                DataTransportService.getPhotos(newValue).then(
-                function (result) {
-                    $scope.PhotoList = result.data;
-                },
-                function (error) { }
-                );
-            }
-               
-        });
 
 })
 

@@ -14,8 +14,6 @@
 
     $scope.selectMap=function(map){
         $scope.selectedMap= map;
-
-
     }
 
     $scope.shareFaceBook = function () {

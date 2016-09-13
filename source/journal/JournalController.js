@@ -1,6 +1,6 @@
 ﻿
 
-angularTraveloggia.controller('JournalController', function (DataTransportService,canEdit,readOnly,isEditing, $scope,SharedStateService,$location,$route,$timeout,$window) 
+angularTraveloggia.controller('JournalController', function (DataTransportService,canEdit,readOnly,isEditing, $scope,SharedStateService,$location,$route,$timeout,$window,debounce) 
 {
 
     $scope.stateMachine = {
@@ -79,6 +79,20 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                         $scope.systemMessage.activate();
                     });
     }
+
+
+    var journalRedraw = debounce(500, function () {
+        if ($location.path() != "/Journal")
+            return;
+        $window.location.reload();
+    });
+
+
+    if ($scope.Capabilities.cantResize == false)
+        $window.addEventListener("resize", journalRedraw)
+
+
+
 
 
     $scope.$watch(

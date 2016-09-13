@@ -1,0 +1,102 @@
+﻿
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+<div  ng-controller="JournalController" ng-style="previewPaneStyle" style="width:100%;overflow-y:scroll">
+
+ 
+    
+  
+        <div 
+         
+            style="padding-right:0px;margin-right:0px;"> 
+            <div class="panel panel-default "   style="margin-bottom:0px">
+
+         
+                <div class="panel-body papyrus" >
+              <!--   
+                    <div class="navbar navbar-default" style="background:transparent" ng-hide="JournalEntries.length ==0 " >
+
+                        <div class="container-fluid cloudBlue" >
+                            <div class="navbar-header">
+                                <div style="float:left;width:100%;margin:0px 10px;border:none;"  
+                                     id="menuToggle"  class="navbar-toggle"
+                                           data-toggle="collapse"
+                                       data-target="#myNavbar" >
+                                  <span class="menuText listHeader" >{{Journal.Title}}</span> 
+                                    <button 
+                                            style="margin-top:0px;margin-bottom:0px;"
+                                            type="button" 
+                                            class="navbar-toggle"
+                                            data-toggle="collapse"
+                                            data-target="#myNavbar"
+                                            >
+
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+
+                                    </button>
+                                </div>
+                            </div>
+                          
+                            <div class="collapse navbar-collapse" id="myNavbar">
+                                <ul class="nav navbar-nav menuText listHeader">
+                                    <li ng-repeat="journal in JournalEntries" 
+                                        ng-class="{active : Journal.JournalID == journal.JournalID }">
+                                    <a style="padding-top:0px;padding-bottom:0px;" href="" ng-click="loadContent($index)">{{journal.Title}}</a>
+                                    </li>
+                                 
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+-->
+
+
+
+
+
+
+                             <div class="journalLabel">
+                       
+                        Journal Date: {{Journal.DateAdded  | date:'MM/dd/yyyy @ h:mma'}}
+                    </div>
+                           <div class="journalLabel">
+                       
+                        Journal Title: {{Journal.Title}}
+                    </div>
+
+
+
+                  
+
+                        <text-angular id="textReader"
+                                      name="readhtmlcontent"
+                                      ng-model="Journal.Text" ta-disabled="true" ta-toolbar="[]">
+                        </text-angular>
+
+
+
+
+
+
+  
+            </div><!--end panel body-->
+
+            </div>
+    </div>   
+        <script>
+// hack to close the burger after selection, 
+            $(document).ready(function () {
+                $(".navbar-nav li a").click(function (event) {
+                    $(".navbar-collapse").collapse('hide');
+                });
+                // kill the idiotic transition animation built into bootstrap navbar
+               // $.support.transition = false
+            });
+        </script>
+
+
+</div>

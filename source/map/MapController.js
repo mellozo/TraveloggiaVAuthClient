@@ -3,10 +3,18 @@
         state: SharedStateService.getAuthorizationState()
     }
 
-    var vpHeight = $window.document.documentElement.clientHeight;
-    var vpWidth = $window.document.documentElement.clientWidth;
-    if (vpWidth > 768)
-    vpWidth = vpWidth * .7;
+
+    if ($location.path() == "/" || $location.path() == "/Map") {
+        var vpHeight = $window.document.documentElement.clientHeight;
+        var vpWidth = $window.document.documentElement.clientWidth;
+        if (vpWidth > 768)
+            vpWidth = vpWidth * .7;
+
+    }
+    else {
+        var vpHeight = $window.document.getElementById("previewFrame").offsetHeight * .30;
+        var vpWidth = $window.document.getElementById("previewFrame").offsetWidth 
+    }
 
     $scope.mapStyle = {
         "height": vpHeight,
@@ -42,6 +50,10 @@
                     SharedStateService.setSelected("Site", site);
                     $scope.$apply(function () { $location.path("/Album") })
                 });
+                Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
+                    SharedStateService.setSelected("Site", site);
+                    $scope.$apply();
+                });
             })(sites[i], $scope, $location)
 
             arrayOfMsftLocs.push(loc);
@@ -54,6 +66,7 @@
           // softy hack because they love me :)
             $scope.mapInstance.setView({ bounds: viewRect, padding: 30 });
             var badZoom = $scope.mapInstance.getZoom();
+            SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
           //  badZoom = badZoom - 2;
            // $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
         }
@@ -164,12 +177,29 @@
             loadSelectedMap();
     }
 
- var redraw = debounce(100, function () {
-        console.log("debounced resize");
-        var vpHeight = $window.document.documentElement.clientHeight;
-        var vpWidth = $window.document.documentElement.clientWidth;
-     if(vpWidth > 768)
-        vpWidth = vpWidth * .7;
+ var redraw = debounce(500, function () {
+
+     console.log("debounced resize on map page");
+     if ($location.path() != "/Map" && $location.path() != "/")
+         return;
+
+     $scope.setDimensions();
+     if ($location.path() == "/" || $location.path() == "/Map") {
+         var vpHeight = $window.document.documentElement.clientHeight;
+         var vpWidth = $window.document.documentElement.clientWidth;
+         if (vpWidth > 768)
+             vpWidth = vpWidth * .7;
+
+     }
+     else {
+         var vpHeight = $window.document.getElementById("previewFrame").offsetHeight * .30
+     var vpWidth = $window.document.getElementById("previewFrame").offsetWidth ;
+        }
+
+     //   var vpHeight = $window.document.documentElement.clientHeight;
+     //   var vpWidth = $window.document.documentElement.clientWidth;
+     //if(vpWidth > 768)
+     //   vpWidth = vpWidth * .7;
 
         $scope.mapStyle = {
             "height": vpHeight,

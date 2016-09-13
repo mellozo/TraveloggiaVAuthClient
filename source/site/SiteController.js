@@ -1,11 +1,6 @@
-﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location,$window) {
+﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location,$window,debounce) {
 
-    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow").innerHeight;
-    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
-    $scope.scrollWindowStyle = {
-        "height": viewFrameHeight,
-        "max-height":viewFrameHeight
-    }
+  
     var VM = this;
    
     //  in future all the accessors to shared state, should handle requery db if empty, 
@@ -35,6 +30,27 @@
         state: SharedStateService.getAuthorizationState()
     }
  
+
+
+    var siteRedraw = debounce(500, function () {
+        if ($location.path() != "/Site")
+            return;
+        $window.location.reload();
+    });
+
+
+    if ($scope.Capabilities.cantResize == false)
+        $window.addEventListener("resize", siteRedraw)
+
+
+
+
+
+
+
+
+
+
 
 
     VM.saveSite = function () {

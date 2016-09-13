@@ -1,18 +1,21 @@
 ﻿
 
-<div class="container-fluid" ng-controller="SiteController as siteCtrl">
+<div  ng-controller="SiteController as siteCtrl">
   
-  <div class="row">
+  <div >
       <div ng-include="'common/ToolBar.html'"></div>
   </div>  
     
-    <div class="row">
-        <div class="col-xs-12 " style="margin:0px;padding:0px;" >
+    <div >
+        <div  class="skyBlue"
+                ng-style="scrollWindowStyle"
+            
+            style="margin-left:auto;margin-right:auto;padding:0px;overflow-y:scroll;max-width:450px;" >
 
 
-            <form class="skyBlue infoText listColumn"  id="SiteInfo">
+            <form class=" infoText listColumn"  id="SiteInfo">
                
-                 <div class="cloudBlue menuText listHeader">
+                 <div class="cloudBlue menuText listHeader" style="text-align:center">
                     {{siteCtrl.Site.Name}}
                 </div>
 

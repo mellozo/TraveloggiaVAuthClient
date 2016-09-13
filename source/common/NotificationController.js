@@ -2,9 +2,16 @@
 
     $scope.reliableHeight = $window.innerHeight;
     $scope.reliableWidth = $window.document.documentElement.clientWidth;
+    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow").innerHeight;
+    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
+    $scope.scrollWindowStyle = {
+        "height": viewFrameHeight,
+        "max-height": viewFrameHeight
+    }
+
 
     $scope.previewPaneStyle = {
-        "height":$scope.reliableHeight *.32
+        "height":$scope.reliableHeight *.31
     }
  
    
@@ -15,11 +22,29 @@
 
     $scope.previewStyle = {
         "height": $scope.reliableHeight,
-        "max-height": $scope.reliableHeight,
-       
+        "max-height": $scope.reliableHeight,       
     }
 
-  
+    $scope.setDimensions = function () {
+        $scope.reliableHeight = $window.innerHeight;
+        $scope.reliableWidth = $window.document.documentElement.clientWidth;
+
+        $scope.previewPaneStyle = {
+            "height": $scope.reliableHeight * .31
+        }
+
+
+        $scope.tableStyle = {
+            "height": $scope.reliableHeight
+
+        }
+
+        $scope.previewStyle = {
+            "height": $scope.reliableHeight,
+            "max-height": $scope.reliableHeight,
+        }
+
+    }
 
     // demonstrating use of inherited scope via nested controllers
     // even though some people think this is a big no no
