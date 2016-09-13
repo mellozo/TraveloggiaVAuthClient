@@ -12,7 +12,7 @@
 
 
     $scope.windowOneStyle = {
-        "max-height": Math.round($scope.reliableHeight * .33)-6,
+        "max-height": Math.round(($scope.reliableHeight -36) * .33)-12,
         "max-width": $scope.reliableWidth
     }
 

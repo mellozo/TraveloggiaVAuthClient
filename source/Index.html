@@ -60,9 +60,9 @@
     <!--    0E7B83          07595D-->
 
 
-<table ng-style="tableStyle" style="width:100%;">
+<table ng-style="tableStyle" style="width:100%;overflow:hidden;">
     <tr >
-        <td id="viewFrame"  class="phone" style="vertical-align:top;">
+        <td id="viewFrame"  class="phone" style="vertical-align:top;overflow:hidden;">
             <div  ng-hide="systemMessage.loadComplete"
                   style="position:relative;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
                 >
@@ -70,7 +70,7 @@
                 loading...
             </div>
             
-            <table style="width:100%;height:100%">
+            <table style="width:100%;height:100%;padding:0px;border:none">
                 <tr>
                     <td  style="vertical-align:top;">
                            <div ng-view  style="border: none; padding: 0px; margin: 0px; display: inline;">
@@ -81,27 +81,34 @@
             </table>
          
         </td>
-        <td id="previewFrame" ng-controller="ToolbarController" class ="desktop bluenav" style ="width:30%;vertical-align:top;padding-right:6px;padding-top:3px;padding-bottom:6px;">
-            <table  style="width:100%;height:100%;padding:0px;border:none;>
+        <td id="previewFrame" ng-controller="ToolbarController" class ="desktop bluenav" style ="width:30%;
+vertical-align:top;padding-right:0px;padding-top:0px;padding-bottom:0px;overflow:hidden">
+            <table  style="width:100%;height:100%;padding:0px;border:none;overflow:hidden;">
                 <tr>
-                    <td style="box-sizing:border-box; margin-top:12px; margin-bottom:12px;vertical-align:top;padding-top:0px;padding-left:6px;padding-right:6px;">
+                    <td style="vertical-align:top;overflow:hidden;">
+                        <div ng-style="previewStyle" style="overflow:hidden;border: none; 
+                        padding-left:12px;padding-right:24px;padding-top:12px; padding-bottom:24px; ">
                    
                                     <div id="windowOne" ng-click="navigateWindowOne()"  class="dottedBorderRed glow" 
-                                        style="height:33%;max-height:33%;margin: 0px 0px 6px;padding:2px;">
+                                        style="height:33%;max-height:33%;
+                                                margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:12px; padding:2px;">
                                            <div ng-include ="preview.windowOne" ></div>
                                     </div>
                             
                                 
                                     <div ng-click="navigateWindowTwo()" class="dottedBorderRed glow" 
-                                        style="height:33%;max-height:33%;margin:0px 0px 6px;padding:2px">
+                                        style="height:33%;max-height:33%;
+                                        margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:12px; padding:2px">
                                              <div ng-include ="preview.windowTwo" ></div>
                                     </div>
                                
                         
                                 <div ng-click="navigateWindowThree()" class="dottedBorderRed glow" 
-                                    style="height:33%;max-height:33%;margin:0px 0px 6px;padding:2px;">
+                                    style="height:33%;max-height:33%;
+                                        margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:24px; padding:2px;">
                                     <div ng-include ="preview.windowThree" ></div>
                                 </div>
+                            </div>
                              
                     </td>
                 </tr>
