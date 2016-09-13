@@ -11,7 +11,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
        "max-height": viewFrameHeight
     }
 
-    if ($location.path() == "/Album") {
+    if ($location.path() == "/Album" || $location.path() == "/Photo") {
                 $scope.viewFrameWidth = $window.document.getElementById("viewFrame").offsetWidth;
                 $scope.viewFrameHeight = $window.document.getElementById("viewFrame").offsetHeight;
                 // this is funky and will change
@@ -32,12 +32,20 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
                 $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
                 $scope.landscapeImageStyle = {
-                    "max-height": "auto",
-                    "max-width": Math.round($scope.viewFrameWidth * .90)
+                    "height": Math.round($scope.viewFrameHeight),
+                    "width": "auto"
                 };
                 $scope.portaitImageStyle = {
-                    "height": Math.round($scope.viewFrameHeight *.90),
-                    "max-width:": "auto"
+                    "width": Math.round($scope.viewFrameWidth),
+                    "height": "auto"
+                }
+
+                $scope.previewWidthStyle = {
+                    "max-width": $scope.viewFrameWidth
+                }
+                $scope.previewImageStyle = {
+                    "height": $scope.viewFrameHeight,
+                     "max-width": $scope.viewFrameWidth
                 }
     }
   
@@ -84,14 +92,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var loadedImage = e.target;
         var degrees = 0;
 
-        if($location.path() =="/Album")
+        if($location.path() =="/Album" || $location.path() =="/Photo")
             var maxHeight = $window.innerHeight * .76
         else
-            var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .3)
+            var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth *.20)
 
         var scaledWidth = maxHeight;
         var height = loadedImage.height;
-
         var width = loadedImage.width;
         var x;
 

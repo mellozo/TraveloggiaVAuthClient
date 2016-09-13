@@ -1,6 +1,6 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout) {
 
-
+// to do check current url to set this
     $scope.preview = {
         windowOne: "site/SitePreview.html",
         windowTwo: "album/AlbumPreview.html",
@@ -57,7 +57,7 @@
             $scope.preview.windowTwo = "album/AlbumPreview.html";        
             $location.path("/Journal");
         }
-       else if ($scope.preview.windowOne == "map/MapPreview.html") {
+       else if ($scope.preview.windowThree == "map/MapPreview.html") {
             $scope.preview.windowOne = "journal/JournalPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
@@ -131,7 +131,7 @@
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Album");
-        $scope.$apply();
+     //   $scope.$apply();
     }
 
     VM.goMap = function () {
@@ -139,7 +139,7 @@
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Map");
-        $scope.$apply();
+       // $scope.$apply();
     }
 
     VM.goSite = function () {
@@ -147,7 +147,7 @@
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Site");
-        $scope.$apply();
+     //   $scope.$apply();
     }
 
     VM.goSiteList = function () {
@@ -159,7 +159,7 @@
         $scope.preview.windowOne = "map/MapPreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
-        $scope.$apply();
+      //  $scope.$apply();
     }
 
 
