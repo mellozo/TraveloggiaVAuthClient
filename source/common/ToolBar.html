@@ -1,42 +1,44 @@
 ﻿<!--the bootstrap way    style="background-image:url(../image/lightblue.jpg)"-->
 
 <div  class="bluenav"   
-     ng-controller="ToolbarController as navCtrl" 
+
      style="padding:0px;" >
     <div >
   
-        <div class="clickableDiv" ng-click="navCtrl.goMap()" title="Map">
-            <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
-                   class="dottedBorderRed glow" src="/../image/globe.png"  ng-click="navCtrl.goMap()" title="Map View" />
+            <div class="clickableDiv" ng-click="goMap()" title="Map">
+                <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
+                       class="dottedBorderRed glow" src="/../image/globe.png"  ng-click="navCtrl.goMap()" title="Map View" />
 
-        </div>
+            </div>
 
 
-                <div class="clickableDiv"  ng-click="navCtrl.goAlbum()" title="Photo Album">
-                    <img
-                         ng-class="{'poppedUp' : selectedState.albumSelected == true}"  
-                          src="../image/sun.png"  class="dottedBorderRed glow"  />
-                </div>
+
+            <div class="clickableDiv"  ng-click="navigateWindowTwo()" title="Photo Album">
+                <img
+                        ng-class="{'poppedUp' : selectedState.albumSelected == true}"  
+                        src="../image/sun.png"  class="dottedBorderRed glow"  />
+            </div>
  
-  
-            
-        <div style="position:relative;margin:0px;padding:0px;display:inline">
-                <div data-toggle="dropdown" class="clickableDiv">
-                    <img src="../image/scroll.png" 
-                         class="dottedBorderRed glow" 
-                            ng-class="{'poppedUp' : selectedState.sitelistSelected == true}"   />
-                </div>
-                <ul class="dropdown-menu" id="siteListDropDown">
-                    <li ng-repeat="site in navCtrl.SiteList">
-                        <a href="" ng-click="navCtrl.selectSite($index)"
-                           ng-class="{'siteListDropDownSelected': site.Name==navCtrl.selectedSite.Name}"
-                           >{{site.Name}}</a>
-                    </li>
-                </ul>
-        </div>
 
 
-                <div class="clickableDiv"  ng-click="navCtrl.goJournal()" title="Journal">
+            <div style="position:relative;margin:0px;padding:0px;display:inline">
+                    <div data-toggle="dropdown" class="clickableDiv">
+                        <img src="../image/scroll.png" 
+                             class="dottedBorderRed glow" 
+                                ng-class="{'poppedUp' : selectedState.sitelistSelected == true}"   />
+                    </div>
+                    <ul class="dropdown-menu" id="siteListDropDown">
+                        <li ng-repeat="site in SiteList">
+                            <a href="" ng-click="selectSite($index)"
+                               ng-class="{'siteListDropDownSelected': site.Name==selectedSite.Name}"
+                               >{{site.Name}}</a>
+                        </li>
+                    </ul>
+            </div>
+
+
+
+                <div class="clickableDiv"  ng-click="navigateWindowThree()" title="Journal">
                     <img src="../image/stack.png"  
                          class="dottedBorderRed glow"
                          ng-class="{'poppedUp' : selectedState.journalSelected == true}"  />
@@ -44,7 +46,7 @@
         
          
     
-                <div class="clickableDiv"  ng-click="navCtrl.goSite()" title="Site Information">
+                <div class="clickableDiv"  ng-click="navigateWindowOne()" title="Site Information">
                     <img src="../image/largepalm.png" 
                          class="dottedBorderRed glow" 
                          ng-class="{'poppedUp' : selectedState.siteSelected == true}"  />

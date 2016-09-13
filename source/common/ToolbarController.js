@@ -1,5 +1,7 @@
-﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout) {
+﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout,$templateCache) {
 
+
+    $scope.updateTime = Date.now();
 // to do check current url to set this
     $scope.preview = {
         windowOne: "site/SitePreview.html",
@@ -68,15 +70,15 @@
 
 
 
-    var VM = this;
-    VM.selectedSite = {
+ 
+   $scope.selectedSite = {
         name:""
     }
-    VM.SiteList = [];
+    $scope.SiteList = [];
 
     var cachedSites =  SharedStateService.Repository.get('Sites');
     if (cachedSites != null && cachedSites.length > 0 )
-        VM.SiteList = cachedSites;
+        $scope.SiteList = cachedSites;
     else {
         var selectedMapID = SharedStateService.getSelectedID("Map")
         if(selectedMapID != null)
@@ -87,7 +89,7 @@
                         SharedStateService.Repository.put('Map', result.data);
                         if (result.data.Sites.length > 0) {
                             SharedStateService.Repository.put("Sites", result.data.Sites)
-                            VM.SiteList = result.data.Sites;
+                            $scope.SiteList = result.data.Sites;
                         }
                     },
                     function (error) {
@@ -100,61 +102,63 @@
     var selectedSiteID = SharedStateService.getSelectedID("Site");
 
     if(selectedSiteID != null)
-    for (var i = 0; i < VM.SiteList.length; i++) {
-        if (VM.SiteList[i].SiteID == selectedSiteID) {
-            VM.selectedSite = VM.SiteList[i];
+    for (var i = 0; i < $scope.SiteList.length; i++) {
+        if ($scope.SiteList[i].SiteID == selectedSiteID) {
+            $scope.selectedSite = $scope.SiteList[i];
             //break;
         }
     }
 
 
 
-    VM.selectSite = function (index) {
-        var selectedSite = VM.SiteList[index];
-        VM.selectedSite = selectedSite;
+    $scope.selectSite = function (index) {
+        var selectedSite = $scope.SiteList[index];
+        $scope.selectedSite = selectedSite;
         SharedStateService.setSelected("Site", selectedSite);
        
     }
 
     
 
-    VM.goJournal = function () {
-        $scope.preview.windowThree = "map/MapPreview.html";
-        $scope.preview.windowOne = "site/SitePreview.html";
-        $scope.preview.windowTwo = "album/AlbumPreview.html";
-        $location.path("/Journal");
-        $scope.$apply();
+  $scope.goJournal = function () {
+    
+          $scope.preview.windowThree = "map/MapPreview.html";// + $scope.updateTime;
+          $scope.preview.windowOne = "site/SitePreview.html";// + $scope.updateTime;
+          $scope.preview.windowTwo = "album/AlbumPreview.html";//+ $scope.updateTime;
+       //   $location.path("/Journal");
+     
+   
     }
 
-    VM.goAlbum = function () {
-        $scope.preview.windowTwo = "map/MapPreview.html";
+  $scope.goAlbum = function () {
+        $scope.preview.windowTwo = "map/MapPreview.html?barf="+$scope.updateTime;
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Album");
-     //   $scope.$apply();
+        //  $scope.$apply();
     }
 
-    VM.goMap = function () {
+  $scope.goMap = function () {
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Map");
-       // $scope.$apply();
+       //$scope.$apply();
     }
 
-    VM.goSite = function () {
+  $scope.goSite = function () {
         $scope.preview.windowOne = "map/MapPreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
         $location.path("/Site");
-     //   $scope.$apply();
+      //  $scope.$apply();
     }
 
-    VM.goSiteList = function () {
+  $scope.goSiteList = function () {
         $location.path("/SiteList");
     }
 
-    VM.goMapList = function () {
+  $scope.goMapList = function () {
         $location.path("/MapList");
         $scope.preview.windowOne = "map/MapPreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
@@ -172,9 +176,9 @@
         },
         function (newValue, oldValue) {
             if (newValue != null && newValue != oldValue) {
-                for (var i = 0; i < VM.SiteList.length; i++) {
-                    if (VM.SiteList[i].SiteID == newValue)
-                        VM.selectedSite = VM.SiteList[i];
+                for (var i = 0; i < $scope.SiteList.length; i++) {
+                    if ($scope.SiteList[i].SiteID == newValue)
+                        $scope.selectedSite = $scope.SiteList[i];
                     break;
                 }
 
