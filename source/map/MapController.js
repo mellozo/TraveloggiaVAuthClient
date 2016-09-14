@@ -22,8 +22,6 @@
     }
 
 
-    
-
     $scope.selectedState = {
         editSelected:false
     }

@@ -133,6 +133,9 @@
         },
         function (newValue, oldValue) {
             if (newValue != null && newValue != oldValue) {
+
+                $scope.SiteList = SharedStateService.Repository.get("Sites");
+
                 for (var i = 0; i < $scope.SiteList.length; i++) {
                     if ($scope.SiteList[i].SiteID == newValue)
                         $scope.selectedSite = $scope.SiteList[i];
@@ -142,6 +145,27 @@
             }
 
         });
+
+
+
+    //// loading the data if they change sites but stay on the page
+    //$scope.$watch(
+    //    function (scope) {
+    //        if (SharedStateService.Selected.Map != null)
+    //            return SharedStateService.Selected.Map.MapID;
+    //    },
+    //    function (newValue, oldValue) {
+    //        if (newValue != null && newValue != oldValue) {
+    //            for (var i = 0; i < $scope.SiteList.length; i++) {
+    //                if ($scope.SiteList[i].SiteID == newValue)
+    //                    $scope.selectedSite = $scope.SiteList[i];
+    //                break;
+    //            }
+
+    //        }
+
+    //    });
+
 
 
 })
