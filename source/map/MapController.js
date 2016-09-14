@@ -3,34 +3,32 @@
         state: SharedStateService.getAuthorizationState()
     }
  
+    var setViewport = function () {
+        if ($location.path() == "/" || $location.path() == "/Map") {
+            var vpHeight = $window.document.documentElement.offsetHeight;
+            var vpWidth = $window.document.documentElement.offsetWidth;
+            if (vpWidth > 768)
+                vpWidth = vpWidth * .7;
+        }
+        else {
+            var vpHeight = (($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
+            var vpWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
+        }
 
-
-
-    if ($location.path() == "/" || $location.path() == "/Map") {
-        var vpHeight = $window.document.documentElement.clientHeight;
-        var vpWidth = $window.document.documentElement.clientWidth;
-        if (vpWidth > 768)
-            vpWidth = vpWidth * .7;
-
+        $scope.mapStyle = {
+            "height": vpHeight,
+            "width": vpWidth
+        }
     }
-    else {
-        var vpHeight = $window.document.getElementById("previewFrame").offsetHeight * .30;
-        var vpWidth = $window.document.getElementById("previewFrame").offsetWidth 
-    }
 
-    $scope.mapStyle = {
-        "height": vpHeight,
-        "width": vpWidth
-    }
+
     
 
     $scope.selectedState = {
         editSelected:false
     }
 
-    var clickHandler = null;
-
-  
+    var clickHandler = null; 
     var pushpinCollection = null;
     $scope.dialogIsShowing = false;
     $scope.searchAddress = null;
@@ -185,28 +183,8 @@
      if ($location.path() != "/Map" && $location.path() != "/")
          return;
 
+     // this sizes the outer container defined in notification controller the base container
      $scope.setDimensions();
-     if ($location.path() == "/" || $location.path() == "/Map") {
-         var vpHeight = $window.document.documentElement.clientHeight;
-         var vpWidth = $window.document.documentElement.clientWidth;
-         if (vpWidth > 768)
-             vpWidth = vpWidth * .7;
-
-     }
-     else {
-         var vpHeight = $window.document.getElementById("previewFrame").offsetHeight * .30
-     var vpWidth = $window.document.getElementById("previewFrame").offsetWidth ;
-        }
-
-     //   var vpHeight = $window.document.documentElement.clientHeight;
-     //   var vpWidth = $window.document.documentElement.clientWidth;
-     //if(vpWidth > 768)
-     //   vpWidth = vpWidth * .7;
-
-        $scope.mapStyle = {
-            "height": vpHeight,
-            "width": vpWidth
-        }
         // when in doubt use a timeout :(
         $timeout(afterLoaded, 0);
     });
@@ -220,9 +198,7 @@
                     if ($scope.mapInstance == null) 
                     {
               
-                        var vpHeight = $window.document.documentElement.clientHeight;
-                        var vpWidth = $window.document.documentElement.clientWidth;
-                        vpWidth = vpWidth * .7;
+                            setViewport();
 
                             $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                                 //   $scope.mapInstance = new Microsoft.Maps.Map(mapContainer, {
@@ -232,9 +208,7 @@
                                 //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
                                 showTermsLink: false,
                                 enableClickableLogo: false
-                                ,
-                                height:vpHeight,
-                                width:vpWidth
+                               
                             });
                         }
 
@@ -244,7 +218,18 @@
                             $timeout($scope.afterLoaded);
 
             }
-    };
+  };
+
+
+
+
+
+
+
+
+
+
+
 
     //ADD CURRENT LOCATION
     $scope.getLocation = function () {
@@ -366,6 +351,7 @@
 
 
     // the kickoff
+
      afterLoaded();
 
     if($scope.Capabilities.cantResize == false)

@@ -62,7 +62,7 @@
 
 <table ng-style="tableStyle" style="width:100%;overflow:hidden;" ng-controller="ToolbarController" >
     <tr >
-        <td id="viewFrame"  class="phone" style="vertical-align:top;overflow:hidden;">
+        <td id="viewFrame"  class="phone" style="vertical-align:top; style="max-width:70%;width:70%">
             <div  ng-hide="systemMessage.loadComplete"
                   style="position:relative;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
                 >
@@ -73,7 +73,7 @@
             <table style="width:100%;height:100%;padding:0px;border:none">
                 <tr>
                     <td  style="vertical-align:top;">
-                        <div id="toolbarRow" ng-hide="selectedState.mapListSelected==true" >
+                        <div id="toolbarRow" ng-hide="selectedState.mapListSelected==true" style="top:0px">
                                 <div ng-include="'common/ToolBar.html'"></div>
 
                           </div>
@@ -85,8 +85,8 @@
             </table>
          
         </td>
-        <td id="previewFrame" class ="desktop bluenav" style ="width:30%;
-vertical-align:top;padding-right:0px;padding-top:0px;padding-bottom:0px;overflow:hidden">
+        <td id="previewFrame" class ="desktop bluenav" style ="max-width:30%;width:30%;
+                    vertical-align:top;padding-right:0px;padding-top:0px;padding-bottom:0px;overflow:hidden">
             <table  style="width:100%;height:100%;padding:0px;border:none;overflow:hidden;">
                 <tr>
                     <td style="vertical-align:top;overflow:hidden;">
@@ -95,21 +95,21 @@ vertical-align:top;padding-right:0px;padding-top:0px;padding-bottom:0px;overflow
                    
                                     <div id="windowOne" ng-click="navigateWindowOne()"  class="dottedBorderRed glow" 
                                         style="height:33%;max-height:33%;
-                                                margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:12px; padding:2px;">
+                                                margin-top:0px;margin-bottom:12px; padding:2px;">
                                            <div ng-include ="preview.windowOne" ></div>
                                     </div>
                             
                                 
                                     <div ng-click="navigateWindowTwo()" class="dottedBorderRed glow" 
                                         style="height:33%;max-height:33%;
-                                        margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:12px; padding:2px">
+                                        margin-top:0px;margin-bottom:12px; padding:2px">
                                              <div ng-include ="preview.windowTwo" ></div>
                                     </div>
                                
                         
                                 <div ng-click="navigateWindowThree()" class="dottedBorderRed glow" 
                                     style="height:33%;max-height:33%;
-                                        margin-top:0px;margin-left:4px;margin-right:4px;margin-bottom:24px; padding:2px;">
+                                        margin-top:0px;margin-bottom:24px; padding:2px;">
                                     <div ng-include ="preview.windowThree" ></div>
                                 </div>
                             </div>

@@ -1,34 +1,29 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
-
-    $scope.updateTime = Date.now();
-// to do check current url to set this
     $scope.preview = {
         windowOne: "site/SitePreview.html",
         windowTwo: "album/AlbumPreview.html",
         windowThree: "journal/JournalPreview.html"
     }
-  
 
+/*****Navigation handlers********/
+    // go Site
     $scope.navigateWindowOne = function () {
         if ($scope.preview.windowOne == "site/SitePreview.html") {
             $scope.preview.windowOne = "map/MapPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
-         
             $location.path("/Site")
         }
         else if ($scope.preview.windowOne == "map/MapPreview.html") {
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
-            $scope.preview.windowThree = "journal/JournalPreview.html";
-        
+            $scope.preview.windowThree = "journal/JournalPreview.html";        
             $location.path("/Map")
         }
-
-
     }
 
+// goAlbum
     $scope.navigateWindowTwo = function () {
         if ($scope.preview.windowTwo == "album/AlbumPreview.html") {
             $scope.preview.windowTwo= "map/MapPreview.html";
@@ -42,9 +37,9 @@
            $scope.preview.windowThree = "journal/JournalPreview.html";
             $location.path("/Map");
        }
-
     }
 
+//goJournal
     $scope.navigateWindowThree = function () {
         if ($scope.preview.windowThree == "journal/JournalPreview.html") {
             $scope.preview.windowThree = "map/MapPreview.html";
@@ -58,12 +53,27 @@
             $scope.preview.windowThree = "journal/JournalPreview.html";
             $location.path("/Map")
        }
+    }
 
-  
+    $scope.goMap = function () {
+        $scope.preview.windowOne = "site/SitePreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
+        $location.path("/Map");
+    }
+
+    $scope.goMapList = function () {
+        $location.path("/MapList");
+        //to do: show bounding rect on map preview
+        $scope.preview.windowOne = "map/MapPreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
     }
 
 
-
+    $scope.goSiteList = function () {
+        $location.path("/SiteList");
+    }
  
    $scope.selectedSite = {
         name:""
@@ -78,7 +88,6 @@
         if(selectedMapID != null)
         DataTransportService.getMapByID(selectedMapID).then(
                     function (result) {
-                        
                         SharedStateService.setSelected("Map", result.data);
                         SharedStateService.Repository.put('Map', result.data);
                         if (result.data.Sites.length > 0) {
@@ -112,54 +121,8 @@
        
     }
 
-    
-
-  $scope.goJournal = function () {
-    
-          $scope.preview.windowThree = "map/MapPreview.html";// + $scope.updateTime;
-          $scope.preview.windowOne = "site/SitePreview.html";// + $scope.updateTime;
-          $scope.preview.windowTwo = "album/AlbumPreview.html";//+ $scope.updateTime;
-       //   $location.path("/Journal");
-     
-   
-    }
-
-  $scope.goAlbum = function () {
-        $scope.preview.windowTwo = "map/MapPreview.html?barf="+$scope.updateTime;
-        $scope.preview.windowOne = "site/SitePreview.html";
-        $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Album");
-        //  $scope.$apply();
-    }
-
-  $scope.goMap = function () {
-        $scope.preview.windowOne = "site/SitePreview.html";
-        $scope.preview.windowTwo = "album/AlbumPreview.html";
-        $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Map");
-       //$scope.$apply();
-    }
-
-  $scope.goSite = function () {
-        $scope.preview.windowOne = "map/MapPreview.html";
-        $scope.preview.windowTwo = "album/AlbumPreview.html";
-        $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Site");
-      //  $scope.$apply();
-    }
-
-  $scope.goSiteList = function () {
-        $location.path("/SiteList");
-    }
-
-  $scope.goMapList = function () {
-        $location.path("/MapList");
-        $scope.preview.windowOne = "map/MapPreview.html";
-        $scope.preview.windowTwo = "album/AlbumPreview.html";
-        $scope.preview.windowThree = "journal/JournalPreview.html";
-      //  $scope.$apply();
-    }
-
+  
+  
 
 
     // loading the data if they change sites but stay on the page

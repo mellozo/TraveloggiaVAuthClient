@@ -30,8 +30,8 @@
     }
 
     $scope.setDimensions = function () {
-        $scope.reliableHeight = $window.innerHeight;
-        $scope.reliableWidth = $window.document.documentElement.clientWidth;
+        $scope.reliableHeight = $window.document.documentElement.offsetHeight;
+        $scope.reliableWidth = $window.document.documentElement.offsetWidth;
 
         $scope.previewPaneStyle = {
             "height": $scope.reliableHeight * .31
