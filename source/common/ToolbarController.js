@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$scope,$location,$window,$http,$timeout,$templateCache) {
+﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
 
     $scope.updateTime = Date.now();
@@ -10,29 +10,22 @@
     }
   
 
-    $scope.selectedState = {
-        mapSelected: $location.path() == "/Map" ? true:false,
-        albumSelected: $location.path() == "/Album" ? true : false,
-        journalSelected: $location.path() == "/Journal" ? true : false,
-        siteSelected: $location.path() == "/Site" ? true : false,
-        maplistSelected: $location.path() == "/MapList" ? true : false,
-        sitelistSelected:$location.path()=="/SiteList"?true:false
-    }
-
-
     $scope.navigateWindowOne = function () {
         if ($scope.preview.windowOne == "site/SitePreview.html") {
             $scope.preview.windowOne = "map/MapPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
-             $scope.preview.windowThree = "journal/JournalPreview.html";    
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+         
             $location.path("/Site")
         }
         else if ($scope.preview.windowOne == "map/MapPreview.html") {
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
+        
             $location.path("/Map")
         }
+
 
     }
 
@@ -48,7 +41,7 @@
            $scope.preview.windowTwo = "album/AlbumPreview.html";
            $scope.preview.windowThree = "journal/JournalPreview.html";
             $location.path("/Map");
-        }
+       }
 
     }
 
@@ -64,8 +57,9 @@
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
             $location.path("/Map")
-        }
+       }
 
+  
     }
 
 

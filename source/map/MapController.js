@@ -2,6 +2,8 @@
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
+ 
+
 
 
     if ($location.path() == "/" || $location.path() == "/Map") {

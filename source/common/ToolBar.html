@@ -2,16 +2,22 @@
 
 <div  class="bluenav"   
 
-     style="padding:0px;" >
+     style="padding:2px 0px;" >
     <div >
   
-            <div class="clickableDiv" ng-click="goMap()" title="Map">
+            <div ng-hide="selectedState.mapSelected==true" class="clickableDiv" ng-click="goMap()" title="Map">
                 <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
-                       class="dottedBorderRed glow" src="/../image/globe.png"  ng-click="navCtrl.goMap()" title="Map View" />
+                       class="dottedBorderRed glow" src="/../image/globe.png"  ng-click="goMap()" title="Map View" />
 
             </div>
 
-
+          <div ng-show="selectedState.mapSelected==true" class ="clickableDiv"   ng-click="goMapList()" title="MapList"
+              ng-class="{'poppedUp' : selectedState.mapListSelected == true}"  >
+            <img title="Map List"
+                 src="../image/steering.png"
+                 class="dottedBorderRed glow "
+                />
+        </div>
 
             <div class="clickableDiv"  ng-click="navigateWindowTwo()" title="Photo Album">
                 <img
