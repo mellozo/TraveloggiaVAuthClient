@@ -61,14 +61,21 @@
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         var searchObject = $location.search();
 
-        if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] != null  )// if loading from a shared link)
+        if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] == "true" )// if loading from a shared link)
         {
           // softy hack because they love me :)
             $scope.mapInstance.setView({ bounds: viewRect, padding: 30 });
             var badZoom = $scope.mapInstance.getZoom();
-           SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-          //  badZoom = badZoom - 2;
-           // $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
+           
+
+            if (searchObject["ZoomOut"] == "true")
+            {
+                badZoom = badZoom - 2;
+                $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
+            }
+            if (selectedSiteID == "null" || selectedSiteID == null )
+                SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+          
         }
         else {
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
@@ -222,7 +229,8 @@
       },
       function (newValue, oldValue) {
           if (newValue != null && newValue != oldValue) {
-              if ($location.path() != "/" && $location.path() != "/Map" && $location.path() !="/MapList" ){
+              var searchObject = $location.search()
+              if( ($location.path() != "/" && $location.path() != "/Map" && $location.path() !="/MapList" )|| searchObject["ZoomOut"]=="false"){
                   var selectedSiteID = SharedStateService.getSelectedID("Site")
                       for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
                           if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {

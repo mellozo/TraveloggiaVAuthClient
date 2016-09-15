@@ -13,7 +13,18 @@
     $scope.selectedMap = null;
 
 
-    $scope.loadMapList = function () {
+    $scope.switchMap = function (map) {
+        var selectedMap = map;
+        SharedStateService.setSelected("Map", selectedMap);
+        SharedStateService.Repository.put("Sites", []);
+        SharedStateService.Repository.put("Map", null);
+        SharedStateService.Repository.put("Journals", []);
+        SharedStateService.Repository.put("Photos", [])
+    }
+
+
+
+var loadMapList = function () {
         var cachedMapList = SharedStateService.Repository.get("MapList");
         if (cachedMapList == null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID()) {
             DataTransportService.getMapList(SharedStateService.getAuthenticatedMemberID()).then(
@@ -32,19 +43,9 @@
     }
 
 
-    $scope.switchMap = function (map) {
-        var selectedMap = map;
-        SharedStateService.setSelected("Map", selectedMap);
-        SharedStateService.Repository.put("Sites", []);
-        SharedStateService.Repository.put("Map", null);
-        SharedStateService.Repository.put("Journals", []);
-        SharedStateService.Repository.put("Photos",[])
-       
-    }
-
   
-
-    $scope.loadMapList();
+    // the kickoff
+   loadMapList();
 
 
 

@@ -20,7 +20,7 @@
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";        
-            $location.path("/Map").search() = {};
+            $location.path("/Map").search({}) ;
         }
     }
 
@@ -30,13 +30,13 @@
             $scope.preview.windowTwo= "map/MapPreview.html";
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
-            $location.path("/Album")
+            $location.path("/Album").search({});
         }
        else if ($scope.preview.windowTwo == "map/MapPreview.html") {
            $scope.preview.windowOne = "site/SitePreview.html";
            $scope.preview.windowTwo = "album/AlbumPreview.html";
            $scope.preview.windowThree = "journal/JournalPreview.html";
-           $location.path("/Map").search() = {};;
+           $location.path("/Map").search({});
        }
     }
 
@@ -52,7 +52,7 @@
             $scope.preview.windowOne = "journal/JournalPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
-            $location.path("/Map").search() = {};
+            $location.path("/Map").search({});
        }
     }
 
@@ -60,7 +60,8 @@
     $scope.selectSite = function (site) {
         $scope.selectedSite = site;
         SharedStateService.setSelected("Site", site);
-        $location.path().search() = {};
+        var currentpath = $location.path();
+        $location.path(currentpath).search( {"ZoomOut":"false"});
     }
 
 
@@ -68,18 +69,18 @@
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Map").search() = {};;
+        $location.path("/Map").search({ "ZoomOut": "true" }) ;
     }
 
     $scope.goMapFirstTime = function () {
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Map").search({"ZoomOut": true});
+        $location.path("/Map").search({"ZoomOut": "true"});
     }
 
     $scope.goMapList = function () {
-        $location.path("/MapList").search() = {};
+        $location.path("/MapList").search({ "ZoomOut": "true" });
         $scope.preview.windowOne = "map/MapPreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
