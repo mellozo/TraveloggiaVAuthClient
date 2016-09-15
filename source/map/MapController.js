@@ -132,8 +132,6 @@
                     SharedStateService.Repository.put("Map", null);
                     SharedStateService.Repository.put("Journals", []);
                     SharedStateService.Repository.put("Photos", [])
-
-
                 }
 
                 $scope.MapRecord = result.data;
@@ -155,10 +153,9 @@
 
  var loadMap = function () {
         var requestedMap = null;
-        var searchObject = $location.search();
+        var searchObject = $location.search();// if loading from a shared link
         if (searchObject["MapID"]) {
             requestedMap = searchObject["MapID"];
-
         }
            
         var cachedMap = SharedStateService.Repository.get("Map");
@@ -176,7 +173,6 @@
     }
 
  var redraw = debounce(500, function () {
-
      console.log("debounced resize on map page");
      if ($location.path() != "/Map" && $location.path() != "/")
          return;
@@ -195,39 +191,60 @@
         else {
                     if ($scope.mapInstance == null) 
                     {
-              
                             setViewport();
 
                             $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
-                                //   $scope.mapInstance = new Microsoft.Maps.Map(mapContainer, {
                                 credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
                                 mapTypeId: "r",
                                 showLocateMeButton: false,
-                                //  center: new Microsoft.Maps.Location(51.50632, -0.12714),
                                 showTermsLink: false,
                                 enableClickableLogo: false
-                               
                             });
-                        }
+                      }
 
-                        if ($scope.mapInstance != null)// of course its not, just checking
-                            loadMap();
-                        else
-                            $timeout($scope.afterLoaded);
+                    if ($scope.mapInstance != null)// of course its not, just checking
+                        loadMap();
+                    else
+                        $timeout($scope.afterLoaded);
 
             }
   };
 
 
 
+    // loading the data if they change sites but stay on the page
+  $scope.$watch(
+      function (scope) {
+          if (SharedStateService.Selected.Site != null)
+              return SharedStateService.Selected.Site.SiteID;
+      },
+      function (newValue, oldValue) {
+          if (newValue != null && newValue != oldValue) {
+              var selectedSiteID = SharedStateService.getSelectedID("Site")
+
+              if ($location.path() != "/" && $location.path() != "/Map") {
+
+                  var selectedSiteID = SharedStateService.getSelectedID("Site")
+                      for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
+                          if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
+                              selectedSite = $scope.MapRecord.Sites[i];
+                              break;
+                          }
+                      }
+                      var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+                      $scope.mapInstance.setView({ center: loc, zoom: 17 });
+              }
+           
+
+          }
+
+      });
 
 
 
 
 
-
-
-
+/******MAP EDITING ************************************************/
 
     //ADD CURRENT LOCATION
     $scope.getLocation = function () {
@@ -236,11 +253,8 @@
         navigator.geolocation.getCurrentPosition(function (pos) {
             $scope.systemMessage.dismiss();
                 addLocation(pos.coords);
-             
             });
-
     }
-
 
     var addLocation = function (pos) {
         var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
@@ -316,7 +330,6 @@
         Microsoft.Maps.Events.removeHandler(clickHandler);
     }
 
-
     $scope.geocodeAddress = function () {
         var geocoder = SharedStateService.geocoder;
         var address = $scope.searchAddress;
@@ -348,11 +361,15 @@
 
 
 
+
+
+
+
     // the kickoff
 
      afterLoaded();
 
     if($scope.Capabilities.cantResize == false)
-    $window.addEventListener("resize", redraw)
+        $window.addEventListener("resize", redraw)
 
 }); 
