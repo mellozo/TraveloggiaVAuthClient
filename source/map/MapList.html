@@ -21,7 +21,7 @@
                             <div ng-repeat="map in MapList" class="seeThrough">
                                 <input ng-click="selectMap(map)"
                                         style="margin:3px;position:relative;left:4px;height:30px;width:30px;display:inline-block"type="checkbox"  ng-click="select($index)"/>
-                                <a href="" ng-click="switchMap($index)">
+                                <a href="" ng-mouseover="switchMap(map)"  ng-click="goMapFirstTime()">
                                      {{map.MapName}}
                                 </a>
                             </div>

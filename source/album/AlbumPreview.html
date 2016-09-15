@@ -1,30 +1,30 @@
 ﻿<div ng-controller="AlbumController"    ng-style="windowOneStyle" >
       <div class=" greenMud"  style="height:100%">
 
-            <div ng-if="selectedPhoto.StorageURL !=null " >
+            <div ng-if="PhotoList[0].StorageURL !=null " >
 
-                <div ng-if="selectedPhoto.orientationID==null || selectedPhoto.orientationID < 5" 
+                <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID < 5" 
                     ng-style="previewImageStyle">
 
                             <div   ng-style="previewImageStyle" 
-                                style="background-image:url('{{  imageServer + imagePath + selectedPhoto.FileName}}');
+                                style="background-image:url('{{  imageServer + imagePath + PhotoList[0].FileName}}');
                                      background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
                             </div>
 
                 </div>
 
-                <div ng-if="selectedPhoto.orientationID != null && selectedPhoto.orientationID >4 ">
+                <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
                     <div ng-if="Capabilities.alreadyKnowsHow==false">
-                            <img on-load="onImageLoad($event, selectedPhoto.orientationID)"
+                            <img on-load="onImageLoad($event, PhotoList[0].orientationID)"
                                     style="position:absolute;visibility:hidden"
                                     ng-style="portraitImageStyle"
-                                    src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
+                                    src="{{  imageServer + imagePath + PhotoList[0].FileName +imageRefresher}}" />
                             <canvas id="canvas" style="display:block;"></canvas>
 
                     </div>
                     <div ng-if="Capabilities.alreadyKnowsHow==true">
                         <img style="max-width:90%;visibility:visible;vertical-align:middle"
-                             ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
+                             ng-src="{{  imageServer + imagePath + PhotoList[0].FileName }}" />
                     </div>
 
           
@@ -33,9 +33,9 @@
 
 
 
-            <div ng-if="selectedPhoto.StorageURL==null " >
-                    <div ng-if="selectedPhoto.orientationID == null"  ng-style="previewImageStyle">
-                        <div   style="height:100%;width:100%;background-image:url('http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}');
+            <div ng-if="PhotoList[0].StorageURL==null " >
+                    <div ng-if="PhotoList[0].orientationID == null"  ng-style="previewImageStyle">
+                        <div   style="height:100%;width:100%;background-image:url('http://www.traveloggia.net/upload/{{imagePath }}{{PhotoList[0].FileName}}');
                             background-size:cover;background-repeat:no-repeat;background-position:50% 50%">
                          </div>
                     </div>

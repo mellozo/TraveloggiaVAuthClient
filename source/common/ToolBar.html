@@ -35,7 +35,7 @@
                     </div>
                     <ul class="dropdown-menu" id="siteListDropDown">
                         <li ng-repeat="site in SiteList">
-                            <a href="" ng-click="selectSite($index)"
+                            <a href="" ng-click="selectSite(site)"
                                ng-class="{'siteListDropDownSelected': site.Name==selectedSite.Name}"
                                >{{site.Name}}</a>
                         </li>

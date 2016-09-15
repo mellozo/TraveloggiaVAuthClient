@@ -59,12 +59,14 @@
         }
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
-        if (selectedSiteID == "null" || selectedSiteID == null)
+        var searchObject = $location.search();
+
+        if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] != null  )// if loading from a shared link)
         {
           // softy hack because they love me :)
             $scope.mapInstance.setView({ bounds: viewRect, padding: 30 });
             var badZoom = $scope.mapInstance.getZoom();
-            SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+           SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
           //  badZoom = badZoom - 2;
            // $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
         }
@@ -220,10 +222,7 @@
       },
       function (newValue, oldValue) {
           if (newValue != null && newValue != oldValue) {
-              var selectedSiteID = SharedStateService.getSelectedID("Site")
-
-              if ($location.path() != "/" && $location.path() != "/Map") {
-
+              if ($location.path() != "/" && $location.path() != "/Map" && $location.path() !="/MapList" ){
                   var selectedSiteID = SharedStateService.getSelectedID("Site")
                       for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
                           if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
@@ -234,12 +233,26 @@
                       var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
                       $scope.mapInstance.setView({ center: loc, zoom: 17 });
               }
-           
+         
 
           }
 
       });
 
+
+
+    // loading the data if they change sites but stay on the page
+  $scope.$watch(
+      function (scope) {
+          if (SharedStateService.Selected.Map != null)
+              return SharedStateService.Selected.Map.MapID;
+      },
+      function (newValue, oldValue) {
+          if (newValue != null && newValue != oldValue) {
+              loadSelectedMap()
+          }
+
+      });
 
 
 

@@ -5,6 +5,7 @@
         windowTwo: "album/AlbumPreview.html",
         windowThree: "journal/JournalPreview.html"
     }
+  
 
 /*****Navigation handlers********/
     // go Site
@@ -19,7 +20,7 @@
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";        
-            $location.path("/Map")
+            $location.path("/Map").search() = {};
         }
     }
 
@@ -35,7 +36,7 @@
            $scope.preview.windowOne = "site/SitePreview.html";
            $scope.preview.windowTwo = "album/AlbumPreview.html";
            $scope.preview.windowThree = "journal/JournalPreview.html";
-            $location.path("/Map");
+           $location.path("/Map").search() = {};;
        }
     }
 
@@ -51,23 +52,38 @@
             $scope.preview.windowOne = "journal/JournalPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
-            $location.path("/Map")
+            $location.path("/Map").search() = {};
        }
     }
+
+
+    $scope.selectSite = function (site) {
+        $scope.selectedSite = site;
+        SharedStateService.setSelected("Site", site);
+        $location.path().search() = {};
+    }
+
 
     $scope.goMap = function () {
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Map");
+        $location.path("/Map").search() = {};;
+    }
+
+    $scope.goMapFirstTime = function () {
+        $scope.preview.windowOne = "site/SitePreview.html";
+        $scope.preview.windowTwo = "album/AlbumPreview.html";
+        $scope.preview.windowThree = "journal/JournalPreview.html";
+        $location.path("/Map").search({"ZoomOut": true});
     }
 
     $scope.goMapList = function () {
-        $location.path("/MapList");
-        //to do: show bounding rect on map preview
+        $location.path("/MapList").search() = {};
         $scope.preview.windowOne = "map/MapPreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
+        
     }
 
 
@@ -75,53 +91,50 @@
         $location.path("/SiteList");
     }
  
-   $scope.selectedSite = {
-        name:""
-    }
-    $scope.SiteList = [];
 
-    var cachedSites =  SharedStateService.Repository.get('Sites');
-    if (cachedSites != null && cachedSites.length > 0 )
-        $scope.SiteList = cachedSites;
-    else {
-        var selectedMapID = SharedStateService.getSelectedID("Map")
-        if(selectedMapID != null)
-        DataTransportService.getMapByID(selectedMapID).then(
-                    function (result) {
-                        SharedStateService.setSelected("Map", result.data);
-                        SharedStateService.Repository.put('Map', result.data);
-                        if (result.data.Sites.length > 0) {
-                            SharedStateService.Repository.put("Sites", result.data.Sites)
-                            $scope.SiteList = result.data.Sites;
-                        }
-                    },
-                    function (error) {
+    var loadSites = function () {
+        var cachedSites = SharedStateService.Repository.get('Sites');
+        if (cachedSites != null && cachedSites.length > 0)
+            $scope.SiteList = cachedSites;
+        else {
+            var selectedMapID = SharedStateService.getSelectedID("Map")
+            if (selectedMapID != null)
+                DataTransportService.getMapByID(selectedMapID).then(
+                            function (result) {
+                                SharedStateService.setSelected("Map", result.data);
+                                SharedStateService.Repository.put('Map', result.data);
+                                if (result.data.Sites.length > 0) {
+                                    SharedStateService.Repository.put("Sites", result.data.Sites)
+                                    $scope.SiteList = result.data.Sites;
+                                    updateSelectedSite();
+                                }
+                            },
+                            function (error) {
 
-                    }
-            );
-    }
-
-
-    var selectedSiteID = SharedStateService.getSelectedID("Site");
-
-    if(selectedSiteID != null)
-    for (var i = 0; i < $scope.SiteList.length; i++) {
-        if ($scope.SiteList[i].SiteID == selectedSiteID) {
-            $scope.selectedSite = $scope.SiteList[i];
-            //break;
+                            }
+                    );
         }
     }
 
 
 
-    $scope.selectSite = function (index) {
-        var selectedSite = $scope.SiteList[index];
-        $scope.selectedSite = selectedSite;
-        SharedStateService.setSelected("Site", selectedSite);
-       
+    var updateSelectedSite = function () {
+        var selectedSiteID = SharedStateService.getSelectedID("Site");
+        if (selectedSiteID != null)
+            for (var i = 0; i < $scope.SiteList.length; i++) {
+                if ($scope.SiteList[i].SiteID == selectedSiteID) {
+                    $scope.selectedSite = $scope.SiteList[i];
+                    //break;
+                }
+            }
+
+
     }
 
-  
+ 
+
+
+
   
 
 
@@ -133,21 +146,14 @@
         },
         function (newValue, oldValue) {
             if (newValue != null && newValue != oldValue) {
-
-                $scope.SiteList = SharedStateService.Repository.get("Sites");
-
-                for (var i = 0; i < $scope.SiteList.length; i++) {
-                    if ($scope.SiteList[i].SiteID == newValue)
-                        $scope.selectedSite = $scope.SiteList[i];
-                    break;
-                }
-
+                loadSites();
             }
 
         });
 
 
-
+    // the kickoff
+    loadSites();
 
 
 })

@@ -12,15 +12,6 @@
 
     $scope.selectedMap = null;
 
-    $scope.selectMap=function(map){
-        $scope.selectedMap= map;
-    }
-
-    $scope.shareFaceBook = function () {
-
-
-    }
-
 
     $scope.loadMapList = function () {
         var cachedMapList = SharedStateService.Repository.get("MapList");
@@ -41,16 +32,17 @@
     }
 
 
-    $scope.switchMap = function (index) {
-        var selectedMap = $scope.MapList[index];
+    $scope.switchMap = function (map) {
+        var selectedMap = map;
         SharedStateService.setSelected("Map", selectedMap);
         SharedStateService.Repository.put("Sites", []);
         SharedStateService.Repository.put("Map", null);
         SharedStateService.Repository.put("Journals", []);
         SharedStateService.Repository.put("Photos",[])
-        $location.path("/Map");
+       
     }
 
+  
 
     $scope.loadMapList();
 

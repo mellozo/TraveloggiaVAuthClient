@@ -67,7 +67,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
         if ($scope.selectedPhoto == null) {
             SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-            $scope.selectedPhoto = $scope.PhotoList[0];
+           // $scope.selectedPhoto = $scope.PhotoList[0];
 
         }
     }
@@ -79,7 +79,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
                 if ($scope.selectedPhoto == null) {
                     SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                    $scope.selectedPhoto = $scope.PhotoList[0];
+                   // $scope.selectedPhoto = $scope.PhotoList[0];
                 }
             },
             function (error) { })
@@ -228,10 +228,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 DataTransportService.getPhotos(newValue).then(
                 function (result) {
                     $scope.PhotoList = result.data;
-                
                         SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                        $scope.selectedPhoto = $scope.PhotoList[0];
-                
+                       // $scope.selectedPhoto = $scope.PhotoList[0];
                 },
                 function (error) { }
                 );
