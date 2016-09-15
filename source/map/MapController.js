@@ -46,7 +46,9 @@
             (function attachEventHandlers(site) {
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                     SharedStateService.setSelected("Site", site);
-                    $scope.$apply(function () { $location.path("/Album") })
+                    $scope.$apply(function () {// $location.path("/Album")
+                        $scope.navigateWindowTwo();
+            })
                 });
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
                     SharedStateService.setSelected("Site", site);
