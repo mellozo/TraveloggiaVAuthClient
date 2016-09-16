@@ -61,7 +61,7 @@
         $scope.selectedSite = site;
         SharedStateService.setSelected("Site", site);
         var currentpath = $location.path();
-        $location.path(currentpath).search( {"ZoomOut":"false"});
+        $location.path(currentpath).search( {"ZoomIn":"true"});
     }
 
 
@@ -69,7 +69,7 @@
         $scope.preview.windowOne = "site/SitePreview.html";
         $scope.preview.windowTwo = "album/AlbumPreview.html";
         $scope.preview.windowThree = "journal/JournalPreview.html";
-        $location.path("/Map").search({ "ZoomOut": "true" }) ;
+        $location.path("/Map").search({  }) ;
     }
 
     $scope.goMapFirstTime = function () {

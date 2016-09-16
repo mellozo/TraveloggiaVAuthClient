@@ -51,8 +51,11 @@
             })
                 });
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
-                    SharedStateService.setSelected("Site", site);
-                    $scope.$apply();
+                    SharedStateService.setSelected("Site", site);                   
+                    $scope.$apply(function () {
+                        var currentPath = $location.path();
+                        $location.path(currentPath).search({});
+                    });
                 });
             })(sites[i], $scope, $location)
 
@@ -202,11 +205,17 @@
         else {
                     if ($scope.mapInstance == null) 
                     {
+
+                        var mapType = "a"
+                        if ($scope.Capabilities.currentDevice.deviceType == "mobile")
+                            mapType = "r";
+
+
                             setViewport();
 
                             $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                                 credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',
-                                mapTypeId: "r",
+                                mapTypeId:mapType,
                                 showLocateMeButton: false,
                                 showTermsLink: false,
                                 enableClickableLogo: false
@@ -223,16 +232,18 @@
 
 
 
-    // loading the data if they change sites but stay on the page
+  //   loading the data if they change sites but stay on the page
   $scope.$watch(
       function (scope) {
           if (SharedStateService.Selected.Site != null)
               return SharedStateService.Selected.Site.SiteID;
       },
       function (newValue, oldValue) {
-          if (newValue != null && newValue != oldValue) {
+          if (newValue != null && newValue != oldValue)
+          {
               var searchObject = $location.search()
-              if( ($location.path() != "/" && $location.path() != "/Map" && $location.path() !="/MapList" )|| searchObject["ZoomOut"]=="false"){
+              if (($location.path() != "/MapList") && searchObject["ZoomIn"] == "true")
+              {
                   var selectedSiteID = SharedStateService.getSelectedID("Site")
                       for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
                           if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
@@ -243,10 +254,7 @@
                       var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
                       $scope.mapInstance.setView({ center: loc, zoom: 17 });
               }
-         
-
           }
-
       });
 
 
