@@ -1,11 +1,16 @@
 ﻿angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce) {
+
+
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
  
     var setViewport = function () {
+
+        var toolbarHeight = $window.document.getElementById("toolbarRow").offsetHeight;
+
         if ($location.path() == "/" || $location.path() == "/Map") {
-            var vpHeight = $window.document.documentElement.offsetHeight;
+            var vpHeight = $window.document.documentElement.offsetHeight - toolbarHeight;
             var vpWidth = $window.document.documentElement.offsetWidth;
             if (vpWidth > 768)
                 vpWidth = vpWidth * .7;
@@ -33,7 +38,21 @@
     $scope.confirmCancelQuestion = "Save location permanently to map?";
 
 
-// INIT SEQUENCE
+    // INIT SEQUENCE
+
+    var clearSites = function () {
+
+        for (var i = 0; i<$scope.mapInstance.entities.getLength() ; i++) {
+            var pushpin = $scope.mapInstance.entities.get(i);
+            if (pushpin instanceof Microsoft.Maps.Pushpin) {
+                $scope.mapInstance.entities.removeAt(i);
+            }
+        }
+
+    }
+
+
+
     var drawSites = function () {
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
@@ -60,7 +79,12 @@
             })(sites[i], $scope, $location)
 
             arrayOfMsftLocs.push(loc);
-            $scope.mapInstance.entities.push(pin);
+            if($scope.mapInstance.entities != null)
+                $scope.mapInstance.entities.push(pin);
+            else 
+                $timeout(function () {
+                    $scope.mapInstance.entities.push(pin);
+                })
         }
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
@@ -70,14 +94,14 @@
         {
           // softy hack because they love me :)
             $scope.mapInstance.setView({ bounds: viewRect, padding: 30 });
-            var badZoom = $scope.mapInstance.getZoom();
+            //var badZoom = $scope.mapInstance.getZoom();
            
 
-            if (searchObject["ZoomOut"] == "true")
-            {
-                badZoom = badZoom - 2;
-                $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
-            }
+            //if (searchObject["ZoomOut"] == "true")
+            //{
+            //   // badZoom = badZoom - 2;
+            //    $scope.mapInstance.setView({ center: viewRect.center, zoom: badZoom });
+            //}
             if (selectedSiteID == "null" || selectedSiteID == null )
                 SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
           
@@ -150,9 +174,20 @@
 
                 $scope.MapRecord = result.data;
                 SharedStateService.Repository.put('Map', result.data);
-                SharedStateService.setSelected("Site",null)
+             
+              
+                    SharedStateService.setSelected("Site", null)
+                 
+                    $timeout(function () {
+                        clearSites();
+                    },3000)
+          
+              
                 if ($scope.MapRecord.Sites.length > 0)
-                    drawSites();
+                  
+                        drawSites();
+                
+                    
                 else
                     $scope.systemMessage.loadComplete = true;
 
@@ -231,8 +266,6 @@
   };
 
 
-
-  //   loading the data if they change sites but stay on the page
   $scope.$watch(
       function (scope) {
           if (SharedStateService.Selected.Site != null)

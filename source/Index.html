@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+
     <link rel="stylesheet" href="css/TraveloggiaStyles.css" type="text/css" />
       <link rel="stylesheet" href="css/lib/bootstrap.css.map" />
     <link rel="stylesheet" href="css/lib/bootstrap-3.3.7.min.css" />
@@ -24,8 +25,6 @@
     <script src='lib/textAngular.min.js'></script>
     <script src="lib/ua-parser.js"></script>
     <script src="lib/angular-debounce.js"></script>
-    <script src="lib/angular-socialshare.js"></script>
-
      <script src="lib/angulartics.js"></script>
     <script src="lib/angulartics-ga.min.js"></script>
     <script>
@@ -56,27 +55,37 @@
 
 </head>
 <body ng-controller="NotificationController" style="background-image: url('image/turq.jpg'); ">
-
-    <!--    0E7B83          07595D-->
-
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '144089425668875',
+            xfbml: true,
+            version: 'v2.7'
+        });
+    };
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
 
 <table ng-style="tableStyle" style="width:100%;overflow:hidden;" ng-controller="ToolbarController" >
     <tr >
-        <td id="viewFrame"  class="phone" style="vertical-align:top; style="max-width:70%;width:70%">
-            <div  ng-hide="systemMessage.loadComplete"
-                  style="position:relative;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:90;text-align:center;color:goldenrod"
-                >
-                <img src="image/compass.gif" style="width:110px;height:110px;z-index:91;display:block;margin:auto" />
-                loading...
+        <td id="viewFrame"  class="phone" style="vertical-align:top;max-width:70%;width:70%">
+
+            <div id="toolbarRow" ng-hide="selectedState.mapListSelected==true" style="top:0px">
+                                <div ng-include="'common/ToolBar.html'"></div>
+
             </div>
+       
             
             <table style="width:100%;height:100%;padding:0px;border:none">
                 <tr>
-                    <td  style="vertical-align:top;">
-                        <div id="toolbarRow" ng-hide="selectedState.mapListSelected==true" style="top:0px">
-                                <div ng-include="'common/ToolBar.html'"></div>
-
-                          </div>
+                    <td  style="vertical-align:top;position:relative">
+                  
                            <div ng-view  style="border: none; padding: 0px; margin: 0px; display: inline;">
                             </div>
 

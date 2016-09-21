@@ -75,7 +75,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                         //}
                     },
                     function (error) {
-                        $scope.systemMessage.text = "error fetching journals" + error.data.Message;
+                        $scope.systemMessage.text = "error fetching journals" ;
                         $scope.systemMessage.activate();
                     });
     }

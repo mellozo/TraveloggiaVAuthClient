@@ -19,11 +19,16 @@
                     <div id="mapList" style="position:relative;list-style:none;margin-left:auto;margin-right:auto;">
                        
                             <div ng-repeat="map in MapList" class="seeThrough">
-                                <input ng-click="selectMap(map)"
-                                        style="margin:3px;position:relative;left:4px;height:30px;width:30px;display:inline-block"type="checkbox"  ng-click="select($index)"/>
-                                <a href="" ng-mouseover="switchMap(map)"  ng-click="goMapFirstTime()">
-                                     {{map.MapName}}
-                                </a>
+                                <input 
+                                        style="margin:3px;position:relative;left:4px;height:26px;width:26px;display:inline-block"
+                                    type="radio" name="charts"    
+                                    ng-model="$parent.MapID"
+                                    value="{{map.MapID}}"
+                                    ng-change="switchMap(map)" />
+                                
+                                                    <a href=""   ng-click="switchAndGo(map)">
+                                                         {{map.MapName}}
+                                                    </a>
                             </div>
                      
                     </div>
