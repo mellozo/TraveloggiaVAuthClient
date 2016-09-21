@@ -1,10 +1,42 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
+    // todo switch to initialize this mess
+
+
     $scope.preview = {
-        windowOne: "site/SitePreview.html",
-        windowTwo: "album/AlbumPreview.html",
-        windowThree: "journal/JournalPreview.html"
+        windowOne: "",
+        windowTwo: "",
+        windowThree:""
+
     }
+    switch ($location.path()) {
+        case "/Album":
+            $scope.preview.windowTwo= "map/MapPreview.html";
+            $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            break;
+        case "/Site":
+            $scope.preview.windowOne = "map/MapPreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            break;
+        case"/Journal":
+            $scope.preview.windowThree = "map/MapPreview.html";
+            $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";      
+            break;
+        case "/MapList":
+            $scope.preview.windowOne = "map/MapPreview.html";
+            $scope.preview.windowTwo = "album/AlbumPreview.html";
+            $scope.preview.windowThree = "journal/JournalPreview.html";
+            break;
+        default:
+            $scope.preview.windowOne="site/SitePreview.html",
+             $scope.preview.windowTwo= "album/AlbumPreview.html",
+             $scope.preview.windowThree= "journal/JournalPreview.html"
+    }
+
+
   
 
 /*****Navigation handlers********/

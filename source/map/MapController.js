@@ -5,27 +5,6 @@
         state: SharedStateService.getAuthorizationState()
     }
  
-    var setViewport = function () {
-
-        var toolbarHeight = $window.document.getElementById("toolbarRow").offsetHeight;
-
-        if ($location.path() == "/" || $location.path() == "/Map") {
-            var vpHeight = $window.document.documentElement.offsetHeight - toolbarHeight;
-            var vpWidth = $window.document.documentElement.offsetWidth;
-            if (vpWidth > 768)
-                vpWidth = vpWidth * .7;
-        }
-        else {
-            var vpHeight = (($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
-            var vpWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
-        }
-
-        $scope.mapStyle = {
-            "height": vpHeight,
-            "width": vpWidth
-        }
-    }
-
 
     $scope.selectedState = {
         editSelected:false
@@ -132,6 +111,7 @@
                     if ($scope.MapRecord.Sites.length > 0) {
                         SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
                         drawSites();
+                        
                     }
                     else
                         $scope.systemMessage.loadComplete = true;
@@ -225,11 +205,10 @@
      console.log("debounced resize on map page");
      if ($location.path() != "/Map" && $location.path() != "/")
          return;
-
      // this sizes the outer container defined in notification controller the base container
      $scope.setDimensions();
-        // when in doubt use a timeout :(
-        $timeout(afterLoaded, 0);
+          // when in doubt use a timeout :(
+        $timeout(afterLoaded(),2000);
     });
 
 
@@ -245,8 +224,6 @@
                         if ($scope.Capabilities.currentDevice.deviceType == "mobile")
                             mapType = "r";
 
-
-                            setViewport();
 
                             $scope.mapInstance = new Microsoft.Maps.Map(document.getElementById('bingMapRaw'), {
                                 credentials: 'AnDSviAN7mqxZu-Dv4y0qbzrlfPvgO9A-MblI08xWO80vQTWw3c6Y6zfuSr_-nxw',

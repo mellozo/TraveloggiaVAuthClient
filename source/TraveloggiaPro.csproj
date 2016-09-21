@@ -104,7 +104,7 @@
     <Content Include="journal\JournalPreview.html" />
     <Content Include="journal\Journal.html" />
     <Content Include="journal\JournalController.js" />
-    <Content Include="lib\angular-socialshare.js" />
+    <Content Include="lib\angular-debounce.js" />
     <Content Include="lib\angular.min.js" />
     <Content Include="lib\angulartics-ga.min.js" />
     <Content Include="lib\angulartics.js" />

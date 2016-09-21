@@ -1,37 +1,38 @@
-﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window) {
+﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window,$timeout) {
 
-    $scope.reliableHeight = $window.innerHeight;
-    $scope.reliableWidth = $window.document.documentElement.clientWidth;
-    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow").innerHeight;
-    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
 
-    $scope.scrollWindowStyle = {
-        "height": viewFrameHeight,
-        "max-height": viewFrameHeight
+
+  $scope.setMapStyle = function () {
+
+        var vpHeight = $scope.reliableHeight - $scope.toolbarHeight;
+        var vpWidth = $scope.reliableWidth
+        if (vpWidth > 768)
+            vpWidth = vpWidth * .7;
+  
+        var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
+        var previewMapWidth = $scope.reliableWidth * .31;//$window.document.getElementById("previewFrame").offsetWidth - 24;
+     
+
+        $scope.mapStyle = {
+            "height": vpHeight,
+            "width": vpWidth
+        }
+
+
+        $scope.previewMapStyle = {
+            "height": previewMapHeight,
+            "width": previewMapWidth
+        }
     }
 
 
-    $scope.windowOneStyle = {
-        "max-height": Math.round(($scope.reliableHeight -36) * .33)-12,
-        "max-width": $scope.reliableWidth
-    }
-
-    $scope.previewPaneStyle = {
-        "height":"100%"//Math.round($scope.reliableHeight *.31)
-    }
- 
-    $scope.tableStyle = {
-        "height": $scope.reliableHeight
-    }
-
-    $scope.previewStyle = {
-        "height": $scope.reliableHeight,
-        "max-height": $scope.reliableHeight,       
-    }
 
     $scope.setDimensions = function () {
-        $scope.reliableHeight = $window.document.documentElement.offsetHeight;
-        $scope.reliableWidth = $window.document.documentElement.offsetWidth;
+        $scope.reliableHeight = $window.innerHeight;
+        $scope.reliableWidth = $window.innerWidth;
+       $scope.toolbarHeight = 66;// $window.document.getElementById("toolbarRow").offsetHeight;
+        var viewFrameHeight = $scope.reliableHeight - $scope.toolbarHeight;
+
 
         $scope.previewPaneStyle = {
             "height": $scope.reliableHeight * .31
@@ -45,6 +46,17 @@
             "height": $scope.reliableHeight,
             "max-height": $scope.reliableHeight,
         }
+        $scope.scrollWindowStyle = {
+            "height": viewFrameHeight,
+            "max-height": viewFrameHeight
+        }
+
+        $scope.windowOneStyle = {
+            "max-height": Math.round(($scope.reliableHeight - 36) * .33) - 12,
+            "max-width": $scope.reliableWidth
+        }
+
+        $timeout($scope.setMapStyle());
     }
 
     // demonstrating use of inherited scope via nested controllers
@@ -97,7 +109,8 @@
 
 
   
-
+    // kickoff
+    $scope.setDimensions();
 
 
 
