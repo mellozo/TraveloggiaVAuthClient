@@ -32,6 +32,20 @@
     }
 
 
+    $scope.$watch(
+        function (scope) {
+            if (SharedStateService.getAuthorizationState() != null)
+                return SharedStateService.getAuthorizationState();
+        },
+        function (newValue, oldValue) {
+            if (newValue != null && newValue != oldValue) {
+
+                var boolAuth =  (newValue==canEdit) ? true:false;
+                VM.authenticationStatus.signedIn = boolAuth;
+               
+            }
+        });
+
 
     //var alreadyLoggedIn = window.sessionStorage.getItem("memberID")
     //if (alreadyLoggedIn != null) {
