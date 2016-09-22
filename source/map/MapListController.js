@@ -15,21 +15,15 @@
 
     $scope.switchMap = function (map) {
         try {
-
             SharedStateService.setSelected("Map", map);
             SharedStateService.Repository.put("Sites", []);
             SharedStateService.Repository.put("Map", null);
             SharedStateService.Repository.put("Journals", []);
             SharedStateService.Repository.put("Photos", [])
-
-
         }
         catch (exception) {
-          //  alert("shit")
+  
         }
-           
-       // var selectedMap = map;
-     
     }
 
 
@@ -40,8 +34,6 @@
         SharedStateService.Repository.put("Journals", []);
         SharedStateService.Repository.put("Photos", [])
         $scope.goMapFirstTime();
-
-
     }
 
     var getPreviewPhoto = function () {
@@ -50,9 +42,10 @@
         var rawURI = "";
         var imageServer1 = "https://s3-us-west-2.amazonaws.com";
         var imageServer2 = "http://www.traveloggia.net";
+        var mapName = SharedStateService.getSelectedMapName();
+        var safeName = $window.encodeURIComponent(mapName)
         if (pic != null) {
-            var imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedMapName() + "/";
-
+            var imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + safeName + "/";
             if (pic.StorageURL != null) {
                 rawURI = "/traveloggia-guests/" + imagePath + pic.FileName;
                 photoURL = imageServer1 + rawURI;
@@ -72,7 +65,7 @@
         var imageURL = getPreviewPhoto();
 
         var url = 'http://www.facebook.com/dialog/feed?app_id=144089425668875' +
-          '&link=' +"http://www.traveloggia.pro?MapID=" +MapID +
+          '&link=' +"http://www.traveloggia.pro/?MapID=" +MapID +
           '&picture=' + imageURL +
          // '&name=' + encodeURIComponent(FBVars.fbShareName) +
           '&caption= viewmap' + 
