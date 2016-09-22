@@ -60,21 +60,22 @@
 
 
 
-    var createFBFeedURL = function () {
-        var MapID = SharedStateService.getSelectedID("Map");
-        var imageURL = getPreviewPhoto();
+    //var createFBFeedURL = function () {
+    //    var MapID = SharedStateService.getSelectedID("Map");
+    //    var imageURL = getPreviewPhoto();
 
-        var url = 'http://www.facebook.com/dialog/feed?app_id=144089425668875' +
-          '&link=' +"http://www.traveloggia.pro/?MapID=" +MapID +
-          '&picture=' + imageURL +
-         // '&name=' + encodeURIComponent(FBVars.fbShareName) +
-          '&caption= viewmap' + 
-       //   '&description=' + encodeURIComponent(FBVars.fbShareDesc) +
-       //   '&redirect_uri=' + FBVars.baseURL + 'PopupClose.html' +
-          '&display=popup';
+    //    var url = 'http://www.facebook.com/dialog/feed?app_id=144089425668875' +
+    //      '&link=' +"http://www.traveloggia.pro/?MapID=" +MapID +
+    //      '&picture=' + imageURL +
+    //     // '&name=' + encodeURIComponent(FBVars.fbShareName) +
+    //      '&caption= viewmap' + 
+    //   //   '&description=' + encodeURIComponent(FBVars.fbShareDesc) +
+    //   //   '&redirect_uri=' + FBVars.baseURL + 'PopupClose.html' +
+    //      '&display=popup';
 
-        return url;
-    }
+    //    return url;
+    //}
+
 
 
     $scope.facebook = function () {
@@ -85,7 +86,7 @@
       //  params['message'] = 'Check out my map ' + MapName;
         params['name'] = MapName;
         params['description'] = 'check out my map! ' ;
-        params['link'] = 'http://localhost:53382/?MapID='+MapID;
+        params['link'] = 'http://www.traveloggia.pro/?MapID='+MapID;
         params['picture'] = imageURL;
         params['picture.height'] = 250;
         params['caption'] = 'made with Traveloggia';

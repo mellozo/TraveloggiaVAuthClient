@@ -1,4 +1,5 @@
-﻿angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce) {
+﻿/// <reference path="Map.html" />
+angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce) {
 
 
     $scope.stateMachine = {
@@ -181,12 +182,18 @@
 
 
  var loadMap = function () {
-        var requestedMap = null;
-        var searchObject = $location.search();// if loading from a shared link
-        if (searchObject["MapID"]) {
-            requestedMap = searchObject["MapID"];
+     var requestedMap = null;
+     var mapID = null;
+        var searchObject = $window.location.search;
+        if (searchObject != "") {
+            var searchParams = searchObject.substr(1, searchObject.length)
+            if( (searchParams.split("=")[0] )=="MapID")
+                mapID = searchParams.split("=")[1]
         }
-           
+       
+        if (mapID != null)
+            requestedMap = mapID;
+
         var cachedMap = SharedStateService.Repository.get("Map");
         var selectedMapID = SharedStateService.getSelectedID("Map");
         if (requestedMap != null)
