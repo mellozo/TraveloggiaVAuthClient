@@ -12,6 +12,7 @@
 
     if (VM.Site == null) {
         var siteID = SharedStateService.getSelectedID("Site");
+        if(siteID != null && siteID != "null")
         DataTransportService.getSiteByID(siteID).then(
             function (result)
             {
@@ -115,7 +116,6 @@
             }
 
             )
-
     }
 
 

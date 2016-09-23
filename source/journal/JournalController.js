@@ -62,6 +62,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
     else
     {
+        if(SharedStateService.getSelectedID("Site") != null  && SharedStateService.getSelectedID("Site") != "null")
         DataTransportService.getJournals(SharedStateService.getSelectedID("Site")).then(
                     function (result) {
                         $scope.JournalEntries = result.data;
