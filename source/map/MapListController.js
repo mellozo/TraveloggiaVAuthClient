@@ -14,6 +14,7 @@
 
 
     $scope.switchMap = function (map) {
+        $scope.selectedMap = map;
         try {
             SharedStateService.setSelected("Map", map);
             SharedStateService.Repository.put("Sites", []);
@@ -144,6 +145,81 @@ var loadMapList = function () {
                 $scope.MapList = SharedStateService.Repository.get('MapList');
         }
     }
+
+
+ 
+
+$scope.showMapEditWindow = function (action) {
+    if (action == "add") {
+        $scope.selectedState.addSelected = true;
+        createMap();
+    }
+    else if (action=="edit")
+        $scope.selectedState.editSelected = true;
+ 
+
+}
+
+var createMap = function () {
+    var anotherMap = new Map();
+    anotherMap.MemberID = SharedStateService.getAuthenticatedMemberID();
+    $scope.selectedMap = anotherMap;
+}
+
+
+$scope.saveMapEdit = function () {
+
+
+    if ($scope.selectedMap.MapID == null) {
+
+        $scope.selectedState.addSelected = false;
+        DataTransportService.addMap($scope.selectedMap).then(
+            function (result) {
+                SharedStateService.setSelected("Map", result.data);
+                $scope.systemMessage.text = "map was added successfully";
+                $scope.systemMessage.activate();
+                $scope.goMapFirstTime();
+
+            },
+                function (error) {
+                    $scope.systemMessage.text = "error adding map";
+                    $scope.systemMessage.activate();
+                })
+    }
+    else if ($scope.selectedMap.MapID != null) {
+        $scope.selectedState.editSelected = false;
+        $scope.selectedMap.MapName = $scope.selectedMap.MapName.replace(/ /g, '_');
+        DataTransportService.updateMap($scope.selectedMap).then(
+            function (result) {
+                SharedStateService.setSelected("Map", result.data);
+                $scope.systemMessage.text = "map was updated successfully";
+                $scope.systemMessage.activate();
+                // refresh map list somehow
+            },
+                function (error) {
+                    $scope.systemMessage.text = "error updating map";
+                    $scope.systemMessage.activate();
+                })
+
+
+
+    }
+
+
+   
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
   

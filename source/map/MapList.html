@@ -6,6 +6,43 @@
         <div ng-include="'map/MapListToolBar.html'"></div>
     </div>
 
+
+    
+
+<div ng-show="selectedState.addSelected == true || selectedState.editSelected == true"  style="margin:8px">
+   <!-- <div  class="col-xs-12" style="margin-bottom:0px;padding-bottom:0px">-->
+        <div class="panel-group" id="accordion" style="margin:0px 15px">
+            <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;margin-bottom:0px;padding-bottom:0px;">
+                <div class="panel-heading" style="background-color:#8EBBDA;">
+                    <h4 class="panel-title listHeader" >
+                        Edit Map Name
+                       <!-- <a data-toggle="collapse" style="font-family:Cinzel;position:relative;right:46px;" data-parent="#accordion" href="" data-target="#collapseOne">Add Photos</a>-->
+                    </h4>
+                </div>
+
+                <div id="collapseOne" class="panel-collapse ">
+                    <div class="panel-body" style="height:130px">
+                        <input ng-model="selectedMap.MapName" class="menuText" />
+                       
+                        <div>
+                            <button 
+                                    ng-disabled="BusyWith.uploading"
+                                    style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
+                                     ng-click="saveMapEdit()">Save
+                            </button>
+                        </div>
+                    
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    <!--</div>-->
+</div>
+
+
+
+
     <div >
         <div   ng-style="scrollWindowStyle"
             style="margin:0px;padding:0px;">

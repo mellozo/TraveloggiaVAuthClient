@@ -62,6 +62,28 @@ var baseURL = "http://localhost:51316"
             return $http(config);
         },
 
+        addMap:function(wholeMap){
+            var endpoint = baseURL + "/api/Maps";
+            var config = {
+                method: "post",
+                url: endpoint,
+                data:wholeMap
+            }
+            return $http(config);
+
+        },
+
+       updateMap: function (wholeMap) {
+            var endpoint = baseURL + "/api/Maps/"+ wholeMap.MapID;
+            var config = {
+                method: "put",
+                url: endpoint,
+                data: wholeMap
+            }
+            return $http(config);
+
+        },
+
         getSiteByID: function (siteID) {
             var endpoint = baseURL + "/api/SelectSite/" + siteID;
             var config = {
