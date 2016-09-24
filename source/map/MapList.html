@@ -30,6 +30,11 @@
                                     style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
                                      ng-click="saveMapEdit()">Save
                             </button>
+                            <button 
+                                    ng-disabled="BusyWith.uploading"
+                                    style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
+                                     ng-click="cancelMapEdit()">Cancel
+                            </button>
                         </div>
                     
                     </div>
@@ -61,7 +66,8 @@
                                     type="radio" name="charts"    
                                     ng-model="$parent.MapID"
                                     value="{{map.MapID}}"
-                                    ng-change="switchMap(map)" />
+                                    ng-change="switchMap(map)" 
+                                   ng-checked="{{selectedMap.MapID ==map.MapID}}"/>
                                 
                                                     <a href=""   ng-click="switchAndGo(map)">
                                                          {{map.MapName}}

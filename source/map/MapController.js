@@ -21,7 +21,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // INIT SEQUENCE
 
     var clearSites = function () {
-        for (var i = 0; i<$scope.mapInstance.entities.getLength() ; i++) {
+        var max = $scope.mapInstance.entities.getLength()-1;
+        for (var i =max ; i > -1; i--) {
             var pushpin = $scope.mapInstance.entities.get(i);
             if (pushpin instanceof Microsoft.Maps.Pushpin) {
                 $scope.mapInstance.entities.removeAt(i);
@@ -152,17 +153,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
                 $scope.MapRecord = result.data;
                 SharedStateService.Repository.put('Map', result.data);
-                SharedStateService.setSelected("Site", null)
-                clearSites();
-             
-          
-              
+                SharedStateService.setSelected("Site", null)             
                 if ($scope.MapRecord.Sites.length > 0)
                     $timeout(function () {
                         drawSites();
                     },1000) 
                 else
+                {
+                    var currentPosition = new Microsoft.Maps.Location(0, 0);
+                    $scope.mapInstance.setView({ center: currentPosition, zoom: 1 })
                     $scope.systemMessage.loadComplete = true;
+                }
+                    
 
             },
             function (error) {
@@ -276,7 +278,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       },
       function (newValue, oldValue) {
           if ($location.path() == "/MapList" && newValue != null && newValue != oldValue) {
-              loadSelectedMap()
+              clearSites();
+              $timeout(loadSelectedMap(newValue),1000);
           }
 
       });

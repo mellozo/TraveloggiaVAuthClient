@@ -37,6 +37,8 @@
         $scope.goMapFirstTime();
     }
 
+
+
     var getPreviewPhoto = function () {
         var pic = SharedStateService.Selected.Site.Photos[0];
         var photoURL = "http://www.traveloggia.pro/image/compass.gif";
@@ -58,24 +60,6 @@
         }
         return photoURL;
     }
-
-
-
-    //var createFBFeedURL = function () {
-    //    var MapID = SharedStateService.getSelectedID("Map");
-    //    var imageURL = getPreviewPhoto();
-
-    //    var url = 'http://www.facebook.com/dialog/feed?app_id=144089425668875' +
-    //      '&link=' +"http://www.traveloggia.pro/?MapID=" +MapID +
-    //      '&picture=' + imageURL +
-    //     // '&name=' + encodeURIComponent(FBVars.fbShareName) +
-    //      '&caption= viewmap' + 
-    //   //   '&description=' + encodeURIComponent(FBVars.fbShareDesc) +
-    //   //   '&redirect_uri=' + FBVars.baseURL + 'PopupClose.html' +
-    //      '&display=popup';
-
-    //    return url;
-    //}
 
 
 
@@ -102,38 +86,16 @@
         }, { scope: 'publish_actions' });
 
         };
-        //var url = createFBFeedURL();
-        //          $window.open(url, 
-        //                'feedDialog', 
-        //                'toolbar=0,status=0,width=626,height=436'
-        //    ); 
-        //}
+    
 
-     
-
-        //$window.FB.ui({
-        //    method: 'feed',
-        //    link: "http://www.traveloggia.pro?MapID=" +MapID,
-        //    app_id: '144089425668875',
-        //    picture: imageURL,
-        //    caption: 'view map'
-        //    //,
-        // //   description:'one two three'
-
-
-        //}, function (response) {
-        //    // Debug response (optional)
-        //    alert("map has been shared on facebook")
-        //});
-  //  }
-
-  
 var loadMapList = function () {
         var cachedMapList = SharedStateService.Repository.get("MapList");
         if (cachedMapList == null || cachedMap.MemberID != SharedStateService.getAuthenticatedMemberID()) {
             DataTransportService.getMapList(SharedStateService.getAuthenticatedMemberID()).then(
                 function (result) {
                     $scope.MapList = result.data;
+                    if (SharedStateService.getSelectedID("Map") != null)
+                        $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading maps";
@@ -156,8 +118,6 @@ $scope.showMapEditWindow = function (action) {
     }
     else if (action=="edit")
         $scope.selectedState.editSelected = true;
- 
-
 }
 
 var createMap = function () {
@@ -168,8 +128,6 @@ var createMap = function () {
 
 
 $scope.saveMapEdit = function () {
-
-
     if ($scope.selectedMap.MapID == null) {
 
         $scope.selectedState.addSelected = false;
@@ -211,7 +169,11 @@ $scope.saveMapEdit = function () {
 }
 
 
-
+$scope.cancelMapEdit = function () {
+    $scope.selectedState.addSelected = false;
+    if (SharedStateService.getSelectedID("Map") != null)
+        $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
+}
 
 
 
