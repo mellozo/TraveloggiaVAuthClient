@@ -126,7 +126,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   var reloadMap = function () {
         var cachedMap = SharedStateService.Repository.get("Map");
         $scope.MapRecord = cachedMap;
-        if ($scope.MapRecord.Sites.length > 0)
+        var cachedSites = SharedStateService.Repository.get("Sites");
+        $scope.MapRecord.Sites = cachedSites;
+        if (cachedSites.length > 0)
             drawSites();
         else
             $scope.systemMessage.loadComplete = true;
@@ -374,32 +376,51 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     $scope.geocodeAddress = function () {
-        var geocoder = SharedStateService.geocoder;
-        var address = $scope.searchAddress;
-        var resultsMap =  SharedStateService.googleMap;
-        geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK)
+        var geocoder = SharedStateService.getSearchManager().then(
+            function (data) 
             {
-                var lat = results[0].geometry.location.lat();
-                var lng = results[0].geometry.location.lng();
-                var siteRecord = $scope.createSiteRecord(lat, lng);
-                siteRecord.Address = results[0].formatted_address;
-                SharedStateService.setSelected("Site", siteRecord);
-                resultsMap.setCenter(results[0].geometry.location);
-                resultsMap.setZoom(13);
-                var marker = new google.maps.Marker({
-                    map: resultsMap,
-                    position: results[0].geometry.location
-                });
-                if (SharedStateService.readOnlyUser == false)
-                $scope.dialogIsShowing = true;
-                angular.element('#accordion .in').collapse('hide');
-                $scope.$apply();
-            } else {
-                alert('Geocode was not successful for the following reason: ' + status);
-            }
-        });
-    }
+                if(data = "ok")
+                var    searchManager = new Microsoft.Maps.Search.SearchManager($scope.mapInstance);
+                var address = $scope.searchAddress;
+                var requestOptions = {
+                    where: $scope.searchAddress,
+                    callback: function (answer, userData) {
+                        $scope.mapInstance.setView({ center: answer.results[0].location, zoom: 12 });
+                        $scope.mapInstance.entities.push(new Microsoft.Maps.Pushpin(answer.results[0].location));
+                        var thePlace = answer.results[0]
+                        var lat = thePlace.location.latitude;
+                        var lng = thePlace.location.longitude;
+                        var siteRecord = createSiteRecord(lat, lng);
+                        siteRecord.Address = thePlace.address.formattedAddress;
+                        siteRecord.Name = thePlace.Name;
+                        SharedStateService.setSelected("Site", siteRecord);
+                        if (SharedStateService.getAuthorizationState() == 'CAN_EDIT')
+                            $scope.dialogIsShowing = true;
+                        angular.element('#searchPanel .in').collapse('hide');
+                        $scope.$apply();
+                    }// end callback;
+
+                }// end request options
+
+                searchManager.geocode(requestOptions);
+
+            },// end if the module loaded
+            function (error) {
+                alert("you suck")
+
+            } );
+  
+
+        var x = 1;
+        };
+       
+
+
+//else {
+//                alert('Geocode was not successful for the following reason: ' + status);
+//            }
+//        });
+//    }
 
 
 

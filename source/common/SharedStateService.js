@@ -1,4 +1,4 @@
-﻿angularTraveloggia.service('SharedStateService',function ( DataTransportService,isEditing,readOnly,canEdit,$cacheFactory,$window,$cookies)
+﻿angularTraveloggia.service('SharedStateService',function ( DataTransportService,isEditing,readOnly,canEdit,$cacheFactory,$window,$cookies,$q)
 {
 
     var local_scope = this;
@@ -131,7 +131,20 @@
     // but todo - store whatever we load from the same map
     local_scope.Repository.put('Photos', []);
 
-    local_scope.Repository.put('Journals',[])
+    local_scope.Repository.put('Journals', [])
+
+
+   
+    
+    
+    local_scope.getSearchManager = function () {
+     var deferredResult= $q.defer();
+     Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+      
+         deferredResult.resolve("ok");
+     });
+     return deferredResult.promise;
+    }
   
 
 })

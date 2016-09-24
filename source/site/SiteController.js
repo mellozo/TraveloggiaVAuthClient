@@ -68,6 +68,9 @@
             var cachedSites = SharedStateService.Repository.get('Sites');
             cachedSites.push(result.data);
             SharedStateService.Repository.put('Sites', cachedSites);
+
+            var cachedMap = SharedStateService.Repository.get("Map");
+
             SharedStateService.setSelected("Site", result.data);
             // invalidate cache of child records
             SharedStateService.Repository.put('Photos', []);
