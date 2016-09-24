@@ -29,27 +29,33 @@
         </div>
     </div>
 
-    <div ng-cloak class="mapLabel" id="mapNameDiv">
+    <div ng-cloak class="mapLabel" id="mapNameDiv" style="left:100px;top:40px;">
         {{MapRecord.MapName}}
     </div>
 
       
          
-    <div class="panel-group" id="searchPanel" style="position:absolute;top:0px;z-index:1999;width:50%;margin-left:25%;margin-right:25%">   
-            <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
-                    <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
-                          <h4 class="panel-title listHeader" >
-                           <a data-toggle="collapse" style="font-family:Cinzel;" data-parent="#accordion" href="" data-target="#collapseOne">Location Search</a>
-                          </h4>
-                    </div>
+    <div class="panel-group cloudBlue" id="searchPanel"
+         style="position:absolute;height:20px; border-bottom-left-radius:12px; border-bottom-right-radius:12px;
+ border-bottom:4px solid black; border-left:4px solid black; border-right:4px solid black; border-top:none;
+z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
+        <a data-toggle="collapse" style="font-family:Cinzel;font-size:10px" data-parent="#searchPanel" href="" data-target="#collapseOne">Search</a>   
+           
                 <div id="collapseOne" class="panel-collapse collapse">
+                     <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
+                     <!--   <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
+                              <h4 class="panel-title listHeader" >
+                           
+                              </h4>
+                        </div>-->
+
                         <div class="panel-body" style="padding-right:25px;padding-left:25px;">
                                          <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;padding:4px;font-size:20px;" />   
                              
                                                                 
                                 <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="geocodeAddress()">Get Coordinates</button>
                          </div>
-                </div>
+                    </div>
             </div>
     </div>
 
@@ -87,10 +93,10 @@
 
     
 
-   <!-- <button class="bluenav glow"
+    <button class="bluenav glow"
                 title="zoom to current location" ng-click="getLocation()"
                 style="border:dotted 2px red;position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:6%;border-radius:90px">
         <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
-    </button>   --> 
+    </button>    
 
     </div>
