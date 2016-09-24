@@ -397,6 +397,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                         if (SharedStateService.getAuthorizationState() == 'CAN_EDIT')
                             $scope.dialogIsShowing = true;
                         angular.element('#searchPanel .in').collapse('hide');
+                        $scope.searchAddress = "";
                         $scope.$apply();
                     }// end callback;
 

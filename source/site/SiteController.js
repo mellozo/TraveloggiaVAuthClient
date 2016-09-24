@@ -45,15 +45,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     VM.saveSite = function () {
         if (VM.Site.SiteID == null)
             VM.addSite();
