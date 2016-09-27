@@ -28,11 +28,19 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // INIT SEQUENCE
 
     var clearSites = function () {
-        var max = $scope.mapInstance.entities.getLength()-1;
+
+        var map = null;
+        if ($location.path() == "/" || $location.path() == "/Map")
+            map = $scope.mapInstance;
+        else
+            map = $scope.previewMap;
+
+
+        var max = map.entities.getLength()-1;
         for (var i =max ; i > -1; i--) {
-            var pushpin = $scope.mapInstance.entities.get(i);
+            var pushpin =map.entities.get(i);
             if (pushpin instanceof Microsoft.Maps.Pushpin) {
-                $scope.mapInstance.entities.removeAt(i);
+                map.entities.removeAt(i);
             }
         }
     }
@@ -46,8 +54,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             map = $scope.mapInstance;
         else
             map = $scope.previewMap;
-
-
 
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
@@ -291,26 +297,27 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
      try{
          var x = (Microsoft != null)// map control not loaded yet - the problem is sometimes the map loades before angular
          // and sometimes angular loades before the map :(
+         if ($http.pendingRequests.length > 0) {
+             $timeout($scope.afterLoaded, 200); // Wait for all templates to be loaded
+         }
+         else {
+             if ($location.path() == "/Map" || $location.path() == "/") {
+
+                 if ($scope.mapInstance == null)
+                     $scope.prepareMainMap();
+             }
+             else if ($location.path() != "/Map" && $location.path() != "/") {
+                 if ($scope.mapPreviewMap == null)
+                     $scope.preparePreviewMap();
+             }
+         }
      }
      catch (error) {
-         $timeout($scope.afterLoaded,200); // Wait for all templates to be loaded
+         console.log("microsoft was null waiting 400")
+         $timeout($scope.afterLoaded,400); // Wait for all templates to be loaded
      }
 
-    if ($http.pendingRequests.length > 0  ) {
-        $timeout($scope.afterLoaded,200); // Wait for all templates to be loaded
-    }
-    else 
-    {
-        if ($location.path() == "/Map" || $location.path() == "/") {
-         
-            if ($scope.mapInstance == null  )
-             $scope.prepareMainMap();
-        }
-        else if ($location.path() != "/Map" && $location.path() != "/"){
-            if ($scope.mapPreviewMap == null  )
-                $scope.preparePreviewMap();
-        }
-    }
+  
   };
 
 
