@@ -1,31 +1,32 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
-    // todo switch to initialize this mess
-
-
+  
     $scope.preview = {
         windowOne: "",
         windowTwo: "",
         windowThree:""
-
     }
     switch ($location.path()) {
         case "/Album":
+         
             $scope.preview.windowTwo= "map/MapPreview.html";
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
             break;
         case "/Site":
+          
             $scope.preview.windowOne = "map/MapPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
             break;
-        case"/Journal":
+        case "/Journal":
+            
             $scope.preview.windowThree = "map/MapPreview.html";
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";      
             break;
         case "/MapList":
+            
             $scope.preview.windowOne = "map/MapPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
@@ -37,16 +38,20 @@
     }
 
 
-  
+    $scope.announce = function () {
+        var mapPreviewDiv = $window.document.getElementById("bingPreviewMap")
+        if (mapPreviewDiv != null)
+       $scope.$broadcast("previewFrameLoaded", mapPreviewDiv)
+    }
 
 /*****Navigation handlers********/
     // go Site
     $scope.navigateWindowOne = function () {
         if ($scope.preview.windowOne == "site/SitePreview.html") {
+            $location.path("/Site")
             $scope.preview.windowOne = "map/MapPreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
-            $location.path("/Site")
         }
         else if ($scope.preview.windowOne == "map/MapPreview.html") {
             $scope.preview.windowOne = "site/SitePreview.html";
@@ -59,6 +64,7 @@
 // goAlbum
     $scope.navigateWindowTwo = function () {
         if ($scope.preview.windowTwo == "album/AlbumPreview.html") {
+          
             $scope.preview.windowTwo= "map/MapPreview.html";
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowThree = "journal/JournalPreview.html";
@@ -75,6 +81,7 @@
 //goJournal
     $scope.navigateWindowThree = function () {
         if ($scope.preview.windowThree == "journal/JournalPreview.html") {
+         
             $scope.preview.windowThree = "map/MapPreview.html";
             $scope.preview.windowOne = "site/SitePreview.html";
             $scope.preview.windowTwo = "album/AlbumPreview.html";        

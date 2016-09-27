@@ -1,5 +1,5 @@
 ﻿<div ng-controller="AlbumController"    ng-style="windowOneStyle" >
-      <div class=" greenMud"  style="height:100%">
+      <div ng-cloak class=" greenMud"  style="height:100%" ng-show="PhotoList.length > 0" >
 
             <div ng-if="PhotoList[0].StorageURL !=null " >
 
@@ -14,7 +14,7 @@
                 </div>
 
                 <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
-                    <div ng-if="Capabilities.alreadyKnowsHow==false">
+                    <div ng-if="Capabilities.alreadyKnowsHow==false ">
                             <img on-load="onImageLoad($event, PhotoList[0].orientationID)"
                                     style="position:absolute;visibility:hidden"
                                     ng-style="portraitImageStyle"

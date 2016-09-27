@@ -1,24 +1,25 @@
-﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window,$timeout) {
+﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window,$timeout,$rootScope) {
 
+
+    $window.beHappy = function () {
+      $scope.$broadcast("softIsHere")
+    }
+
+ 
 
 
   $scope.setMapStyle = function () {
-
         var vpHeight = $scope.reliableHeight - $scope.toolbarHeight;
         var vpWidth = $scope.reliableWidth
         if (vpWidth > 768)
             vpWidth = vpWidth * .7;
-  
         var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
         var previewMapWidth = $scope.reliableWidth * .31;//$window.document.getElementById("previewFrame").offsetWidth - 24;
-     
 
         $scope.mapStyle = {
             "height": vpHeight,
             "width": vpWidth
         }
-
-
         $scope.previewMapStyle = {
             "height": previewMapHeight,
             "width": previewMapWidth
