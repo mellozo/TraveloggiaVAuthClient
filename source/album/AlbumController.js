@@ -17,8 +17,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 // this is funky and will change
                 $scope.vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
                 var vhseventysix = $scope.viewFrameHeight * .76;
-                var vweighty = $scope.viewFrameWidth * .8;
-                var vheighty = $scope.viewFrameHeight * .8;
+                var vweighty = $scope.viewFrameWidth - 32;//* .8;
+                var vheighty = $scope.viewFrameHeight ;//* .8;
                 $scope.landscapeImageStyle = {
                     "max-height": vhseventysix,
                     "max-width": vweighty
@@ -93,7 +93,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var degrees = 0;
 
         if($location.path() =="/Album" || $location.path() =="/Photo")
-            var maxHeight = $window.innerHeight * .76
+            var maxHeight = $window.innerHeight -68;// * .76
         else
             var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth *.20)
 
@@ -108,8 +108,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
         var ctx = canvas.getContext("2d");
        ctx.save();
-        // make canvas a big square for now
-        canvas.width = scaledWidth;
+     
+       canvas.width = x;//scaledWidth;
         canvas.height =scaledWidth;
        // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
         ctx.restore();

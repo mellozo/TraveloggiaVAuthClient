@@ -14,7 +14,7 @@
         if (vpWidth > 768)
             vpWidth = vpWidth * .7;
         var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
-        var previewMapWidth = $scope.reliableWidth * .31;//$window.document.getElementById("previewFrame").offsetWidth - 24;
+        var previewMapWidth = ($scope.reliableWidth * .31) - 32;//$window.document.getElementById("previewFrame").offsetWidth - 24;
 
         $scope.mapStyle = {
             "height": vpHeight,
@@ -54,7 +54,7 @@
 
         $scope.windowOneStyle = {
             "max-height": Math.round(($scope.reliableHeight - 36) * .33) - 12,
-            "max-width": $scope.reliableWidth
+            "max-width": $scope.reliableWidth -32
         }
 
         $timeout($scope.setMapStyle());
