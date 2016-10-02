@@ -17,18 +17,19 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 // this is funky and will change
                 $scope.vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
                 var vhseventysix = $scope.viewFrameHeight * .76;
-                var vweighty = $scope.viewFrameWidth - 32;//* .8;
+                var vweighty = $scope.viewFrameWidth - 75;//* .8;
                 var vheighty = $scope.viewFrameHeight ;//* .8;
                 $scope.landscapeImageStyle = {
                     "max-height": vhseventysix,
-                    "max-width": vweighty
+                    "max-width": vweighty,
+                    "width":vweighty
                 };
                 $scope.portaitImageStyle = {
                     "height": "auto",
                     "max-width:": vheighty
                 }
     }
-    else {
+    else {// PREVIEW 
                 $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
                 $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
                 $scope.landscapeImageStyle = {
