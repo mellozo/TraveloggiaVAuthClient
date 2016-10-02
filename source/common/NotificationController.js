@@ -65,7 +65,9 @@
     var isMapPage = ($location.path() == "/Map" || $location.path() == "/") ? true : false;
 
     var fortyVPHeight = $window.innerHeight * .4
-   
+  
+  
+
     var userAgentParser = new UAParser();
     var result = userAgentParser.getResult();
     var device = new Device();
@@ -88,12 +90,16 @@
     }
 
     if (result.browser.name != null && result.browser.version != null) {
-        $scope.Capabilities.alreadyKnowsHow = (result.browser.name == "Mobile Safari" && result.browser.version == "9.0") ? true : false;
+        var browserNumber =  parseInt(result.browser.version)
+        $scope.Capabilities.alreadyKnowsHow = (result.browser.name == "Mobile Safari" && browserNumber>= 9) ? true : false;
     }
 
     if (result.os !== null && result.browser != null) {
         $scope.Capabilities.cantResize = (result.os.name == "Windows Phone" && result.browser.version == "11.0") ? true : false;
     }
+
+
+ 
 
 
     $scope.systemMessage = {
