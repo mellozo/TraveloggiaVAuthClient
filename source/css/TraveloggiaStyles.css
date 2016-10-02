@@ -47,7 +47,7 @@ padding:0;*/
 padding:5px;
  background-color:#E5DD9F;
  display:inline-block;
-  border:dotted 2px red;
+  border:dotted 2px #a7427c;
 }
 
 /*toolbarstyles*/
@@ -74,9 +74,16 @@ padding:5px;
   -moz-box-shadow: 0 0 5px 2px #f00; 
 }
 
+
+.glow:hover {
+  box-shadow: 0 0 5px 2px #a7427c;
+  -webkit-box-shadow: 0 0 5px 2px #a7427c; 
+  -moz-box-shadow: 0 0 5px 2px #a7427c; 
+}
+
 .dottedBorderRed {
   width:100%;
-  border:dotted 2px red;
+  border:dotted 2px #a7427c;
 }
 
 .siteListDropDownSelected {
