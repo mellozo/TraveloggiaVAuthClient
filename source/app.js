@@ -1,7 +1,7 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics'])
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics']);
 
 // consider file path from the start page AngularMain.html
 angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analyticsProvider) {
@@ -77,15 +77,18 @@ angularTraveloggia.constant("isEditing", "IS_EDITING")
 
 angularTraveloggia.run(function ($rootScope) {
     $rootScope.$on('$locationChangeSuccess', function (event, url, oldUrl, state, oldState) {
-       
-        $rootScope.selectedState = {
-            mapSelected: (url.lastIndexOf("/")==url.length-1 || url.indexOf("/Map")>0) ? true : false,
-            albumSelected: url.indexOf("/Album" ) > 0 ? true : false,
-            journalSelected: url.indexOf("/Journal")>0 ? true : false,
-            siteSelected: url.indexOf("/Site" )>0? true : false,
-            mapListSelected: url.indexOf("/MapList") >0  ? true : false,
-            sitelistSelected:url.indexOf("/SiteList")>0 ? true : false,
-        };
+    
+
+            $rootScope.selectedState = {
+                mapSelected: (url.lastIndexOf("/") == url.length - 1 || url.indexOf("/Map") > 0) ? true : false,
+                albumSelected: url.indexOf("/Album") > 0 ? true : false,
+                journalSelected: url.indexOf("/Journal") > 0 ? true : false,
+                siteSelected: url.indexOf("/Site") > 0 ? true : false,
+                mapListSelected: url.indexOf("/MapList") > 0 ? true : false,
+                sitelistSelected: url.indexOf("/SiteList") > 0 ? true : false,
+                signInSelected: url.indexOf("/SignIn")>0 ? true:false
+            };
+      
        
     });
 });
