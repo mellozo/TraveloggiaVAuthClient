@@ -35,10 +35,14 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
         },
 
         getMaps: function (memberID) {
+          
             var endpoint = baseURL + "/api/Maps/" + memberID;
             var config = {
                 method: "get",
-                url:endpoint
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
             return $http(config);
         },
@@ -48,7 +52,10 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             var endpoint = baseURL + "/api/MapList/" + memberID;
             var config = {
                 method: "get",
-                url: endpoint
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
             return $http(config);
         },
@@ -57,7 +64,10 @@ angularTraveloggia.factory('DataTransportService', function ($http,$q) {
             var endpoint = baseURL + "/api/SelectMap/" + mapID;
             var config = {
                 method: "get",
-                url: endpoint
+                url: endpoint,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
             return $http(config);
         },

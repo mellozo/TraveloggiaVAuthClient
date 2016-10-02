@@ -76,12 +76,12 @@
     <Content Include="common\ToolbarController.js" />
     <Content Include="css\lib\bootstrap-3.3.7.css" />
     <Content Include="css\lib\bootstrap-3.3.7.min.css" />
-    <Content Include="css\lib\marc Antoine Charpentierdownload.jpg" />
     <Content Include="css\lib\textAngular.css" />
     <Content Include="css\TraveloggiaStyles.css" />
     <Content Include="diagnostics\Monitor.html" />
     <Content Include="diagnostics\MonitorController.js" />
     <Content Include="image\anchor.png" />
+    <Content Include="image\calmWater.jpg" />
     <Content Include="image\compass.gif" />
     <Content Include="image\email.png" />
     <Content Include="image\fb.png" />
@@ -89,7 +89,6 @@
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
     <Content Include="image\lightgreen.jpg" />
-    <Content Include="image\Charpentier.jpg" />
     <Content Include="image\minus.png" />
     <Content Include="image\pencil.png" />
     <Content Include="image\plus.png" />
