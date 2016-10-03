@@ -23,10 +23,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         };
 
         $scope.portaitImageStyle = {
-            "height": heightMinusPad
+            "height": heightMinusPad,
+ "max-width": widthMinusBorderBackground
         }
 
-        $scope.whateverImageStyle = {
+        $scope.whateverStyle = {
             "max-height": heightMinusPad,
             "max-width": widthMinusBorderBackground
         }
@@ -40,16 +41,15 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         };
 
         $scope.portaitImageStyle = {
-            "height": heightMinusPad
-        }
-
-        $scope.whateverImageStyle = {
-            "max-height": heightMinusPad,
+            "height": heightMinusPad,
             "max-width": widthMinusPad
         }
 
-
-
+        $scope.whateverStyle = {
+            "max-height": heightMinusPad,
+            "max-width": widthMinusPad
+         
+        }
 
     }
     else {// PREVIEW 
@@ -109,58 +109,112 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             function (error) { })
     }
 
-    $scope.dontAsk = function (e, orientationID) {
-        var loadedImage = e.target;
-        // landscape
-        if (loadedImage.height < loadedImage.width) {
 
-                    if ($location.path() == "/Photo")
-                        $scope.whateverImageStyle = {
-                            "width": widthMinusPad
-                        }
-                    if ($location.path() == "/Album") {
-                        var scrollContainer = $window.document.getElementById("albumScrollContainer")
-                        var scrollWidth = scrollContainer.offsetWidth - scrollContainer.clientWidth;
-                        var widthMinusPadScroll = widthMinusPad - scrollWidth;
-                        var widthMinusBorderBackground = widthMinusPadScroll - 14;
-                        $scope.whateverImageStyle = {
-                            "width": widthMinusBorderBackground
-                        }
-                    }
-        }
-        else if ( loadedImage.height > loadedImage.width)//portrait
-           
-                $scope.whateverImageStyle = {
-                    "height": heightMinusPad
-                }
-       
-       
-            
+
+
+
+
+    $scope.dontAsk = function (event,Photo) {
+        var loadedImage = event.target;
+        var origH = loadedImage.height;
+        var origW = loadedImage.width;
+        var maxH = heightMinusPad;
+        var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad
+       var currentStyle = calculateAspectRatio(origH, origW, maxH, maxW)
+       Photo.renderStyle = currentStyle;
+
     }
+
+
+
+    var calculateAspectRatio = function (origH, origW, maxH, maxW) {
+      
+
+        var orientation = (origH >= origW) ? "portrait" : "landscape";
+        switch (orientation) {
+
+            case "landscape":
+                var landscapeWidth = maxW;
+                var lStyle = {"width":landscapeWidth}
+                var calculatedHeight = (origH * maxW) / origW;
+                if (calculatedHeight > maxH) {
+                    var calculatedWidth = (maxH * origW) / origH;
+                    landscapeWidth = Math.round(calculatedWidth);
+                }
+               return lStyle;
+               $scope.whateverStyle.width = landscapeWidth;
+                break;
+
+            case "portrait":
+                var portraitHeight = maxH;
+                var portraitWidth = null;
+        
+                var pStyle = {
+                    "height": portraitHeight,
+                    "width":portraitWidth
+                }
+                var calculatedWidth = (maxH * origW) / origH;
+                
+                if (calculatedWidth > maxW) {
+                    var calculatedHeight = (origH * maxW) / origW;
+                    portraitHeight = Math.round(calculatedHeight);
+                    portraitWidth = maxW;
+                }
+                else
+                    portraitWidth = calculatedWidth;
+
+              return pStyle;
+                $scope.whateverStyle.height = pStyle;
+                break;
+        }
+    }
+
 
     // rotates image if nescessary 
     $scope.onImageLoad = function (e, orientationID) {
         var loadedImage = e.target;
         var degrees = 0;
+        var maxHeight =0
+        var maxWidth = 0
+        if ($location.path() == "/Album") {
+            var scrollContainer = $window.document.getElementById("albumScrollContainer")
+            var scrollWidth = scrollContainer.offsetWidth - scrollContainer.clientWidth;
+            var widthMinusPadScroll = widthMinusPad - scrollWidth;
+            var widthMinusBorderBackground = widthMinusPadScroll - 14;
+            maxHeight = heightMinusPad;
+            maxWidth = widthMinusBorderBackground;
 
-        if($location.path() =="/Album" || $location.path() =="/Photo")
-            var maxHeight = heightMinusPad;
+            }
+        else if ($location.path()=="/Photo"){
+            maxHeight = heightMinusPad;
+            maxWidth = widthMinusPad;
+        }
+          
         else
-            var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth *.20)
+             maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth *.20)
 
         var scaledWidth = maxHeight;
         var height = loadedImage.height;
         var width = loadedImage.width;
         var x;
 
-        //   height/width = x/scaledWidth;
+        //   height/width = x/maxHeight;
       //  height * scaledWidth = x * width;
-        x= (height * scaledWidth)/width;
+        x = (height * scaledWidth) / width;
+        if (x > maxWidth) {
+            var y=0;
+            //height/width =  maxWidth/y
+         //  height * y = maxWidth * width
+            y = (width * maxWidth) / height;
+            scaledWidth = y;
+            x =maxWidth;
+
+        }
         var canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
         var ctx = canvas.getContext("2d");
        ctx.save();
      
-       canvas.width = x;//scaledWidth;
+       canvas.width = x;
         canvas.height =scaledWidth;
        // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
         ctx.restore();

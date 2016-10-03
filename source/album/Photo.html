@@ -7,32 +7,27 @@
 
     <div ng-if="selectedPhoto.StorageURL !=null ">
 
-        <div ng-if="selectedPhoto.orientationID !=null && selectedPhoto.orientationID < 5" >
-            <img ng-src="{{  imageServer + imagePath + selectedPhoto.FileName}}"
-                ng-style="landscapeImageStyle">
+        <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID < 5" >
+            <img ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher}}"
+                  ng-style="{{whateverStyle}}"/>
         </div>
 
-         <div ng-if="selectedPhoto.orientationID==null " style="border:1px solid white">
-            <img 
-                on-load="dontAsk($event, selectedPhoto.orientationID)"
-                ng-src="{{  imageServer + imagePath + selectedPhoto.FileName}}"
-               ng-style="whateverImageStyle">
-        </div>
+        
 
 
         <div ng-if="selectedPhoto.orientationID != null && selectedPhoto.orientationID >4 " >
+
             <div ng-if="Capabilities.alreadyKnowsHow==false">
                     <img on-load="onImageLoad($event, selectedPhoto.orientationID)"
                             style="position:absolute;visibility:hidden"
-                            ng-style="portraitImageStyle"
+                            ng-style="{{whateverStyle}}"
                             src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
                     <canvas id="canvas" style="display:block;"></canvas>
-
             </div>
+
             <div ng-if="Capabilities.alreadyKnowsHow==true" >
                 <img 
-                    on-load="dontAsk($event, selectedPhoto.orientationID)"
-                    ng-style="whateverImageStyle"
+                     ng-style="{{portraitImageStyle}}"
                      ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
             </div>
 
@@ -43,14 +38,9 @@
 
 
     <div ng-if="selectedPhoto.StorageURL==null " >
-
-            <div ng-if="selectedPhoto.orientationID == null" >
                     <img 
-                        on-load="dontAsk($event, selectedPhoto.orientationID)"
-                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName}}"
-                         ng-style="whateverImageStyle" />
-            </div>
-
+                        ng-style="{{whateverStyle}}"
+                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName +imageRefresher}}"  />          
     </div>
 
 

@@ -47,26 +47,21 @@
 
 
 
-                        <div ng-if="Photo.StorageURL !=null " class="imageFrame">
+                        <div ng-if="Photo.StorageURL !=null " class="imageFrame" >
                            
-                                   <div ng-if="Photo.orientationID != null && Photo.orientationID < 5"  >
+                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                                 ng-style="landscapeImageStyle">
+                                                ng-style="{{whateverStyle}}">
                                    </div>
 
-                                   <div ng-if="Photo.orientationID==null " >
-                                        <img
-                                               on-load="dontAsk($event, Photo.orientationID)"
-                                             ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                            ng-style="whateverImageStyle">
-                                    </div>
+                              
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
 
                                                     <div ng-if="Capabilities.alreadyKnowsHow ==false">
-                                                        <img on-load="onImageLoad($event, Photo.orientationID)"
-                                                             style="position:absolute;visibility:hidden"
-                                                             ng-style="portraitImageStyle"
+                                                        <img  style="position:absolute;visibility:hidden"
+                                                            on-load="onImageLoad($event, Photo.orientationID)"
+                                                          
                                                              ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
                                                         <canvas id="canvas" style="display:block;"></canvas>
 
@@ -74,7 +69,7 @@
 
                                                     <div ng-if="Capabilities.alreadyKnowsHow == true">
                                                         <img 
-                                                            ng-style="whateverImageStyle"
+                                                            ng-style="{{whateverStyle}}"
                                                              ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
                                                     </div>
 
@@ -86,11 +81,14 @@
 
 
 
-                        <div ng-if="Photo.StorageURL==null " class="imageFrame">
-                                <div ng-if="Photo.orientationID == null">
-                                        <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                                 ng-style="whateverImageStyle" />
-                                </div>
+                        <div ng-if="Photo.StorageURL==null " class="imageFrame" style="border:1px solid white">
+                                
+                                        <img 
+                                         
+                                            ng-style="{{whateverStyle}}"
+                                            ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
+                                                 />
+                               
                         </div>
 
 
