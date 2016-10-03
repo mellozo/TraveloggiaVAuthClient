@@ -3,51 +3,74 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
 
     $scope.authorizationState = SharedStateService.getAuthorizationState();
-   // $scope.setDimensions();
-    var toolbarHeight = 62;// $window.document.getElementById("toolbarRow");
-    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
-    $scope.scrollWindowStyle = {
-        "height": viewFrameHeight,
-       "max-height": viewFrameHeight
-    }
+    var toolbarHeight = 66;
+    $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
+    $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
+    var widthMinusPad = $scope.viewFrameWidth - 32;
+    var heightMinusPad = $scope.viewFrameHeight - 32;
 
-    if ($location.path() == "/Album" || $location.path() == "/Photo") {
-                $scope.viewFrameWidth = $window.document.getElementById("viewFrame").offsetWidth;
-                $scope.viewFrameHeight = $window.document.getElementById("viewFrame").offsetHeight;
-                // this is funky and will change
-                $scope.vheighty = $window.document.getElementById("viewFrame").offsetHeight * .8;
-                var vhseventysix = $scope.viewFrameHeight * .76;
-                var vweighty = $scope.viewFrameWidth - 75;//* .8;
-                var vheighty = $scope.viewFrameHeight ;//* .8;
-                $scope.landscapeImageStyle = {
-                    "max-height": vhseventysix,
-                    "max-width": vweighty,
-                    "width":vweighty
-                };
-                $scope.portaitImageStyle = {
-                    "height": "auto",
-                    "max-width:": vheighty
-                }
+    if ($location.path() == "/Album") {
+        // offset includes the border and scrollbars - not the margin
+        // clientWidth is just the inner content - not scroll bars
+        var scrollContainer = $window.document.getElementById("albumScrollContainer")
+        var scrollWidth = scrollContainer.offsetWidth -scrollContainer.clientWidth;
+        var widthMinusPadScroll = widthMinusPad - scrollWidth ;
+        var widthMinusBorderBackground = widthMinusPadScroll - 14;
+
+        $scope.landscapeImageStyle = {
+            "max-height": heightMinusPad,
+            "width": widthMinusBorderBackground
+        };
+
+        $scope.portaitImageStyle = {
+            "height": heightMinusPad
+        }
+
+        $scope.whateverImageStyle = {
+            "max-height": heightMinusPad,
+            "max-width": widthMinusBorderBackground
+        }
+
+    }
+    else if ($location.path() == "/Photo") {
+
+        $scope.landscapeImageStyle = {
+            "max-height": heightMinusPad,
+            "width": widthMinusPad
+        };
+
+        $scope.portaitImageStyle = {
+            "height": heightMinusPad
+        }
+
+        $scope.whateverImageStyle = {
+            "max-height": heightMinusPad,
+            "max-width": widthMinusPad
+        }
+
+
+
+
     }
     else {// PREVIEW 
-                $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
-                $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
-                $scope.landscapeImageStyle = {
-                    "height": Math.round($scope.viewFrameHeight),
-                    "width": "auto"
-                };
-                $scope.portaitImageStyle = {
-                    "width": Math.round($scope.viewFrameWidth),
-                    "height": "auto"
-                }
+        $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
+        $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
+        $scope.landscapeImageStyle = {
+            "height": Math.round($scope.viewFrameHeight),
+            "width": "auto"
+        };
+        $scope.portaitImageStyle = {
+            "width": Math.round($scope.viewFrameWidth),
+            "height": "auto"
+        }
 
-                $scope.previewWidthStyle = {
-                    "max-width": $scope.viewFrameWidth
-                }
-                $scope.previewImageStyle = {
-                    "height": $scope.viewFrameHeight,
-                     "max-width": $scope.viewFrameWidth
-                }
+        $scope.previewWidthStyle = {
+            "max-width": $scope.viewFrameWidth
+        }
+        $scope.previewImageStyle = {
+            "height": $scope.viewFrameHeight,
+            "max-width": $scope.viewFrameWidth
+        }
     }
   
   
@@ -86,7 +109,34 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             function (error) { })
     }
 
+    $scope.dontAsk = function (e, orientationID) {
+        var loadedImage = e.target;
+        // landscape
+        if (loadedImage.height < loadedImage.width) {
 
+                    if ($location.path() == "/Photo")
+                        $scope.whateverImageStyle = {
+                            "width": widthMinusPad
+                        }
+                    if ($location.path() == "/Album") {
+                        var scrollContainer = $window.document.getElementById("albumScrollContainer")
+                        var scrollWidth = scrollContainer.offsetWidth - scrollContainer.clientWidth;
+                        var widthMinusPadScroll = widthMinusPad - scrollWidth;
+                        var widthMinusBorderBackground = widthMinusPadScroll - 14;
+                        $scope.whateverImageStyle = {
+                            "width": widthMinusBorderBackground
+                        }
+                    }
+        }
+        else if ( loadedImage.height > loadedImage.width)//portrait
+           
+                $scope.whateverImageStyle = {
+                    "height": heightMinusPad
+                }
+       
+       
+            
+    }
 
     // rotates image if nescessary 
     $scope.onImageLoad = function (e, orientationID) {
@@ -94,7 +144,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var degrees = 0;
 
         if($location.path() =="/Album" || $location.path() =="/Photo")
-            var maxHeight = $window.innerHeight -68;// * .76
+            var maxHeight = heightMinusPad;
         else
             var maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth *.20)
 
@@ -204,17 +254,24 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     var albumRedraw = debounce(500, function () {
-        if ($location.path() != "/Album")
+        if ($location.path() != "/Album" && $location.path()!="/Photo")
             return;
-
+       // alert("resize called")
         $window.location.reload();
     });
+
+    //var albumHorizontal = debounce(500, function () {
+    //    if ($location.path() != "/Album" && $location.path() != "/Photo")
+    //        return;
+    //    alert("orientation called")
+    //    $window.location.reload();
+    //});
 
 
     if ($scope.Capabilities.cantResize == false)
         $window.addEventListener("resize", albumRedraw)
 
-
+    //$window.addEventListener("orientationchange", albumHorizontal)
   
     // loading the data if they change sites but stay on the page
     $scope.$watch(

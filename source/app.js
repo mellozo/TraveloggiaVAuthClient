@@ -93,6 +93,8 @@ angularTraveloggia.run(function ($rootScope) {
     });
 });
 
+
+// used by the photos on load to determine size and orientation
 angularTraveloggia.directive('onLoad', ['$parse', function ($parse) {
      return {
          restrict: 'A',

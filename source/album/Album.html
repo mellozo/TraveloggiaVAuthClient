@@ -1,5 +1,6 @@
 ﻿<script src="../lib/load-image.all.min.js"></script>
-<div class=" greenMud"   ng-controller="AlbumController" >
+<div  ng-style="scrollWindowStyle"  class=" greenMud" id="albumScrollContainer"
+    style="padding:16px;overflow-y:scroll;-webkit-overflow-scrolling: touch;"  ng-controller="AlbumController" >
 
 
 
@@ -37,20 +38,28 @@
 </div>
 
 
-<div   style="margin-top:0px;padding-top:0px;">
-    <div  
-           ng-style="scrollWindowStyle" 
-        style="margin-top:0px;padding-top:0px;overflow-y:scroll;-webkit-overflow-scrolling: touch;" id="photoListContainer"> 
+
+    <div  style="margin:0px;padding:0px" id="photoListContainer"> 
    
 
-                <div ng-repeat="Photo in PhotoList" style="margin-top:15px;margin-left:5px;margin-right:auto;padding-top:0px;">
+                <div ng-repeat="Photo in PhotoList" style="margin-top:15px;padding-top:0px;">
                     <a href="" ng-click="selectPhoto(Photo)">
+
+
+
                         <div ng-if="Photo.StorageURL !=null " class="imageFrame">
                            
-                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
+                                   <div ng-if="Photo.orientationID != null && Photo.orientationID < 5"  >
                                             <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
                                                  ng-style="landscapeImageStyle">
                                    </div>
+
+                                   <div ng-if="Photo.orientationID==null " >
+                                        <img
+                                               on-load="dontAsk($event, Photo.orientationID)"
+                                             ng-src="{{  imageServer + imagePath + Photo.FileName}}"
+                                            ng-style="whateverImageStyle">
+                                    </div>
 
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
 
@@ -65,7 +74,7 @@
 
                                                     <div ng-if="Capabilities.alreadyKnowsHow == true">
                                                         <img 
-                                                             style="max-width:90%;visibility:visible"
+                                                            ng-style="whateverImageStyle"
                                                              ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
                                                     </div>
 
@@ -77,26 +86,20 @@
 
 
 
-
-
-
-
-
-
-
-
                         <div ng-if="Photo.StorageURL==null " class="imageFrame">
                                 <div ng-if="Photo.orientationID == null">
                                         <img ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
-                                                 ng-style="landscapeImageStyle" />
+                                                 ng-style="whateverImageStyle" />
                                 </div>
                         </div>
+
+
                     </a>
                     <div> {{Photo.FileName}}</div>
                 </div>
 
     </div>
-</div>
+
 
 </div>
 
