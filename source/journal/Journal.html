@@ -2,22 +2,14 @@
 
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
-<div  ng-controller="JournalController" style="width:100%">
+<div  ng-controller="JournalController" 
+            ng-style="scrollWindowStyle"
+            style="overflow-y:scroll"
+            class ="papyrus"> 
 
-   <!-- <div id="toolbarRow">
-        <div ng-include="'common/ToolBar.html'"></div>
-    </div>-->
 
- 
-    
-    <div  >
-        <div 
-          ng-style="scrollWindowStyle"
-            style="padding-right:0px;margin-right:0px;overflow-y:scroll"> 
-            <div class="panel panel-default "   style="margin-bottom:0px">
-
-         
-                <div class="panel-body papyrus" >
+            <div class="panel panel-default "   style="border:none;margin-bottom:0px">
+                <div class="panel-body papyrus"  >
                  
                     <div class="navbar navbar-default" style="background:transparent" ng-hide="JournalEntries.length ==0 && stateMachine.state == 'READ_ONLY'" >
 
@@ -101,7 +93,7 @@
             </div><!--end panel body-->
 
             </div>
-    </div>   
+    
         <script>
 // hack to close the burger after selection, 
             $(document).ready(function () {
@@ -112,6 +104,6 @@
                // $.support.transition = false
             });
         </script>
-</div>
+
 
 </div>
