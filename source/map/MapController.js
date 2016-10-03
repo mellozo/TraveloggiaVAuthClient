@@ -111,7 +111,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
 
-
+   
 
   var loadDefaultMap = function () {
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(

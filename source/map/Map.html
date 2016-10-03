@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div ng-cloak class="mapLabel" id="mapNameDiv" style="left:100px;top:40px;">
+    <div ng-cloak class="mapLabel" id="mapNameDiv" style="left:85px;top:40px;">
         {{MapRecord.MapName}}
     </div>
 
@@ -43,11 +43,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
            
                 <div id="collapseOne" class="panel-collapse collapse">
                      <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
-                     <!--   <div class="panel-heading" style="background-color:#8EBBDA;height:45px;">
-                              <h4 class="panel-title listHeader" >
-                           
-                              </h4>
-                        </div>-->
+                   
 
                         <div class="panel-body" style="padding-right:25px;padding-left:25px;">
                                          <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;padding:4px;font-size:20px;" />   
@@ -84,7 +80,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
     </confirm-cancel>
 
 
-    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel">
+    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel" style="bottom:5px">
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
         <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
         <a  ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
