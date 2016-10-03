@@ -63,10 +63,10 @@
 
 // goAlbum
     $scope.navigateWindowTwo = function () {
-        if ($scope.preview.windowTwo == "album/AlbumPreview.html") {
-          
-            $scope.preview.windowTwo= "map/MapPreview.html";
+        if ($scope.preview.windowTwo == "album/AlbumPreview.html" || $location.path()=="/Photo") {
             $scope.preview.windowOne = "site/SitePreview.html";
+            $scope.preview.windowTwo= "map/MapPreview.html";
+          
             $scope.preview.windowThree = "journal/JournalPreview.html";
             $location.path("/Album").search({});
         }
