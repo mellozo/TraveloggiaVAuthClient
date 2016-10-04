@@ -122,8 +122,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad;
         var w = calculateAspectRatio(origH, origW, maxH, maxW) + "px"
         loadedImage.style.width = w;
-     
-
+        var container = loadedImage.parentNode.parentNode;
+        container.style.visibility="visible"
     }
 
 

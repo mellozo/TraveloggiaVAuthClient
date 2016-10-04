@@ -47,11 +47,13 @@
 
 
 
-                        <div ng-if="Photo.StorageURL !=null " class="imageFrame" >
+                        <div ng-if="Photo.StorageURL !=null " class="imageFrame">
                            
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
-                                            <img ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                                   on-load="dontAsk($event)"">
+                                            <img 
+                                                   
+                                                    ng-src="{{  imageServer + imagePath + Photo.FileName}}"
+                                                    on-load="dontAsk($event)"">
                                    </div>
 
                               
@@ -80,12 +82,14 @@
 
 
 
-                        <div ng-if="Photo.StorageURL==null " class="imageFrame" >
-                                        <img 
+                        <div ng-if="Photo.StorageURL==null " class="imageFrame"  style="visibility:hidden">
+                            <div>
+                                        <img
+                                           
                                             on-load="dontAsk($event)"
                                             ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
                                                  />
-                               
+                               </div>
                         </div>
 
 
