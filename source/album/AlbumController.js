@@ -29,7 +29,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
         $scope.whateverStyle = {
             "max-height": heightMinusPad,
-            "max-width": widthMinusBorderBackground
+            "width": widthMinusBorderBackground
         }
 
     }
@@ -47,7 +47,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
         $scope.whateverStyle = {
             "max-height": heightMinusPad,
-            "max-width": widthMinusPad
+            "width": widthMinusPad
          
         }
 
@@ -114,25 +114,23 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
 
-    $scope.dontAsk = function (event,Photo) {
+    $scope.dontAsk = function (event) {
         var loadedImage = event.target;
         var origH = loadedImage.height;
         var origW = loadedImage.width;
         var maxH = heightMinusPad;
-        var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad
-       var currentStyle = calculateAspectRatio(origH, origW, maxH, maxW)
-       Photo.renderStyle = currentStyle;
+        var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad;
+        var w = calculateAspectRatio(origH, origW, maxH, maxW) + "px"
+        loadedImage.style.width = w;
+     
 
     }
 
 
 
     var calculateAspectRatio = function (origH, origW, maxH, maxW) {
-      
-
         var orientation = (origH >= origW) ? "portrait" : "landscape";
         switch (orientation) {
-
             case "landscape":
                 var landscapeWidth = maxW;
                 var lStyle = {"width":landscapeWidth}
@@ -141,7 +139,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     var calculatedWidth = (maxH * origW) / origH;
                     landscapeWidth = Math.round(calculatedWidth);
                 }
-               return lStyle;
+                return landscapeWidth
                $scope.whateverStyle.width = landscapeWidth;
                 break;
 
@@ -163,7 +161,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 else
                     portraitWidth = calculatedWidth;
 
-              return pStyle;
+                return portraitWidth;
                 $scope.whateverStyle.height = pStyle;
                 break;
         }

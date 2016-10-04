@@ -8,8 +8,9 @@
     <div ng-if="selectedPhoto.StorageURL !=null ">
 
         <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID < 5" >
-            <img ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher}}"
-                  ng-style="{{whateverStyle}}"/>
+            <img 
+                    ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher}}"
+                    on-load="dontAsk($event)"/>
         </div>
 
         
@@ -18,16 +19,16 @@
         <div ng-if="selectedPhoto.orientationID != null && selectedPhoto.orientationID >4 " >
 
             <div ng-if="Capabilities.alreadyKnowsHow==false">
-                    <img on-load="onImageLoad($event, selectedPhoto.orientationID)"
+                    <img 
+                            on-load="onImageLoad($event, selectedPhoto.orientationID)"
                             style="position:absolute;visibility:hidden"
-                            ng-style="{{whateverStyle}}"
                             src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
                     <canvas id="canvas" style="display:block;"></canvas>
             </div>
 
             <div ng-if="Capabilities.alreadyKnowsHow==true" >
                 <img 
-                     ng-style="{{portraitImageStyle}}"
+                     on-load="dontAsk($event)"
                      ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
             </div>
 
@@ -39,7 +40,7 @@
 
     <div ng-if="selectedPhoto.StorageURL==null " >
                     <img 
-                        ng-style="{{whateverStyle}}"
+                         on-load="dontAsk($event)"
                          ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName +imageRefresher}}"  />          
     </div>
 
