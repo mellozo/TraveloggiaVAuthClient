@@ -65,16 +65,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
             (function attachEventHandlers(site) {
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    SharedStateService.setSelected("Site", site);
+                    
                     $scope.$apply(function () {// $location.path("/Album")
+                        SharedStateService.setSelected("Site", site);
                         $scope.navigateWindowTwo();
             })
                 });
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
-                    SharedStateService.setSelected("Site", site);                   
+                               
                     $scope.$apply(function () {
-                        var currentPath = $location.path();
-                        $location.path(currentPath).search({});
+                        SharedStateService.setSelected("Site", site);
+                        //var currentPath = $location.path();
+                        //$location.path(currentPath).search({});
                     });
                 });
             })(sites[i], $scope, $location)
@@ -85,7 +87,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             else 
                 $timeout(function () {
                    map.entities.push(pin);
-                })
+                },100)
         }
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
