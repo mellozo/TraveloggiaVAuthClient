@@ -1,14 +1,15 @@
-﻿<div   ng-style="scrollWindowStyle"  ng-controller="AlbumController" style="background-color:#4a4646;padding:16px">
+﻿<div   ng-style="scrollWindowStyle"  ng-controller="AlbumController" style="background-color:#4a4646;padding:16px;overflow-y:scroll">
 
    
 
     <div  ng-show="selectedPhoto != null">
      
 
-    <div ng-if="selectedPhoto.StorageURL !=null ">
+    <div ng-if="selectedPhoto.StorageURL !=null " style="visibility:hidden">
 
         <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID < 5" >
             <img 
+            
                     ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher}}"
                     on-load="dontAsk($event)"/>
         </div>
@@ -51,18 +52,42 @@
 
 </div>
 
-   <!-- <div class="row" >
-        <div class="col-xs-12">
+    <div style="margin-top:16px;margin-bottom:16px;">
+      
             
-                <div  ng-show="authorizationState == 'CAN_EDIT'"  style="padding:5px;">
+         <div class="form-group">
+                    <div class="infoText reverseText" >Date Taken:</div>
+                    <input type="text" value="{{selectedPhoto.DateTaken| date: 'MM/dd/yyyy hh:mm:ss'}}" class="form-control" id="Date"/>
+                </div>
+         <div class="form-group">
+                    <div class="infoText reverseText">Caption:</div>
+                    <input type="text" ng-model="selectedPhoto.Caption" class="form-control" id="Caption">
+                </div>
+         <div class="form-group">
+                    <div class="infoText reverseText">File Name:</div>
+                    <input type="text" ng-model="selectedPhoto.FileName" class="form-control" id="Caption">
+                </div>
+           <div ng-show="stateMachine.state=='CAN_EDIT' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
+                        <a href="" ng-click="updatePhoto()">Save</a>
+                    </div>
+
+          <div ng-show="stateMachine.state=='CAN_EDIT' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                          <a   href="" ng-click="deletePhoto()" >Delete</a>
+                    </div>
+
+<!--    <div class="bluenav">
+            <div  ng-show="stateMachine.state== 'CAN_EDIT'" class="clickableDiv" >
                     <a href="" ng-click="deletePhoto()">
                         <img src="../image/minus.png" style="height:40px;width:40px;" />
                     </a>
                 </div>
-          
+
+    </div>
+          -->
+
            
-        </div>
-    </div>-->
+        
+    </div>
 </div>
   
 

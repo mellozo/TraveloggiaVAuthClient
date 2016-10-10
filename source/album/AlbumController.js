@@ -2,7 +2,11 @@
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
 
-    $scope.authorizationState = SharedStateService.getAuthorizationState();
+   
+    $scope.stateMachine = {
+        state: SharedStateService.getAuthorizationState()
+    }
+
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
@@ -24,7 +28,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
         $scope.portaitImageStyle = {
             "height": heightMinusPad,
- "max-width": widthMinusBorderBackground
+            "max-width": widthMinusBorderBackground
         }
 
         $scope.whateverStyle = {
@@ -481,7 +485,21 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         if (exif != null) {
             photoRecord.orientation = exif.orientation;
             photoRecord.orientationID = orientationID;
-            photoRecord.DateTaken = exif.DateTimeOriginal;
+
+            // "YYYY:MM:DD HH:MM:SS" with time shown in 24-hour format, 
+            // and the date and time separated by one blank character (hex 20).
+            // will somebody just shoot me?
+            var stringDateMess = exif.DateTimeOriginal;
+            var justDate = stringDateMess.split(" ")[0];
+            var ymd = justDate.split(":");
+            var justTime = stringDateMess.split(" ")[1];
+            var jsMonth = parseInt(ymd[1]) - 1;
+            var hms = justTime.split(":");
+         //   var hours = hms[0] > 12? parseInt(hms[0])-12:hms[0]
+            var jsDate = new Date(ymd[0], jsMonth, ymd[2], hms[0], hms[1], hms[2]);
+            var jsDateUTC = jsDate.toUTCString();
+
+            photoRecord.DateTaken = jsDateUTC;
         }
         return photoRecord;
     }
@@ -494,6 +512,27 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+    $scope.UTCtoLocal = function (utc) {
+        var localDate = Date.parse(utc)
+        return localDate;
+
+    }
+
+    $scope.updatePhoto = function () {
+        DataTransportService.updatePhoto($scope.selectedPhoto).then(
+             function (result) {
+                 $scope.systemMessage.text = " photo updated successfully";
+                 $scope.systemMessage.activate();
+             },
+              function (error) {
+                  $scope.systemMessage.text = "error updating photo record";
+                  $scope.systemMessage.activate();
+              }
+             );
+
+    }
+
+   
     var uploadFile = function () {
         var memberID = SharedStateService.getAuthenticatedMemberID();
         var mapName = SharedStateService.getSelectedMapName();

@@ -23,6 +23,11 @@ body {
     font-family:Centaur;
 }
 
+.reverseText {
+    color:#eee7e7;
+    font-weight:200;
+}
+
 
 .readableText {
     font-size:2.5em;
@@ -130,21 +135,25 @@ a:link {
     font-weight:500;
 margin-left:5px;
 margin-right:5px;
-  color: white;
+  color: #a7427c;
   opacity:1.0;
 }
 /* visited link */
 a:visited {
-  color: hotpink;
+  color: #a7427c;
 }
 /* mouse over link */
 a:hover {
 font-weight: bold ;
+ color: #a7427c;
 }
 /* selected link */
 a:active {
   color: white;
 }
+
+
+
 .lightgreen {
   background-image: url("../image/lightgreen.jpg");
   background-size: cover;
@@ -286,12 +295,6 @@ left:5px;
     
 }
 
-
-#photoList a:link { color: purple;}
-#photoList a:visited {color: blue;}
-#photoList a:hover {color: red;}
-#photoList a:active {color: yellow;}
-
 @media (max-width: 768px) {
 
     .desktop {
@@ -317,15 +320,3 @@ left:5px;
     
 }
 
-
-/*.signin{
-
-    background-color:@seagreen;
-    height:300px;
-    padding:1px;
-}
-
-.monkey{
-
-  background-color:brown;  
-}*/
