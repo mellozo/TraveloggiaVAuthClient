@@ -5,15 +5,16 @@
     <div  ng-show="selectedPhoto != null">
      
 
-    <div ng-if="selectedPhoto.StorageURL !=null " style="visibility:hidden">
+    <div ng-if="selectedPhoto.StorageURL !=null " >
 
+        <div style="visibility:hidden">
         <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID < 5" >
             <img 
             
-                    ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher}}"
+                    ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher.queryString}}"
                     on-load="dontAsk($event)"/>
         </div>
-
+        </div>
         
 
 
@@ -21,19 +22,21 @@
 
             <div ng-if="Capabilities.alreadyKnowsHow==false">
                     <img 
+                         style="position:absolute;visibility:hidden"
                             on-load="onImageLoad($event, selectedPhoto.orientationID)"
-                            style="position:absolute;visibility:hidden"
-                            src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher}}" />
+                           
+                           ng-src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher.queryString}}" />
                     <canvas id="canvas" style="display:block;"></canvas>
             </div>
 
-            <div ng-if="Capabilities.alreadyKnowsHow==true" >
-                <img 
-                     on-load="dontAsk($event)"
-                     ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
-            </div>
+               <div style="visibility:hidden">
+                        <div ng-if="Capabilities.alreadyKnowsHow==true" >
+                            <img 
+                                 on-load="dontAsk($event)"
+                                 ng-src="{{  imageServer + imagePath + selectedPhoto.FileName }}" />
+                        </div>
+          </div>
 
-          
         </div>
     </div>
 
@@ -42,7 +45,7 @@
     <div ng-if="selectedPhoto.StorageURL==null " >
                     <img 
                          on-load="dontAsk($event)"
-                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName +imageRefresher}}"  />          
+                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName +imageRefresher.queryString}}"  />          
     </div>
 
 
