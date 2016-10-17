@@ -16,7 +16,7 @@
 
 
 
-<div id="mainContainer"   ng-controller="MapController"  >
+<div id="mainContainer"   ng-controller="MapController" style="position:relative" ng-style="scrollWindowStyle">
  
     <div class="clickableDiv" style="position:absolute;z-index:99" >
         <div ng-cloak ng-show="stateMachine.state=='CAN_EDIT' " class="bluenav" style="padding:2px"
@@ -63,7 +63,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
 
 
 
-       <div ng-hide="systemMessage.loadComplete" style="position:absolute;top:200px;width:100%;background-color:transparent;opacity:.9;z-index:299;
+       <div ng-hide="systemMessage.loadComplete" style="position:absolute;top:50%; margin-top:-160px;width:100%;background-color:transparent;opacity:.9;z-index:299;
                      text-align:center;color:goldenrod;font-size:18px;" >
                                 <img ng-src="image/compass.gif" style="width:110px;height:110px;z-index:91;display:block;margin:auto" />
                                  loading...
@@ -80,7 +80,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
     </confirm-cancel>
 
 
-    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel" style="bottom:5px">
+    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="signInDiv" class="mapLabel" style="position:absolute;display:inline;bottom:50px">
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
         <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
         <a  ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
@@ -91,7 +91,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
 
     <button class="bluenav glow"
                 title="zoom to current location" ng-click="getLocation()"
-                style="border:dotted 2px red;position:absolute;left:50%;margin-left:-25px;height:60px;width:60px;bottom:6%;border-radius:90px">
+                style="border:dotted 2px #a7427c;position:absolute;left:50%;margin-left:-30px;height:60px;width:60px;bottom:90px;border-radius:90px">
         <img src="../image/stars.png" style="z-index:999;height:40px;width:40px;"  />
     </button>    
 
