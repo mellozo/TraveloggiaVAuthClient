@@ -1,10 +1,10 @@
-﻿<div ng-controller="MonitorController" style="background-color:white;">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+﻿<div ng-controller="MonitorController" ng-style="scrollWindowStyle"
+    style="background-color:white;overflow-y:scroll">
+   
+  <div  style="padding:15px;">
             <h3> Diagnostics</h3>
-        </div>
-        <div class="panel-body">
-            <form>
+        
+            <form style="margin-top:30px;margin-bottom:60px;margin-right:15px;margin-left:15px;">
                 <div class="form-group">
                     OS Name
                     <input class="form-control" type="text" value={{Capabilities.currentDevice.osName}} readonly>
@@ -47,6 +47,6 @@
                 </div>
                 <button ng-click="submitIssue()">SUBMIT</button>
             </form>
-            </div>
-        </div>
+        
+  </div>         
 </div>
