@@ -6,7 +6,7 @@
         firstAttempt:($route.current.isCreate != null)?false:true,
         failedSignin: false,
         createAccount: ($route.current.isCreate != null) ? true : false,
-        signedIn: (SharedStateService.getAuthorizationState() ==canEdit) ? true:false
+        signedIn: (SharedStateService.getAuthorizationState() =="CAN_EDIT") ? true:false
     };
    
     VM.authenticate = function () {
