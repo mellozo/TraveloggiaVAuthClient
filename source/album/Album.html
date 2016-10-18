@@ -39,53 +39,42 @@
 
 
 
-    <div  style="margin:0px;padding:0px" id="photoListContainer"> 
+    <div  style="margin:0px;padding:0px;position:relative;width:100%" id="photoListContainer"> 
         <div ng-repeat="Photo in PhotoList" style="margin-top:15px;padding-top:0px;">
             <a href="" ng-click="selectPhoto(Photo)">
 
 
-                        <div ng-if="Photo.StorageURL !=null " class="imageFrame" >
-                           
-                            <div style="visibility:hidden">
-                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5"  >
+                <div ng-if="Photo.StorageURL !=null " class="imageFrame"  >
+                          
+                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5 || Capabilities.alreadyKnowsHow == true"  >
                                             <img 
-                                                    ng-src="{{  imageServer + imagePath + Photo.FileName}}"
-                                                    on-load="dontAsk($event)"">
+                                                 on-load="dontAsk($event)"
+                                                 ng-style="landscapeImageStyle"
+                                                 ng-src="{{  imageServer + imagePath + Photo.FileName}}"  />
                                    </div>
-                            </div>
-                              
+                          
 
-                                    <div ng-if="Photo.orientationID != null && Photo.orientationID > 4" >
-
-                                                    <div ng-if="Capabilities.alreadyKnowsHow ==false">
-                                                        <img  
-                                                                style="position:absolute;visibility:hidden"
-                                                                on-load="onImageLoad($event, Photo.orientationID)"
-                                                                ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
-                                                        <canvas id="canvas" style="display:block;"></canvas>
-                                                    </div>
-
-                                        <div style="visibility:hidden">
-                                                    <div ng-if="Capabilities.alreadyKnowsHow == true">
-                                                        <img 
-                                                                on-load="dontAsk($event)"
-                                                                ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
-                                                    </div>
-                                        </div>
+                                    <div ng-if="Photo.orientationID != null && Photo.orientationID > 4 && Capabilities.alreadyKnowsHow ==false" >                                                                                                    
+                                            <img  
+                                                    style="position:absolute;visibility:hidden"
+                                                    on-load="onImageLoad($event, Photo.orientationID)"
+                                                    ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
+                                            <canvas id="canvas" style="display:block;" 
+                                                    ></canvas>
                                     </div>
-                        </div>
 
 
+                </div>
 
-
-                        <div ng-if="Photo.StorageURL==null " class="imageFrame"  style="visibility:hidden">
+                <div ng-if="Photo.StorageURL==null " class="imageFrame"  >
                             <div>
                                         <img
+                                            ng-style="landscapeImageStyle"
                                             on-load="dontAsk($event)"
                                             ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{Photo.FileName}}"
                                                  />
                                </div>
-                        </div>
+                </div>
 
 
                     </a>

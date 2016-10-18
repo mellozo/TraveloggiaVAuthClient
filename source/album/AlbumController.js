@@ -22,17 +22,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var widthMinusBorderBackground = widthMinusPadScroll - 14;
 
         $scope.landscapeImageStyle = {
-            "max-height": heightMinusPad,
-            "width": widthMinusBorderBackground
+            "width": widthMinusBorderBackground + "px"
         };
 
         $scope.portaitImageStyle = {
             "height": heightMinusPad,
-            "max-width": widthMinusBorderBackground
-        }
-
-        $scope.whateverStyle = {
-            "max-height": heightMinusPad,
             "width": widthMinusBorderBackground
         }
 
@@ -40,20 +34,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     else if ($location.path() == "/Photo") {
 
         $scope.landscapeImageStyle = {
-            "max-height": heightMinusPad,
             "width": widthMinusPad
         };
 
         $scope.portaitImageStyle = {
             "height": heightMinusPad,
-            "max-width": widthMinusPad
+            "width": widthMinusPad
         }
 
-        $scope.whateverStyle = {
-            "max-height": heightMinusPad,
-            "width": widthMinusPad
-         
-        }
 
     }
     else {// PREVIEW 
@@ -127,10 +115,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var origW = loadedImage.width;
         var maxH = heightMinusPad;
         var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad;
-        var w = calculateAspectRatio(origH, origW, maxH, maxW) + "px"
-        loadedImage.style.width = w;
-        var container = loadedImage.parentNode.parentNode;
-        container.style.visibility="visible"
+        var w = calculateAspectRatio(origH, origW, maxH, maxW)
+        if(w != maxW)
+        {
+            w= w + "px"
+            loadedImage.style.width = w;
+        }
+
     }
 
 
@@ -300,7 +291,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 //break;
         }
 
-      
 
 
     }
