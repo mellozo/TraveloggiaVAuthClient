@@ -8,10 +8,10 @@
     <div ng-if="selectedPhoto.StorageURL !=null " >
                  
                     <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID < 5 || Capabilities.alreadyKnowsHow == true" >
-                            <img 
-                                ng-style="landscapeImageStyle"
-                                ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher.queryString}}"
-                                on-load="dontAsk($event)"/>
+                                    <img 
+                                        ng-style="landscapeImageStyle"
+                                        ng-src="{{  imageServer + imagePath + selectedPhoto.FileName+imageRefresher.queryString}}"
+                                        on-load="dontAsk($event)"/>
                     </div>
                   
 
@@ -19,7 +19,7 @@
                                     <img 
                                         style="position:absolute;visibility:hidden"
                                         on-load="onImageLoad($event, selectedPhoto.orientationID)"
-                                       ng-src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher.queryString}}" />
+                                        ng-src="{{  imageServer + imagePath + selectedPhoto.FileName +imageRefresher.queryString}}" />
                                     <canvas id="canvas" style="display:block;" 
                                       ></canvas>
                     </div>

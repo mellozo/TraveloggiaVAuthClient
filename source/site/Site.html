@@ -1,6 +1,9 @@
 ﻿
 
-<div  ng-controller="SiteController as siteCtrl"  ng-style="scrollWindowStyle" class="skyBlue" style="margin-left:auto;margin-right:auto;padding:0px;overflow-y:scroll;max-width:450px;" >
+<div  ng-controller="SiteController as siteCtrl"  
+    ng-style="scrollWindowStyle" 
+    class="skyBlue"
+    style="margin-left:auto;margin-right:auto;padding:0px;overflow-y:scroll;-webkit-overflow-scrolling: touch;max-width:450px;" >
 
 
             <form class=" infoText listColumn"  id="SiteInfo">
@@ -80,7 +83,7 @@
                     </div>
                         <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
                           <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
-                </div>
+                    </div>
              
                     
                 </div>

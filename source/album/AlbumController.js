@@ -22,7 +22,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var widthMinusBorderBackground = widthMinusPadScroll - 14;
 
         $scope.landscapeImageStyle = {
-            "width": widthMinusBorderBackground + "px"
+            "width": widthMinusBorderBackground 
         };
 
         $scope.portaitImageStyle = {
@@ -60,8 +60,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             "max-width": $scope.viewFrameWidth
         }
         $scope.previewImageStyle = {
-            "height": $scope.viewFrameHeight,
-            "max-width": $scope.viewFrameWidth
+            "height": $scope.viewFrameHeight-8,
+            "width": $scope.viewFrameWidth
         }
     }
   
@@ -86,7 +86,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
         if ($scope.selectedPhoto == null) {
             SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-           // $scope.selectedPhoto = $scope.PhotoList[0];
+          
 
         }
     }
@@ -98,7 +98,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
                 if ($scope.selectedPhoto == null) {
                     SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                   // $scope.selectedPhoto = $scope.PhotoList[0];
+                
                 }
             },
             function (error) { })
@@ -336,7 +336,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 function (result) {
                     $scope.PhotoList = result.data;
                         SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                       // $scope.selectedPhoto = $scope.PhotoList[0];
+                     
                 },
                 function (error) { }
                 );

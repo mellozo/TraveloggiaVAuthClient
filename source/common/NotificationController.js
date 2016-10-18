@@ -5,38 +5,16 @@
       $scope.$broadcast("softIsHere")
     }
 
- 
-
-
-  $scope.setMapStyle = function () {
-        var vpHeight = $scope.reliableHeight - $scope.toolbarHeight;
-        var vpWidth = $scope.reliableWidth
-        if (vpWidth > 768)
-            vpWidth = vpWidth * .7;
-        var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
-        var previewMapWidth = ($scope.reliableWidth * .31) - 32;//$window.document.getElementById("previewFrame").offsetWidth - 24;
-
-        $scope.mapStyle = {
-            "height": vpHeight,
-            "width": vpWidth
-        }
-        $scope.previewMapStyle = {
-            "height": previewMapHeight,
-            "width": previewMapWidth
-        }
-    }
-
-
-
+//called at the end of this page
     $scope.setDimensions = function () {
         $scope.reliableHeight = $window.innerHeight;
         $scope.reliableWidth = $window.innerWidth;
-       $scope.toolbarHeight = 66;// $window.document.getElementById("toolbarRow").offsetHeight;
+        $scope.toolbarHeight = 66;// $window.document.getElementById("toolbarRow").offsetHeight;
         var viewFrameHeight = $scope.reliableHeight - $scope.toolbarHeight;
-
+        var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
 
         $scope.previewPaneStyle = {
-            "height": $scope.reliableHeight * .31
+            "height":( ($scope.reliableHeight -12  )* .33) -20// .31
         }
 
         $scope.tableStyle = {
@@ -54,11 +32,38 @@
 
         $scope.windowOneStyle = {
             "max-height": Math.round(($scope.reliableHeight - 36) * .33) - 12,
-            "max-width": $scope.reliableWidth -32
+            "max-width": viewFrameWidth-32
         }
 
         $timeout($scope.setMapStyle());
     }
+
+
+
+  $scope.setMapStyle = function () {
+        var vpHeight = $scope.reliableHeight - $scope.toolbarHeight;
+        var vpWidth = $scope.reliableWidth
+        if (vpWidth > 768)
+            vpWidth = vpWidth * .7;
+
+        var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
+
+
+
+        var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
+        var previewMapWidth = ($scope.reliableWidth * .31) - 32;//$window.document.getElementById("previewFrame").offsetWidth - 24;
+
+        $scope.mapStyle = {
+            "height": vpHeight,
+            "width": viewFrameWidth 
+        }
+        $scope.previewMapStyle = {
+            "height": ( ($scope.reliableHeight -12  )* .33) -28,
+            "width": previewMapWidth
+        }
+    }
+
+
 
     // demonstrating use of inherited scope via nested controllers
     // even though some people think this is a big no no
