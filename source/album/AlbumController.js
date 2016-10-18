@@ -45,23 +45,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
     else {// PREVIEW 
-        $scope.viewFrameWidth = $window.document.getElementById("previewFrame").offsetWidth;
-        $scope.viewFrameHeight = Math.round($window.document.getElementById("previewFrame").offsetHeight * .30)
-        $scope.landscapeImageStyle = {
-            "height": Math.round($scope.viewFrameHeight),
-            "width": "auto"
-        };
+       var previewWidth = $window.document.getElementById("previewFrame").offsetWidth;
+       var previewHeight = ( ($scope.reliableHeight -12  )* .33) -28
+
         $scope.portaitImageStyle = {
-            "width": Math.round($scope.viewFrameWidth),
+            "width": previewWidth,
             "height": "auto"
         }
 
-        $scope.previewWidthStyle = {
-            "max-width": $scope.viewFrameWidth
-        }
+
         $scope.previewImageStyle = {
-            "height": $scope.viewFrameHeight-8,
-            "width": $scope.viewFrameWidth
+            "height": previewHeight,
+            "width": previewWidth - 32
         }
     }
   
