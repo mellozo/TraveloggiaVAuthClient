@@ -14,7 +14,7 @@
 
                        switch ($location.path()) {
 
-                           case "Map":
+                           case "/Map":
                                $scope.preview.windowOne = "site/SitePreview.html";
                                $scope.preview.windowTwo = "album/AlbumPreview.html";
                                $scope.preview.windowThree = "journal/JournalPreview.html";
