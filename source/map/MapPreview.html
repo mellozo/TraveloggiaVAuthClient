@@ -1,10 +1,15 @@
-﻿<div ng-controller="MapController">
-
-    
-    <div id="bingPreviewMap" ng-style="previewMapStyle" style="position:relative">
-
-    </div>
+﻿<div  ng-click="goMap()" 
+    class="dottedBorderRed glow" 
+    style="padding:2px;"
+    ng-style="previewPaneStyle">
 
 
+        <div ng-controller="MapController">
+
+            <div id="bingPreviewMap" ng-style="previewMapStyle" style="position:relative">
+
+            </div>
+
+        </div>
 
 </div>

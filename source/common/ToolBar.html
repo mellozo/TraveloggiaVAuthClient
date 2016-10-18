@@ -1,25 +1,25 @@
 ﻿<!--the bootstrap way    style="background-image:url(../image/lightblue.jpg)"-->
 
-<div  class="bluenav"   
-
-     style="padding:2px 0px;" >
-    <div >
+<div  class="bluenav"   style="padding:2px 0px;min-height:66px;max-height:66px;" >
   
-            <div ng-hide="selectedState.mapSelected==true" class="clickableDiv" ng-click="goMap()" title="Map">
+          <div  class ="clickableDiv"   ng-click="goMapList()" title="MapList"
+              ng-class="{'poppedUp' : selectedState.mapListSelected == true}"  >
+                    <img title="Map List"
+                         src="../image/steering.png"
+                         class="dottedBorderRed glow "/>
+            </div>
+
+
+  
+            <div  class="clickableDiv" ng-click="goMap()" title="Map">
                 <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
-                       class="dottedBorderRed glow" src="/../image/globe.png"  ng-click="goMap()" title="Map View" />
+                       class="dottedBorderRed glow" src="/../image/globe.png"   title="Map View" />
 
             </div>
 
-          <div ng-show="selectedState.mapSelected==true" class ="clickableDiv"   ng-click="goMapList()" title="MapList"
-              ng-class="{'poppedUp' : selectedState.mapListSelected == true}"  >
-            <img title="Map List"
-                 src="../image/steering.png"
-                 class="dottedBorderRed glow "
-                />
-        </div>
+        
 
-            <div class="clickableDiv"  ng-click="navigateWindowTwo()" title="Photo Album">
+            <div class="clickableDiv"  ng-click="goAlbum()" title="Photo Album">
                 <img
                         ng-class="{'poppedUp' : selectedState.albumSelected == true}"  
                         src="../image/sun.png"  class="dottedBorderRed glow"  />
@@ -44,7 +44,7 @@
 
 
 
-                <div class="clickableDiv"  ng-click="navigateWindowThree()" title="Journal">
+                <div class="clickableDiv"  ng-click="goJournal()" title="Journal">
                     <img src="../image/stack.png"  
                          class="dottedBorderRed glow"
                          ng-class="{'poppedUp' : selectedState.journalSelected == true}"  />
@@ -52,7 +52,7 @@
         
          
     
-                <div class="clickableDiv"  ng-click="navigateWindowOne()" title="Site Information">
+                <div class="clickableDiv"  ng-click="goSite()" title="Site Information">
                     <img src="../image/largepalm.png" 
                          class="dottedBorderRed glow" 
                          ng-class="{'poppedUp' : selectedState.siteSelected == true}"  />
@@ -60,8 +60,7 @@
 
                  
 
-       
-    </div>
+
   
 
 </div>    
