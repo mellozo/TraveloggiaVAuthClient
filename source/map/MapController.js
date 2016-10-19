@@ -13,8 +13,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     })
 
   
-
-
     $scope.selectedState = {
         editSelected:false
     }
@@ -46,9 +44,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             }
         }
     }
-
-
-
 
 
     var drawPreviewSite= function () {
@@ -86,11 +81,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
 
-
-
-
     var drawSites = function () {
-
         var map = null;
         if ($location.path() == "/" || $location.path() == "/Map")
             map = $scope.mapInstance;
@@ -99,7 +90,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
-
         for (var i = 0; i < sites.length; i++)
         {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
@@ -107,39 +97,44 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
             (function attachEventHandlers(site) {
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    
                     $scope.$apply(function () {// $location.path("/Album")
                         SharedStateService.setSelected("Site", site);
                         $scope.goAlbum();
-            })
+                        })
                 });
+
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
-                               
                     $scope.$apply(function () {
                         SharedStateService.setSelected("Site", site);
-                        //var currentPath = $location.path();
-                        //$location.path(currentPath).search({});
                     });
                 });
             })(sites[i], $scope, $location)
 
+            // used to calculate bounding rect
             arrayOfMsftLocs.push(loc);
-            if(map.entities != null)
-                map.entities.push(pin);
-            else 
-                $timeout(function () {
-                   map.entities.push(pin);
-                },100)
+
+            pushPin(pin);
+       
         }
+
+
+
+
+
+
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         var searchObject = $location.search();
+        var selectedSite = null;
 
         if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] == "true" )// if loading from a shared link)
         {
            map.setView({ bounds: viewRect, padding: 30 });
-            if (selectedSiteID == "null" || selectedSiteID == null )
-                SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+           if (selectedSiteID == "null" || selectedSiteID == null) {
+               selectedSite =$scope.MapRecord.Sites[0]
+               SharedStateService.setSelected("Site",selectedSite );
+           }
+               
         }
         else {
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
@@ -148,10 +143,34 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     break;
                 }
             }
-            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-            map.setView({ center: loc, zoom: 17 });
+
+
+                if (selectedSite != null) {
+                    var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+                    map.setView({ center: loc, zoom: 17 });
+
+                }
+         
         }
         $scope.systemMessage.loadComplete = true;
+    }
+
+
+
+    var pushPin = function (pin) {
+       var map = $scope.mapInstance;
+        if (map.entities != null)
+            map.entities.push(pin);
+        else {
+            console.log("map.entities is null waiting 100")
+            $timeout(function () {
+                pushPin(pin)
+            }, 100)
+
+
+        }
+         
+
     }
 
 
@@ -239,8 +258,10 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var searchObject = $window.location.search;
         if (searchObject != "") {
             var searchParams = searchObject.substr(1, searchObject.length)
-            if( (searchParams.split("=")[0] )=="MapID")
-                mapID = searchParams.split("=")[1]
+            if ((searchParams.split("=")[0]) == "MapID") {
+                mapID = searchParams.split("=")[1];
+            }
+                
         }
        
         if (mapID != null)
@@ -248,7 +269,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
         var cachedMap = SharedStateService.Repository.get("Map");
         var selectedMapID = SharedStateService.getSelectedID("Map");
-        if (requestedMap != null)
+        if (requestedMap != null && cachedMap==null)
             loadSelectedMap(requestedMap);
        else if (cachedMap == null && (selectedMapID == null || selectedMapID =="null"))
             loadDefaultMap();

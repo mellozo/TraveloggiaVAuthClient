@@ -86,6 +86,7 @@
     <Content Include="image\email.png" />
     <Content Include="image\fb.png" />
     <Content Include="image\globe.png" />
+    <Content Include="image\golddust.jpg" />
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
     <Content Include="image\lightgreen.jpg" />

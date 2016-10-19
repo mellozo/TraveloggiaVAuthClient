@@ -93,7 +93,18 @@
     }
 
     $scope.goMapList = function () {
-        $location.path("/MapList").search({ "ZoomOut": "true" }); 
+        if ($window.location.search.indexOf("MapID")== -1)
+            $location.path("/MapList")
+        else
+        {
+           
+            var plainold = $window.location.href.split("?")[0]
+            plainold = plainold + "#/MapList";
+            $window.location.replace(plainold);
+        }
+    
+        
+      
     }
 
 
