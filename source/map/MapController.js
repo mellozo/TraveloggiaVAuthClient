@@ -387,13 +387,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   drawPreviewSite();
               }
           }
-          //else if (newValue == null) {
-          //    if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
-          //        clearSites();
+          else if (newValue == null) {
+              if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
+                  clearSites();
                  
-          //    }
+              }
 
-          //}
+          }
       });
 
 

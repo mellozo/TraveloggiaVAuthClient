@@ -100,6 +100,7 @@
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
                 SharedStateService.deleteFromCache("Sites", "SiteID", VM.Site.SiteID);
+                SharedStateService.setSelected("Site",null)
                 $scope.systemMessage.text = "Location deleted successfully";
                 $scope.systemMessage.activate();
                 VM.Site = null;
@@ -116,7 +117,7 @@
     $scope.$watch(
        function (scope) {
            if (SharedStateService.Selected.Site != null)
-               return SharedStateService.Selected.Site.SiteID;
+               return SharedStateService.Selected.Site.Latitude;
        },
        function (newValue, oldValue) {
            if (newValue != null && newValue != oldValue) {
