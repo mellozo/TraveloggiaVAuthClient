@@ -10,25 +10,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
-    var widthMinusPad = $scope.viewFrameWidth - 32;
+    var widthMinusPad = $scope.viewFrameWidth - 36;
     var heightMinusPad = $scope.viewFrameHeight - 32;
 
     if ($location.path() == "/Album") {
         // offset includes the border and scrollbars - not the margin
         // clientWidth is just the inner content - not scroll bars
         var scrollContainer = $window.document.getElementById("albumScrollContainer")
-        var scrollWidth = scrollContainer.offsetWidth -scrollContainer.clientWidth;
+        var scrollWidth = 24;//scrollContainer.offsetWidth -scrollContainer.clientWidth;
         var widthMinusPadScroll = widthMinusPad - scrollWidth ;
-        var widthMinusBorderBackground = widthMinusPadScroll - 14;
+        var widthMinusPadScrollBorder = widthMinusPadScroll - 14;
 
         $scope.landscapeImageStyle = {
-            "width": widthMinusBorderBackground 
+            "width": widthMinusPadScrollBorder
         };
 
-        $scope.portaitImageStyle = {
-            "height": heightMinusPad,
-            "width": widthMinusBorderBackground
-        }
+        //$scope.portaitImageStyle = {
+        //    "height": heightMinusPad,
+        //    "width": widthMinusPadScrollBorder
+        //}
 
     }
     else if ($location.path() == "/Photo") {
@@ -48,15 +48,10 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
        var previewWidth = $window.document.getElementById("previewFrame").offsetWidth;
        var previewHeight = ( ($scope.reliableHeight -12  )* .33) -28
 
-        $scope.portaitImageStyle = {
-            "width": previewWidth,
-            "height": "auto"
-        }
-
 
         $scope.previewImageStyle = {
             "height": previewHeight,
-            "width": previewWidth - 32
+            "width": previewWidth - 24
         }
     }
   
@@ -109,7 +104,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var origH = loadedImage.height;
         var origW = loadedImage.width;
         var maxH = heightMinusPad;
-        var maxW = ($location.path() == "/Album") ? widthMinusBorderBackground : widthMinusPad;
+        var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPad;
         var w = calculateAspectRatio(origH, origW, maxH, maxW)
         if(w != maxW)
         {

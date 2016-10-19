@@ -21,19 +21,21 @@
             "height": $scope.reliableHeight
         }
 
+
+        // set on Index page outer div contianing ng-views
         $scope.previewStyle = {
             "height": $scope.reliableHeight,
             "max-height": $scope.reliableHeight,
         }
+
+
+
         $scope.scrollWindowStyle = {
             "height": viewFrameHeight,
-            "max-height": viewFrameHeight
+            "max-height": viewFrameHeight,
+         
         }
 
-        $scope.windowOneStyle = {
-            "max-height": Math.round(($scope.reliableHeight - 36) * .33) - 12,
-            "max-width": viewFrameWidth-32
-        }
 
         $timeout($scope.setMapStyle());
     }
@@ -47,15 +49,11 @@
             vpWidth = vpWidth * .7;
 
         var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
-
-
-
-        var previewMapHeight = $scope.reliableHeight * .31;//(($window.document.getElementById("previewFrame").offsetHeight - 36) * .33) - 8;
-        var previewMapWidth = ($scope.reliableWidth * .31) - 32;//$window.document.getElementById("previewFrame").offsetWidth - 24;
+        var previewMapWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
 
         $scope.mapStyle = {
             "height": vpHeight,
-            "width": viewFrameWidth 
+            "width": viewFrameWidth -8
         }
         $scope.previewMapStyle = {
             "height": ( ($scope.reliableHeight -12  )* .33) -28,
