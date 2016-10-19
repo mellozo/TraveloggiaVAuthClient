@@ -1,22 +1,17 @@
 ﻿
 angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce,$rootScope) {
 
-
-
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
 
-
     $scope.$on("softIsHere", function (event, data) {
-        $scope.afterLoaded();
+       afterLoaded();
     })
-
   
     $scope.selectedState = {
         editSelected:false
     }
-
 
     var clickHandler = null; 
     var pushpinCollection = null;
@@ -47,11 +42,10 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var drawPreviewSite= function () {
-
         var map = $scope.previewMap;
         var selectedSiteID = SharedStateService.getSelectedID("Site");
         var selectedSite = null;
-        if (selectedSiteID == "null" || selectedSiteID == null)// if loading from a shared link)
+        if ($location.path() !="/Site" && (selectedSiteID == "null" || selectedSiteID == null))// if loading from a shared link)
         {
             selectedSite= $scope.MapRecord.Sites[0];
             SharedStateService.setSelected("Site",selectedSite);
@@ -156,7 +150,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
 
-
     var pushPin = function (pin) {
        var map = $scope.mapInstance;
         if (map.entities != null)
@@ -166,11 +159,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             $timeout(function () {
                 pushPin(pin)
             }, 100)
-
-
         }
-         
-
     }
 
 
@@ -241,8 +230,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     $scope.mapInstance.setView({ center: currentPosition, zoom: 1 })
                     $scope.systemMessage.loadComplete = true;
                 }
-                    
-
             },
             function (error) {
                 $scope.systemMessage.text = "error loading selected map";
@@ -289,12 +276,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
      // this sizes the outer container defined in notification controller the base container
      $scope.setDimensions();
           // when in doubt use a timeout :(
-        $timeout($scope.afterLoaded(),1000);
+        $timeout(afterLoaded(),1000);
  });
 
 
-
- $scope.preparePreviewMap = function ( previewDiv ) {
+    var preparePreviewMap = function ( previewDiv ) {
      var mapEl = $window.document.getElementById("bingPreviewMap")
      var mapType = "a"
      if ($scope.Capabilities.currentDevice.deviceType == "mobile")
@@ -316,7 +302,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
      else {
          console.log("calling prepare previewbecause microsoft is null waiting 3000")
          $timeout(function () {
-             $scope.preparePreviewMap();
+             preparePreviewMap();
          }, 3000)
      }// end bing is loaded yet
 
@@ -326,8 +312,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
  }
 
 
-
- $scope.prepareMainMap = function () {
+    var prepareMainMap = function () {
      if ($scope.mapInstance == null) {
          var mapEl = null;
          var mapType = "a"
@@ -349,7 +334,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
          else {
              console.log("calling prepare main map microsoft is null waiting 3000")
              $timeout(function () {
-                 $scope.prepareMainMap();
+                 prepareMainMap();
              }, 3000)
          }// end bing is loaded yet
 
@@ -359,7 +344,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
  }
 
 
- $scope.afterLoaded = function () {
+    var afterLoaded = function () {
      try{
          var x = (Microsoft != null)// map control not loaded yet - the problem is sometimes the map loades before angular
          // and sometimes angular loades before the map :(
@@ -370,11 +355,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
              if ($location.path() == "/Map" || $location.path() == "/") {
 
                  if ($scope.mapInstance == null)
-                     $scope.prepareMainMap();
+                    prepareMainMap();
              }
              else if ($location.path() != "/Map" && $location.path() != "/") {
                  if ($scope.previewMap == null)
-                     $scope.preparePreviewMap();
+                    preparePreviewMap();
              }
          }
      }
@@ -400,25 +385,15 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
               if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
                   clearSites();
                   drawPreviewSite();
-
               }
-             // var searchObject = $location.search()
-              //if (($location.path() != "/MapList") && $location.path() !="/" && $location.path() !="/Map")
-              //{
-              //    var selectedSiteID = SharedStateService.getSelectedID("Site")
-                //  var sites = SharedStateService.Repository.get("Sites") != null
-                  //if (sites != null) {
-                  //    for (var i = 0; i < sites.length; i++) {
-                  //        if (sites[i].SiteID == selectedSiteID) {
-                  //            selectedSite = $scope.MapRecord.Sites[i];
-                  //            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-                  //            $scope.mapInstance.setView({ center: loc, zoom: 16 });
-                  //            break;
-                  //        }
-                  //    }                  
-                  //}
-             // }
           }
+          //else if (newValue == null) {
+          //    if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
+          //        clearSites();
+                 
+          //    }
+
+          //}
       });
 
 
@@ -453,9 +428,12 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var addLocation = function (pos) {
-        var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
-        SharedStateService.setSelected("Site", siteRecord);
+      
         $scope.$apply(function () {
+            var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
+            SharedStateService.setSelected("Site", siteRecord);
+
+
             var currentPosition = new Microsoft.Maps.Location(pos.latitude, pos.longitude);
             var marker = createMarker(pos.latitude, pos.longitude);
             if (pushpinCollection == null) {
@@ -467,9 +445,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
 
             if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
-                $scope.dialogIsShowing = true;
-
-         
+                $scope.dialogIsShowing = true;        
         });
 
 
@@ -582,7 +558,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     // the kickoff
-    $scope.afterLoaded();
+    afterLoaded();
 
     if($scope.Capabilities.cantResize == false)
         $window.addEventListener("resize", redraw)

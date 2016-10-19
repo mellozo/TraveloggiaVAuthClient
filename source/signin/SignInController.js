@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route) {
+﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route,$window) {
     var VM = this;
     VM.Member = new Member();
 
@@ -18,7 +18,16 @@
               SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.setAuthorizationState(canEdit);
               // we will depricate this
-             // SharedStateService.readOnlyUser = false;
+              // SharedStateService.readOnlyUser = false;
+              if ($window.location.search.indexOf("MapID") == -1)
+                  $location.path("/Map")
+              else {
+
+                  var plainold = $window.location.href.split("?")[0]
+                  plainold = plainold + "#/Map";
+                  $window.location.replace(plainold);
+              }
+
               $location.path("/Map")
           },
           function (error) {
