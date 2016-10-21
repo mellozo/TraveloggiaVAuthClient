@@ -23,26 +23,44 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // INIT SEQUENCE
 
     var clearSites = function () {
+        removePins();
+    }
 
+
+    var removePins = function () {
         var map = null;
         if ($location.path() == "/" || $location.path() == "/Map")
             map = $scope.mapInstance;
         else
             map = $scope.previewMap;
 
-
-        var max = map.entities.getLength()-1;
-        for (var i =max ; i > -1; i--) {
-            var pushpin =map.entities.get(i);
-            if (pushpin instanceof Microsoft.Maps.Pushpin) {
-                map.entities.removeAt(i);
+        if (map!= null && map.entities != null) {
+            var max = map.entities.getLength() - 1;
+            for (var i = max ; i > -1; i--) {
+                var pushpin = map.entities.get(i);
+                if (pushpin instanceof Microsoft.Maps.Pushpin) {
+                    map.entities.removeAt(i);
+                }
             }
         }
+
+        else
+        {
+            console.log("map or entities is null removing pins ??? waiting 1000")
+            $timeout(function ()
+            { removePins() }, 1000)
+        }
+            
+
+
     }
+
 
 
     var drawPreviewSite= function () {
         var map = $scope.previewMap;
+        if ($scope.previewMap == null)
+            preparePreviewMap();
         var selectedSiteID = SharedStateService.getSelectedID("Site");
         var selectedSite = null;
         if ($location.path() !="/Site" && (selectedSiteID == "null" || selectedSiteID == null))// if loading from a shared link)
@@ -50,8 +68,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             selectedSite= $scope.MapRecord.Sites[0];
             SharedStateService.setSelected("Site",selectedSite);
         }
-              
-    
+
         for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
         {
             if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
@@ -59,19 +76,12 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 break;
             }
         }
-         
-            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
-            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
-            
-            if (map.entities != null)
-                map.entities.push(pin);
-            else
-                $timeout(function () {
-                    map.entities.push(pin);
-                }, 100);
 
-            map.setView({ center: loc, zoom: 17 });
-            $scope.systemMessage.loadComplete = true;
+        var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
+        var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
+        pushPin(pin);
+        map.setView({ center: loc, zoom: 17 });
+        $scope.systemMessage.loadComplete = true;
     }
 
 
@@ -151,7 +161,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var pushPin = function (pin) {
-       var map = $scope.mapInstance;
+        var map = null;
+        if ($location.path() == "/" || $location.path() == "/Map")
+            map = $scope.mapInstance;
+        else
+            map = $scope.previewMap;
         if (map.entities != null)
             map.entities.push(pin);
         else {
@@ -349,7 +363,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
          var x = (Microsoft != null)// map control not loaded yet - the problem is sometimes the map loades before angular
          // and sometimes angular loades before the map :(
          if ($http.pendingRequests.length > 0) {
-             $timeout($scope.afterLoaded, 200); // Wait for all templates to be loaded
+             $timeout(afterLoaded, 200); // Wait for all templates to be loaded
          }
          else {
              if ($location.path() == "/Map" || $location.path() == "/") {

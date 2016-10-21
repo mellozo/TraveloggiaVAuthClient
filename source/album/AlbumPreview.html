@@ -7,47 +7,48 @@
     style="padding:2px;">
         <div ng-controller="AlbumController" style="height:100%"    >
 
+            <div ng-cloak>
 
-            <div ng-if="PhotoList[0].StorageURL !=null " >
+                        <div ng-if="PhotoList[0].StorageURL !=null " >
 
-                <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID < 5" ng-style="previewImageStyle" >
+                            <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID < 5" ng-style="previewImageStyle" >
 
-                            <div   
-                                style="height:100%;width:100%;
-                                     background-image:url('{{  imageServer + imagePath + PhotoList[0].FileName}}');
-                                     background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
+                                        <div   
+                                            style="height:100%;width:100%;
+                                                 background-image:url('{{  imageServer + imagePath + PhotoList[0].FileName}}');
+                                                 background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
+                                        </div>
+
                             </div>
 
-                </div>
-
-                <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
-                    <div ng-if="Capabilities.alreadyKnowsHow==false ">
-                            <img on-load="onImageLoad($event, PhotoList[0].orientationID)"
-                                    style="position:absolute;visibility:hidden"
+                            <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
+                                <div ng-if="Capabilities.alreadyKnowsHow==false ">
+                                        <img on-load="onImageLoad($event, PhotoList[0].orientationID)"
+                                                style="position:absolute;visibility:hidden"
                                   
-                                    src="{{  imageServer + imagePath + PhotoList[0].FileName +imageRefresher}}" />
-                            <canvas id="canvas" style="display:block;"></canvas>
+                                                src="{{  imageServer + imagePath + PhotoList[0].FileName +imageRefresher}}" />
+                                        <canvas id="canvas" style="display:block;"></canvas>
 
-                    </div>
-                    <div ng-if="Capabilities.alreadyKnowsHow==true"
-                      >
-                        <img style="width:100%;visibility:visible;vertical-align:middle"
-                             ng-src="{{  imageServer + imagePath + PhotoList[0].FileName }}" />
-                    </div>
+                                </div>
+                                <div ng-if="Capabilities.alreadyKnowsHow==true"
+                                  >
+                                    <img style="width:100%;visibility:visible;vertical-align:middle"
+                                         ng-src="{{  imageServer + imagePath + PhotoList[0].FileName }}" />
+                                </div>
 
           
-                </div>
-            </div>
+                            </div>
+                        </div>
 
 
 
-            <div ng-if="PhotoList[0].StorageURL==null " ng-style="previewImageStyle">
+                        <div ng-if="PhotoList[0].StorageURL==null " ng-style="previewImageStyle">
                 
-                        <div   style="height:100%;width:100%;background-image:url('http://www.traveloggia.net/upload/{{imagePath }}{{PhotoList[0].FileName}}');
-                            background-size:cover;background-repeat:no-repeat;background-position:50% 50%">
-                         </div>
+                                    <div   style="height:100%;width:100%;background-image:url('http://www.traveloggia.net/upload/{{imagePath }}{{PhotoList[0].FileName}}');
+                                        background-size:cover;background-repeat:no-repeat;background-position:50% 50%">
+                                     </div>
                    
+                        </div>
+
             </div>
-
-
 </div>

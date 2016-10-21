@@ -31,14 +31,11 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
             controller:'MapController'
         })
 
-           .when('/Site', {
-               templateUrl: 'site/Site.html',
-               controller: 'SiteController'
-           })
+        .when('/Site', {
+            templateUrl: 'site/Site.html',
+            controller: 'SiteController'
+        })
 
-// just to demonstrate use of resolve in routing
-// you must specify controller here - not optional as in html binding
-// note resolve = {} and the object has string property and promise value 
          .when('/Album', {
              templateUrl: 'album/Album.html',
              controller: 'AlbumController'
@@ -77,8 +74,6 @@ angularTraveloggia.constant("isEditing", "IS_EDITING")
 
 angularTraveloggia.run(function ($rootScope) {
     $rootScope.$on('$locationChangeSuccess', function (event, url, oldUrl, state, oldState) {
-    
-
             $rootScope.selectedState = {
                 mapSelected: (url.lastIndexOf("/") == url.length - 1 || url.indexOf("/Map") > 0) ? true : false,
                 albumSelected: url.indexOf("/Album") > 0 ? true : false,
