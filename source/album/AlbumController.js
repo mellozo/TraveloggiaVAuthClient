@@ -55,8 +55,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
     }
   
-  
-  
+ 
+
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
@@ -95,10 +95,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
-
-
-
     $scope.dontAsk = function (event) {
         var loadedImage = event.target;
         var origH = loadedImage.height;
@@ -113,7 +109,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
 
     }
-
 
 
     var calculateAspectRatio = function (origH, origW, maxH, maxW) {
@@ -292,25 +287,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $location.path("/Photo");
     }
 
-    var albumRedraw = debounce(500, function () {
-        if ($location.path() != "/Album" && $location.path()!="/Photo")
-            return;
-       // alert("resize called")
-        $window.location.reload();
-    });
-
-    //var albumHorizontal = debounce(500, function () {
-    //    if ($location.path() != "/Album" && $location.path() != "/Photo")
-    //        return;
-    //    alert("orientation called")
-    //    $window.location.reload();
-    //});
-
-
-    if ($scope.Capabilities.cantResize == false)
-        $window.addEventListener("resize", albumRedraw)
-
-    //$window.addEventListener("orientationchange", albumHorizontal)
   
     // loading the data if they change sites but stay on the page
     $scope.$watch(

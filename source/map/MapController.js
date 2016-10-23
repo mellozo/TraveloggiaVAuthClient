@@ -1,5 +1,5 @@
 ﻿
-angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, debounce,$rootScope) {
+angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, $rootScope) {
 
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
@@ -8,6 +8,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     $scope.$on("softIsHere", function (event, data) {
        afterLoaded();
     })
+
+    $scope.$on("dimensionsReset", function (event, data) {
+        afterLoaded();
+    })
+
   
     $scope.selectedState = {
         editSelected:false
@@ -76,12 +81,17 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 break;
             }
         }
+        if (selectedSite != null) {
+            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
+            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
+            pushPin(pin);
+            map.setView({ center: loc, zoom: 17 });
+            $scope.systemMessage.loadComplete = true;
 
-        var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
-        var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
-        pushPin(pin);
-        map.setView({ center: loc, zoom: 17 });
-        $scope.systemMessage.loadComplete = true;
+        }
+        else
+            console.log("selected site is null")
+   
     }
 
 
@@ -281,17 +291,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
             loadSelectedMap();
     }
-
-
-    var redraw = debounce(800, function () {
-     console.log("debounced resize on map page");
-     if ($location.path() != "/Map" && $location.path() != "/")
-         return;
-     // this sizes the outer container defined in notification controller the base container
-     $scope.setDimensions();
-          // when in doubt use a timeout :(
-        $timeout(afterLoaded(),1000);
- });
 
 
     var preparePreviewMap = function ( previewDiv ) {
@@ -574,7 +573,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // the kickoff
     afterLoaded();
 
-    if($scope.Capabilities.cantResize == false)
-        $window.addEventListener("resize", redraw)
+   
 
 }); 

@@ -6,23 +6,16 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     $scope.stateMachine = {
             state:SharedStateService.getAuthorizationState()
             }
-    
-
-    var toolbarHeight = 62;//$window.document.getElementById("toolbarRow");
-    var viewFrameHeight = $scope.reliableHeight - toolbarHeight;
-    $scope.scrollWindowStyle = {
-        "height": viewFrameHeight,
-        "max-height":viewFrameHeight
-    }
+ 
     // this is if we are redirecting from html5.traveloggia.net which doesnt have its own journal page
-    if ($location.search().MapID != null)
+    if ($location.search().SiteID!= null)
     {
         var mapid = $location.search().MapID;
         var siteid = $location.search().SiteID;
         SharedStateService.readOnlyUser = true;
         SharedStateService.Selected.SiteID = siteid;
-        $location.search('MapID', null);
-        $location.search('SiteID', null);
+        $location.search('MapID', {});
+        $location.search('SiteID', {});
 
         DataTransportService.getMap(mapid).then(
             function (result) {
@@ -32,7 +25,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                 SharedStateService.Repository.put('Sites', MapRecord.Sites)
             },
         function(error){
-            $scope.systemMessage.text = "error fetching journals" + error.data.Message;
+            $scope.systemMessage.text = "error fetching journals with mapid " + error.data.Message;
             $scope.systemMessage.activate();
         } )
     }
@@ -70,30 +63,13 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                             SharedStateService.Repository.put("Journals", result.data);
                             $scope.Journal = $scope.JournalEntries[0];
                         }
-                        //else {
-                        //    if(SharedStateService.authorizationState == canEdit)
-                        //        $scope.addNew();
-                        //}
+                  
                     },
                     function (error) {
                         $scope.systemMessage.text = "error fetching journals" ;
                         $scope.systemMessage.activate();
                     });
     }
-
-
-    var journalRedraw = debounce(500, function () {
-        if ($location.path() != "/Journal")
-            return;
-        $window.location.reload();
-    });
-
-
-    if ($scope.Capabilities.cantResize == false)
-        $window.addEventListener("resize", journalRedraw)
-
-
-
 
 
     $scope.$watch(

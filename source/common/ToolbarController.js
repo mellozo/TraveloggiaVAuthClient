@@ -27,8 +27,8 @@
                                break;
 
                            case "/Album":
+                               $scope.preview.windowOne = "map/MapPreview.html";
                                $scope.preview.windowTwo = "site/SitePreview.html";
-                               $scope.preview.windowOne="map/MapPreview.html";
                                $scope.preview.windowThree = "journal/JournalPreview.html";
                                break;
                            case "/Site":
@@ -37,9 +37,9 @@
                                $scope.preview.windowThree = "journal/JournalPreview.html";
                                break;
                            case "/Journal":
-                               $scope.preview.windowThree = "site/SitePreview.html";
+                               $scope.preview.windowOne = "map/MapPreview.html";
                                $scope.preview.windowTwo = "album/AlbumPreview.html";
-                                  $scope.preview.windowOne = "map/MapPreview.html";
+                               $scope.preview.windowThree = "site/SitePreview.html";
                                break;
                        
                            default:

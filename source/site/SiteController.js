@@ -33,18 +33,6 @@
  
 
 
-    var siteRedraw = debounce(500, function () {
-        if ($location.path() != "/Site")
-            return;
-        $window.location.reload();
-    });
-
-
-    if ($scope.Capabilities.cantResize == false)
-        $window.addEventListener("resize", siteRedraw)
-
-
-
     VM.saveSite = function () {
         if (VM.Site.SiteID == null)
             VM.addSite();

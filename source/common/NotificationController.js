@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller("NotificationController", function ($scope, $location, $window,$timeout,$rootScope) {
+﻿angularTraveloggia.controller("NotificationController", function (debounce,$scope, $location, $window,$timeout,$rootScope) {
 
 
     $window.beHappy = function () {
@@ -14,7 +14,8 @@
         var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
 
         $scope.previewPaneStyle = {
-            "height":( ($scope.reliableHeight -12  )* .33) -20// .31
+            "height": (($scope.reliableHeight - 12) * .33) - 20//,
+          //  "width": ($scope.reliableWidth * .3)-16
         }
 
         $scope.tableStyle = {
@@ -122,6 +123,11 @@
     // kickoff
     $scope.setDimensions();
 
+
+
+
+    if ($scope.Capabilities.cantResize == false)
+        $window.addEventListener("resize", resetDimensions)
 
 
 
