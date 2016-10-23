@@ -2,13 +2,13 @@
 <div  
     ng-style="scrollWindowStyle"  
     class=" greenMud" id="albumScrollContainer"
-    style="padding:16px;overflow-y:auto;-webkit-overflow-scrolling: touch;"  ng-controller="AlbumController" >
+    style="padding:0px 16px 16px;overflow-y:auto;-webkit-overflow-scrolling: touch;"  ng-controller="AlbumController" >
 
 
 
-<div ng-show="stateMachine.state=='CAN_EDIT' " style="margin-bottom:0px;padding-bottom:0px">
+<div ng-show="stateMachine.state=='CAN_EDIT' " style="margin-bottom:20px;padding-bottom:0px">
   
-        <div class="panel-group" id="accordion" style="margin-top:10px;margin-bottom:0px;padding-bottom:0px;">
+        <div class="panel-group" id="accordion" style="margin-top:10px;margin-bottom:4px;padding-bottom:0px;">
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;margin-bottom:0px;padding-bottom:0px;">
                 <div class="panel-heading" style="background-color:#8EBBDA;text-align:right;">
                     <h4 class="panel-title" >
@@ -42,7 +42,7 @@
 
 
     <div  style="margin:0px;padding:0px;position:relative;width:100%" id="photoListContainer"> 
-        <div ng-repeat="Photo in PhotoList" style="margin-top:15px;padding-top:0px;">
+        <div ng-repeat="Photo in PhotoList" style="margin-top:4px;padding-top:0px;">
             <a href="" ng-click="selectPhoto(Photo)">
 
 

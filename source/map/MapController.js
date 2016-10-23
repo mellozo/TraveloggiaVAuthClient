@@ -103,8 +103,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             drawPreviewSite();
             return;
         }
-           
-
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
         for (var i = 0; i < sites.length; i++)
@@ -156,10 +154,12 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 }
             }
 
-
         if (selectedSite != null) {
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-            map.setView({ center: loc, zoom: 17 });
+            if (map == null)
+                console.log("map is null inside draw sites trying to set view on selected site")
+            else
+                map.setView({ center: loc, zoom: 17 });
         }
          
         }
