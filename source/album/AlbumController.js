@@ -1,7 +1,6 @@
 ﻿
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
-
    
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
@@ -349,12 +348,19 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
+    $scope.updatePhoto = function () {
+        DataTransportService.updatePhoto($scope.selectedPhoto).then(
+             function (result) {
+                 $scope.systemMessage.text = " photo updated successfully";
+                 $scope.systemMessage.activate();
+             },
+              function (error) {
+                  $scope.systemMessage.text = "error updating photo record";
+                  $scope.systemMessage.activate();
+              }
+             );
 
-
-
-
-
-
+    }
 
 
     //**************************upload functionality todo:move to its own page
@@ -407,7 +413,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             )
         }
     }
-
 
     // displays in preview pane and creates record with exif data
     function onFileSelected(file) {
@@ -477,21 +482,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
-    $scope.updatePhoto = function () {
-        DataTransportService.updatePhoto($scope.selectedPhoto).then(
-             function (result) {
-                 $scope.systemMessage.text = " photo updated successfully";
-                 $scope.systemMessage.activate();
-             },
-              function (error) {
-                  $scope.systemMessage.text = "error updating photo record";
-                  $scope.systemMessage.activate();
-              }
-             );
-
-    }
-
-   
     var uploadFile = function () {
         var memberID = SharedStateService.getAuthenticatedMemberID();
         var mapName = SharedStateService.getSelectedMapName();
