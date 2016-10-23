@@ -51,7 +51,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
         $scope.previewImageStyle = {
             "height": previewHeight,
-            "width": previewWidth - 24
+            "width": previewWidth - 32
         }
     }
   

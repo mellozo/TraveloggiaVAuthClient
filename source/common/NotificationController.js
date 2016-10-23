@@ -56,7 +56,7 @@
 
         $scope.mapStyle = {
             "height": vpHeight,
-            "width": viewFrameWidth -8
+            "width": viewFrameWidth 
         }
         $scope.previewMapStyle = {
             "height": ( ($scope.reliableHeight -12  )* .33) -28,
