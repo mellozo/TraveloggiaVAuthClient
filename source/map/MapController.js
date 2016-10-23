@@ -99,8 +99,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var map = null;
         if ($location.path() == "/" || $location.path() == "/Map")
             map = $scope.mapInstance;
-        else
+        else {
             drawPreviewSite();
+            return;
+        }
+           
 
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
@@ -131,11 +134,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
        
         }
 
-
-
-
-
-
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
         var selectedSiteID = SharedStateService.getSelectedID("Site")
         var searchObject = $location.search();
@@ -159,11 +157,10 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             }
 
 
-                if (selectedSite != null) {
-                    var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-                    map.setView({ center: loc, zoom: 17 });
-
-                }
+        if (selectedSite != null) {
+            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+            map.setView({ center: loc, zoom: 17 });
+        }
          
         }
         $scope.systemMessage.loadComplete = true;

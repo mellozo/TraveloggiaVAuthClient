@@ -37,7 +37,6 @@
         $scope.scrollWindowStyle = {
             "height": viewFrameHeight,
             "max-height": viewFrameHeight,
-         
         }
 
         $timeout($scope.setMapStyle());
