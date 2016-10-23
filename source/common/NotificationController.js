@@ -5,6 +5,11 @@
       $scope.$broadcast("softIsHere")
     }
 
+
+    var resetDimensions = function () {
+        $window.location.reload();
+    }
+
 //called at the end of this page
     $scope.setDimensions = function () {
         $scope.reliableHeight = $window.innerHeight;
@@ -22,7 +27,6 @@
             "height": $scope.reliableHeight
         }
 
-
         // set on Index page outer div contianing ng-views
         $scope.previewStyle = {
             "height": $scope.reliableHeight,
@@ -30,13 +34,11 @@
         }
 
 
-
         $scope.scrollWindowStyle = {
             "height": viewFrameHeight,
             "max-height": viewFrameHeight,
          
         }
-
 
         $timeout($scope.setMapStyle());
     }
@@ -66,11 +68,7 @@
 
     // demonstrating use of inherited scope via nested controllers
     // even though some people think this is a big no no
-    var isMapPage = ($location.path() == "/Map" || $location.path() == "/") ? true : false;
-
-    var fortyVPHeight = $window.innerHeight * .4
-  
-  
+  var isMapPage = ($location.path() == "/Map" || $location.path() == "/") ? true : false;
 
     var userAgentParser = new UAParser();
     var result = userAgentParser.getResult();
@@ -84,7 +82,6 @@
     device.deviceModel = result.device.model;
     device.deviceType = result.device.type;
     device.deviceVendor = result.device.vendor;
-    
 
     $scope.Capabilities = {
         height:$scope.reliableHeight,
@@ -101,9 +98,6 @@
     if (result.os !== null && result.browser != null) {
         $scope.Capabilities.cantResize = (result.os.name == "Windows Phone" && result.browser.version == "11.0") ? true : false;
     }
-
-
- 
 
 
     $scope.systemMessage = {
