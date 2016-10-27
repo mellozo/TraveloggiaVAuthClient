@@ -19,7 +19,13 @@
             $('#'+attrs.id).datetimepicker();
             var picker = $('#' + attrs.elid).data('DateTimePicker');
             var ipt = elem.find("#dateInputField");
-            ipt[0].value = scope.mel;
+            if (scope.mel != null) {
+                var jdate = new Date(scope.mel);
+                var readableDate = jdate.toLocaleString();
+                ipt[0].value = readableDate;
+
+            }
+    
                ipt.on('blur', function () {
                    scope.$apply(function() {
                        ngModel.$setViewValue(ipt[0].value);
