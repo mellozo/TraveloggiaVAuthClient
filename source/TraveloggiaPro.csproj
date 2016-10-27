@@ -43,7 +43,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -70,12 +69,16 @@
     <Content Include="common\ConfirmCancelDirective.js" />
     <Content Include="common\DataObjects.js" />
     <Content Include="common\DataTransportService.js" />
+    <Content Include="common\DateTimeWrapperDirective.js" />
     <Content Include="common\NotificationController.js" />
     <Content Include="common\SharedStateService.js" />
     <Content Include="common\ToolBar.html" />
     <Content Include="common\ToolbarController.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="css\lib\bootstrap-3.3.7.css" />
     <Content Include="css\lib\bootstrap-3.3.7.min.css" />
+    <Content Include="css\lib\numberPicker.css" />
     <Content Include="css\lib\textAngular.css" />
     <Content Include="css\TraveloggiaStyles.css" />
     <Content Include="diagnostics\Monitor.html" />
@@ -109,6 +112,7 @@
     <Content Include="lib\angulartics-ga.min.js" />
     <Content Include="lib\angulartics.js" />
     <Content Include="lib\bootstrap-3.3.7.min.js" />
+    <Content Include="lib\bootstrap-datetimepicker.min.js" />
     <Content Include="lib\bootstrap.min.js" />
     <Content Include="lib\extensions\angular-cookies.js" />
     <Content Include="lib\extensions\angular-mocks.js" />
@@ -116,6 +120,8 @@
     <Content Include="lib\extensions\angular.min.js" />
     <Content Include="lib\jquery-3.1.0.min.js" />
     <Content Include="lib\load-image.all.min.js" />
+    <Content Include="lib\moment.min.js" />
+    <Content Include="lib\numberPicker.js" />
     <Content Include="lib\textAngular-rangy.min.js" />
     <Content Include="lib\textAngular-sanitize.min.js" />
     <Content Include="lib\textAngular.min.js" />
@@ -127,6 +133,14 @@
     <Content Include="lib\extensions\angular.min.js.map" />
     <Content Include="css\TraveloggiaStyles.less" />
     <Content Include="css\lib\bootstrap.css.map" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="css\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="css\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="css\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="css\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
