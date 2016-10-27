@@ -6,7 +6,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     $scope.$on("softIsHere", function (event, data) {
-       afterLoaded();
+        afterLoaded();
     })
 
     $scope.$on("dimensionsReset", function (event, data) {
@@ -34,10 +34,16 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     var removePins = function () {
         var map = null;
-        if ($location.path() == "/" || $location.path() == "/Map")
+        if ($location.path() == "/" || $location.path() == "/Map"){
             map = $scope.mapInstance;
-        else
+        }
+        else if($window.innerWidth > 768){
             map = $scope.previewMap;
+        }
+    else{
+            return;
+        }
+            
 
         if (map!= null && map.entities != null) {
             var max = map.entities.getLength() - 1;
@@ -48,7 +54,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 }
             }
         }
-
         else
         {
             console.log("map or entities is null removing pins ??? waiting 1000")

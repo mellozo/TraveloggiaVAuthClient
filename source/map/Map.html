@@ -53,8 +53,8 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
 
     
     <confirm-cancel   
-        ng-show="dialogIsShowing"
-        style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px"
+        ng-cloak  ng-show="dialogIsShowing"
+        style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px;"
         question="confirmCancelQuestion"
         on-confirm="saveCurrentLocation()" 
         on-cancel="dismiss()">

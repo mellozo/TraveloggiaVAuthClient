@@ -16,21 +16,48 @@
                 "</div>",
         link: function (scope, elem, attrs, ngModel) {
             var selector = "#" + attrs.id;
-            $('#'+attrs.id).datetimepicker();
+            $('#'+attrs.id).datetimepicker()
             var picker = $('#' + attrs.elid).data('DateTimePicker');
             var ipt = elem.find("#dateInputField");
             if (scope.mel != null) {
                 var jdate = new Date(scope.mel);
                 var readableDate = jdate.toLocaleString();
                 ipt[0].value = readableDate;
-
+            }
+            else {
+                picker.clear();
             }
     
-               ipt.on('blur', function () {
-                   scope.$apply(function() {
-                       ngModel.$setViewValue(ipt[0].value);
-                       });
-               })
+            ipt.on('blur', function () {
+                scope.$apply(function() {
+                    ngModel.$setViewValue(ipt[0].value);
+                    });
+            })
+
+            scope.$watch('mel', function (data, x, y, z) {
+                var picker = $('#' + elem[0].id).data('DateTimePicker');
+                if (picker != null)
+                    picker.enable();
+              
+                    var ipt = elem.find("#dateInputField");
+                 
+                if (scope.mel != null) {
+                    var jdate = new Date(scope.mel);
+                    var readableDate = jdate.toLocaleString();
+                    ipt[0].value = readableDate;
+                }
+                else {
+                    var picker = $('#' + elem[0].id).data('DateTimePicker');
+                    picker.clear();
+                }
+
+             
+                
+            
+
+            });
+
+
             
         }
 
