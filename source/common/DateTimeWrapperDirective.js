@@ -4,7 +4,7 @@
         restrict: "E",
         require:'ngModel',
         scope: {
-            mel: '='
+            mel: '=ngModel'
         },
       replace:true,
         template:
@@ -17,9 +17,9 @@
         link: function (scope, elem, attrs, ngModel) {
             var selector = "#" + attrs.id;
             $('#'+attrs.id).datetimepicker()
-            var picker = $('#' + attrs.elid).data('DateTimePicker');
+            var picker = $('#' + attrs.id).data('DateTimePicker');
             var ipt = elem.find("#dateInputField");
-            if (scope.mel != null) {
+            if (scope.mel != null && scope.mel !="") {
                 var jdate = new Date(scope.mel);
                 var readableDate = jdate.toLocaleString();
                 ipt[0].value = readableDate;
@@ -35,13 +35,13 @@
             })
 
             scope.$watch('mel', function (data, x, y, z) {
-                var picker = $('#' + elem[0].id).data('DateTimePicker');
-                if (picker != null)
-                    picker.enable();
+                //var picker = $('#' + elem[0].id).data('DateTimePicker');
+                //if (picker != null)
+                //    picker.enable();
               
                     var ipt = elem.find("#dateInputField");
                  
-                if (scope.mel != null) {
+                if (scope.mel != null && scope.mel != "") {
                     var jdate = new Date(scope.mel);
                     var readableDate = jdate.toLocaleString();
                     ipt[0].value = readableDate;
