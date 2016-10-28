@@ -2,19 +2,24 @@ angularTraveloggia.controller('NumPickerController', function NumPickerControlle
     
     $scope.incVal = function(){
       // $scope.animateUp = false;
-      if(angular.isNumber($scope.val)){
-        if(!angular.isUndefined($scope.maxValue) && $scope.val>=$scope.maxValue){
-          return;
-        };
-        $scope.val++;
-        if(!!$scope.onChange){
-          $scope.onChange({value: $scope.val})
+        if (angular.isNumber($scope.val)) {
+            if (!angular.isUndefined($scope.maxValue) && $scope.val >= $scope.maxValue) {
+                return;
+            };
+            $scope.val++;
+            if (!!$scope.onChange) {
+                $scope.onChange({ value: $scope.val })
+            }
         }
-      };
+        else {
+            $scope.val = 1;
+        };
+
     };
     $scope.decVal = function(){
       // $scope.animateUp = true;
-      if(angular.isNumber($scope.val)){
+        if (angular.isNumber($scope.val))
+        {
         if(!angular.isUndefined($scope.minValue) && $scope.val<=$scope.minValue){
           return;
         };
@@ -22,7 +27,11 @@ angularTraveloggia.controller('NumPickerController', function NumPickerControlle
         if(!!$scope.onChange){
           $scope.onChange({value: $scope.val})
         }
-      }
+        }
+        else
+        {
+            $scope.val =1;
+        }
     }
     
     $scope.isMinValue = function(){
