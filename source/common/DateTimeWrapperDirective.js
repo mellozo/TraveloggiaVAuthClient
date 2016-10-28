@@ -2,64 +2,81 @@
     return {
 
         restrict: "E",
-        require:'ngModel',
+        require: 'ngModel',
         scope: {
             mel: '=ngModel'
         },
-      replace:true,
+        replace: true,
         template:
                  "<div class='input-group date'  >" +
-                    "<input   id='dateInputField'   type='text' class='form-control'   />"+
+                    "<input   id='dateInputField'   type='text' class='form-control'  value={{mel}} />" +
+                   //" <label>{{mel}}</label>"+
                     "<span class='input-group-addon'>" +
-                        "<span class='glyphicon glyphicon-calendar'></span>"+
-                    "</span>"+
+                        "<span class='glyphicon glyphicon-calendar'></span>" +
+                    "</span>" +
                 "</div>",
         link: function (scope, elem, attrs, ngModel) {
-            var selector = "#" + attrs.id;
-            $('#'+attrs.id).datetimepicker()
-            var picker = $('#' + attrs.id).data('DateTimePicker');
-            var ipt = elem.find("#dateInputField");
-            if (scope.mel != null && scope.mel !="") {
-                var jdate = new Date(scope.mel);
-                var readableDate = jdate.toLocaleString();
-                ipt[0].value = readableDate;
-            }
-            else {
-                picker.clear();
-            }
-    
-            ipt.on('blur', function () {
-                scope.$apply(function() {
-                    ngModel.$setViewValue(ipt[0].value);
-                    });
-            })
-
-            scope.$watch('mel', function (data, x, y, z) {
-                //var picker = $('#' + elem[0].id).data('DateTimePicker');
-                //if (picker != null)
-                //    picker.enable();
-              
-                    var ipt = elem.find("#dateInputField");
-                 
+            try {
+      
+                $('#' + attrs.id).datetimepicker()
+                var picker = $('#' + attrs.id).data('DateTimePicker');
+                var ipt = elem.find("#dateInputField");
                 if (scope.mel != null && scope.mel != "") {
                     var jdate = new Date(scope.mel);
                     var readableDate = jdate.toLocaleString();
                     ipt[0].value = readableDate;
+                    var picker = $('#' + attrs.id).data('DateTimePicker');
+                    if(picker == null)
+                        alert("picker is dead")
                 }
                 else {
-                    var picker = $('#' + elem[0].id).data('DateTimePicker');
                     picker.clear();
                 }
 
-             
-                
-            
+                ipt.on('blur', function (e) {
+                    try {
+                 
+                        scope.$apply(function () {
+                            if (scope.mel != null && scope.mel != "")
+                                ngModel.$setViewValue(scope.mel);
+                            else if(e.target.value != null)
+                                ngModel.$setViewValue(e.target.value);
+                        });
+                    }
+                    catch (error) {
+                        alert("error in blur")
+                    }
 
-            });
+                })
 
+                scope.$watch('mel', function (data, x, y, z) {
+                    try {
+                        var ipt = elem.find("#dateInputField");
+                        if (scope.mel != null && scope.mel != "") {
+                            var jdate = new Date(scope.mel);
+                            var readableDate = jdate.toLocaleString();
+                            ipt[0].value = readableDate;
+                        }
+                        else {
+                            var picker = $('#' + elem[0].id).data('DateTimePicker');
+                            if (picker != null)
+                                picker.clear();
+                            else {
+                                ipt[0].value = null;
+                                $('#' + attrs.id).datetimepicker()
+                              
+                            }
+                        }
+                    }
+                    catch (error) {
+                        alert("error in watch")
+                    }
 
-            
+                });
+            }
+            catch (error) {
+                alert("error in link")
+            }
         }
-
     }
 });
