@@ -142,7 +142,7 @@
             for (var i = 0; i < $scope.SiteList.length; i++) {
                 if ($scope.SiteList[i].SiteID == selectedSiteID) {
                     $scope.selectedSite = $scope.SiteList[i];
-                    //break;
+                    break;
                 }
             }
 

@@ -6,9 +6,9 @@
     }
 
 
-    var resetDimensions = function () {
+    var resetDimensions = debounce(1000, function () {
         $window.location.reload();
-    }
+    });
 
 //called at the end of this page
     $scope.setDimensions = function () {

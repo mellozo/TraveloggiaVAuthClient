@@ -47,6 +47,7 @@
  
 
     local_scope.setSelected = function (key, value) {
+     
         local_scope.Selected[key] = value;
         var propName = key + "ID";
         if (value != null)
@@ -66,6 +67,24 @@
         var propName = key + "ID";
         ID = local_scope.Selected[key] == null ? $cookies.get(propName) : local_scope.Selected[key][propName];
         return ID;
+    }
+
+
+    local_scope.getSelectedSite = function () {
+        var site = local_scope.Selected.Site;
+        if (site == null) {
+            var selectedSiteID = local_scope.getSelectedID("Site")
+            var sites = local_scope.Repository.get("Sites")
+            if (sites != null && selectedSiteID != null) {
+                for (var i = 0; i < sites.length; i++) {
+                    if (sites[i].SiteID == selectedSiteID) {
+                        site = sites[i];
+                        break;
+                    }
+                }
+            }
+        }
+             return site;
     }
 
 

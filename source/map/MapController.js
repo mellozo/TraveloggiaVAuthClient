@@ -72,6 +72,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         if ($scope.previewMap == null)
             preparePreviewMap();
         var selectedSiteID = SharedStateService.getSelectedID("Site");
+        console.log("drawing preview map selected site id is "+ selectedSiteID)
         var selectedSite = null;
         if ($location.path() !="/Site" && (selectedSiteID == "null" || selectedSiteID == null))// if loading from a shared link)
         {
@@ -225,35 +226,42 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var loadSelectedMap = function (mapID) {
-      var selectedMapID=null;
-      if (mapID == null)
-          selectedMapID = SharedStateService.getSelectedID("Map")
-      else
-          selectedMapID = mapID;
+        var selectedMapID=(mapID==null)?SharedStateService.getSelectedID("Map"):mapID
+   
         DataTransportService.getMapByID(selectedMapID).then(
             function (result) {
                 if (mapID != null)// this is passed by a query string param on a shareable link
                 {
+                    // moved this to shared state service get auth
+                    //- ie handling if there is a query string param should only call this once
                     SharedStateService.setAuthorizationState(readOnly);
                     SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
-                    SharedStateService.setSelected("Map", result.data);
-                    SharedStateService.Repository.put("Sites", []);
-                    SharedStateService.Repository.put("Map", null);
-                    SharedStateService.Repository.put("Journals", []);
-                    SharedStateService.Repository.put("Photos", [])
+                
+                    //SharedStateService.Repository.put("Sites", []);
+                    //SharedStateService.Repository.put("Map", null);
+                    //SharedStateService.Repository.put("Journals", []);
+                    //SharedStateService.Repository.put("Photos", [])
                 }
 
                 $scope.MapRecord = result.data;
+                SharedStateService.setSelected("Map", result.data);
                 SharedStateService.Repository.put('Map', result.data);
-                SharedStateService.setSelected("Site", null)             
-                if ($scope.MapRecord.Sites.length > 0)
-                    $timeout(function () {
-                        drawSites();
-                    },1000) 
+                  
+                //if ($scope.MapRecord.Sites.length > 0)
+                //    $timeout(function () {
+                //        drawSites();
+                    //    },1000) 
+                if ($scope.MapRecord.Sites.length > 0) {
+                    SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
+                    var selectedSite = SharedStateService.getSelectedSite();
+                    if (selectedSite.MapID != selectedMapID)// if we are reloading a page from the same session we have this
+                        SharedStateService.setSelected("Site", null)
+                    drawSites();                        
+                }
                 else
                 {
-                    var currentPosition = new Microsoft.Maps.Location(0, 0);
-                    $scope.mapInstance.setView({ center: currentPosition, zoom: 1 })
+                    //var currentPosition = new Microsoft.Maps.Location(0, 0);
+                    //$scope.mapInstance.setView({ center: currentPosition, zoom: 1 })
                     $scope.systemMessage.loadComplete = true;
                 }
             },
