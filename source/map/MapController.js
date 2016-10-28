@@ -40,7 +40,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             return;
         }
             
-
         if (map!= null && map.entities != null) {
             var max = map.entities.getLength() - 1;
             for (var i = max ; i > -1; i--) {
@@ -52,13 +51,10 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         else
         {
-            console.log("map or entities is null removing pins ??? waiting 1000")
+            console.log("map or entities is null removing pins ??? waiting 800")
             $timeout(function ()
-            { removePins() }, 1000)
+            { removePins() }, 800)
         }
-            
-
-
     }
 
 
@@ -92,8 +88,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
         }
         else
-            console.log("selected site is null")
-   
+            console.log("this is a bug  and selected site is null")
     }
 
 
@@ -228,39 +223,28 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             function (result) {
                 if (mapID != null)// this is passed by a query string param on a shareable link
                 {
-                    // moved this to shared state service get auth
-                    //- ie handling if there is a query string param should only call this once
+                    // move this to shared state service get auth
+                    //- ie handling if there is a query string param should set auth once
                     SharedStateService.setAuthorizationState(readOnly);
                     SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
-                
-                    //SharedStateService.Repository.put("Sites", []);
-                    //SharedStateService.Repository.put("Map", null);
-                    //SharedStateService.Repository.put("Journals", []);
-                    //SharedStateService.Repository.put("Photos", [])
                 }
 
                 $scope.MapRecord = result.data;
                 SharedStateService.setSelected("Map", result.data);
                 SharedStateService.Repository.put('Map', result.data);
-                  
-                //if ($scope.MapRecord.Sites.length > 0)
-                //    $timeout(function () {
-                //        drawSites();
-                    //    },1000) 
+         
                 if ($scope.MapRecord.Sites.length > 0) {
                     SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
-                   $scope.$emit("sitesLoaded")
+                    $scope.$emit("sitesLoaded")
+                    // if we are reloading a page from the same session selectedSite is saved
                     var selectedSite = SharedStateService.getSelectedSite();
                     if (selectedSite != null && selectedSite.MapID != selectedMapID) {
                         SharedStateService.setSelected("Site", null)
-                    }// if we are reloading a page from the same session we have this
-                       
+                    }                       
                     drawSites();                        
                 }
                 else
                 {
-                    //var currentPosition = new Microsoft.Maps.Location(0, 0);
-                    //$scope.mapInstance.setView({ center: currentPosition, zoom: 1 })
                     $scope.systemMessage.loadComplete = true;
                 }
             },

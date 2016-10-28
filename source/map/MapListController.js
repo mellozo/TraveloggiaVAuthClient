@@ -126,6 +126,20 @@ var createMap = function () {
     $scope.selectedMap = anotherMap;
 }
 
+var deleteMap = function () {
+    DataTransportService.deleteMap($scope.selectedMap.MapID).then(
+        function (result) {
+            $scope.systemMessage.text = "map deleted successfully";
+            $scope.systemMessage.activate();
+        },
+        function (error) {
+            $scope.systemMessage.text = "error deleting map";
+            $scope.systemMessage.activate();
+
+        })
+
+}
+
 
 $scope.saveMapEdit = function () {
     if ($scope.selectedMap.MapID == null) {
@@ -134,6 +148,11 @@ $scope.saveMapEdit = function () {
         DataTransportService.addMap($scope.selectedMap).then(
             function (result) {
                 SharedStateService.setSelected("Map", result.data);
+                SharedStateService.setSelected("Site", null)
+                SharedStateService.Repository.put("Sites", []);
+                SharedStateService.Repository.put("Map", result.data);
+                SharedStateService.Repository.put("Journals", []);
+                SharedStateService.Repository.put("Photos", [])
                 $scope.systemMessage.text = "map was added successfully";
                 $scope.systemMessage.activate();
                 $scope.goMapFirstTime();
@@ -158,14 +177,7 @@ $scope.saveMapEdit = function () {
                     $scope.systemMessage.text = "error updating map";
                     $scope.systemMessage.activate();
                 })
-
-
-
     }
-
-
-   
-
 }
 
 
@@ -174,13 +186,6 @@ $scope.cancelMapEdit = function () {
     if (SharedStateService.getSelectedID("Map") != null)
         $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
 }
-
-
-
-
-
-
-
 
 
 
