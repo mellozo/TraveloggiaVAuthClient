@@ -251,9 +251,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
                    $scope.$emit("sitesLoaded")
                     var selectedSite = SharedStateService.getSelectedSite();
-
-
-                    if (selectedSite.MapID != selectedMapID) {
+                    if (selectedSite != null && selectedSite.MapID != selectedMapID) {
                         SharedStateService.setSelected("Site", null)
                     }// if we are reloading a page from the same session we have this
                        
