@@ -29,17 +29,20 @@
                     <wrapped-date  ng-model="siteCtrl.Site.Departure" id="Departure"  ></wrapped-date>
                 </div>
 
-                <!--  <div class="form-group">
+                  <div class="form-group" >
                       <div class="infoText"><b>stop no.:</b></div>
-                       <div  layout="row" layout-align="start start">
-                              <input style="display:inline;"    "type="text" ng-model="siteCtrl.Site.RouteIndex" class="form-control" id="Name">
-                              <div  class="element-container" md-whiteframe="10" ng-init="siteCtrl.Site.RouteIndex=0">
+                            <input style="display:inline;width:60px;float:left"   ng-model="siteCtrl.Site.RouteIndex" class="form-control">        
+                                    
+                       <div class="element-container" style="float:left">
+                           
+                              <div  md-whiteframe="10" ng-init="siteCtrl.Site.RouteIndex=0">
                                         <md-num-picker ng-model="siteCtrl.Site.RouteIndex"  min-value="0" ></md-num-picker>
                               </div>
-                       </div>                    
-                </div> --> 
+                       </div>   
+                   
+                </div>  
 
-                <div class="form-group">
+                <div  class="form-group" style="clear:left">
                     <div class="infoText"><b>address:</b></div>
                     <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address">
                 </div>

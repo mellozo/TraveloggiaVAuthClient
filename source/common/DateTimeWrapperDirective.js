@@ -63,6 +63,7 @@
                                 picker.clear();
                             else {
                                 ipt[0].value = null;
+                                console.log("about to create new picker")
                                 $('#' + attrs.id).datetimepicker()
                               
                             }
