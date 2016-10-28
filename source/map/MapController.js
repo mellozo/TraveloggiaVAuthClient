@@ -9,11 +9,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         afterLoaded();
     })
 
-    $scope.$on("dimensionsReset", function (event, data) {
-        afterLoaded();
-    })
-
-  
+    
     $scope.selectedState = {
         editSelected:false
     }
@@ -253,9 +249,14 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     //    },1000) 
                 if ($scope.MapRecord.Sites.length > 0) {
                     SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
+                   $scope.$emit("sitesLoaded")
                     var selectedSite = SharedStateService.getSelectedSite();
-                    if (selectedSite.MapID != selectedMapID)// if we are reloading a page from the same session we have this
+
+
+                    if (selectedSite.MapID != selectedMapID) {
                         SharedStateService.setSelected("Site", null)
+                    }// if we are reloading a page from the same session we have this
+                       
                     drawSites();                        
                 }
                 else

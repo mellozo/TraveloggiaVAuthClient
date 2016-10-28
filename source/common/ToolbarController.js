@@ -1,6 +1,10 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
   
+    $scope.$on("sitesLoaded", function (event, data) {
+        loadSites();
+    })
+
     $scope.preview = {
         windowOne: "",
         windowTwo: "",
@@ -54,11 +58,11 @@
 
 
 
-    $scope.announce = function () {
-        var mapPreviewDiv = $window.document.getElementById("bingPreviewMap")
-        if (mapPreviewDiv != null)
-       $scope.$broadcast("previewFrameLoaded", mapPreviewDiv)
-    }
+    //$scope.announce = function () {
+    //    var mapPreviewDiv = $window.document.getElementById("bingPreviewMap")
+    //    if (mapPreviewDiv != null)
+    //   $scope.$broadcast("previewFrameLoaded", mapPreviewDiv)
+    //}
 
 /*****Navigation handlers********/
     // go Site
@@ -150,9 +154,6 @@
     }
 
  
-
-
-
   
 
 
