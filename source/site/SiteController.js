@@ -112,6 +112,11 @@
             )
     }
 
+    VM.openURL = function () {
+        if(VM.Site != null && VM.Site.URL != null)
+        $window.open(VM.Site.URL)
+    }
+
 
     $scope.$watch(
        function (scope) {

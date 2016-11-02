@@ -89,6 +89,7 @@
     <Content Include="image\fb.png" />
     <Content Include="image\globe.png" />
     <Content Include="image\golddust.jpg" />
+    <Content Include="image\internet.png" />
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
     <Content Include="image\lightgreen.jpg" />
@@ -117,7 +118,7 @@
     <Content Include="lib\extensions\angular-mocks.js" />
     <Content Include="lib\extensions\angular-route.min.js" />
     <Content Include="lib\extensions\angular.min.js" />
-    <Content Include="lib\flatpickr.js" />
+    <Content Include="lib\flatpickr.min.js" />
     <Content Include="lib\jquery-3.1.0.min.js" />
     <Content Include="lib\load-image.all.min.js" />
     <Content Include="lib\numberPicker.js" />

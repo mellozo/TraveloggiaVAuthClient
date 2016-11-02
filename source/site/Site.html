@@ -1,6 +1,6 @@
 ﻿
 <link rel="stylesheet" href="css/lib/flatpickr.min.css"/>
-<script src="lib/flatpickr.js"></script>
+<script src="lib/flatpickr.min.js"></script>
 
 <div  ng-controller="SiteController as siteCtrl"  
     ng-style="scrollWindowStyle" 
@@ -76,7 +76,12 @@
 
                 <div class="form-group">
                     <label for="URL">website:</label>
-                    <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
+                        <div class="input-group">
+                            <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
+                            <span class='input-group-addon' ng-click="siteCtrl.openURL()">
+                                            <img width="20" height="20" src="image/internet.png"  />
+                                    </span>
+                        </div>
                 </div>
                 <div style="margin-bottom:400px;">
 
@@ -98,7 +103,7 @@
     
 
         function dropIt(ctrl) {
-            if ($("#" + ctrl)[0]._flatpickr == null) 
+            if ($("#" + ctrl)[0]._flatpickr == null)
                 $("#" + ctrl).flatpickr(
                           {
                               enableTime: true,
@@ -107,8 +112,7 @@
                               onChange: function (selectedDates, dateStr, instance) {
                                   setDateTime(dateStr, ctrl)
                               }
-              }
-          )
+                          });
 
                 $("#"+ctrl)[0]._flatpickr.toggle();
           
