@@ -31,6 +31,7 @@ Map = function () {
     scope_safe.LastRevision = null;
     scope_safe.HasLayers = null;
     scope_safe.SavedToDB = false;
+    scope_safe.IsDeleted = false;
     scope_safe.Sites = [];
 }
 

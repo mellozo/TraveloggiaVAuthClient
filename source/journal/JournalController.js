@@ -78,25 +78,23 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
             return SharedStateService.Selected.Site.SiteID;
         },
         function (newValue, oldValue) {
-            if (newValue !=null && newValue != oldValue)
+            if ( newValue != oldValue)
             {
-                //$scope.Site = SharedStateService.Selected.Site;
+                $scope.Journal = null;
                 if (SharedStateService.getAuthorizationState() == 'IS_EDITING')
                 {
                     SharedStateService.setAuthorizationState(canEdit);
                     $scope.stateMachine.state = canEdit;
                 }
-                    
+                
+                if (newValue != null)
                 DataTransportService.getJournals(newValue).then(
                  function (result) {
-                     SharedStateService.Repository.put("Journals", result.data);
                      $scope.JournalEntries = result.data;
                      if ($scope.JournalEntries.length > 0) {
                          SharedStateService.Repository.put("Journals", result.data);
                          $scope.Journal = $scope.JournalEntries[0];
                      }
-                     else
-                         $scope.Journal = null;
                  },
                 function (error) {
                     $scope.systemMessage.text = "error fetching journals" + error.data.Message;
@@ -120,6 +118,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         var recordDate = new Date(Date.now());
         journal.JournalDate = recordDate.toLocaleDateString();
         journal.MemberID = SharedStateService.getAuthenticatedMemberID();
+        journal.Title = null;
         $scope.Journal = journal;
         SharedStateService.setAuthorizationState(isEditing);
         $scope.stateMachine.state = isEditing;

@@ -121,6 +121,8 @@
 //ridiculous that angular doesnt have this already
     local_scope.deleteFromCache=function(collectionName,propName, itemID){
         var collection = local_scope.Repository.get(collectionName);
+        if (collection == null)
+            return;
         var spliceIndex = 0;
 
         try{
