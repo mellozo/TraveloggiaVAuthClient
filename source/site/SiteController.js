@@ -2,10 +2,24 @@
 
   
     var VM = this;
+
+    // sorry this is so hideous but angular monster digests the control
+    // entirely directives wont help
+    $window.setDateTime = function (strDate, prop) {
+        if (VM.Site == null)
+            return;
+
+        switch (prop) {
+            case "Arrival":
+                VM.Site.Arrival = strDate;
+                break;
+            case "Departure":
+                VM.Site.Departure = strDate;
+                break;
+        }
+        $scope.$apply();
+    }
    
-    //  in future all the accessors to shared state, should handle requery db if empty, 
-    // not the client controlers but I guess its this way because of async and having the then
-    // on the controller
 
 
     VM.Site = SharedStateService.Selected.Site;
@@ -63,8 +77,6 @@
             $scope.systemMessage.activate();
         }
         );
-
-
     }
 
 
@@ -80,7 +92,6 @@
                          //to do log error
                      }
          );
-
     }
 
 

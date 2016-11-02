@@ -1,4 +1,6 @@
 ﻿
+<link rel="stylesheet" href="css/lib/flatpickr.min.css"/>
+<script src="lib/flatpickr.js"></script>
 
 <div  ng-controller="SiteController as siteCtrl"  
     ng-style="scrollWindowStyle" 
@@ -27,22 +29,33 @@
 
                 <div class="form-group">
                     <label for="description">description:</label>
-                    <textarea rows="10" ng-model="siteCtrl.Site.Description" class="form-control" id="description" />
+                    <textarea rows="10" ng-model="siteCtrl.Site.Description " class="form-control" id="description" />
                 </div>
 
-            
-                <div class="form-group">
+          
+
+                <div class="form-group" id="Arrival">
                        <label for="Arrival">arrival:</label>
-                    <wrapped-date   ng-model="siteCtrl.Site.Arrival"  id="Arrival"></wrapped-date>
+                        <div class='input-group date'>
+                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d yyyy h:m'}}"/>
+                                    <span class='input-group-addon' onclick="dropIt('Arrival')">
+                                            <span  class ='glyphicon glyphicon-calendar'  ></span>
+                                    </span>
+                        </div>
+                </div>
+
+                <div class="form-group" id="Departure">
+                       <label for="Arrival">departure:</label>
+                        <div class='input-group date'>
+                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d yyyy h:m'}}"/>
+                                    <span class='input-group-addon' onclick="dropIt('Departure')">
+                                            <span  class ='glyphicon glyphicon-calendar' "></span>
+                                    </span>
+                        </div>
                 </div>
 
 
-                <div class="form-group">
-                  <label for="Arrival">departure:</label>
-                    <wrapped-date  ng-model="siteCtrl.Site.Departure" id="Departure"  ></wrapped-date>
-                </div>
-
-                  <div class="form-group" >
+                <div class="form-group" >
                             <div class="infoText"><b>stop no.:</b></div>
                             <input style="display:inline;width:60px;float:left"   ng-model="siteCtrl.Site.RouteIndex" class="form-control">        
                            <div class="element-container" style="float:left">
@@ -50,7 +63,7 @@
                                             <md-num-picker ng-model="siteCtrl.Site.RouteIndex"  min-value="0" ></md-num-picker>
                                   </div>
                            </div>   
-                </div>  
+                </div>    
 
                 <div class="form-group" style="clear:left">
                     <label for="phone">phone:</label>
@@ -80,7 +93,29 @@
             </form>
 
 
+    <script>
 
+    
+
+        function dropIt(ctrl) {
+            if ($("#" + ctrl)[0]._flatpickr == null) 
+                $("#" + ctrl).flatpickr(
+                          {
+                              enableTime: true,
+                              allowInput: false,
+                              dateFormat: 'M j Y  h:i',
+                              onChange: function (selectedDates, dateStr, instance) {
+                                  setDateTime(dateStr, ctrl)
+                              }
+              }
+          )
+
+                $("#"+ctrl)[0]._flatpickr.toggle();
+          
+        }
+
+
+    </script>
 
 
 </div>
