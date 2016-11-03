@@ -117,6 +117,11 @@
         $window.open(VM.Site.URL)
     }
 
+    VM.sendEmail = function () {
+
+        $window.open('mailto:'+VM.Site.Email);
+    }
+
 
     $scope.$watch(
        function (scope) {

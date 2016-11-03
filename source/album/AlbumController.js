@@ -294,9 +294,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             return SharedStateService.Selected.Site.SiteID;
         },
         function (newValue, oldValue) {
+            $scope.PhotoList = [];
+            SharedStateService.setSelected("Photo",null);
             if (newValue != null && newValue != oldValue)
             {
-                $scope.PhotoList = [];
+        
                 DataTransportService.getPhotos(newValue).then(
                 function (result) {
                     $scope.PhotoList = result.data;

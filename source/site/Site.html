@@ -10,7 +10,7 @@
 
             <form class=" infoText listColumn"  id="SiteInfo">
                
-                 <div class="cloudBlue menuText listHeader" style="text-align:center">
+                 <div class="cloudBlue menuText listHeader" style="min-height:44px;text-align:center">
                     {{siteCtrl.Site.Name}}
                 </div>
 
@@ -49,6 +49,7 @@
                         <div class='input-group date'>
                             <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d yyyy h:m'}}"/>
                                     <span class='input-group-addon' onclick="dropIt('Departure')">
+                    
                                             <span  class ='glyphicon glyphicon-calendar' "></span>
                                     </span>
                         </div>
@@ -67,18 +68,40 @@
 
                 <div class="form-group" style="clear:left">
                     <label for="phone">phone:</label>
-                    <input type="tel" ng-model="siteCtrl.Site.Phone" class="form-control" id="phone">
+
+                      <div class="input-group">
+                                    <input type="text" ng-model="siteCtrl.Site.Phone" class="form-control" id="Phone">
+                                    <span class='input-group-addon' >
+                                            <a style="padding:0px;margin:0px;" href="tel:+{{siteCtrl.Site.Phone}}"><img width="20" height="20" src="image/cell1.png"  /></a>
+                                    </span>
+                        </div>
+
+
                 </div>
+
+
+
+
+
                 <div class="form-group">
-                    <label for="Email">email address:</label>
-                    <input type="email" ng-model="siteCtrl.Site.Email" class="form-control" id="Email">
+                    <label for="Email">email:</label>
+                    <div class="input-group">
+                                    <input type="text" ng-model="siteCtrl.Site.Email" class="form-control" id="Email">
+                                    <span class='input-group-addon' ng-click="siteCtrl.sendEmail()">
+                                            <img width="20" height="20" src="image/mail.png"  />
+                                    </span>
+                        </div>
                 </div>
+
+
+
+
 
                 <div class="form-group">
                     <label for="URL">website:</label>
                         <div class="input-group">
-                            <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
-                            <span class='input-group-addon' ng-click="siteCtrl.openURL()">
+                                    <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
+                                    <span class='input-group-addon' ng-click="siteCtrl.openURL()">
                                             <img width="20" height="20" src="image/internet.png"  />
                                     </span>
                         </div>
