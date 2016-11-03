@@ -37,7 +37,7 @@
                 <div class="form-group" id="Arrival">
                        <label for="Arrival">arrival:</label>
                         <div class='input-group date'>
-                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d yyyy h:m'}}"/>
+                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d, yyyy h:m a'}}"/>
                                     <span class='input-group-addon' onclick="dropIt('Arrival')">
                                             <span  class ='glyphicon glyphicon-calendar'  ></span>
                                     </span>
@@ -47,7 +47,7 @@
                 <div class="form-group" id="Departure">
                        <label for="Arrival">departure:</label>
                         <div class='input-group date'>
-                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d yyyy h:m'}}"/>
+                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d, yyyy h:m a'}}"/>
                                     <span class='input-group-addon' onclick="dropIt('Departure')">
                     
                                             <span  class ='glyphicon glyphicon-calendar' "></span>
