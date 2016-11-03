@@ -22,9 +22,9 @@
       
          
     <div class="panel-group cloudBlue" id="searchPanel"
-         style="position:absolute;height:20px; border-bottom-left-radius:12px; border-bottom-right-radius:12px;
- border-bottom:4px solid black; border-left:4px solid black; border-right:4px solid black; border-top:none;
-z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
+            style="position:absolute;height:20px; border-bottom-left-radius:12px; border-bottom-right-radius:12px;
+            border-bottom:4px solid black; border-left:4px solid black; border-right:4px solid black; border-top:none;
+            z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
         <a data-toggle="collapse" style="font-family:Cinzel;font-size:10px" data-parent="#searchPanel" href="" data-target="#collapseOne">Search</a>   
            
                 <div id="collapseOne" class="panel-collapse collapse">
@@ -32,9 +32,7 @@ z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
                    
 
                         <div class="panel-body" style="padding-right:25px;padding-left:25px;">
-                                         <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;padding:4px;font-size:20px;" />   
-                             
-                                                                
+                                         <input id="inputAddress" ng-model ="searchAddress"            type="text" style="margin-top:12px;padding:4px;font-size:20px;" />                        
                                 <button style="margin-top:10px;background-color:#244F55" class="btn btn-primary" ng-click="geocodeAddress()">Get Coordinates</button>
                          </div>
                     </div>

@@ -27,6 +27,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         removePins();
     }
 
+    setView = function () {
+        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
+    }
 
     var removePins = function () {
         var map = null;
@@ -141,7 +144,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                selectedSite =$scope.MapRecord.Sites[0]
                SharedStateService.setSelected("Site",selectedSite );
            }
-               
         }
         else {
             for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
@@ -433,13 +435,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             });
     }
 
-    var addLocation = function (pos) {
-      
-        $scope.$apply(function () {
+    var addLocation = function (pos) {      
+        $scope.$apply(function ()
+        {
             var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
             SharedStateService.setSelected("Site", siteRecord);
-
-
             var currentPosition = new Microsoft.Maps.Location(pos.latitude, pos.longitude);
             var marker = createMarker(pos.latitude, pos.longitude);
             if (pushpinCollection == null) {
@@ -447,14 +447,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 $scope.mapInstance.layers.insert(pushpinCollection);
             }
             pushpinCollection.add(marker);
-
             $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
 
-            if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
-                $scope.dialogIsShowing = true;        
+       
+
         });
 
-
+        reverseGeocode(pos.latitude, pos.longitude);
     }
 
     var createSiteRecord = function (lat, lng) {
@@ -472,6 +471,29 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         return pin;
     }
 
+  var reverseGeocode = function (lat, long) {
+      SharedStateService.getSearchManager().then(function () {
+          var geocoder = new Microsoft.Maps.Search.SearchManager($scope.mapInstance);
+          var reverseGeocodeRequestOptions = {
+              location: new Microsoft.Maps.Location(lat, long),
+              callback: function (answer, userData) {
+                   var site = SharedStateService.Selected.Site;
+                   site.Address = answer.address.formattedAddress;
+
+                   $scope.$apply(function () {
+                       if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
+                           $scope.dialogIsShowing = true;
+
+                   })
+                
+              }
+          };
+          geocoder.reverseGeocode(reverseGeocodeRequestOptions);
+
+      });
+      
+    }
+
     $scope.dismiss = function () {
         $scope.dialogIsShowing = false;
     }
@@ -480,9 +502,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         $location.path("/Site");
     }
 
-    setView = function () {
-        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-    }
+  
 
   // CLICK TO ADD LOCATION
     $scope.enterEdit = function () {
@@ -543,24 +563,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 
 
             } );
-  
 
-        var x = 1;
         };
        
 
-
-//else {
-//                alert('Geocode was not successful for the following reason: ' + status);
-//            }
-//        });
-//    }
-
-
-
-
-
-
+    
 
 
     // the kickoff

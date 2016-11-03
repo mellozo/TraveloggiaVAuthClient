@@ -24,6 +24,7 @@
 
     VM.Site = SharedStateService.Selected.Site;
 
+
     if (VM.Site == null) {
         var siteID = SharedStateService.getSelectedID("Site");
         if(siteID != null && siteID != "null")
@@ -45,6 +46,13 @@
         state: SharedStateService.getAuthorizationState()
     }
  
+
+
+
+
+
+
+
 
 
     VM.saveSite = function () {
@@ -121,6 +129,11 @@
 
         $window.open('mailto:'+VM.Site.Email);
     }
+
+
+
+
+
 
 
     $scope.$watch(

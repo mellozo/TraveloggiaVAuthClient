@@ -161,7 +161,6 @@
     local_scope.getSearchManager = function () {
      var deferredResult= $q.defer();
      Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-      
          deferredResult.resolve("ok");
      });
      return deferredResult.promise;
