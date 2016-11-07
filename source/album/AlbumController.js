@@ -2,60 +2,29 @@
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
    
+ 
+    $scope.PhotoList = [];
+
+
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
-
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
     var widthMinusPad = $scope.viewFrameWidth - 36;
     var heightMinusPad = $scope.viewFrameHeight - 32;
+    var scrollContainer = $window.document.getElementById("albumScrollContainer")
+    var scrollWidth = 24;//scrollContainer.offsetWidth -scrollContainer.clientWidth;
+    var widthMinusPadScroll = widthMinusPad - scrollWidth ;
+    var widthMinusPadScrollBorder = widthMinusPadScroll - 14;
+    var previewWidth = $window.document.getElementById("previewFrame").offsetWidth;
+    var previewHeight = ( ($scope.reliableHeight -12  )* .33) -28
 
-    if ($location.path() == "/Album") {
-        // offset includes the border and scrollbars - not the margin
-        // clientWidth is just the inner content - not scroll bars
-        var scrollContainer = $window.document.getElementById("albumScrollContainer")
-        var scrollWidth = 24;//scrollContainer.offsetWidth -scrollContainer.clientWidth;
-        var widthMinusPadScroll = widthMinusPad - scrollWidth ;
-        var widthMinusPadScrollBorder = widthMinusPadScroll - 14;
-
-        $scope.landscapeImageStyle = {
-            "width": widthMinusPadScrollBorder
-        };
-
-        //$scope.portaitImageStyle = {
-        //    "height": heightMinusPad,
-        //    "width": widthMinusPadScrollBorder
-        //}
-
+    $scope.previewImageStyle = {
+        "height": previewHeight,
+        "width": previewWidth - 32
     }
-    else if ($location.path() == "/Photo") {
-
-        $scope.landscapeImageStyle = {
-            "width": widthMinusPad
-        };
-
-        $scope.portaitImageStyle = {
-            "height": heightMinusPad,
-            "width": widthMinusPad
-        }
-
-
-    }
-    else {// PREVIEW 
-       var previewWidth = $window.document.getElementById("previewFrame").offsetWidth;
-       var previewHeight = ( ($scope.reliableHeight -12  )* .33) -28
-
-
-        $scope.previewImageStyle = {
-            "height": previewHeight,
-            "width": previewWidth - 32
-        }
-    }
-  
- 
-
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
@@ -63,52 +32,79 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedID("Map") + "/";
 
-    var randomDate = new Date();
-    $scope.imageRefresher ={
-        queryString:   "?reload=" + Math.random()
-        
-    }
-
-    var cachedPhotos = SharedStateService.Repository.get('Photos');
-
-    if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site"))
-    {
-        $scope.PhotoList = cachedPhotos;
-        $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
-        if ($scope.selectedPhoto == null) {
-            SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+    var loadPhotos = function () {
+        var cachedPhotos = SharedStateService.Repository.get('Photos');
+        if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site")) {
           
-
+            $scope.PhotoList = cachedPhotos;
+            $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+            if ($scope.selectedPhoto == null) {
+                SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+                $scope.selectedPhoto = $scope.PhotoList[0];
+            }
+           
+        }
+        else if (SharedStateService.getSelectedID("Site") != null) {
+            DataTransportService.getPhotos(SharedStateService.getSelectedID("Site")).then(
+                function (result) {
+                    $scope.PhotoList = result.data;
+                    SharedStateService.Repository.put('Photos', result.data);
+                    $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
+                    if ($scope.selectedPhoto == null) {
+                        SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
+                        $scope.selectedPhoto = $scope.PhotoList[0];
+                    }
+                },
+                function (error) { })
         }
     }
-    else if (SharedStateService.getSelectedID("Site") != null ){
-        DataTransportService.getPhotos(SharedStateService.getSelectedID("Site")).then(
-            function (result) {
-                $scope.PhotoList = result.data;
-                SharedStateService.Repository.put('Photos', result.data);
-                $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
-                if ($scope.selectedPhoto == null) {
-                    SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                
-                }
-            },
-            function (error) { })
-    }
 
-
-    $scope.dontAsk = function (event) {
+    $scope.dontAsk = function (event,Photo) {
         var loadedImage = event.target;
-        var origH = loadedImage.height;
-        var origW = loadedImage.width;
-        var maxH = heightMinusPad;
-        var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPad;
-        var w = calculateAspectRatio(origH, origW, maxH, maxW)
-        if(w != maxW)
-        {
-            w= w + "px"
-            loadedImage.style.width = w;
+
+        if (Photo.Height == null || Photo.Width == null) {
+            Photo.Height = loadedImage.height;
+            Photo.Width = loadedImage.width;
+            DataTransportService.updatePhoto(Photo).then(
+            function (result) {
+                SharedStateService.updateCache("Photo","PhotoID",Photo.PhotoID, result.data)
+                var origH = loadedImage.height;
+                var origW = loadedImage.width;
+                var maxH = heightMinusPad;
+                var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPad;
+                var w = calculateAspectRatio(origH, origW, maxH, maxW)
+                if (w != maxW) {
+                    w = w + "px"
+                    loadedImage.style.width = w;
+                }
+             console.log("uploaded photo dimensions")
+            },
+             function (error) {
+               console.log("error updating photo height and width")
+             }
+            );
+        }
+        else {
+
+            return;
         }
 
+
+
+
+    }
+
+
+
+    $scope.getImageStyle = function (Photo) {
+        if (Photo.Height == null || Photo.Width == null)
+            return;
+        var origH = Photo.Height;
+        var origW = Photo.Width;
+        var maxH = heightMinusPad;
+        var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPadScroll;
+        var w = calculateAspectRatio(origH, origW, maxH, maxW)
+        return{"width" :w}
     }
 
 
@@ -153,8 +149,15 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     // rotates image if nescessary 
-    $scope.onImageLoad = function (e, orientationID) {
+    $scope.onImageLoad = function (e, orientationID,Photo) {
         var loadedImage = e.target;
+        if (Photo.height == null || Photo.width == null) {
+            Photo.height = loadedImage.height;
+            Photo.width = loadedImage.width;
+        }
+
+
+
         var degrees = 0;
         var maxHeight =0
         var maxWidth = 0
@@ -285,6 +288,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.selectPhoto = function (photo) {
         SharedStateService.setSelected("Photo", photo);
         $scope.selectedPhoto = photo;
+
         $location.path("/Photo");
     }
 
@@ -296,16 +300,15 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             return SharedStateService.Selected.Site.SiteID;
         },
         function (newValue, oldValue) {
-            $scope.PhotoList = [];
-            SharedStateService.setSelected("Photo",null);
-            if (newValue != null && newValue != oldValue)
+         
+            if ( newValue != oldValue)
             {
-        
-                DataTransportService.getPhotos(newValue).then(
+                $scope.PhotoList = [];
+                SharedStateService.setSelected("Photo", null);
+               DataTransportService.getPhotos(newValue).then(
                 function (result) {
                     $scope.PhotoList = result.data;
                         SharedStateService.setSelected("Photo", $scope.PhotoList[0]);
-                     
                 },
                 function (error) { }
                 );
@@ -320,11 +323,19 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                  return SharedStateService.Selected.Map.MapName;
          },
          function (newValue, oldValue) {
-             if (newValue != null && newValue != oldValue) 
-                 $scope.imagePath = SharedStateService.getAuthenticatedMemberID() +"/" + SharedStateService.getSelectedMapName() + "/";
-            
+             if (newValue != null && newValue != oldValue) {
+                 $scope.oldImagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedMapName() + "/";
+                 $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedID("Map") + "/";
+             } 
          });
 
+    $scope.$watch(function (scope) {
+        return $scope.PhotoList;
+    },
+        function (newValue, oldValue) {
+            if (newValue.length == 0)
+                loadPhotos();
+    })
 
 
 
@@ -514,6 +525,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+
+
+    // I think this was refactored into the sss
     getObjectByProperty = function (list, property, value) {
         var obj = null;
         for (var i = 0; i < list.length; i++) {
@@ -561,6 +575,10 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
        );
 
 
+
+// kickoff
+
+  //  loadPhotos();
 
 })
 

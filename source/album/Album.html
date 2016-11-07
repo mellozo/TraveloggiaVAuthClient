@@ -42,7 +42,7 @@
 
 
     <div  style="margin:0px;padding:0px;position:relative;width:100%" id="photoListContainer"> 
-        <div ng-repeat="Photo in PhotoList" style="margin-top:4px;padding-top:0px;">
+        <div ng-repeat="Photo in PhotoList " style="margin-top:4px;padding-top:0px;">
             <a href="" ng-click="selectPhoto(Photo)">
 
 
@@ -50,8 +50,8 @@
                           
                                    <div ng-if="Photo.orientationID == null || Photo.orientationID < 5 || Capabilities.alreadyKnowsHow == true"  >
                                             <img 
-                                                 on-load="dontAsk($event)"
-                                                 ng-style="landscapeImageStyle"
+                                                 on-load="dontAsk($event,Photo)"
+                                                 ng-style="getImageStyle(Photo)"
                                                  ng-src="{{  imageServer + imagePath + Photo.FileName}}"  />
                                    </div>
                           
@@ -71,8 +71,8 @@
                 <div ng-if="Photo.StorageURL==null " class="imageFrame"  >
                             <div>
                                         <img
-                                            ng-style="landscapeImageStyle"
-                                            on-load="dontAsk($event)"
+                                            ng-style="getImageStyle(Photo)"
+                                            on-load="dontAsk($event,Photo)"
                                             ng-src="http://www.traveloggia.net/upload/{{oldImagePath }}{{Photo.FileName}}"
                                                  />
                                </div>
