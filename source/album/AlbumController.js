@@ -39,7 +39,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     var loadPhotos = function () {
         var cachedPhotos = SharedStateService.Repository.get('Photos');
         if (cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getSelectedID("Site")) {
-          
             $scope.PhotoList = cachedPhotos;
             $scope.selectedPhoto = SharedStateService.getSelectedPhoto();
             if ($scope.selectedPhoto == null) {
@@ -60,9 +59,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
     }
 
+
     $scope.dontAsk = function (event,Photo) {
         var loadedImage = event.target;
-
         if (Photo.Height == null || Photo.Width == null) {
             Photo.Height = loadedImage.height;
             Photo.Width = loadedImage.width;
@@ -86,15 +85,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             );
         }
         else {
-
             return;
         }
-
-
-
-
     }
-
 
 
     $scope.getImageStyle = function (Photo) {
@@ -305,7 +298,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
   
-    // loading the data if they change sites but stay on the page
+/***WATCH SITE ID*****/
     $scope.$watch(
         function (scope) {
             if(SharedStateService.Selected.Site != null)
@@ -330,6 +323,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         });
 
 
+/****WATCH MAP ID ***/
     $scope.$watch(
          function (scope) {
              if (SharedStateService.Selected.Map != null)
@@ -342,6 +336,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
              } 
          });
 
+
+/***WATCH PHOTO LIST *****/
     $scope.$watch(function (scope) {
         return $scope.PhotoList;
     },
@@ -473,6 +469,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var photoRecord = new Photo();
         photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
+        photoRecord.Width =exif.PixelXDimension;
+        photoRecord.Height = exif.PixelYDimension
         photoRecord.FileName = fileName;
         if (exif != null) {
             photoRecord.orientation = exif.orientation;
