@@ -44,7 +44,7 @@
 
                         <div ng-if="PhotoList[0].StorageURL==null " ng-style="previewImageStyle">
                 
-                                    <div   style="height:100%;width:100%;background-image:url('http://www.traveloggia.net/upload/{{oldImagePath }}{{PhotoList[0].FileName}}');
+                                    <div   style="height:100%;width:100%;background-image:url('{{oldImagePath + PhotoList[0].FileName}}');
                                         background-size:cover;background-repeat:no-repeat;background-position:50% 50%">
                                      </div>
                    

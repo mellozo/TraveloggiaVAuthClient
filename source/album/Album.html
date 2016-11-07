@@ -59,7 +59,7 @@
                                     <div ng-if="Photo.orientationID != null && Photo.orientationID > 4 && Capabilities.alreadyKnowsHow ==false" >                                                                                                    
                                             <img  
                                                     style="position:absolute;visibility:hidden"
-                                                    on-load="onImageLoad($event, Photo.orientationID)"
+                                                    on-load="onImageLoad($event, Photo.orientationID,Photo)"
                                                     ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
                                             <canvas id="canvas" style="display:block;" 
                                                     ></canvas>
@@ -73,7 +73,7 @@
                                         <img
                                             ng-style="getImageStyle(Photo)"
                                             on-load="dontAsk($event,Photo)"
-                                            ng-src="http://www.traveloggia.net/upload/{{oldImagePath }}{{Photo.FileName}}"
+                                            ng-src="{{  oldImagePath + Photo.FileName}}"
                                                  />
                                </div>
                 </div>
