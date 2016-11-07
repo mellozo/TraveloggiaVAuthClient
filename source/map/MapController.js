@@ -313,10 +313,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
              preparePreviewMap();
          }, 3000)
      }// end bing is loaded yet
-
-
-
-
  }
 
 
@@ -448,9 +444,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             }
             pushpinCollection.add(marker);
             $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
-
-       
-
         });
 
         reverseGeocode(pos.latitude, pos.longitude);
@@ -507,10 +500,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   // CLICK TO ADD LOCATION
     $scope.enterEdit = function () {
         // add crosshair cursor
-        $scope.selectedState.editSelected = true;
+   $scope.selectedState.editSelected = true;
        // angular.element("#bingMapRaw").style.cursor = "crosshair";
      clickHandler =   Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
-
             if (e.targetType === "map") {
                 // Mouse is over Map
                 var loc = e.location;
@@ -518,7 +510,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 exitEdit();
             } else {
                 // Mouse is over Pushpin, Polyline, Polygon
-              
             }
         });
     }
@@ -567,7 +558,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         };
        
 
+   
     
+
 
 
     // the kickoff

@@ -16,7 +16,6 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
           templateUrl:'diagnostics/Monitor.html'
          })
 
-
         .when('/SignIn', {
           templateUrl: 'signin/SignIn.html'          
         })

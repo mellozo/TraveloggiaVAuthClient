@@ -76,15 +76,15 @@ var Photo=function()
     scope_safe.StorageURL = null;
     scope_safe.ThumbnailURL = null;
     scope_safe.orientation  = null;
-   scope_safe.orientationID  = null;
-   scope_safe.GPSLatitude  = null;
-   scope_safe.GPSLongitude  = null;
-   scope_safe.Camera  = null;
-   scope_safe.Model  = null;
-   scope_safe.Software  = null;
-   scope_safe.Height  = null;
-   scope_safe.Width  = null;
-   scope_safe.BitsPerSample  = null;
+    scope_safe.orientationID  = null;
+    scope_safe.GPSLatitude  = null;
+    scope_safe.GPSLongitude  = null;
+    scope_safe.Camera  = null;
+    scope_safe.Model  = null;
+    scope_safe.Software  = null;
+    scope_safe.Height  = null;
+    scope_safe.Width  = null;
+    scope_safe.BitsPerSample  = null;
 
 }
 
