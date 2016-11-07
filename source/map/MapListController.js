@@ -81,112 +81,127 @@
         };
     
 
-var loadMapList = function () {
-        var cachedMapList = SharedStateService.Repository.get("MapList");
-        if (cachedMapList == null || cachedMapList[0].MemberID != SharedStateService.getAuthenticatedMemberID()) {
-            DataTransportService.getMapList(SharedStateService.getAuthenticatedMemberID()).then(
-                function (result) {
-                    $scope.MapList = result.data;
-                    SharedStateService.Repository.put("MapList", result.data);
-                    if (SharedStateService.getSelectedID("Map") != null)
-                        $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
-                },
-                function (error) {
-                    $scope.systemMessage.text = "error loading maps";
-                    $scope.systemMessage.activate();
-                }
-            )// end then
+    var loadMapList = function () {
+            var cachedMapList = SharedStateService.Repository.get("MapList");
+            if (cachedMapList == null || cachedMapList[0].MemberID != SharedStateService.getAuthenticatedMemberID()) {
+                DataTransportService.getMapList(SharedStateService.getAuthenticatedMemberID()).then(
+                    function (result) {
+                        $scope.MapList = result.data;
+                        SharedStateService.Repository.put("MapList", result.data);
+                        if (SharedStateService.getSelectedID("Map") != null)
+                            $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
+                    },
+                    function (error) {
+                        $scope.systemMessage.text = "error loading maps";
+                        $scope.systemMessage.activate();
+                    }
+                )// end then
+            }
+            else {
+                    $scope.MapList = SharedStateService.Repository.get('MapList');
+            }
         }
-        else {
-                $scope.MapList = SharedStateService.Repository.get('MapList');
-        }
-    }
 
 
  
 
-$scope.showMapEditWindow = function (action) {
-    if (action == "add") {
-        $scope.selectedState.addSelected = true;
-        createMap();
+    $scope.showMapEditWindow = function (action) {
+        if (action == "add") {
+            $scope.selectedState.addSelected = true;
+            createMap();
+        }
+        else if (action=="edit")
+            $scope.selectedState.editSelected = true;
     }
-    else if (action=="edit")
-        $scope.selectedState.editSelected = true;
-}
 
-var createMap = function () {
-    var anotherMap = new Map();
-    anotherMap.MemberID = SharedStateService.getAuthenticatedMemberID();
-    $scope.selectedMap = anotherMap;
-}
 
- $scope.deleteMap = function () {
-    DataTransportService.deleteMap($scope.selectedMap.MapID).then(
-        function (result) {
-            SharedStateService.deleteFromCache("MapList", "MapID", $scope.selectedMap.MapID);
-            loadMapList();
-            $scope.systemMessage.text = "map deleted successfully";
+    $scope.editMap = function () {
+       
+        if  ( parseInt($scope.selectedMap.MapID) <= 6088)
+        {
+            $scope.systemMessage.text = "map name may not be edited";
             $scope.systemMessage.activate();
-        },
-        function (error) {
-            $scope.systemMessage.text = "error deleting map";
-            $scope.systemMessage.activate();
+        }
+        else
+        $scope.showMapEditWindow("edit")
 
-        })
-
-}
+    }
 
 
-$scope.saveMapEdit = function () {
-    if ($scope.selectedMap.MapID == null) {
 
+    var createMap = function () {
+        var anotherMap = new Map();
+        anotherMap.MemberID = SharedStateService.getAuthenticatedMemberID();
+        $scope.selectedMap = anotherMap;
+    }
+
+     $scope.deleteMap = function () {
+        DataTransportService.deleteMap($scope.selectedMap.MapID).then(
+            function (result) {
+                SharedStateService.deleteFromCache("MapList", "MapID", $scope.selectedMap.MapID);
+                loadMapList();
+                $scope.systemMessage.text = "map deleted successfully";
+                $scope.systemMessage.activate();
+            },
+            function (error) {
+                $scope.systemMessage.text = "error deleting map";
+                $scope.systemMessage.activate();
+
+            })
+
+    }
+
+
+    $scope.saveMapEdit = function () {
+        if ($scope.selectedMap.MapID == null) {
+
+            $scope.selectedState.addSelected = false;
+            DataTransportService.addMap($scope.selectedMap).then(
+                function (result) {
+                    // to do make a shared util method to add to the cache as we are doing for delete
+                    var maplist = SharedStateService.Repository.get("MapList");
+                    maplist.splice(0,0,result.data);
+                    SharedStateService.Repository.put("MapList", maplist);
+
+                    SharedStateService.setSelected("Map", result.data);
+                    SharedStateService.setSelected("Site", null)
+                    SharedStateService.Repository.put("Sites", []);
+                    SharedStateService.Repository.put("Map", result.data);
+                    SharedStateService.Repository.put("Journals", []);
+                    SharedStateService.Repository.put("Photos", [])
+                    $scope.systemMessage.text = "map was added successfully";
+                    $scope.systemMessage.activate();
+                    $scope.goMapFirstTime();
+
+                },
+                    function (error) {
+                        $scope.systemMessage.text = "error adding map";
+                        $scope.systemMessage.activate();
+                    })
+        }
+        else if ($scope.selectedMap.MapID != null) {
+            $scope.selectedState.editSelected = false;
+            DataTransportService.updateMap($scope.selectedMap).then(
+                function (result) {
+                    SharedStateService.setSelected("Map", result.data);
+                    SharedStateService.updateCache("MapList", "MapID", $scope.selectedMap.MapID, $scope.selectedMap)
+                    $scope.systemMessage.text = "map was updated successfully";
+                    $scope.systemMessage.activate();
+                    // refresh map list somehow
+                },
+                    function (error) {
+                        $scope.systemMessage.text = "error updating map";
+                        $scope.systemMessage.activate();
+                    })
+        }
+    }
+
+
+    $scope.cancelMapEdit = function () {
         $scope.selectedState.addSelected = false;
-        DataTransportService.addMap($scope.selectedMap).then(
-            function (result) {
-                // to do make a shared util method to add to the cache as we are doing for delete
-                var maplist = SharedStateService.Repository.get("MapList");
-                maplist.splice(0,0,result.data);
-                SharedStateService.Repository.put("MapList", maplist);
-
-                SharedStateService.setSelected("Map", result.data);
-                SharedStateService.setSelected("Site", null)
-                SharedStateService.Repository.put("Sites", []);
-                SharedStateService.Repository.put("Map", result.data);
-                SharedStateService.Repository.put("Journals", []);
-                SharedStateService.Repository.put("Photos", [])
-                $scope.systemMessage.text = "map was added successfully";
-                $scope.systemMessage.activate();
-                $scope.goMapFirstTime();
-
-            },
-                function (error) {
-                    $scope.systemMessage.text = "error adding map";
-                    $scope.systemMessage.activate();
-                })
+        if (SharedStateService.getSelectedID("Map") != null)
+            $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
     }
-    else if ($scope.selectedMap.MapID != null) {
-        $scope.selectedState.editSelected = false;
-        $scope.selectedMap.MapName = $scope.selectedMap.MapName.replace(/ /g, '_');
-        DataTransportService.updateMap($scope.selectedMap).then(
-            function (result) {
-                SharedStateService.setSelected("Map", result.data);
-                $scope.systemMessage.text = "map was updated successfully";
-                $scope.systemMessage.activate();
-                // refresh map list somehow
-            },
-                function (error) {
-                    $scope.systemMessage.text = "error updating map";
-                    $scope.systemMessage.activate();
-                })
-    }
-}
-
-
-$scope.cancelMapEdit = function () {
-    $scope.selectedState.addSelected = false;
-    if (SharedStateService.getSelectedID("Map") != null)
-        $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
-}
 
 
 

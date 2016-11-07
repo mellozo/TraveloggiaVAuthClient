@@ -118,6 +118,24 @@
     }
 
 
+
+    local_scope.updateCache=function(collectionName, propName, itemID, item)
+    {
+        var collection = local_scope.Repository.get(collectionName);
+        if (collection == null)
+            return;
+
+        for (var i = 0; i < collection.length; i++) {
+            if (collection[i][propName] == itemID) {
+                collection[i] = item;
+                break;
+            }
+        }
+    }
+
+
+
+
 //ridiculous that angular doesnt have this already
     local_scope.deleteFromCache=function(collectionName,propName, itemID){
         var collection = local_scope.Repository.get(collectionName);
