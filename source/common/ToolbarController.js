@@ -31,6 +31,7 @@
                                break;
 
                            case "/Album":
+                           case "/Photo":
                                $scope.preview.windowOne = "map/MapPreview.html";
                                $scope.preview.windowTwo = "site/SitePreview.html";
                                $scope.preview.windowThree = "journal/JournalPreview.html";
@@ -58,11 +59,6 @@
 
 
 
-    //$scope.announce = function () {
-    //    var mapPreviewDiv = $window.document.getElementById("bingPreviewMap")
-    //    if (mapPreviewDiv != null)
-    //   $scope.$broadcast("previewFrameLoaded", mapPreviewDiv)
-    //}
 
 /*****Navigation handlers********/
     // go Site
@@ -73,6 +69,7 @@
     //// goAlbum
     $scope.goAlbum = function () {
         $location.path("/Album")
+       
     }
 
     $scope.goJournal = function () {
