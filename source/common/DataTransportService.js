@@ -197,13 +197,13 @@ var baseURL = "http://traveloggiaservices.net"
         },
 
        
-        uploadImage: function (memberID, mapName,  imageFile) {
+        uploadImage: function (memberID, mapID,  imageFile) {
             var uploadResult = $q.defer();
             //using the amazon javascript api
             var bucketName = 'traveloggia-guests';
             AWS.config.update({ accessKeyId: 'AKIAJ5HBU5J7RIIHEETQ', secretAccessKey: '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' })
             AWS.config.region = 'us-west-2'
-            var objKey = memberID+"/" + mapName+"/"  + imageFile.name;
+            var objKey = memberID+"/" + mapID+"/"  + imageFile.name;
             var bucket = new AWS.S3({
                 params: {
                     Bucket: bucketName

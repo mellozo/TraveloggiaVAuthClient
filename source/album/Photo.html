@@ -30,7 +30,7 @@
                                     <img 
                                           ng-style="landscapeImageStyle"
                                          on-load="dontAsk($event)"
-                                         ng-src="http://www.traveloggia.net/upload/{{imagePath }}{{selectedPhoto.FileName +imageRefresher.queryString}}"  />          
+                                         ng-src="http://www.traveloggia.net/upload/{{oldImagePath }}{{selectedPhoto.FileName +imageRefresher.queryString}}"  />          
                     </div>
 
     </div>  
@@ -64,17 +64,7 @@
                           <a   href="" ng-click="deletePhoto()" >Delete</a>
                     </div>
 
-<!--    <div class="bluenav">
-            <div  ng-show="stateMachine.state== 'CAN_EDIT'" class="clickableDiv" >
-                    <a href="" ng-click="deletePhoto()">
-                        <img src="../image/minus.png" style="height:40px;width:40px;" />
-                    </a>
-                </div>
 
-    </div>
-          -->
-
-           
         
     </div>
 </div>

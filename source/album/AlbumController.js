@@ -59,7 +59,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
 
-    $scope.imagePath = SharedStateService.getAuthenticatedMemberID() +"/" + SharedStateService.getSelectedMapName() + "/";
+    $scope.oldImagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedMapName() + "/";
+
+    $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + SharedStateService.getSelectedID("Map") + "/";
 
     var randomDate = new Date();
     $scope.imageRefresher ={
@@ -486,12 +488,12 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     var uploadFile = function () {
         var memberID = SharedStateService.getAuthenticatedMemberID();
-        var mapName = SharedStateService.getSelectedMapName();
+        var mapID = SharedStateService.getSelectedID("Map");
         for (var i = 0; i < $scope.filesToUpload.length; i++) {
             (function (imageFile, fileName, photoRecord) {
                 var fileName = imageFile.name
                 var photoRecord = getObjectByProperty($scope.photoRecords, "FileName", fileName);
-                DataTransportService.uploadImage(memberID, mapName, imageFile).then(
+                DataTransportService.uploadImage(memberID, mapID, imageFile).then(
                                  function (result) {
                                      $scope.addPhotoRecord(photoRecord);
                                  },
