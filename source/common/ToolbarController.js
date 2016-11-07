@@ -81,6 +81,9 @@
         $scope.selectedSite = site;
         SharedStateService.setSelected("Site", site);
         var currentpath = $location.path();
+
+        if (currentpath == "/Photo")
+           currentpath="/Album"
         $location.path(currentpath).search( {"ZoomIn":"true"});
     }
 
