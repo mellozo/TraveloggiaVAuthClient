@@ -19,9 +19,12 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     $scope.searchAddress = null;
 
+    //ConfirmCancel Handlers
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
 
     var saveCurrentLocation = function () {
-        alert("you dont suck")
         $location.path("/Site");
     }
 
@@ -30,15 +33,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     $scope.ConfirmCancel ={
         question:"Save location permanently to map?",
         isShowing:false,
-        ccCancel:function(){alert("you suck")},
+        ccCancel:dismiss,
         ccConfirm: saveCurrentLocation
     }
 
-    //ConfirmCancel Handlers
-      var dismiss = function () {
-        $scope.ConfirmCancel.isShowing = false;
-    }
-
+   
   
 
 
@@ -135,7 +134,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             (function attachEventHandlers(site) {
 
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                   if( $scope.selectedState.editSelected == false)
+                
                     $scope.$apply(function () {
                         SharedStateService.setSelected("Site", site);
                         $scope.goAlbum();
@@ -454,6 +453,35 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 /******MAP EDITING ************************************************/
 
+
+
+    // CLICK TO ADD LOCATION
+  $scope.toggleEdit = function () {
+      // add crosshair cursor
+      $scope.selectedState.editSelected = ($scope.selectedState.editSelected == false) ? true : false;
+      // angular.element("#bingMapRaw").style.cursor = "crosshair";
+      if ($scope.selectedState.editSelected == true)
+          clickHandler = Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
+              if (e.targetType === "map") {
+                  // Mouse is over Map
+                  var loc = e.location;
+                  addLocation(loc)
+                  $scope.toggleEdit();
+              } else {
+                  // Mouse is over Pushpin, Polyline, Polygon
+              }
+          });
+      else {
+          Microsoft.Maps.Events.removeHandler(clickHandler);
+      }
+  }
+
+
+
+
+
+
+
     //ADD CURRENT LOCATION
     $scope.getLocation = function () {
         $scope.systemMessage.text = "working...";
@@ -544,27 +572,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
   
   
-
-  // CLICK TO ADD LOCATION
-    $scope.toggleEdit = function () {
-        // add crosshair cursor
-        $scope.selectedState.editSelected = ($scope.selectedState.editSelected == false) ? true : false;
-        // angular.element("#bingMapRaw").style.cursor = "crosshair";
-      if( $scope.selectedState.editSelected == true)
-         clickHandler =   Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
-                if (e.targetType === "map") {
-                    // Mouse is over Map
-                    var loc = e.location;
-                    addLocation(loc)
-                    toggleEdit();
-                } else {
-                    // Mouse is over Pushpin, Polyline, Polygon
-                }
-         });
-      else {
-          Microsoft.Maps.Events.removeHandler(clickHandler);
-      }
-    }
 
   
 
