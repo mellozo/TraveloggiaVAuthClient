@@ -9,24 +9,31 @@
         <div ng-include="'map/MapListToolBar.html'"></div>
     </div>
 
-
-    <div ng-show="selectedState.addSelected == true || selectedState.editSelected == true"  style="margin:8px">
   
-            <div class="panel-group" id="accordion" style="margin:0px 15px">
+
+
+            <div class=" infoText listColumn skyBlue"
+                style="overflow-y:scroll;-webkit-overflow-scrolling: touch;max-width:450px;">
+
+
+
+
+    <div ng-show="selectedState.addSelected == true || selectedState.editSelected == true"  style="margin:0px">
+  
+            <div class="panel-group" id="accordion" style="margin:0px 0px">
                 <div class="panel panel-default" 
                     style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;margin-bottom:0px;padding-bottom:0px;">
                     <div class="panel-heading" style="background-color:#8EBBDA;">
-                        <h4 class="panel-title listHeader" >
+                        <div class="menuText panel-title listHeader" style="display:inline">
                             Edit Map Name
-                      
-                        </h4>
+                        </div>
                     </div>
 
                     <div id="collapseOne" class="panel-collapse ">
                         <div class="panel-body" style="height:130px">
-                            <input ng-model="selectedMap.MapName" class="menuText" />
+                            <input ng-model="selectedMap.MapName" class="form-control infoText" style="font-size:22px;" />
                        
-                            <div>
+                            <div style="float:right;padding-right:30px;">
                                 <button 
                                         ng-disabled="BusyWith.uploading"
                                         style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
@@ -47,14 +54,51 @@
    
     </div>
 
+    
+    <div ng-show="selectedState.linkSelected== true"  style="margin:0px">
+  
+            <div class="panel-group" id="accordion" style="margin:0px 0px">
+                <div class="panel panel-default" 
+                    style="background-color:#DEE5F2;margin-bottom:0px;padding-bottom:0px;">
+                    <div class="panel-heading" style="background-color:#8EBBDA;">
+                        <div class="menuText panel-title listHeader" style="display:inline">
+                            Copy Url
+                        </div>
+                 
+                    </div>
+
+                    <div id="collapseOne" class="panel-collapse ">
+                        <div class="panel-body" style="height:130px;">
+                            <input value="www.traveloggia.pro?MapID={{selectedMap.MapID}}"  class="form-control infoText" style="font-size:22px;"/>
+                       
+                         <div style="float:right;padding-right:30px;">
+                        
+                                <button 
+                                        ng-disabled="BusyWith.uploading"
+                                        style="margin-top:10px;background-color:#244F55" class="btn btn-primary"
+                                         ng-click="toggleLink()">Close
+                                </button>
+                            </div>  
+                    
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+   
+    </div>
 
 
-      
 
-            <div class=" infoText listColumn skyBlue"
-                style="overflow-y:scroll;-webkit-overflow-scrolling: touch;max-width:450px;">
+
+
+
+
+
+
+
                
-                    <div class="cloudBlue menuText listHeader">
+                    <div class="cloudBlue menuText listHeader" style="text-align:center">
                         Map List
                     </div>
 

@@ -41,13 +41,19 @@
                 </div>
         
          
-        <div class="clickableDiv" ng-click="" title="Share Email">
+        <div class="clickableDiv" ng-click="sendEmail()" title="Share Email">
             <img src="../image/email.png"
                  class="dottedBorderRed glow"
                  ng-class="{'poppedUp' : selectedState.emailSelected == true}" />
         </div>
                
-                 
+                
+        <div class="clickableDiv" ng-click="toggleLink()" title="Share Link">
+            <img src="../image/internet.png"
+                 class="dottedBorderRed glow"
+                 ng-class="{'poppedUp' : selectedState.linkSelected == true}" />
+        </div>
+                    
 
        
     </div>

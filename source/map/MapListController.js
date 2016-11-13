@@ -7,10 +7,14 @@
         deleteSelected:  false,
         siteSelected: false,
         facebookSelected:  false,
-        emailSelected:  false
+        emailSelected: false,
+        linkSelected:false
     }
 
-    $scope.selectedMap = {};
+    $scope.selectedMap = {
+        MapID: SharedStateService.getSelectedID("Map"),
+        MapName:SharedStateService.getSelectedMapName()
+    }
 
 
     $scope.switchMap = function (map) {
@@ -54,7 +58,10 @@
         return photoURL;
     }
 
+  $scope.sendEmail = function () {
 
+        $window.open('mailto:?body=Sharing a link to my map http://www.traveloggia.pro?MapID='+$scope.selectedMap.MapID);
+    }
 
     $scope.facebook = function () {
         var MapID = SharedStateService.getSelectedID("Map");
@@ -113,6 +120,12 @@
         else if (action=="edit")
             $scope.selectedState.editSelected = true;
     }
+
+    $scope.toggleLink = function () {
+        $scope.selectedState.linkSelected = ($scope.selectedState.linkSelected == true) ? false : true;
+    }
+
+  
 
 
     $scope.editMap = function () {
@@ -199,6 +212,7 @@
 
     $scope.cancelMapEdit = function () {
         $scope.selectedState.addSelected = false;
+        $scope.selectedState.editSelected = false;
         if (SharedStateService.getSelectedID("Map") != null)
             $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
     }
