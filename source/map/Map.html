@@ -7,7 +7,7 @@
     <div class="clickableDiv" style="position:absolute;z-index:99" >
         <div ng-cloak ng-show="stateMachine.state=='CAN_EDIT' " class="bluenav" style="padding:2px"
             
-             ng-click="enterEdit()">
+             ng-click="toggleEdit()">
             <img title="enable add pushpin"
                  src="../image/anchor.png"
                  class="dottedBorderRed glow "
@@ -25,7 +25,8 @@
             style="position:absolute;height:20px; border-bottom-left-radius:12px; border-bottom-right-radius:12px;
             border-bottom:4px solid black; border-left:4px solid black; border-right:4px solid black; border-top:none;
             z-index:999;width:50%;margin-left:25%;margin-right:25%;text-align:center">
-        <a data-toggle="collapse" style="font-family:Cinzel;font-size:10px" data-parent="#searchPanel" href="" data-target="#collapseOne">Search</a>   
+        <a data-toggle="collapse" style="font-family:Cinzel;font-size:10px" data-parent="#searchPanel" href="" 
+                        data-target="#collapseOne">Search</a>   
            
                 <div id="collapseOne" class="panel-collapse collapse">
                      <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;">
@@ -51,11 +52,12 @@
 
     
     <confirm-cancel   
-        ng-cloak  ng-show="dialogIsShowing"
+        id="dlgConfirmCancel"
+        ng-cloak  ng-show="ConfirmCancel.isShowing"
         style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px;"
-        question="confirmCancelQuestion"
-        on-confirm="saveCurrentLocation()" 
-        on-cancel="dismiss()">
+        question="ConfirmCancel.question"
+        on-confirm="ConfirmCancel.ccConfirm()" 
+        on-cancel="ConfirmCancel.ccCancel()">
     </confirm-cancel>
 
 

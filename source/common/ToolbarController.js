@@ -15,45 +15,42 @@
     $scope.$on(
                    "$routeChangeSuccess",
                    function handleRouteChangeEvent(event) {
+                           switch ($location.path()) {
 
-                       switch ($location.path()) {
+                               //case "/Map":
+                               //    $scope.preview.windowOne = "site/SitePreview.html";
+                               //    $scope.preview.windowTwo = "album/AlbumPreview.html";
+                               //    $scope.preview.windowThree = "journal/JournalPreview.html";
+                               //    break;
 
-                           case "/Map":
-                               $scope.preview.windowOne = "site/SitePreview.html";
-                               $scope.preview.windowTwo = "album/AlbumPreview.html";
-                               $scope.preview.windowThree = "journal/JournalPreview.html";
-                               break;
+                               case "/MapList":
+                                   $scope.preview.windowOne = "map/MapPreview.html";
+                                   $scope.preview.windowTwo = "album/AlbumPreview.html";
+                                   $scope.preview.windowThree = "journal/JournalPreview.html";
+                                   break;
 
-                           case "/MapList":
-                               $scope.preview.windowOne = "map/MapPreview.html";
-                               $scope.preview.windowTwo = "album/AlbumPreview.html";
-                               $scope.preview.windowThree = "journal/JournalPreview.html";
-                               break;
+                               case "/Album":
+                               case "/Photo":
+                                   $scope.preview.windowOne = "map/MapPreview.html";
+                                   $scope.preview.windowTwo = "site/SitePreview.html";
+                                   $scope.preview.windowThree = "journal/JournalPreview.html";
+                                   break;
+                               case "/Site":
+                                   $scope.preview.windowOne = "map/MapPreview.html";
+                                   $scope.preview.windowTwo = "album/AlbumPreview.html";
+                                   $scope.preview.windowThree = "journal/JournalPreview.html";
+                                   break;
+                               case "/Journal":
+                                   $scope.preview.windowOne = "map/MapPreview.html";
+                                   $scope.preview.windowTwo = "album/AlbumPreview.html";
+                                   $scope.preview.windowThree = "site/SitePreview.html";
+                                   break;
 
-                           case "/Album":
-                           case "/Photo":
-                               $scope.preview.windowOne = "map/MapPreview.html";
-                               $scope.preview.windowTwo = "site/SitePreview.html";
-                               $scope.preview.windowThree = "journal/JournalPreview.html";
-                               break;
-                           case "/Site":
-                               $scope.preview.windowOne ="map/MapPreview.html";
-                               $scope.preview.windowTwo = "album/AlbumPreview.html";
-                               $scope.preview.windowThree = "journal/JournalPreview.html";
-                               break;
-                           case "/Journal":
-                               $scope.preview.windowOne = "map/MapPreview.html";
-                               $scope.preview.windowTwo = "album/AlbumPreview.html";
-                               $scope.preview.windowThree = "site/SitePreview.html";
-                               break;
-                       
-                           default:
-                               $scope.preview.windowOne = "site/SitePreview.html",
-                                $scope.preview.windowTwo = "album/AlbumPreview.html",
-                                $scope.preview.windowThree = "journal/JournalPreview.html"
-                       }
-
-
+                               default:
+                                   $scope.preview.windowOne = "site/SitePreview.html",
+                                    $scope.preview.windowTwo = "album/AlbumPreview.html",
+                                    $scope.preview.windowThree = "journal/JournalPreview.html"
+                           }
                    }
                );
 

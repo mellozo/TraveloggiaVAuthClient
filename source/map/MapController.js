@@ -16,9 +16,31 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     var clickHandler = null; 
     var pushpinCollection = null;
-    $scope.dialogIsShowing = false;
+
     $scope.searchAddress = null;
-    $scope.confirmCancelQuestion = "Save location permanently to map?";
+
+
+    var saveCurrentLocation = function () {
+        alert("you dont suck")
+        $location.path("/Site");
+    }
+
+
+
+    $scope.ConfirmCancel ={
+        question:"Save location permanently to map?",
+        isShowing:false,
+        ccCancel:function(){alert("you suck")},
+        ccConfirm: saveCurrentLocation
+    }
+
+    //ConfirmCancel Handlers
+      var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+  
+
 
 
     // INIT SEQUENCE
@@ -59,7 +81,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             { removePins() }, 800)
         }
     }
-
 
 
     var drawPreviewSite= function () {
@@ -105,14 +126,17 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
+        var isDraggable = SharedStateService.getAuthorizationState() == "CAN_EDIT" ? true : false;
         for (var i = 0; i < sites.length; i++)
         {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: sites[i].Name, subTitle: sites[i].Address });
+            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: isDraggable, title: sites[i].Name, subTitle: sites[i].Address });
 
             (function attachEventHandlers(site) {
+
                 Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    $scope.$apply(function () {// $location.path("/Album")
+                   if( $scope.selectedState.editSelected == false)
+                    $scope.$apply(function () {
                         SharedStateService.setSelected("Site", site);
                         $scope.goAlbum();
                         })
@@ -123,6 +147,15 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                         SharedStateService.setSelected("Site", site);
                     });
                 });
+
+                if (isDraggable == true) {
+                    Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
+                        SharedStateService.setSelected("Site", site);
+                        var loc = e.location;
+                        $scope.editLocation(loc,site)                         
+                    });
+                }
+
             })(sites[i], $scope, $location)
 
             // used to calculate bounding rect
@@ -445,9 +478,19 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             pushpinCollection.add(marker);
             $scope.mapInstance.setView({ center: currentPosition, zoom: 16 })
         });
-
         reverseGeocode(pos.latitude, pos.longitude);
     }
+
+
+
+     $scope.editLocation = function (pos,siteRecord) {
+        siteRecord.Latitude = pos.latitude;
+        siteRecord.Longitude = pos.longitude;
+        reverseGeocode(pos.latitude, pos.longitude);
+    }
+
+
+
 
     var createSiteRecord = function (lat, lng) {
         var site = new Site();
@@ -473,51 +516,57 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                    var site = SharedStateService.Selected.Site;
                    site.Address = answer.address.formattedAddress;
 
+                  if(site.SiteID == null)// its a new location
                    $scope.$apply(function () {
                        if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
-                           $scope.dialogIsShowing = true;
-
+                           $scope.ConfirmCancel.isShowing = true;
                    })
-                
+                   else // we are moved an existing location
+                  {
+                      DataTransportService.updateSite(site).then(
+                          function (result) {
+                              SharedStateService.updateCache("Sites", "SiteID", result.data.SiteID, result.data);
+                              $scope.systemMessage.text = "Location has been updated";
+                              $scope.systemMessage.activate();
+                          },
+                          function (error) {
+                              $scope.systemMessage.text = "error loading map data";
+                              $scope.systemMessage.activate();
+                          })
+                  }
               }
           };
+          // make the call files are loaded
           geocoder.reverseGeocode(reverseGeocodeRequestOptions);
-
       });
       
     }
 
-    $scope.dismiss = function () {
-        $scope.dialogIsShowing = false;
-    }
-
-    $scope.saveCurrentLocation = function () {
-        $location.path("/Site");
-    }
-
+  
   
 
   // CLICK TO ADD LOCATION
-    $scope.enterEdit = function () {
+    $scope.toggleEdit = function () {
         // add crosshair cursor
-   $scope.selectedState.editSelected = true;
-       // angular.element("#bingMapRaw").style.cursor = "crosshair";
-     clickHandler =   Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
-            if (e.targetType === "map") {
-                // Mouse is over Map
-                var loc = e.location;
-                addLocation(loc)
-                exitEdit();
-            } else {
-                // Mouse is over Pushpin, Polyline, Polygon
-            }
-        });
+        $scope.selectedState.editSelected = ($scope.selectedState.editSelected == false) ? true : false;
+        // angular.element("#bingMapRaw").style.cursor = "crosshair";
+      if( $scope.selectedState.editSelected == true)
+         clickHandler =   Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
+                if (e.targetType === "map") {
+                    // Mouse is over Map
+                    var loc = e.location;
+                    addLocation(loc)
+                    toggleEdit();
+                } else {
+                    // Mouse is over Pushpin, Polyline, Polygon
+                }
+         });
+      else {
+          Microsoft.Maps.Events.removeHandler(clickHandler);
+      }
     }
 
-    var exitEdit = function () {
-        $scope.selectedState.editSelected = false;
-        Microsoft.Maps.Events.removeHandler(clickHandler);
-    }
+  
 
     $scope.geocodeAddress = function () {
         var geocoder = SharedStateService.getSearchManager().then(
