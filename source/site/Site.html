@@ -106,16 +106,17 @@
                                     </span>
                         </div>
                 </div>
-                <div style="margin-bottom:400px;">
+                <div style="margin-top:20px;margin-bottom:300px;">
 
-
-                    <div ng-show="stateMachine.state=='CAN_EDIT' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
+                      <div style="float:right;padding-right:30px;">
+                    <div ng-show="stateMachine.state=='CAN_EDIT' " class ="sheerButton">
                         <a href="" ng-click="siteCtrl.saveSite()">Save</a>
                     </div>
-                        <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
+                        <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " class="sheerButton" >
                           <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
                     </div>
-             
+                          </div>
+            
                     
                 </div>
             </form>

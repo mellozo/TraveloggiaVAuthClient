@@ -232,17 +232,36 @@ input {
     background-color:#0E7B83;
 }
 
+
+     /*color:#0E7B83;*/
+
+
+/*background-color:#244F55"*/
+
+.sheerButton {
+
+display:inline-block;
+background-color:lightgray;
+opacity:0.6;
+padding:12px;
+border-radius:7px;
+width:4em;
+text-align:center;
+
+}
+
+
 #mapList a {
     font-size:22px;
-     color:#0E7B83;
+ color: #c7438f;
    z-index:4;
    opacity:1;
 }
 
 
-.seeThrough{
-background-color:#e1dddd;
-opacity:1;
+.mapListItem{
+background-color:#244F55;
+
 padding:4px;
 border-radius:7px;
 margin-bottom:10px;
@@ -278,7 +297,7 @@ z-index:2;
 #signInDiv  {
 bottom:3px;
 left:5px;
-      background-color:lightgray;
+ background-color:lightgray;
       
 }
 

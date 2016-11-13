@@ -8,18 +8,25 @@
 
 
 
-<div style="z-index:99;width:200px">
+<div style="z-index:99;width:200px;>
 
-    <div class="panel panel-default" style="box-shadow: 0 10px 6px -6px #777;">
-  <div class="panel-body">
+    <div class="panel panel-default" style="background-color:darkgoldenrod;box-shadow: 0 10px 6px -6px #777;">
+  <div class="panel-body" style="background-color:#244F55">
    
     <p>
-           <span style="font:Centaur;color:brown">{{question}}</span>
+           <span style="font:Centaur;color:white">{{question}}</span>
     </p>
  
 <div style="margin-left:auto;margin-right:auto;position:relative;text-align:center">
-    <button  ng-click="confirm()" type="button" class="btn btn-primary" id="btnConfirm" style="width:60px;position:relative">Yes</button>
-     <button  ng-click="cancel()" type="button" class="btn btn-danger" id="btnCancel"  style="width:60px;position:relative">No</button>
+    
+    <div  class="sheerButton">
+        <a href="" ng-click="confirm()" >Yes
+            </a>
+    </div>
+     
+    
+    <div class="sheerButton">
+        <a href=""  ng-click="cancel()" >No</a></div>
 </div>
   </div>
 </div>
