@@ -59,9 +59,14 @@
     }
 
   $scope.sendEmail = function () {
-
         $window.open('mailto:?body=Sharing a link to my map http://www.traveloggia.pro?MapID='+$scope.selectedMap.MapID);
-    }
+  }
+
+
+  $scope.toggleLink = function () {
+      $scope.selectedState.linkSelected = ($scope.selectedState.linkSelected == true) ? false : true;
+  }
+
 
     $scope.facebook = function () {
         var MapID = SharedStateService.getSelectedID("Map");
@@ -121,15 +126,10 @@
             $scope.selectedState.editSelected = true;
     }
 
-    $scope.toggleLink = function () {
-        $scope.selectedState.linkSelected = ($scope.selectedState.linkSelected == true) ? false : true;
-    }
 
-  
 
 
     $scope.editMap = function () {
-       
         if  ( parseInt($scope.selectedMap.MapID) <= 6088)
         {
             $scope.systemMessage.text = "map name may not be edited";
@@ -137,7 +137,6 @@
         }
         else
         $scope.showMapEditWindow("edit")
-
     }
 
 
@@ -214,7 +213,13 @@
         $scope.selectedState.addSelected = false;
         $scope.selectedState.editSelected = false;
         if (SharedStateService.getSelectedID("Map") != null)
-            $scope.selectedMap.MapID = SharedStateService.getSelectedID("Map");
+        $scope.selectedMap = {
+            MapID: SharedStateService.getSelectedID("Map"),
+            MapName: SharedStateService.getSelectedMapName()
+        }
+
+
+     
     }
 
 
