@@ -16,20 +16,20 @@
 
                 <div class="form-group">
                     <div class="infoText"><b>name:</b></div>
-                    <input type="text" ng-model="siteCtrl.Site.Name" class="form-control" id="Name">
+                    <input type="text" ng-model="siteCtrl.Site.Name" class=" sitelistText form-control" id="Name">
                 </div>
 
 
 
                 <div  class="form-group" >
                     <div class="infoText"><b>address:</b></div>
-                    <input type="text" ng-model="siteCtrl.Site.Address" class="form-control" id="Address">
+                    <input type="text" ng-model="siteCtrl.Site.Address" class="sitelistText form-control" id="Address">
                 </div>
 
 
                 <div class="form-group">
                     <label for="description">description:</label>
-                    <textarea rows="10" ng-model="siteCtrl.Site.Description " class="form-control" id="description" />
+                    <textarea rows="10" ng-model="siteCtrl.Site.Description " class="sitelistText form-control" id="description" />
                 </div>
 
           
@@ -37,7 +37,7 @@
                 <div class="form-group" id="Arrival">
                        <label for="Arrival">arrival:</label>
                         <div class='input-group date'>
-                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d, yyyy h:m a'}}"/>
+                            <input  type="text"  class="sitelistText form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d, yyyy h:m a'}}"/>
                                     <span class='input-group-addon' onclick="dropIt('Arrival')">
                                             <span  class ='glyphicon glyphicon-calendar'  ></span>
                                     </span>
@@ -47,7 +47,7 @@
                 <div class="form-group" id="Departure">
                        <label for="Arrival">departure:</label>
                         <div class='input-group date'>
-                            <input  type="text"  class="form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d, yyyy h:m a'}}"/>
+                            <input  type="text"  class="sitelistText form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d, yyyy h:m a'}}"/>
                                     <span class='input-group-addon' onclick="dropIt('Departure')">
                     
                                             <span  class ='glyphicon glyphicon-calendar' "></span>
@@ -58,19 +58,19 @@
 
                 <div class="form-group" >
                             <div class="infoText"><b>stop no.:</b></div>
-                            <input style="display:inline;width:60px;float:left"   ng-model="siteCtrl.Site.RouteIndex" class="form-control">        
-                           <div class="element-container" style="float:left">
+                            <input style="display:inline;width:60px;float:left"   ng-model="siteCtrl.Site.RouteIndex" class="sitelistText form-control">        
+                           <!--<div class="element-container" style="float:left">
                                   <div  md-whiteframe="10" >
                                             <md-num-picker ng-model="siteCtrl.Site.RouteIndex"  min-value="0" ></md-num-picker>
                                   </div>
-                           </div>   
+                           </div>   -->
                 </div>    
 
                 <div class="form-group" style="clear:left">
                     <label for="phone">phone:</label>
 
                       <div class="input-group">
-                                    <input type="text" ng-model="siteCtrl.Site.Phone" class="form-control" id="Phone">
+                                    <input type="text" ng-model="siteCtrl.Site.Phone" class="sitelistText form-control" id="Phone">
                                     <span class='input-group-addon' >
                                             <a style="padding:0px;margin:0px;" href="tel:+{{siteCtrl.Site.Phone}}"><img width="20" height="20" src="image/cell1.png"  /></a>
                                     </span>
@@ -86,7 +86,7 @@
                 <div class="form-group">
                     <label for="Email">email:</label>
                     <div class="input-group">
-                                    <input type="text" ng-model="siteCtrl.Site.Email" class="form-control" id="Email">
+                                    <input type="text" ng-model="siteCtrl.Site.Email" class="sitelistText form-control" id="Email">
                                     <span class='input-group-addon' ng-click="siteCtrl.sendEmail()">
                                             <img width="20" height="20" src="image/mail.png"  />
                                     </span>
@@ -100,25 +100,31 @@
                 <div class="form-group">
                     <label for="URL">website:</label>
                         <div class="input-group">
-                                    <input type="text" ng-model="siteCtrl.Site.URL" class="form-control" id="URL">
+                                    <input type="text" ng-model="siteCtrl.Site.URL" class="sitelistText form-control" id="URL">
                                     <span class='input-group-addon' ng-click="siteCtrl.openURL()">
                                             <img width="20" height="20" src="image/internet.png"  />
                                     </span>
                         </div>
                 </div>
-                <div style="margin-top:20px;margin-bottom:300px;">
 
-                      <div style="float:right;padding-right:30px;">
-                    <div ng-show="stateMachine.state=='CAN_EDIT' " class ="sheerButton">
-                        <a href="" ng-click="siteCtrl.saveSite()">Save</a>
-                    </div>
-                        <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " class="sheerButton" >
-                          <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
-                    </div>
-                          </div>
-            
-                    
-                </div>
+
+
+           
+
+                      <div class="sheerButtonContainer">
+                            <div ng-show="stateMachine.state=='CAN_EDIT' " class ="sheerButton">
+                                <a href="" ng-click="siteCtrl.saveSite()">Save</a>
+                            </div>
+                            <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " class="sheerButton" >
+                              <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
+                            </div>
+                     </div>
+
+                
+                
+        <div class="spacer250"></div>
+
+
             </form>
 
 

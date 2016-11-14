@@ -1,7 +1,7 @@
 ﻿
 
 
-var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics', 'ngMaterial']);
+var angularTraveloggia = angular.module("AngularTraveloggia", ["ngRoute", 'ngCookies', 'textAngular', 'rt.debounce', 'angulartics', 'angulartics.google.analytics']);
 
 // consider file path from the start page AngularMain.html
 angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analyticsProvider) {

@@ -17,30 +17,32 @@
 
         <div class="lightgreen centered goldtrim" style="padding:16px;margin-bottom:8px;border-radius:3.5px;">
     
-                <input required ng-model = "Ctrl.Member.Email" placeholder="email address" type="text" 
-                        style="z-index:2;font-family:inherit;box-sizing:border-box;width:100%; margin:0px;padding:6px" />
+                <input class="signIn" required ng-model = "Ctrl.Member.Email" placeholder="email address" type="text"  />
         </div>
 
 
         <div class="lightgreen centered goldtrim"  style="padding:16px;margin-bottom:8px;border-radius:3.5px">   
                 
-            <input required ng-model="Ctrl.Member.Password"  placeholder="password" type="password" 
-                        style="font-family:inherit;box-sizing:border-box;width:100%; margin:0px;padding:6px" />
+            <input class="signIn" required  ng-model="Ctrl.Member.Password"  placeholder="password" type="password"  />
         </div>
+
+
+
+
 
 
         <div id="buttonDiv"  style="text-align:center;padding:16px;">
           
-            <div ng-show="Ctrl.authenticationStatus.firstAttempt" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                  <input type="submit" ng-click="Ctrl.signIn()" value="Sign In"/>
+            <div ng-show="Ctrl.authenticationStatus.firstAttempt" class="lightgreen greenButton" >
+                  <a  ng-click="Ctrl.signIn()">Sign In</a> 
             </div>
 
-            <div ng-show="Ctrl.authenticationStatus.failedSignin" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                <input type="submit" ng-click="Ctrl.signIn()"  value="Try Again"/> 
+            <div ng-show="Ctrl.authenticationStatus.failedSignin" class="greenButton" >
+                <a ng-click="Ctrl.signIn()">Try Again</a>  
             </div>
                    
-            <div ng-show="Ctrl.authenticationStatus.createAccount" id="aCreateAccount"  style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;" >
-                <input type="submit" ng-click="Ctrl.createAccount()" value="Create Account"/>
+            <div ng-show="Ctrl.authenticationStatus.createAccount" id="aCreateAccount" class="greenButton">
+                <a ng-click="Ctrl.createAccount()" >Create Account</a>
             </div>
 
         </div>
