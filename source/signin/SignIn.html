@@ -12,19 +12,21 @@
              <div style="height:30px">
 
              </div>
+
              <img src="../image/ship.png" alt="Traveloggia" title="Traveloggia" style="height:40px;width:40px;float:left;margin-right:12px;" />
              <div style="color:goldenrod;font-weight:800;padding-left:10px;padding-bottom:10px">Traveloggia</div>
 
-        <div class="lightgreen centered goldtrim" style="padding:16px;margin-bottom:8px;border-radius:3.5px;">
-    
-                <input class="signIn" required ng-model = "Ctrl.Member.Email" placeholder="email address" type="text"  />
-        </div>
 
 
-        <div class="lightgreen centered goldtrim"  style="padding:16px;margin-bottom:8px;border-radius:3.5px">   
+            <div class="lightgreen centered goldtrim" style="padding:16px;margin-bottom:8px;border-radius:3.5px;">
+                    <input class="signIn" required ng-model = "Ctrl.Member.Email" placeholder="email address" type="text"  />
+            </div>
+
+
+            <div class="lightgreen centered goldtrim"  style="padding:16px;margin-bottom:8px;border-radius:3.5px">   
                 
-            <input class="signIn" required  ng-model="Ctrl.Member.Password"  placeholder="password" type="password"  />
-        </div>
+                <input class="signIn" required  ng-model="Ctrl.Member.Password"  placeholder="password" type="password"  />
+            </div>
 
 
 
@@ -37,11 +39,11 @@
                   <a  ng-click="Ctrl.signIn()">Sign In</a> 
             </div>
 
-            <div ng-show="Ctrl.authenticationStatus.failedSignin" class="greenButton" >
+            <div ng-show="Ctrl.authenticationStatus.failedSignin" class="lightgreen greenButton" >
                 <a ng-click="Ctrl.signIn()">Try Again</a>  
             </div>
                    
-            <div ng-show="Ctrl.authenticationStatus.createAccount" id="aCreateAccount" class="greenButton">
+            <div ng-show="Ctrl.authenticationStatus.createAccount"  class="lightgreen greenButton">
                 <a ng-click="Ctrl.createAccount()" >Create Account</a>
             </div>
 

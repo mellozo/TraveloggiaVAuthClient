@@ -101,10 +101,34 @@
 
 
     VM.createAccount = function () {
+
+        var strMessage = "";
+        if (VM.Member.Email == null || VM.Email=="" ) 
+            strMessage="Email is required "
+
+        if(VM.Member.Password==null || VM.password=="")
+            strMessage = strMessage + "Password is required ";
+
+        if(strMessage != ""){
+            $scope.systemMessage.text = strMessage;
+            $scope.systemMessage.activate();
+            return;
+        }
+
         DataTransportService.addMember(VM.Member).then(
             function (result, x, y, z, h) {
                 SharedStateService.setAuthenticatedMember(result.data);
-                $scope.systemMessage.text = "Account created successfully. You have full access to develop content.";
+                SharedStateService.setAuthorizationState(canEdit);
+// clear 
+                SharedStateService.setSelected("Site", null);
+                SharedStateService.setSelected("Journal", null);
+                SharedStateService.setSelected("Map", null);
+                SharedStateService.Repository.put("Sites", []);
+                SharedStateService.Repository.put("Map", null);
+                SharedStateService.Repository.put("Journals", []);
+                SharedStateService.Repository.put("Photos", [])
+
+                $scope.systemMessage.text = "Account created successfully.";
                 $scope.systemMessage.activate();
                 $location.path("/Map")
             },

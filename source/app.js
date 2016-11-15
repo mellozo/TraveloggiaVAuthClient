@@ -80,7 +80,8 @@ angularTraveloggia.run(function ($rootScope) {
                 siteSelected: url.indexOf("/Site") > 0 ? true : false,
                 mapListSelected: url.indexOf("/MapList") > 0 ? true : false,
                 sitelistSelected: url.indexOf("/SiteList") > 0 ? true : false,
-                signInSelected: url.indexOf("/SignIn")>0 ? true:false
+                signInSelected: url.indexOf("/SignIn") > 0 ? true : false,
+                createSelected: url.indexOf("/CreateAccount") > 0 ? true : false
             };
       
        

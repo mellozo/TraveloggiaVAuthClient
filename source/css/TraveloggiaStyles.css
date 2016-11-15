@@ -18,25 +18,19 @@ body {
 }
 
 .sparkle{
-
     background-image:url(../image/golddust.jpg);
 }
-
 
 .teal
 {
     /*background-color:#2A7D76;*/
     /*filter: alpha(opacity = 50);*/
     background-color:rgba(42,125,118,0.5);
- 
 }
-
 
 .greenMud {
     background-color:#0E7B83;
 }
-
-
 
 .skyBlue {
     background-color:#DEE5F2;
@@ -54,7 +48,6 @@ body {
 
 .deepGreen{
     background-color:#244F55;
-
 }
 
 /*.turq {
@@ -74,8 +67,8 @@ body {
 
 #mapList a {
     font-size:22px;
- color: #c7438f;
-   opacity:1;
+    color: #c7438f;
+    opacity:1;
 }
 
 
@@ -93,7 +86,6 @@ z-index:2;
 
 .greenButton {
 display:inline-block;
-
 opacity:0.6;
 padding:12px;
 border-radius:7px;
@@ -315,7 +307,7 @@ padding:5px;
 }
 
 .signIn {
- 
+ background-color:white;
   border: none;
   border-radius: 6px;
   width:100%;

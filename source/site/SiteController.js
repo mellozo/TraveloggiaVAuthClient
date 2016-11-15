@@ -3,6 +3,12 @@
   
     var VM = this;
 
+
+    $scope.stateMachine = {
+        state: SharedStateService.getAuthorizationState()
+    }
+
+
     // sorry this is so hideous but angular monster digests the control
     // entirely directives wont help
     $window.setDateTime = function (strDate, prop) {
@@ -41,18 +47,6 @@
 
 
     }
-
-    $scope.stateMachine = {
-        state: SharedStateService.getAuthorizationState()
-    }
- 
-
-
-
-
-
-
-
 
 
     VM.saveSite = function () {
@@ -140,9 +134,11 @@
        function (scope) {
            if (SharedStateService.Selected.Site != null)
                return SharedStateService.Selected.Site.Latitude;
+           else
+               return SharedStateService.Selected.Site;
        },
        function (newValue, oldValue) {
-           if (newValue != null && newValue != oldValue) {
+           if ( newValue != oldValue) {
                VM.Site = SharedStateService.Selected.Site;
            }
        });
