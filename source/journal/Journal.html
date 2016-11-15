@@ -2,7 +2,7 @@
 
 <div  ng-controller="JournalController" 
             ng-style="scrollWindowStyle"
-            style="overflow-y:auto"
+            style="overflow-y:auto;font-family:Centaur;font-size:18px;"
             class ="papyrus"> 
 
 
@@ -77,16 +77,18 @@
                         </text-angular>
 
 
+                        <div class="sheerButtonContainer">
+                                                <div ng-show="stateMachine.state=='IS_EDITING' "  class="sheerButton">
+                                                    <a href="" ng-click="saveJournal()">Save</a>
+                                                </div>
+                                                <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null"  class="sheerButton">
+                                                    <a href="" ng-click="deleteJournal()">Delete</a>
+                                                </div>
+                                                <div ng-show="stateMachine.state=='IS_EDITING'  "  class="sheerButton">
+                                                    <a href="" ng-click="cancelJournal()">Cancel</a>
+                                                </div>
 
-                        <div ng-show="stateMachine.state=='IS_EDITING' " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
-                            <a href="" ng-click="saveJournal()">Save</a>
-                        </div>
-                        <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null" style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
-                            <a href="" ng-click="deleteJournal()">Delete</a>
-                        </div>
-                        <div ng-show="stateMachine.state=='IS_EDITING'  " style="display:inline-block;background-color:lightgray;opacity:0.6;padding:12px;border-radius:7px;">
-                            <a href="" ng-click="cancelJournal()">Cancel</a>
-                        </div>
+                            </div>
 
             </div><!--end panel body-->
 

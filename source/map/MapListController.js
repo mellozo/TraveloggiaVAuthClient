@@ -21,11 +21,11 @@
         SharedStateService.setSelected("Site", null);
         SharedStateService.setSelected("Journal", null);
         $scope.selectedMap = map;
-            SharedStateService.setSelected("Map", map);
-            SharedStateService.Repository.put("Sites", []);
-            SharedStateService.Repository.put("Map", null);
-            SharedStateService.Repository.put("Journals", []);
-            SharedStateService.Repository.put("Photos", [])
+        SharedStateService.setSelected("Map", map);
+        SharedStateService.Repository.put("Sites", []);
+        SharedStateService.Repository.put("Map", null);
+        SharedStateService.Repository.put("Journals", []);
+        SharedStateService.Repository.put("Photos", [])
     }
 
 

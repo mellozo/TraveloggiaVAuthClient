@@ -318,6 +318,12 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 },
                 function (error) { }
                 );
+
+
+
+
+
+
             }
                
         });
@@ -536,6 +542,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+    $scope.$watch(
+        function (scope) {
+            return $scope.filesUploadedCount
+        },
+        function (newValue, oldValue) {
+            if ($scope.filesToUpload && newValue == $scope.filesToUpload.length) {
+                if ($scope.filesUploadedCount > 1)
+                    $scope.systemMessage.text = $scope.filesUploadedCount + " photos uploaded successfully";
+                else
+                    $scope.systemMessage.text = " photo uploaded successfully";
+
+                $scope.systemMessage.activate();
+                $scope.filesToUpload = null;
+                $scope.filesUploadedCount = 0;
+                $route.reload();
+            }
+        }
+        );
+
 
 
     // I think this was refactored into the sss
@@ -566,26 +591,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    $scope.$watch(
-       function (scope) {
-           return $scope.filesUploadedCount
-       },
-       function (newValue, oldValue) {
-           if ($scope.filesToUpload && newValue == $scope.filesToUpload.length) {
-               if ($scope.filesUploadedCount > 1)
-                   $scope.systemMessage.text = $scope.filesUploadedCount + " photos uploaded successfully";
-               else
-                   $scope.systemMessage.text = " photo uploaded successfully";
-
-               $scope.systemMessage.activate();
-               $scope.filesToUpload = null;
-               $scope.filesUploadedCount = 0;
-               $route.reload();
-           }
-       }
-       );
-
-
+ 
 
 // kickoff
 
