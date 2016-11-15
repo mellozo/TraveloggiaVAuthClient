@@ -475,27 +475,29 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var photoRecord = new Photo();
         photoRecord.SiteID = SharedStateService.getSelectedID("Site");
         photoRecord.StorageURL = $scope.imageServer;
-        photoRecord.Width =exif.PixelXDimension;
-        photoRecord.Height = exif.PixelYDimension
+     
         photoRecord.FileName = fileName;
         if (exif != null) {
             photoRecord.orientation = exif.orientation;
             photoRecord.orientationID = orientationID;
-
+            photoRecord.Width = exif.PixelXDimension;
+            photoRecord.Height = exif.PixelYDimension
             // "YYYY:MM:DD HH:MM:SS" with time shown in 24-hour format, 
             // and the date and time separated by one blank character (hex 20).
             // will somebody just shoot me?
-            var stringDateMess = exif.DateTimeOriginal;
-            var justDate = stringDateMess.split(" ")[0];
-            var ymd = justDate.split(":");
-            var justTime = stringDateMess.split(" ")[1];
-            var jsMonth = parseInt(ymd[1]) - 1;
-            var hms = justTime.split(":");
-         //   var hours = hms[0] > 12? parseInt(hms[0])-12:hms[0]
-            var jsDate = new Date(ymd[0], jsMonth, ymd[2], hms[0], hms[1], hms[2]);
-            var jsDateUTC = jsDate.toUTCString();
+            if (exif.DateTimeOriginal != null) {
+                var stringDateMess = exif.DateTimeOriginal;
+                var justDate = stringDateMess.split(" ")[0];
+                var ymd = justDate.split(":");
+                var justTime = stringDateMess.split(" ")[1];
+                var jsMonth = parseInt(ymd[1]) - 1;
+                var hms = justTime.split(":");
+                //   var hours = hms[0] > 12? parseInt(hms[0])-12:hms[0]
+                var jsDate = new Date(ymd[0], jsMonth, ymd[2], hms[0], hms[1], hms[2]);
+                var jsDateUTC = jsDate.toUTCString();
 
-            photoRecord.DateTaken = jsDateUTC;
+                photoRecord.DateTaken = jsDateUTC;
+            }
         }
         return photoRecord;
     }
