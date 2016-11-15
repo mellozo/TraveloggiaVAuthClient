@@ -11,6 +11,11 @@
         windowThree:""
     }
 
+    $scope.Swap = {
+        Map:true
+    }
+
+
    
     $scope.$on(
                    "$routeChangeSuccess",
@@ -24,6 +29,7 @@
                                //    break;
 
                                case "/MapList":
+                                   $scope.Swap.Map = false;
                                    $scope.preview.windowOne = "map/MapPreview.html";
                                    $scope.preview.windowTwo = "album/AlbumPreview.html";
                                    $scope.preview.windowThree = "journal/JournalPreview.html";
@@ -31,22 +37,26 @@
 
                                case "/Album":
                                case "/Photo":
+                                   $scope.Swap.Map = false;
                                    $scope.preview.windowOne = "map/MapPreview.html";
                                    $scope.preview.windowTwo = "site/SitePreview.html";
                                    $scope.preview.windowThree = "journal/JournalPreview.html";
                                    break;
                                case "/Site":
+                                   $scope.Swap.Map = false;
                                    $scope.preview.windowOne = "map/MapPreview.html";
                                    $scope.preview.windowTwo = "album/AlbumPreview.html";
                                    $scope.preview.windowThree = "journal/JournalPreview.html";
                                    break;
                                case "/Journal":
+                                   $scope.Swap.Map = false;
                                    $scope.preview.windowOne = "map/MapPreview.html";
                                    $scope.preview.windowTwo = "album/AlbumPreview.html";
                                    $scope.preview.windowThree = "site/SitePreview.html";
                                    break;
 
                                default:
+                                   $scope.Swap.Map = true;
                                    $scope.preview.windowOne = "site/SitePreview.html",
                                     $scope.preview.windowTwo = "album/AlbumPreview.html",
                                     $scope.preview.windowThree = "journal/JournalPreview.html"
@@ -86,7 +96,15 @@
 
 
     $scope.goMap = function () {
+       
         $location.path("/Map").search({  }) ;
+    }
+
+
+
+    $scope.openSearch=function(){
+        $scope.$broadcast("searchClicked")
+
     }
 
     $scope.goMapFirstTime = function () {

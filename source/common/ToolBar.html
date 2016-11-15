@@ -10,9 +10,16 @@
 
 
   
-            <div  class="clickableDiv" ng-click="goMap()" title="Map">
+            <div  ng-show="Swap.Map==false" class="clickableDiv" ng-click="goMap()" title="Map">
                 <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
                        class="dottedBorderRed glow" src="/../image/globe.png"   title="Map View" />
+
+            </div>
+
+    
+            <div ng-show="Swap.Map==true"  class="clickableDiv" ng-click="openSearch()" title="Search">
+                <img ng-class="{'poppedUp' : selectedState.mapSelected == true}"  
+                       class="dottedBorderRed glow" src="/../image/glass.png"   title="Search" />
 
             </div>
 

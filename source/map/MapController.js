@@ -10,14 +10,22 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     })
 
     
+    $scope.$on("searchClicked", function (event, data) {
+        $scope.selectedState.searchSelected = true;
+    });
+
+
     $scope.selectedState = {
-        editSelected:false
+        editSelected: false,
+        searchSelected:false
     }
 
     var clickHandler = null; 
     var pushpinCollection = null;
 
-    $scope.searchAddress = null;
+    $scope.Search = {
+        Address:null
+    }
 
     //ConfirmCancel Handlers
     var dismiss = function () {
@@ -572,18 +580,22 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
   
   
-
+/****SEARCH****************************************/
   
 
     $scope.geocodeAddress = function () {
         var geocoder = SharedStateService.getSearchManager().then(
             function (data) 
             {
-                if(data = "ok")
+           
+
+               $scope.selectedState.searchSelected= false
+                
+
                 var    searchManager = new Microsoft.Maps.Search.SearchManager($scope.mapInstance);
-                var address = $scope.searchAddress;
+              
                 var requestOptions = {
-                    where: $scope.searchAddress,
+                    where: $scope.Search.Address,
                     callback: function (answer, userData) {
                         $scope.mapInstance.setView({ center: answer.results[0].location, zoom: 12 });
                         $scope.mapInstance.entities.push(new Microsoft.Maps.Pushpin(answer.results[0].location));
@@ -596,8 +608,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                         SharedStateService.setSelected("Site", siteRecord);
                         if (SharedStateService.getAuthorizationState() == 'CAN_EDIT')
                             $scope.dialogIsShowing = true;
-                        angular.element('#searchPanel .in').collapse('hide');
-                        $scope.searchAddress = "";
+                        
+                        $scope.Search.Address = null;
                         $scope.$apply();
                     }// end callback;
 
@@ -607,7 +619,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
             },// end if the module loaded
             function (error) {
-                
+                $scope.systemMessage.text = "error enabling search";
+                $scope.systemMessage.activate();
 
             } );
 
