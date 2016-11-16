@@ -195,8 +195,11 @@
             $scope.selectedState.editSelected = false;
             DataTransportService.updateMap($scope.selectedMap).then(
                 function (result) {
-                    SharedStateService.setSelected("Map", result.data);
+                    SharedStateService.setSelected("Map", $scope.selectedMap);
+
+                    SharedStateService.Repository.put("Map", $scope.selectedMap);
                     SharedStateService.updateCache("MapList", "MapID", $scope.selectedMap.MapID, $scope.selectedMap)
+                    loadMapList();
                     $scope.systemMessage.text = "map was updated successfully";
                     $scope.systemMessage.activate();
                     // refresh map list somehow

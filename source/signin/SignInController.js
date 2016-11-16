@@ -64,16 +64,20 @@
 
 
     VM.signOut = function(){
-        //  window.location.href = "http://html5.traveloggia.net/Default.html";
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
-        SharedStateService.Repository.put("Map", null);
+        // clear 
         SharedStateService.setSelected("Map", null);
-        // this will be deprecated
-    //    SharedStateService.readOnlyUser = true;
+        SharedStateService.setSelected("Site", null);
+        SharedStateService.setSelected("Journal", null);
+
+        SharedStateService.Repository.put("Map", null);
+        SharedStateService.Repository.put("Sites", []);
+        SharedStateService.Repository.put("Journals", []);
+        SharedStateService.Repository.put("Photos", [])
         VM.authenticationStatus.signedIn = false;
         $route.reload();
-       // and all the other stuff we will fool around with later like JWT
+
     }
 
 

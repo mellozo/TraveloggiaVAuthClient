@@ -183,29 +183,35 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
         if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] == "true" )// if loading from a shared link)
         {
-           map.setView({ bounds: viewRect, padding: 30 });
+            $timeout(
+                function(){
+                    map.setView({ bounds: viewRect, padding: 20})
+                },1000);
+            
            if (selectedSiteID == "null" || selectedSiteID == null) {
                selectedSite =$scope.MapRecord.Sites[0]
                SharedStateService.setSelected("Site",selectedSite );
            }
         }
-        else {
-            for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
-                if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
-                    selectedSite = $scope.MapRecord.Sites[i];
-                    break;
+        else
+        {
+                for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
+                    if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
+                        selectedSite = $scope.MapRecord.Sites[i];
+                        break;
+                    }
                 }
-            }
 
-        if (selectedSite != null) {
-            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-            if (map == null)
-                console.log("map is null inside draw sites trying to set view on selected site")
-            else
-                map.setView({ center: loc, zoom: 17 });
+                if (selectedSite != null){
+                    var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+                    if (map == null)
+                        console.log("map is null inside draw sites trying to set view on selected site")
+                    else
+                        map.setView({ center: loc, zoom: 17 });
+                }
         }
-         
-        }
+
+
         $scope.systemMessage.loadComplete = true;
     }
 
@@ -303,6 +309,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var loadMap = function () {
+        $scope.systemMessage.loadComplete = false;
      var requestedMap = null;
      var mapID = null;
         var searchObject = $window.location.search;
