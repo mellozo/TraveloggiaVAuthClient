@@ -1,6 +1,9 @@
 ﻿
 angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, $rootScope) {
 
+
+    var isLoaded = false;
+
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
@@ -20,7 +23,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         searchSelected:false
     }
 
-    var clickHandler = null; 
+    var mapClickHandler = null; 
     var pushpinCollection = null;
 
     $scope.Search = {
@@ -133,7 +136,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
-        var isDraggable = SharedStateService.getAuthorizationState() == "CAN_EDIT" ? true : false;
+        var isDraggable = (SharedStateService.getAuthorizationState() == "CAN_EDIT" && ( $scope.Capabilities.currentDevice.deviceType == null || $scope.Capabilities.currentDevice.deviceType=="tablet"))? true : false;
+
         for (var i = 0; i < sites.length; i++)
         {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
@@ -157,9 +161,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
                 if (isDraggable == true) {
                     Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
-                        SharedStateService.setSelected("Site", site);
-                        var loc = e.location;
-                        $scope.editLocation(loc,site)                         
+                            SharedStateService.setSelected("Site", site);
+                            var loc = e.location;
+                            $scope.editLocation(loc, site)
                     });
                 }
 
@@ -389,26 +393,31 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var afterLoaded = function () {
-     try{
+        try {
+            if (isLoaded == true)
+                return;
          var x = (Microsoft != null)// map control not loaded yet - the problem is sometimes the map loades before angular
          // and sometimes angular loades before the map :(
-         if ($http.pendingRequests.length > 0) {
-             $timeout(afterLoaded, 200); // Wait for all templates to be loaded
-         }
-         else {
+         //if ($http.pendingRequests.length > 0) {
+         //    $timeout(afterLoaded, 800); // Wait for all templates to be loaded
+         //}
+         //else {
              if ($location.path() == "/Map" || $location.path() == "/") {
 
                  if ($scope.mapInstance == null)
-                    prepareMainMap();
+                     prepareMainMap();
+                 isLoaded = true;
              }
              else if ($location.path() != "/Map" && $location.path() != "/") {
                  if ($scope.previewMap == null)
-                    preparePreviewMap();
+                     preparePreviewMap();
+                 isLoaded = true;
              }
-         }
+        // }
      }
      catch (error) {
-         console.log("microsoft was null waiting 400")
+         console.log("msft bing map v8 was null waiting 400")
+        // $window.location.reload();
          $timeout($scope.afterLoaded,400); // Wait for all templates to be loaded
      }
 
@@ -462,14 +471,15 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 /******MAP EDITING ************************************************/
 
 
-
-    // CLICK TO ADD LOCATION
   $scope.toggleEdit = function () {
       // add crosshair cursor
       $scope.selectedState.editSelected = ($scope.selectedState.editSelected == false) ? true : false;
       // angular.element("#bingMapRaw").style.cursor = "crosshair";
-      if ($scope.selectedState.editSelected == true)
-          clickHandler = Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
+      if ($scope.selectedState.editSelected == true){
+
+        //  enableDrag();
+
+          mapClickHandler = Microsoft.Maps.Events.addHandler($scope.mapInstance, "click", function (e) {
               if (e.targetType === "map") {
                   // Mouse is over Map
                   var loc = e.location;
@@ -479,18 +489,17 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   // Mouse is over Pushpin, Polyline, Polygon
               }
           });
+      }
       else {
-          Microsoft.Maps.Events.removeHandler(clickHandler);
+
+          //disableDrag();
+
+          Microsoft.Maps.Events.removeHandler(mapClickHandler);
       }
   }
 
 
-
-
-
-
-
-    //ADD CURRENT LOCATION
+    // CURRENT LOCATION
     $scope.getLocation = function () {
         $scope.systemMessage.text = "working...";
         $scope.systemMessage.activate();
@@ -517,6 +526,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         reverseGeocode(pos.latitude, pos.longitude);
     }
 
+
+
+    /***************EDIT LOCATION**********************/
 
 
      $scope.editLocation = function (pos,siteRecord) {
@@ -607,7 +619,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                         siteRecord.Name = thePlace.Name;
                         SharedStateService.setSelected("Site", siteRecord);
                         if (SharedStateService.getAuthorizationState() == 'CAN_EDIT')
-                            $scope.dialogIsShowing = true;
+                            $scope.ConfirmCancel.isShowing = true;
                         
                         $scope.Search.Address = null;
                         $scope.$apply();
@@ -633,7 +645,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     // the kickoff
-    afterLoaded();
+   afterLoaded();
 
    
 

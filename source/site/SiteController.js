@@ -63,9 +63,6 @@
             var cachedSites = SharedStateService.Repository.get('Sites');
             cachedSites.push(result.data);
             SharedStateService.Repository.put('Sites', cachedSites);
-
-            var cachedMap = SharedStateService.Repository.get("Map");
-
             SharedStateService.setSelected("Site", result.data);
             // invalidate cache of child records
             SharedStateService.Repository.put('Photos', []);
@@ -114,13 +111,13 @@
             )
     }
 
+
     VM.openURL = function () {
         if(VM.Site != null && VM.Site.URL != null)
         $window.open(VM.Site.URL)
     }
 
     VM.sendEmail = function () {
-
         $window.open('mailto:'+VM.Site.Email);
     }
 

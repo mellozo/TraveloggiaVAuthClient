@@ -87,6 +87,7 @@
     <Content Include="image\compass.gif" />
     <Content Include="image\email.png" />
     <Content Include="image\fb.png" />
+    <Content Include="image\glass.png" />
     <Content Include="image\globe.png" />
     <Content Include="image\golddust.jpg" />
     <Content Include="image\internet.png" />
