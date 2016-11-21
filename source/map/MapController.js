@@ -148,16 +148,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 if (isDraggable == true) {
                     Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
                         $scope.$apply(
-                        
-                        
                         function () {
-
                             SharedStateService.setSelected("Site", site);
                             var loc = e.location;
                             $scope.editLocation(loc, site)
-
                         })
-                           
                     });
                 }
 
@@ -231,6 +226,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
  
     var loadDefaultMap = function () {
+    
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data;
@@ -243,6 +239,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     }
                     else
                         $scope.systemMessage.loadComplete = true;
+
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading map data";
@@ -254,14 +251,17 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   
     
     var reloadMap = function () {
+      
         var cachedMap = SharedStateService.Repository.get("Map");
         $scope.MapRecord = cachedMap;
         var cachedSites = SharedStateService.Repository.get("Sites");
         $scope.MapRecord.Sites = cachedSites;
         if (cachedSites.length > 0)
             drawSites();
-        else
+        else 
             $scope.systemMessage.loadComplete = true;
+
+     
     }
 
 
@@ -441,7 +441,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
 
-
+//WATCH SITE ID
   $scope.$watch(
       function (scope) {
           if (SharedStateService.Selected.Site != null)
@@ -465,8 +465,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       });
 
 
-
-    // loading the data if they change sites but stay on the page
+//WATCH MAP ID
   $scope.$watch(
       function (scope) {
           if (SharedStateService.Selected.Map != null)
@@ -507,13 +506,35 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   }
 
     // CURRENT LOCATION
-    $scope.getLocation = function () {
+  $scope.getLocation = function () {
+
+      var geo_options = {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 2000
+      };
+
         $scope.systemMessage.text = "working...";
         $scope.systemMessage.activate();
         navigator.geolocation.getCurrentPosition(function (pos) {
             $scope.systemMessage.dismiss();
                 addLocation(pos.coords);
-            });
+        }, 
+        function (error) {
+        
+            if( error.code ==2){
+                $scope.systemMessage.text = "reload and try again";
+                $scope.systemMessage.activate();
+                console.log("navigator geo loation not working" + error.message)            
+            }
+            else {
+                $scope.systemMessage.text = error.message;
+                console.log(error.message)
+            }
+             
+        },
+        geo_options
+            );
     }
 
     var addLocation = function (pos) {      
