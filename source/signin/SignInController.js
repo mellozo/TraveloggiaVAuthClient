@@ -56,12 +56,6 @@
         });
 
 
-    //var alreadyLoggedIn = window.sessionStorage.getItem("memberID")
-    //if (alreadyLoggedIn != null) {
-    //    VM.Member.MemberID = alreadyLoggedIn;
-    //    VM.authenticate();
-    //}
-
 
     VM.signOut = function(){
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });

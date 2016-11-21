@@ -20,13 +20,25 @@
     $scope.$on(
                    "$routeChangeSuccess",
                    function handleRouteChangeEvent(event) {
+
+                       if ($window.innerWidth <=768) {
+                           $scope.preview.windowOne = "";
+                           $scope.preview.windowTwo = "";
+                           $scope.preview.windowThree = "";
+
+                           if ($location.path() == "/" || $location.path() == "/Map")
+                               $scope.Swap.Map = true;
+                           else
+                               $scope.Swap.Map = false;
+                       }
+                       else {
                            switch ($location.path()) {
 
-                               //case "/Map":
-                               //    $scope.preview.windowOne = "site/SitePreview.html";
-                               //    $scope.preview.windowTwo = "album/AlbumPreview.html";
-                               //    $scope.preview.windowThree = "journal/JournalPreview.html";
-                               //    break;
+                               case "/Map":
+                                   $scope.preview.windowOne = "site/SitePreview.html";
+                                   $scope.preview.windowTwo = "album/AlbumPreview.html";
+                                   $scope.preview.windowThree = "journal/JournalPreview.html";
+                                   break;
 
                                case "/MapList":
                                    $scope.Swap.Map = false;
@@ -61,6 +73,10 @@
                                     $scope.preview.windowTwo = "album/AlbumPreview.html",
                                     $scope.preview.windowThree = "journal/JournalPreview.html"
                            }
+
+                       }
+
+                        
                    }
                );
 
@@ -90,13 +106,13 @@
         var currentpath = $location.path();
 
         if (currentpath == "/Photo")
-           currentpath="/Album"
-        $location.path(currentpath).search( {"ZoomIn":"true"});
+            currentpath = "/Album"
+        $location.path(currentpath).search({ });
+       // $location.path(currentpath).search( {"ZoomIn":"true"});
     }
 
 
     $scope.goMap = function () {
-       
         $location.path("/Map").search({  }) ;
     }
 

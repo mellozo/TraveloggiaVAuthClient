@@ -65,13 +65,15 @@
                         </div>
 
                         <text-angular ng-hide="stateMachine.state=='IS_EDITING'" id="textReader"
-                                      name="readhtmlcontent"
-                                      ng-model="Journal.Text" ta-disabled="true" ta-toolbar="[]">
+                                      name="readhtmlcontent" 
+                              ng-model="Journal.Text"
+                                      ta-disabled="true" ta-toolbar="[]">
+                    
                         </text-angular>
 
                         <text-angular ng-show="stateMachine.state=='IS_EDITING'  " id="textEditor"
                                       name="edithtmlcontent"
-                                      ng-model="Journal.Text"
+                                    
                                       style="font-size:20px;min-height:260px;"
                                       ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]" ;>
                         </text-angular>

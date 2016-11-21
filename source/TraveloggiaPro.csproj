@@ -122,7 +122,6 @@
     <Content Include="lib\flatpickr.min.js" />
     <Content Include="lib\jquery-3.1.0.min.js" />
     <Content Include="lib\load-image.all.min.js" />
-    <Content Include="lib\numberPicker.js" />
     <Content Include="lib\textAngular-rangy.min.js" />
     <Content Include="lib\textAngular-sanitize.min.js" />
     <Content Include="lib\textAngular.min.js" />

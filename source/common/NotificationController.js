@@ -40,7 +40,7 @@
             "max-height": viewFrameHeight,
         }
 
-        $timeout($scope.setMapStyle());
+        $timeout($scope.setMapStyle,100);
     }
 
 
