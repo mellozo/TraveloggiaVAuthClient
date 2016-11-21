@@ -22,16 +22,19 @@
                             </div>
 
                             <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
+
                                 <div ng-if="Capabilities.alreadyKnowsHow==false ">
-                                        <img on-load="onImageLoad($event, PhotoList[0].orientationID)"
+                                        <img on-load="onImageLoad($event, PhotoList[0].orientationID,PhotoList[0])"
                                                 style="position:absolute;visibility:hidden"
-                                  
-                                                src="{{  imageServer + imagePath + PhotoList[0].FileName +imageRefresher}}" />
+                                                ng-src="{{  imageServer + imagePath + PhotoList[0].FileName  +imageRefresher.queryString}}" />
                                         <canvas id="canvas" style="display:block;"></canvas>
 
                                 </div>
-                                <div ng-if="Capabilities.alreadyKnowsHow==true"
-                                  >
+
+
+
+
+                                <div ng-if="Capabilities.alreadyKnowsHow==true">
                                     <img style="width:100%;visibility:visible;vertical-align:middle"
                                          ng-src="{{  imageServer + imagePath + PhotoList[0].FileName }}" />
                                 </div>

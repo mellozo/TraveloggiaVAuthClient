@@ -152,7 +152,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             DataTransportService.updatePhoto(Photo).then(
           function (result) {
               SharedStateService.updateCache("Photo", "PhotoID", Photo.PhotoID, result.data)
-              doRotation(orientationID,loadedImage);
+              doRotation(orientationID, loadedImage);
+              $scope.$apply();
               console.log("uploaded photo dimensions")
           },
            function (error) {
@@ -184,7 +185,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 maxWidth = widthMinusPadScroll;
             }
             else//preview frame rotation?
-                maxHeight = Math.round($window.document.getElementById("previewFrame").offsetWidth * .20)
+            {
+                maxHeight = $scope.previewMapStyle.height;
+                maxWidth = $scope.previewMapStyle.width;
+            }
+               
 
             var scaledWidth = maxHeight;
             var height = loadedImage.height;
