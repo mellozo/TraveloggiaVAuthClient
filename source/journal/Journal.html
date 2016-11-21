@@ -80,13 +80,13 @@
 
 
                         <div class="sheerButtonContainer">
-                                                <div ng-show="stateMachine.state=='IS_EDITING' "  class="sheerButton">
+                                                <div ng-show="stateMachine.state=='IS_EDITING' "  class="skyBlue sheerButton shadow">
                                                     <a href="" ng-click="saveJournal()">Save</a>
                                                 </div>
-                                                <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null"  class="sheerButton">
+                                                <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null"  class="skyBlue sheerButton shadow">
                                                     <a href="" ng-click="deleteJournal()">Delete</a>
                                                 </div>
-                                                <div ng-show="stateMachine.state=='IS_EDITING'  "  class="sheerButton">
+                                                <div ng-show="stateMachine.state=='IS_EDITING'  "  class="skyBlue sheerButton shadow">
                                                     <a href="" ng-click="cancelJournal()">Cancel</a>
                                                 </div>
 

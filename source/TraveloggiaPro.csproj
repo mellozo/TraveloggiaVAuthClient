@@ -74,10 +74,8 @@
     <Content Include="common\ToolBar.html" />
     <Content Include="common\ToolbarController.js" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="css\lib\bootstrap-3.3.7.css" />
     <Content Include="css\lib\bootstrap-3.3.7.min.css" />
     <Content Include="css\lib\flatpickr.min.css" />
-    <Content Include="css\lib\numberPicker.css" />
     <Content Include="css\lib\textAngular.css" />
     <Content Include="css\TraveloggiaStyles.css" />
     <Content Include="diagnostics\Monitor.html" />
