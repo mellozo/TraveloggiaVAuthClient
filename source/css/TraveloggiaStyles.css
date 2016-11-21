@@ -66,14 +66,22 @@ body {
 
 
 #mapList a {
-    font-size:22px;
-    color: #c7438f;
+    font-size:26px;
+    color: #244F55;
     opacity:1;
 }
 
 
+#mapList a:hover {
+    font-size:26px;
+    color: #c7438f;
+    opacity:1;
+}
+
 .mapListItem{
-background-color:#244F55;
+/*background-color:#244F55;*/
+border:1px solid goldenrod;
+
 padding:4px;
 border-radius:7px;
 margin-bottom:10px;
@@ -129,13 +137,20 @@ float:right;
 
 .sheerButton {
 display:inline-block;
-background-color:#244F55;
+border:1px solid goldenrod;
+/*background-color:#244F55;*/
 padding:10px;
 border-radius:7px;
 margin:4px;
 text-align:center;
-font-size:18px;
+font-size:22px;
 
+}
+
+.shadow {
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
 }
 
 
@@ -203,7 +218,7 @@ height:250px;
   top:70px;
   font-size:18px;
   color:goldenrod;
-  background-color:lightgray;
+  background-color:#e8f5f4;
   padding:2px;
   left:5px;
 }

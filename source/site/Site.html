@@ -112,10 +112,10 @@
            
 
                       <div class="sheerButtonContainer">
-                            <div ng-show="stateMachine.state=='CAN_EDIT' " class ="sheerButton">
+                            <div ng-show="stateMachine.state=='CAN_EDIT' " class ="sheerButton shadow">
                                 <a href="" ng-click="siteCtrl.saveSite()">Save</a>
                             </div>
-                            <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " class="sheerButton" >
+                            <div ng-show="stateMachine.state=='CAN_EDIT' && siteCtrl.Site.SiteID != null " class="sheerButton shadow" >
                               <a   href="" ng-click="siteCtrl.deleteSite()" >Delete</a>
                             </div>
                      </div>

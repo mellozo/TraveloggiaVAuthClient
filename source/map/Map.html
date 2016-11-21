@@ -57,7 +57,9 @@
 
    
 
-    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="authDiv" class="deepGreen mapLabel" >
+    <div ng-cloak   ng-controller="SignInController as SignInCtrl" id="authDiv" 
+
+        class="skyBlue mapLabel" >
         <a ng-show="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.signOut()">Sign Out</a>
         <a ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goSignInPage()">Sign In</a>
         <a  ng-hide="SignInCtrl.authenticationStatus.signedIn" href="" ng-click="SignInCtrl.goCreateAccount()">Create Account</a>
