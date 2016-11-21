@@ -11,8 +11,8 @@
 
                         <div ng-if="PhotoList[0].StorageURL !=null " >
 
-                            <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID < 5" ng-style="previewImageStyle" >
-
+                            <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID ==1 || PhotoList[0].orientationID ==2 || PhotoList[0].orientationID ==4"
+                                " ng-style="previewImageStyle" >
                                         <div   
                                             style="height:100%;width:100%;
                                                  background-image:url('{{  imageServer + imagePath + PhotoList[0].FileName}}');
@@ -21,7 +21,7 @@
 
                             </div>
 
-                            <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID >4 ">
+                            <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID !=1 && PhotoList[0].orientationID !=2 && PhotoList[0].orientationID !=4">
 
                                 <div ng-if="Capabilities.alreadyKnowsHow==false ">
                                         <img on-load="onImageLoad($event, PhotoList[0].orientationID,PhotoList[0])"

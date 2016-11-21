@@ -176,7 +176,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             var maxWidth = 0
             if ($location.path() == "/Album") {
                 var scrollContainer = $window.document.getElementById("albumScrollContainer")
-                var scrollWidth = scrollContainer.offsetWidth - scrollContainer.clientWidth;
                 var widthMinusPadScroll = widthMinusPad - scrollWidth;
                 var widthMinusBorderBackground = widthMinusPadScroll - 14;
                 maxHeight = heightMinusPad;
@@ -184,7 +183,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             }
             else if ($location.path() == "/Photo") {
                 maxHeight = heightMinusPad;
-                maxWidth = widthMinusPadScroll;
+                maxWidth = widthMinusPad - scrollWidth;
             }
             else//preview frame rotation?
             {
@@ -228,6 +227,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     break;
                 case 3:
                     degrees = 180;
+                    var w = maxWidth;
+                    var h = (maxWidth * loadedImage.height) / loadedImage.width;
+                    canvas.width = w
+                    canvas.height = h
+                   ctx.translate(w/2,h/2)// move the origin to the center of the canvas so rotate will rotate around the center
+                   ctx.rotate(degrees * Math.PI / 180);
+                   ctx.drawImage(loadedImage, -w / 2, -h/2, w, h);//specify starting coords ( back out from the center to get upper left corner )
                     break;
                 case 4:
                     degrees = 0;

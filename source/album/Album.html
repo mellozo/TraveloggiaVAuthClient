@@ -48,7 +48,7 @@
 
                 <div ng-if="Photo.StorageURL !=null " class="imageFrame"  >
                           
-                                   <div ng-if="Photo.orientationID == null || Photo.orientationID < 5 || Capabilities.alreadyKnowsHow == true"  >
+                                   <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
                                             <img 
                                                  on-load="dontAsk($event,Photo)"
                                                  ng-style="getImageStyle(Photo)"
@@ -56,7 +56,7 @@
                                    </div>
                           
 
-                                    <div ng-if="Photo.orientationID != null && Photo.orientationID > 4 && Capabilities.alreadyKnowsHow ==false" >                                                                                                    
+                                    <div ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false" >                                                                                                    
                                             <img  
                                                     style="position:absolute;visibility:hidden"
                                                     on-load="onImageLoad($event, Photo.orientationID,Photo)"
