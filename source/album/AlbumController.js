@@ -91,6 +91,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     $scope.getImageStyle = function (Photo) {
+        if (Photo == null)
+            return;
         if (Photo.Height == null || Photo.Width == null)
             return;
         var origH = Photo.Height;

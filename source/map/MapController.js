@@ -569,7 +569,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                    var site = SharedStateService.Selected.Site;
                    site.Address = answer.address.formattedAddress;
 
-                  if(site.SiteID == null)// its a new location
+                  if(site.SiteID == 0)// its a new location
                    $scope.$apply(function () {
                        if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
                            $scope.ConfirmCancel.isShowing = true;
