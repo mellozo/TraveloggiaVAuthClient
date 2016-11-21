@@ -31,13 +31,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
       
 
-    $scope.JournalEntries = [];
-    if (SharedStateService.readOnlyUser == true)
-        $scope.canEdit = false;
-    else
-        $scope.canEdit = true;
-
-    $scope.action = "read";
+    $scope.JournalEntries = [];  
     $scope.Journal = null;
     $scope.journalIndex = 0;
 
@@ -135,7 +129,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
 
 
-    $scope.deleteJournal = function () {
+    var deleteJournal = function () {
+        $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteJournal($scope.Journal.JournalID).then(
                 function (result) {
                     $scope.JournalEntries.splice($scope.journalIndex, 1);
@@ -154,6 +149,27 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                     $scope.systemMessage.activate();
                 });
     }
+
+
+
+
+    //ConfirmCancel Handlers
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+    $scope.confirmDeleteJournal = function () {
+        $scope.ConfirmCancel.isShowing = true;
+    }
+
+
+    if ($location.path() == "/Journal") {
+        $scope.ConfirmCancel.question = "Delete Selected Journal ?";
+        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccConfirm = deleteJournal;
+    }
+
+
 
 
     $scope.cancelJournal = function () {

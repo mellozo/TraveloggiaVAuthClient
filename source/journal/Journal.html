@@ -66,14 +66,13 @@
 
                         <text-angular ng-hide="stateMachine.state=='IS_EDITING'" id="textReader"
                                       name="readhtmlcontent" 
-                              ng-model="Journal.Text"
-                                      ta-disabled="true" ta-toolbar="[]">
-                    
+                                       ng-model="Journal.Text"
+                                      ta-toolbar="[]">
                         </text-angular>
 
                         <text-angular ng-show="stateMachine.state=='IS_EDITING'  " id="textEditor"
                                       name="edithtmlcontent"
-                                    
+                                ng-model="Journal.Text"
                                       style="font-size:20px;min-height:260px;"
                                       ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]" ;>
                         </text-angular>
@@ -84,7 +83,7 @@
                                                     <a href="" ng-click="saveJournal()">Save</a>
                                                 </div>
                                                 <div ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null"  class="skyBlue sheerButton shadow">
-                                                    <a href="" ng-click="deleteJournal()">Delete</a>
+                                                    <a href="" ng-click="confirmDeleteJournal()">Delete</a>
                                                 </div>
                                                 <div ng-show="stateMachine.state=='IS_EDITING'  "  class="skyBlue sheerButton shadow">
                                                     <a href="" ng-click="cancelJournal()">Cancel</a>
