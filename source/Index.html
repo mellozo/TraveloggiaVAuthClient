@@ -156,7 +156,15 @@
     </div>
 
 
-
+ <confirm-cancel   
+        id="dlgConfirmCancel"
+        ng-cloak  ng-show="ConfirmCancel.isShowing"
+        style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px;"
+        question="ConfirmCancel.question"
+        on-confirm="ConfirmCancel.ccConfirm()" 
+        on-cancel="ConfirmCancel.ccCancel()">
+    </confirm-cancel>
+ 
 
 
 

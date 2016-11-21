@@ -6,6 +6,15 @@
     }
 
 
+    $scope.ConfirmCancel = {
+        question:"",
+        isShowing: false,
+        ccCancel: null,
+        ccConfirm: null
+    }
+
+
+   
     var resetDimensions = debounce(400, function () {
         console.log("debounce 400 mls")
         $window.location.reload();

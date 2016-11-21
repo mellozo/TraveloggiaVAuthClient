@@ -1,6 +1,9 @@
 ﻿angularTraveloggia.controller("MapListController", function (SharedStateService, $scope, $location, DataTransportService,$window) {
 
 
+   
+  
+
     $scope.selectedState = {
         addSelected: false,
         editSelected: false,
@@ -15,6 +18,8 @@
         MapID: SharedStateService.getSelectedID("Map"),
         MapName:SharedStateService.getSelectedMapName()
     }
+
+   
 
 
     $scope.switchMap = function (map) {
@@ -147,7 +152,18 @@
         $scope.selectedMap = anotherMap;
     }
 
-     $scope.deleteMap = function () {
+
+
+    $scope.confirmDelete=function(){
+     $scope.ConfirmCancel.isShowing = true;
+}
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+
+    var deleteMap = function () {
+        $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteMap($scope.selectedMap.MapID).then(
             function (result) {
                 SharedStateService.deleteFromCache("MapList", "MapID", $scope.selectedMap.MapID);
@@ -162,6 +178,13 @@
             })
 
     }
+
+
+
+    $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
+    $scope.ConfirmCancel.ccConfirm = deleteMap;
+    $scope.ConfirmCancel.ccCancel = dismiss;
+
 
 
     $scope.saveMapEdit = function () {

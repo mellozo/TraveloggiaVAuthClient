@@ -50,7 +50,7 @@
 
 
     VM.saveSite = function () {
-        if (VM.Site.SiteID == null)
+        if (VM.Site.SiteID == 0)
             VM.addSite();
         else
             VM.updateSite();
@@ -58,6 +58,7 @@
  
 
     VM.addSite = function () {
+        VM.Site.SiteID = null;
         DataTransportService.addSite(VM.Site).then(
         function (result) {
             var cachedSites = SharedStateService.Repository.get('Sites');
@@ -94,7 +95,8 @@
     }
 
 
-    VM.deleteSite = function () {
+    var deleteSite = function () {
+        $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
                 SharedStateService.deleteFromCache("Sites", "SiteID", VM.Site.SiteID);
@@ -110,6 +112,26 @@
 
             )
     }
+
+
+    //ConfirmCancel Handlers
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+    VM.confirmDeleteSite = function () {
+        $scope.ConfirmCancel.isShowing = true;
+    }
+
+
+    if ($location.path() == "/Site") {
+        $scope.ConfirmCancel.question = "Delete Selected Location ?";
+        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccConfirm = deleteSite;
+    }
+
+
+
 
 
     VM.openURL = function () {

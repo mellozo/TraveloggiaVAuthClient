@@ -361,7 +361,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     //******************single photo edit page 
 
-    $scope.deletePhoto = function () {
+
+    //ConfirmCancel Handlers
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+    $scope.confirmDeletePhoto = function () {
+        $scope.ConfirmCancel.isShowing = true;
+    }
+
+    var deletePhoto = function () {
+        $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
             function (result) {
                 var cachedPhotos = SharedStateService.Repository.get('Photos');
@@ -381,6 +392,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             }
             )
     }
+
+
+    if ($location.path() == "/Photo") {
+        $scope.ConfirmCancel.question = "Delete Selected Image ?";
+        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccConfirm = deletePhoto;
+    }
+ 
 
 
     $scope.updatePhoto = function () {
@@ -598,11 +617,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
- 
 
-// kickoff
-
-  //  loadPhotos();
 
 })
 

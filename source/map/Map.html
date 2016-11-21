@@ -33,7 +33,7 @@
                                      <div class="deepGreen panel-body" >
                                             <input ng-model="Search.Address" class="sitelistText  form-control"  />
                                             <div class="sheerButtonContainer">
-                                                <div class="sheerButton" 
+                                                <div class="skyBlue sheerButton" 
                                                         ng-disabled="BusyWith.uploading">
                                                     <a href=""     ng-click="geocodeAddress()">Search</a>
                                                 </div>
@@ -79,14 +79,6 @@
     
     
      
-    <confirm-cancel   
-        id="dlgConfirmCancel"
-        ng-cloak  ng-show="ConfirmCancel.isShowing"
-        style="z-index:99;position:absolute;left:50%;margin-left:-100px;top:50%;margin-top:-140px;"
-        question="ConfirmCancel.question"
-        on-confirm="ConfirmCancel.ccConfirm()" 
-        on-cancel="ConfirmCancel.ccCancel()">
-    </confirm-cancel>
- 
+   
 
     </div>

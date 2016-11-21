@@ -21,15 +21,20 @@
                    "$routeChangeSuccess",
                    function handleRouteChangeEvent(event) {
 
+                       // show search on map page
+                       if ($location.path() == "/" || $location.path() == "/Map")
+                           $scope.Swap.Map = true;
+                       else
+                           $scope.Swap.Map = false;
+
+
+
                        if ($window.innerWidth <=768) {
                            $scope.preview.windowOne = "";
                            $scope.preview.windowTwo = "";
                            $scope.preview.windowThree = "";
 
-                           if ($location.path() == "/" || $location.path() == "/Map")
-                               $scope.Swap.Map = true;
-                           else
-                               $scope.Swap.Map = false;
+                        
                        }
                        else {
                            switch ($location.path()) {

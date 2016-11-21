@@ -27,25 +27,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         Address:null
     }
 
-    //ConfirmCancel Handlers
-    var dismiss = function () {
-        $scope.ConfirmCancel.isShowing = false;
-    }
-
-    var saveCurrentLocation = function () {
-        $location.path("/Site");
-    }
-
-
-
-    $scope.ConfirmCancel ={
-        question:"Save location permanently to map?",
-        isShowing:false,
-        ccCancel:dismiss,
-        ccConfirm: saveCurrentLocation
-    }
-
-   
+  
   
 
 
@@ -98,19 +80,25 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var selectedSiteID = SharedStateService.getSelectedID("Site");
         console.log("drawing preview map selected site id is "+ selectedSiteID)
         var selectedSite = null;
+      //  var sites = SharedStateService.Repository.get("Sites"); // because map record children is not updated if you just added a site
+      //  $scope.MapRecord.Sites = sites;
         if ($location.path() !="/Site" && (selectedSiteID == "null" || selectedSiteID == null))// if loading from a shared link)
         {
             selectedSite= $scope.MapRecord.Sites[0];
             SharedStateService.setSelected("Site",selectedSite);
         }
+        else {
+            selectedSite = SharedStateService.Selected.Site;
 
-        for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
-        {
-            if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
-                selectedSite = $scope.MapRecord.Sites[i];
-                break;
-            }
-        }
+        }       
+
+        //for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
+        //{
+        //    if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
+        //        selectedSite = $scope.MapRecord.Sites[i];
+        //        break;
+        //    }
+        //}
         if (selectedSite != null) {
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
             var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
@@ -497,7 +485,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 /******MAP EDITING ************************************************/
 
-
   $scope.toggleEdit = function () {
       // add crosshair cursor
       $scope.selectedState.editSelected = ($scope.selectedState.editSelected == false) ? true : false;
@@ -518,7 +505,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           Microsoft.Maps.Events.removeHandler(mapClickHandler);
       }
   }
-
 
     // CURRENT LOCATION
     $scope.getLocation = function () {
@@ -558,11 +544,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             reverseGeocode(pos.latitude, pos.longitude);
     }
 
-
-
-
     var createSiteRecord = function (lat, lng) {
         var site = new Site();
+        site.SiteID = 0;
         site.MapID = $scope.MapRecord.MapID;
         site.MemberID = SharedStateService.getAuthenticatedMemberID();
         site.Latitude = lat;
@@ -576,7 +560,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         return pin;
     }
 
-  var reverseGeocode = function (lat, long) {
+    var reverseGeocode = function (lat, long) {
       SharedStateService.getSearchManager().then(function () {
           var geocoder = new Microsoft.Maps.Search.SearchManager($scope.mapInstance);
           var reverseGeocodeRequestOptions = {
@@ -621,11 +605,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var geocoder = SharedStateService.getSearchManager().then(
             function (data) 
             {
-           
-
                $scope.selectedState.searchSelected= false
-                
-
                 var    searchManager = new Microsoft.Maps.Search.SearchManager($scope.mapInstance);
               
                 var requestOptions = {
@@ -663,6 +643,23 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
    
     
+    //ConfirmCancel Handlers
+    var dismiss = function () {
+        $scope.ConfirmCancel.isShowing = false;
+    }
+
+    var saveCurrentLocation = function () {
+        $scope.ConfirmCancel.isShowing = false;
+        $location.path("/Site");
+    }
+
+
+    if ($location.path() == "/" || $location.path() == "/Map") {
+        $scope.ConfirmCancel.question = "Save location permanently to map?";
+        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccConfirm = saveCurrentLocation;
+    }
+
 
 
 
