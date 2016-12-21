@@ -1,5 +1,44 @@
 ﻿angularTraveloggia.controller('SiteController', function (SharedStateService,DataTransportService,$scope,$location,$window,debounce) {
 
+
+    $window.dropIt = function(ctrl) {
+        if ($("#" + ctrl)[0]._flatpickr == null)
+            $("#" + ctrl).flatpickr(
+                      {
+                          enableTime: true,
+                          allowInput: false,
+                         // dateFormat: 'M j Y  h:i',
+                          dateFormat: 'm /d /Y  h:i',
+                          onChange: function (selectedDates, dateStr, instance) {
+                              setDateTime(dateStr, ctrl)
+                          }
+                      });
+
+        $("#"+ctrl)[0]._flatpickr.toggle();
+          
+    }
+
+    // sorry this is so hideous but angular monster digests the control
+    // entirely directives wont help
+    $window.setDateTime = function (strDate, prop) {
+        if (VM.Site == null)
+            return;
+
+        $scope.$apply(function () {
+            switch (prop) {
+                case "Arrival":
+                    VM.Site.Arrival = strDate;
+                    break;
+                case "Departure":
+                    VM.Site.Departure = strDate;
+                    break;
+            }
+
+
+        })
+
+        // $scope.$apply();
+    }
   
     var VM = this;
 
@@ -9,21 +48,13 @@
     }
 
 
-    // sorry this is so hideous but angular monster digests the control
-    // entirely directives wont help
-    $window.setDateTime = function (strDate, prop) {
-        if (VM.Site == null)
-            return;
+    $scope.makeDate=function(strDate){
+        if(strDate != null)
+        return new Date(strDate);
+    }
 
-        switch (prop) {
-            case "Arrival":
-                VM.Site.Arrival = strDate;
-                break;
-            case "Departure":
-                VM.Site.Departure = strDate;
-                break;
-        }
-        $scope.$apply();
+    $scope.updateModel=function(event){
+        var el = event.target;
     }
    
 
@@ -31,13 +62,24 @@
     VM.Site = SharedStateService.Selected.Site;
 
 
-    if (VM.Site == null) {
+    function makeDates(site) {
+        if (site.Arrival != null)
+            site.Arrival = new Date(site.Arrival);
+
+        if(site.Departure != null)
+            site.Departure = new Date(site.Departure)
+
+    }
+
+    if (VM.Site == null)
+    {
         var siteID = SharedStateService.getSelectedID("Site");
         if(siteID != null && siteID != "null")
         DataTransportService.getSiteByID(siteID).then(
             function (result)
             {
                 VM.Site = result.data;
+              makeDates(VM.Site)
             },
             function (error)
             {
@@ -47,6 +89,8 @@
 
 
     }
+    else
+        makeDates(VM.Site)
 
 
     VM.saveSite = function () {

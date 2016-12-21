@@ -36,23 +36,34 @@
 
                 <div class="form-group" id="Arrival">
                        <label for="Arrival">arrival:</label>
-                        <div class='input-group date'>
-                            <input  type="text"  class="sitelistText form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d, yyyy h:m a'}}"/>
-                                    <span class='input-group-addon' onclick="dropIt('Arrival')">
-                                            <span  class ='glyphicon glyphicon-calendar'  ></span>
-                                    </span>
-                        </div>
+                        
+                                <div ng-if="Capabilities.currentDevice.deviceType==null">
+                                    <div class='input-group date'>
+                                              <input   class="sitelistText form-control"  value="{{siteCtrl.Site.Arrival | date : 'MMM d, yyyy h:m a'}}"/>
+                                                <span class='input-group-addon' onclick="dropIt('Arrival')">
+                                                        <span  class ='glyphicon glyphicon-calendar'  ></span>
+                                                </span>
+                                        </div>
+                                </div>
+                            <div ng-if="Capabilities.currentDevice.deviceType != null">
+                                  <input   type="datetime-local" class="sitelistText form-control" ng-model="siteCtrl.Site.Arrival" />
+                            </div>
                 </div>
 
                 <div class="form-group" id="Departure">
                        <label for="Arrival">departure:</label>
-                        <div class='input-group date'>
-                            <input  type="text"  class="sitelistText form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d, yyyy h:m a'}}"/>
-                                    <span class='input-group-addon' onclick="dropIt('Departure')">
-                    
-                                            <span  class ='glyphicon glyphicon-calendar' "></span>
-                                    </span>
-                        </div>
+                            <div ng-if="Capabilities.currentDevice.deviceType==null">
+                                          <div class='input-group date'>
+                                                <input    class="sitelistText form-control"  value="{{siteCtrl.Site.Departure | date : 'MMM d, yyyy h:m a'}}"/>
+                                                <span class='input-group-addon' onclick="dropIt('Departure')">
+                                                    <span  class ='glyphicon glyphicon-calendar' "></span>
+                                                </span>
+                                          </div>
+                            </div>
+                            <div ng-if="Capabilities.currentDevice.deviceType !=null">
+                                <input  type="datetime-local"  class="sitelistText form-control" ng-model="siteCtrl.Site.Departure"  />
+
+                            </div>
                 </div>
 
 
@@ -128,7 +139,7 @@
             </form>
 
 
-    <script>
+<!--    <script>
 
     
 
@@ -149,7 +160,7 @@
         }
 
 
-    </script>
+    </script>-->
 
 
 </div>
