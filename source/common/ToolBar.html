@@ -1,7 +1,9 @@
 ﻿
-<div  class="bluenav"   style="padding:2px 0px;min-height:66px;max-height:66px;" >
+
+
+<div  class="bluenav toolbar"   style="display:flex;flex-direction:row;align-items:center;height:66px;" >
   
-          <div  class ="clickableDiv"   ng-click="goMapList()" title="MapList"
+          <div  class ="clickableDiv"   ng-click="goMapList()" title="MapList" 
               ng-class="{'poppedUp' : selectedState.mapListSelected == true}"  >
                     <img title="Map List"
                          src="../image/steering.png"
@@ -30,11 +32,9 @@
                         ng-class="{'poppedUp' : selectedState.albumSelected == true}"  
                         src="../image/sun.png"  class="dottedBorderRed glow"  />
             </div>
- 
 
-
-            <div style="position:relative;margin:0px;padding:0px;display:inline">
-                    <div data-toggle="dropdown" class="clickableDiv">
+    <div class="dropdown clickableDiv" style="border:0px;margin:0px;padding:0px;" title="Site List">
+     <div data-toggle="dropdown" >
                         <img src="../image/scroll.png" 
                              class="dottedBorderRed glow" 
                                 ng-class="{'poppedUp' : selectedState.sitelistSelected == true}"   />
@@ -46,9 +46,7 @@
                                >{{site.Name}}</a>
                         </li>
                     </ul>
-            </div>
-
-
+        </div>
 
                 <div class="clickableDiv"  ng-click="goJournal()" title="Journal">
                     <img src="../image/stack.png"  
@@ -65,6 +63,12 @@
                 </div>
 
                  
+                <div class="clickableDiv"  ng-click="goMonitor()" title="Problem Report"
+                    style="margin-right:0px;">
+                    <img src="../image/skull.png" 
+                         class="dottedBorderRed glow" 
+                         ng-class="{'poppedUp' : selectedState.monitorSelected == true}"  />
+                </div>
 
 
   
@@ -72,6 +76,7 @@
 </div>    
      
 
+    
 
 
 
