@@ -16,7 +16,14 @@
                               <a href="" ng-click="submitIssue()">SUBMIT</a></div>
                 </div>
               <div style="height:15px"></div>
-           
+            <div style="clear:right" class ="form-group">
+                   Width
+                    <input class="form-control" type="text" value={{Capabilities.currentDevice.windowInnerWidth}} readonly>
+                </div>
+                 <div style="clear:right" class ="form-group">
+                   Height
+                    <input class="form-control" type="text" value={{Capabilities.currentDevice.windowInnerHeight}} readonly>
+                </div>
                 <div style="clear:right" class ="form-group">
                     OS Name
                     <input class="form-control" type="text" value={{Capabilities.currentDevice.osName}} readonly>
