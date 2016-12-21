@@ -91,14 +91,15 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             selectedSite = SharedStateService.Selected.Site;
 
         }       
-
-        //for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
-        //{
-        //    if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
-        //        selectedSite = $scope.MapRecord.Sites[i];
-        //        break;
-        //    }
-        //}
+        // this seems very stupid since we save selected site in SharedStat - but when we reload, we only get the id the site is wiped out 
+        // I think too tired to rethink now but we need this
+        for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
+        {
+            if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
+                selectedSite = $scope.MapRecord.Sites[i];
+                break;
+            }
+        }
         if (selectedSite != null) {
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
             var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
@@ -220,7 +221,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             console.log("map.entities is null waiting 100")
             $timeout(function () {
                 pushPin(pin)
-            }, 100)
+            }, 300)
         }
     }
 
@@ -420,7 +421,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // }
      catch (error) {
         console.log("msft bing map v8 was null waiting 400")
-        $timeout(waitAndReload, 400); 
+        $timeout(waitAndReload, 1000); 
      }
 
   

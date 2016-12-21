@@ -17,6 +17,8 @@
 
 
    
+
+   
     $scope.$on(
                    "$routeChangeSuccess",
                    function handleRouteChangeEvent(event) {
@@ -73,7 +75,7 @@
                                    break;
 
                                default:
-                                   $scope.Swap.Map = true;
+                                 
                                    $scope.preview.windowOne = "site/SitePreview.html",
                                     $scope.preview.windowTwo = "album/AlbumPreview.html",
                                     $scope.preview.windowThree = "journal/JournalPreview.html"
@@ -119,6 +121,10 @@
 
     $scope.goMap = function () {
         $location.path("/Map").search({  }) ;
+    }
+
+    $scope.goMonitor= function () {
+        $location.path("/Monitor").search({});
     }
 
 
@@ -198,6 +204,8 @@
         function (scope) {
             if (SharedStateService.Selected.Site != null)
                 return SharedStateService.Selected.Site.SiteID;
+            else
+                return SharedStateService.getSelectedID("Site")
         },
         function (newValue, oldValue) {
             if (newValue != null && newValue != oldValue) {
@@ -206,6 +214,9 @@
 
         });
 
+
+    if ($scope.SiteList == null)
+        loadSites();
 
 
 })
