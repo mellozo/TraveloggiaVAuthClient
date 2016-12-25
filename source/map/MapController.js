@@ -1,5 +1,5 @@
 ﻿
-angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route, $scope, $location, DataTransportService, $timeout, $http, $rootScope) {
+angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route,$routeParams, $scope, $location, DataTransportService, $timeout, $http, $rootScope) {
 
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
@@ -30,31 +30,17 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   
   
 
-
-
     // INIT SEQUENCE
 
     var clearSites = function () {
         removePins();
     }
 
-    setView = function () {
-        SharedStateService.setSelected("Site", $scope.MapRecord.Sites[0]);
-    }
-
     var removePins = function () {
-        var map = null;
-        if ($location.path() == "/" || $location.path() == "/Map"){
-            map = $scope.mapInstance;
-        }
-        else if($window.innerWidth > 768){
-            map = $scope.previewMap;
-        }
-    else{
+        var map = getMapInstance();
+        if (map == null)
             return;
-        }
-            
-        if (map!= null && map.entities != null) {
+        else if (map!= null && map.entities != null) {
             var max = map.entities.getLength() - 1;
             for (var i = max ; i > -1; i--) {
                 var pushpin = map.entities.get(i);
@@ -71,176 +57,157 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
     }
 
-
-    var drawPreviewSite = function () {
-      
-        var map = $scope.previewMap;
-        if ($scope.previewMap == null)
-            preparePreviewMap();
-        var selectedSiteID = SharedStateService.getSelectedID("Site");
-        console.log("drawing preview map selected site id is "+ selectedSiteID)
-        var selectedSite = null;
-      //  var sites = SharedStateService.Repository.get("Sites"); // because map record children is not updated if you just added a site
-      //  $scope.MapRecord.Sites = sites;
-        if ($location.path() !="/Site" && (selectedSiteID == "null" || selectedSiteID == null))// if loading from a shared link)
-        {
-            selectedSite= $scope.MapRecord.Sites[0];
-            SharedStateService.setSelected("Site",selectedSite);
-        }
-        else {
-            selectedSite = SharedStateService.Selected.Site;
-
-        }       
-        // this seems very stupid since we save selected site in SharedStat - but when we reload, we only get the id the site is wiped out 
-        // I think too tired to rethink now but we need this
-        for (var i = 0; i < $scope.MapRecord.Sites.length; i++) 
-        {
-            if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
-                selectedSite = $scope.MapRecord.Sites[i];
-                break;
-            }
-        }
-        if (selectedSite != null) {
-            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
-            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
-            pushPin(pin);
-            map.setView({ center: loc, zoom: 17 });
-            $scope.systemMessage.loadComplete = true;
-
-        }
-        else
-            console.log("this is a bug  and selected site is null")
-    }
-
-
-    var drawSites = function () {
-       
+    var getMapInstance = function () {
         var map = null;
-        if ($location.path() == "/" || $location.path() == "/Map")
+        if (($location.path() != "/MapList") && ($location.path() == "/" || $location.path().indexOf("/Map") == 0)) {
             map = $scope.mapInstance;
-        else {
-            drawPreviewSite();
-            return;
         }
-        var sites = $scope.MapRecord.Sites;
-        var arrayOfMsftLocs = [];
-        var isDraggable = (SharedStateService.getAuthorizationState() == "CAN_EDIT" && ( $scope.Capabilities.currentDevice.deviceType == null || $scope.Capabilities.currentDevice.deviceType=="tablet"))? true : false;
-
-        for (var i = 0; i < sites.length; i++)
-        {
-            var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
-            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: isDraggable, title: sites[i].Name, subTitle: sites[i].Address });
-
-            (function attachEventHandlers(site) {
-
-                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                    $scope.$apply(function () {
-                        SharedStateService.setSelected("Site", site);
-                        $scope.goAlbum();
-                        })
-                });
-
-                Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
-                    $scope.$apply(function () {
-                        SharedStateService.setSelected("Site", site);
-                    });
-                });
-
-                if (isDraggable == true) {
-                    Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
-                        $scope.$apply(
-                        function () {
-                            SharedStateService.setSelected("Site", site);
-                            var loc = e.location;
-                            $scope.editLocation(loc, site)
-                        })
-                    });
-                }
-
-            })(sites[i], $scope, $location)
-
-            // used to calculate bounding rect
-            arrayOfMsftLocs.push(loc);
-
-            pushPin(pin);
-       
+        else if ($window.innerWidth > 768) {
+            map = $scope.previewMap;
         }
-
-      
-
-        var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);
-        var selectedSiteID = SharedStateService.getSelectedID("Site")
-        var searchObject = $location.search();
-        var selectedSite = null;
-
-        if (selectedSiteID == "null" || selectedSiteID == null || searchObject["ZoomOut"] == "true" )// if loading from a shared link)
-        {
-            map.setView({ bounds: viewRect, padding: 20 })
-            $timeout(
-                function(){
-                    map.setView({ bounds: viewRect, padding: 20})
-                },1000);
-            
-           if (selectedSiteID == "null" || selectedSiteID == null) {
-               selectedSite =$scope.MapRecord.Sites[0]
-               SharedStateService.setSelected("Site",selectedSite );
-           }
-        }
-        else
-        {
-                for (var i = 0; i < $scope.MapRecord.Sites.length; i++) {
-                    if ($scope.MapRecord.Sites[i].SiteID == selectedSiteID) {
-                        selectedSite = $scope.MapRecord.Sites[i];
-                        break;
-                    }
-                }
-
-                if (selectedSite != null){
-                    var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
-                    if (map == null)
-                      console.log("map is null inside draw sites trying to set view on selected site")
-                    else
-                        map.setView({ center: loc, zoom: 17 });
-                }
-        }
-
-
+        return map;
+    }
+ 
+    var setBounds = function (arrayOfMsftLocs) {
         $scope.systemMessage.loadComplete = true;
+        var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);   
+        $timeout(
+            function () {
+                $scope.mapInstance.setView({ bounds: viewRect, padding: 30 })
+              
+            },1000);
     }
 
+    var setCenter = function (selectedSite) {
+         $scope.systemMessage.loadComplete = true;
+        var map = getMapInstance();
+        if (selectedSite != null) {
+            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
+            if (map == null)
+                console.log("map is null inside draw sites trying to set view on selected site")
+            else {
+                $timeout(function () {
+                    map.setView({ center: loc, zoom: 17 });
+         
+                });
+
+            }
+               
+        }
+
+    }
 
     var pushPin = function (pin) {
-        var map = null;
-        if ($location.path() == "/" || $location.path() == "/Map")
-            map = $scope.mapInstance;
-        else
-            map = $scope.previewMap;
+        var map = getMapInstance();
         if (map.entities != null)
             map.entities.push(pin);
         else {
-            console.log("map.entities is null waiting 100")
+            console.log("map.entities is null waiting 300")
             $timeout(function () {
                 pushPin(pin)
             }, 300)
         }
     }
 
- 
+    var drawPreviewSite = function () {
+        var map = $scope.previewMap;
+        if ($scope.previewMap == null)
+            preparePreviewMap();
+
+        localforage.getItem("Site", function (error, value) {
+            if (error == null) {
+                var selectedSite = value;
+                if ($location.path() != "/Site" && selectedSite == null)// if loading from a shared link)
+                {
+                    selectedSite = $scope.MapRecord.Sites[0];
+                    SharedStateService.setSelectedAsync("Site", selectedSite);
+                }
+                var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
+                var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
+                pushPin(pin);
+                setCenter(selectedSite);
+
+            }
+        })
+
+    }
+
+    var drawSites = function () {
+        var map = $scope.mapInstance;
+        var sites = $scope.MapRecord.Sites;
+        var arrayOfMsftLocs = [];
+        var isDraggable = (SharedStateService.getAuthorizationState() == "CAN_EDIT" && ($scope.Capabilities.currentDevice.deviceType == null || $scope.Capabilities.currentDevice.deviceType == "tablet")) ? true : false;
+        for (var i = 0; i < sites.length; i++) {
+            var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
+            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: isDraggable, title: sites[i].Name, subTitle: sites[i].Address });
+            (
+                function attachEventHandlers(site) {
+                    Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                        $scope.$apply(function () {
+                            localforage.setItem("Site", site, function (err) {
+                                $scope.goAlbum();
+                            })
+                            $scope.goAlbum();
+                        })
+                    });
+
+                    Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
+                        $scope.$apply(function () {
+                            SharedStateService.setSelectedAsync("Site", site);
+
+                        });
+                    });
+
+                    if (isDraggable == true) {
+                        Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
+                            $scope.$apply(
+                            function () {
+                                SharedStateService.setSelectedAsync("Site", site);
+                                var loc = e.location;
+                                $scope.editLocation(loc, site)
+                            })
+                        });
+                    }
+
+                })(sites[i], $scope, $location)
+
+            // used to calculate bounding rect
+            arrayOfMsftLocs.push(loc);
+
+            pushPin(pin);
+
+        }
+
+
+        var searchObject = $location.search();
+
+        localforage.getItem("Site", function (err, value) {
+            var selectedSite = value;
+            if (selectedSite == null || searchObject["ZoomOut"] == "true")// if loading from a shared link)
+            {
+                setBounds(arrayOfMsftLocs);
+                SharedStateService.setSelectedAsync("Site", $scope.MapRecord.Sites[0]);
+            }
+            else {
+                setCenter(selectedSite)
+            }
+        });
+    }
+
     var loadDefaultMap = function () {
-    
             DataTransportService.getMaps(SharedStateService.getAuthenticatedMemberID() ).then(
                 function (result) {
                     $scope.MapRecord = result.data;
-                    SharedStateService.setSelected("Map", $scope.MapRecord);
-                    SharedStateService.Repository.put('Map', result.data);                   
-                    SharedStateService.setSelected("Site", null);// clear any previous settings
-                    if ($scope.MapRecord.Sites.length > 0) {
-                        SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
-                        drawSites();                        
+                    SharedStateService.setSelectedAsync("Map", $scope.MapRecord);               
+                    SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
+                    if ($scope.MapRecord.Sites.length > 0) {                    
+                        localforage.setItem("Sites", $scope.MapRecord.Sites, function (err) {
+                            drawSites();
+                        })
+                                           
                     }
                     else
                         $scope.systemMessage.loadComplete = true;
-
                 },
                 function (error) {
                     $scope.systemMessage.text = "error loading map data";
@@ -249,91 +216,102 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             )// end then
 
     }
-  
-    
-    var reloadMap = function () {
-      
-        var cachedMap = SharedStateService.Repository.get("Map");
-        $scope.MapRecord = cachedMap;
-        var cachedSites = SharedStateService.Repository.get("Sites");
-        $scope.MapRecord.Sites = cachedSites;
-        if (cachedSites.length > 0)
-            drawSites();
-        else 
-            $scope.systemMessage.loadComplete = true;
-
      
+    var reloadMap = function (chachedMap) {
+        var map = getMapInstance();
+        $scope.MapRecord = chachedMap;
+        if ($scope.MapRecord.Sites.length > 0)
+        {
+            if(map.name ==="MainMap")
+                drawSites();
+            else if(map.name==="PreviewMap")
+                drawPreviewSite();
+        }
+        else
+            $scope.$apply(function () {
+                $scope.systemMessage.loadComplete = true;
+
+            })
+           
     }
 
+    var getMapByID = function (selectedMapID) {
 
-    var loadSelectedMap = function (mapID) {
-        var selectedMapID=(mapID==null)?SharedStateService.getSelectedID("Map"):mapID
-   
+      // to do store all the maps as we get them, - whats bad is they will never be refreshed unless check first for updates so...
+     //   var cachedMap = SharedStateService.getItemFromCache("Maps","MapID",selectedMapID, callback)
+
+
         DataTransportService.getMapByID(selectedMapID).then(
-            function (result) {
-                if (mapID != null)// this is passed by a query string param on a shareable link
-                {
-                    // move this to shared state service get auth
-                    //- ie handling if there is a query string param should set auth once
-                    SharedStateService.setAuthorizationState(readOnly);
-                    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
-                }
+          function (result) {
+              //if (mapID != null)// this is passed by a query string param on a shareable link
+              //{
+              //    // move this to shared state service get auth
+              //    //- ie handling if there is a query string param should set auth once
+              //    SharedStateService.setAuthorizationState(readOnly);
+              //    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
+              //}
 
-                $scope.MapRecord = result.data;
-                SharedStateService.setSelected("Map", result.data);
-                SharedStateService.Repository.put('Map', result.data);
-         
-                if ($scope.MapRecord.Sites.length > 0) {
-                    SharedStateService.Repository.put("Sites", $scope.MapRecord.Sites);
-                    $scope.$emit("sitesLoaded")
-                    // if we are reloading a page from the same session selectedSite is saved
-                    var selectedSite = SharedStateService.getSelectedSite();
-                    if (selectedSite != null && selectedSite.MapID != selectedMapID) {
-                        SharedStateService.setSelected("Site", null)
-                    }                       
-                    drawSites();                        
-                }
-                else
-                {
-                    $scope.systemMessage.loadComplete = true;
-                }
-            },
-            function (error) {
-                $scope.systemMessage.text = "error loading selected map";
-                $scope.systemMessage.activate();
-            }
-            )
-}
+          $scope.MapRecord = result.data;
+          SharedStateService.setSelectedAsync("Map", result.data);
+          if ($scope.MapRecord.Sites.length > 0) {
+              SharedStateService.setSelectedAsync("Sites", $scope.MapRecord.Sites);
+              $scope.$emit("sitesLoaded")
+              //// if we are reloading a page from the same session selectedSite is saved
+                 
+              drawSites();
+          }
+          else {
+              $scope.systemMessage.loadComplete = true;
+          }
+      },
+          function (error) {
+              $scope.systemMessage.text = "error loading selected map";
+              $scope.systemMessage.activate();
+          })
+    }
 
-
-    var loadMap = function () {
-        $scope.systemMessage.loadComplete = false;
-     var requestedMap = null;
-     var mapID = null;
+    var parseQueryString = function () {
+        var mapID = null;
         var searchObject = $window.location.search;
         if (searchObject != "") {
             var searchParams = searchObject.substr(1, searchObject.length)
             if ((searchParams.split("=")[0]) == "MapID") {
                 mapID = searchParams.split("=")[1];
             }
-                
         }
-       
-        if (mapID != null)
-            requestedMap = mapID;
+        return mapID;
+    }
 
-        var cachedMap = SharedStateService.Repository.get("Map");
-        var selectedMapID = SharedStateService.getSelectedID("Map");
-        if (requestedMap != null && cachedMap==null)
-            loadSelectedMap(requestedMap);
-       else if (cachedMap == null && (selectedMapID == null || selectedMapID =="null"))
-            loadDefaultMap();
-        else if (cachedMap == null && selectedMapID != null)
-            loadSelectedMap();
-        else if (cachedMap != null && selectedMapID !== null && cachedMap.MapID == selectedMapID)
-            reloadMap();
-        else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
-            loadSelectedMap();
+
+    var loadSelectedMap = function (mapID) {
+        getMapByID(mapID)
+    }
+
+
+// branch for different types of load
+    var loadMap = function () {
+        $scope.systemMessage.loadComplete = false;
+         var requestedMap = parseQueryString();
+         var cachedMap = null;
+         var selectedMapID = $routeParams.mapID;
+
+
+         localforage.getItem("Map", function (error, value) {
+             cachedMap = value;
+                if (requestedMap != null && cachedMap == null)
+                    loadSelectedMap(requestedMap);
+                else if (cachedMap == null && (selectedMapID == null || selectedMapID == "null"))
+                    loadDefaultMap();
+                else if (cachedMap == null && selectedMapID != null)
+                    loadSelectedMap(selectedMapID);
+                else if (cachedMap != null && selectedMapID !== null && cachedMap.MapID == selectedMapID)
+                    reloadMap(cachedMap);
+                else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
+                    loadSelectedMap(selectedMapID);
+                else if (cachedMap != null && selectedMapID == null)
+                    reloadMap(cachedMap);
+         })
+
     }
 
 
@@ -350,17 +328,23 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
              mapTypeId: mapType,
              showLocateMeButton: false,
              showTermsLink: false,
-             enableClickableLogo: false
+             enableClickableLogo: false,
+             showCopyright: false,
+             showLogo: false,
+             showScalebar: false,
+             showDashboard:false
          });
+
+         $scope.previewMap.name = "PreviewMap";
 
          if ($scope.previewMap != null)// of course its not, just checking
             loadMap();
      }
      else {
-         console.log("calling prepare previewbecause microsoft is null waiting 3000")
+         console.log("calling prepare preview because microsoft is null waiting 1000")
          $timeout(function () {
              preparePreviewMap();
-         }, 3000)
+         }, 1000)
      }// end bing is loaded yet
  }
 
@@ -378,8 +362,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                  mapTypeId: mapType,
                  showLocateMeButton: false,
                  showTermsLink: false,
-                 enableClickableLogo: false
+                 enableClickableLogo: false,
+                 showCopyright: false,
+                 showLogo: false,
+                 showBreadcrumb:true
              });
+
+             $scope.mapInstance.name = "MainMap";
 
              if ($scope.mapInstance != null)// of course its not, just checking
                  loadMap();
@@ -405,13 +394,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           //   $timeout(afterLoaded, 800); // this ends up waiting for images which dont need to be waited for
          //}
          //else {
-             if ($location.path() == "/Map" || $location.path() == "/") {
+             if ($location.path() != "/MapList" && $location.path().indexOf("/Map")==0 || $location.path() == "/") {
                  if ($scope.mapInstance == null)
                      prepareMainMap();
                  else
                      loadMap();               
              }
-             else if ($location.path() != "/Map" && $location.path() != "/") {
+             else  {
                  if ($scope.previewMap == null)
                      preparePreviewMap();
                  else
@@ -420,7 +409,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
          }
     // }
      catch (error) {
-        console.log("msft bing map v8 was null waiting 400")
+        console.log("msft bing map v8 was null waiting 1000")
         $timeout(waitAndReload, 1000); 
      }
 
@@ -435,47 +424,44 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         catch (error) {
             $window.location.reload();
-
         }
-     
-
     }
 
 
 //WATCH SITE ID
   $scope.$watch(
       function (scope) {
-          if (SharedStateService.Selected.Site != null)
-              return SharedStateService.Selected.Site.SiteID;
+          localforage.getItem("Site", function (error, value) {
+              if (error == null)
+                  return value;
+          })
       },
       function (newValue, oldValue) {
-          if (newValue != null && newValue != "null" && newValue != oldValue)
+          if (newValue != oldValue && newValue.MapID == oldValue.mapID)
           {
-              if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
+              if (($location.path() != "/MapList") && $location.path() != "/" && ($location.path().indexOf("/Map")  != 0)) {
                   clearSites();
-                  drawPreviewSite();
+                  if (newValue != null)
+                    drawPreviewSite();
               }
+          
           }
-          else if (newValue == null) {
-              if (($location.path() != "/MapList") && $location.path() != "/" && $location.path() != "/Map") {
-                  clearSites();
-                 
-              }
-
-          }
+         
       });
 
 
 //WATCH MAP ID
   $scope.$watch(
       function (scope) {
-          if (SharedStateService.Selected.Map != null)
-              return SharedStateService.Selected.Map.MapID;
+          localforage.getItem("MapListItem", function (error, value) {
+              if (error == null)
+                  return value.MapID;
+          })
       },
       function (newValue, oldValue) {
           if ($location.path() == "/MapList" && newValue != null && newValue != oldValue) {
               clearSites();
-              $timeout(loadSelectedMap(newValue),1000);
+              $timeout(loadSelectedMap(newValue.MapID),1000);
           }
 
       });
@@ -542,7 +528,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         $scope.$apply(function ()
         {
             var siteRecord = createSiteRecord(pos.latitude, pos.longitude);
-            SharedStateService.setSelected("Site", siteRecord);
+            SharedStateService.setSelectedAsync("Site", siteRecord);
             var currentPosition = new Microsoft.Maps.Location(pos.latitude, pos.longitude);
             var marker = createMarker(pos.latitude, pos.longitude);
             if (pushpinCollection == null) {
@@ -621,7 +607,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
   
   
 /****SEARCH****************************************/
-  
 
     $scope.geocodeAddress = function () {
         var geocoder = SharedStateService.getSearchManager().then(
@@ -641,7 +626,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                         var siteRecord = createSiteRecord(lat, lng);
                         siteRecord.Address = thePlace.address.formattedAddress;
                         siteRecord.Name = thePlace.Name;
-                        SharedStateService.setSelected("Site", siteRecord);
+                        SharedStateService.setSelectedAsync("Site", siteRecord);
                         if (SharedStateService.getAuthorizationState() == 'CAN_EDIT')
                             $scope.ConfirmCancel.isShowing = true;
                         
@@ -676,7 +661,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
 
-    if ($location.path() == "/" || $location.path() == "/Map") {
+    if ($location.path() == "/" || $location.path().indexOf("/Map") ==0){
         $scope.ConfirmCancel.question = "Save location permanently to map?";
         $scope.ConfirmCancel.ccCancel = dismiss;
         $scope.ConfirmCancel.ccConfirm = saveCurrentLocation;

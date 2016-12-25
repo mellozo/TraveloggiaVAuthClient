@@ -13,16 +13,12 @@
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
           function (result, x, y, z, h) {
               // clear default map loaded with default display user's data
-              SharedStateService.Repository.put("Map", null);
-              SharedStateService.setSelected("Map", null);
+              SharedStateService.clearMap();
               SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.setAuthorizationState(canEdit);
-              // we will depricate this
-              // SharedStateService.readOnlyUser = false;
               if ($window.location.search.indexOf("MapID") == -1)
                   $location.path("/Map")
               else {
-
                   var plainold = $window.location.href.split("?")[0]
                   plainold = plainold + "#/Map";
                   $window.location.replace(plainold);
@@ -61,14 +57,7 @@
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
         // clear 
-        SharedStateService.setSelected("Map", null);
-        SharedStateService.setSelected("Site", null);
-        SharedStateService.setSelected("Journal", null);
-
-        SharedStateService.Repository.put("Map", null);
-        SharedStateService.Repository.put("Sites", []);
-        SharedStateService.Repository.put("Journals", []);
-        SharedStateService.Repository.put("Photos", [])
+        SharedStateService.clearMap();
         VM.authenticationStatus.signedIn = false;
         $route.reload();
 
@@ -118,14 +107,7 @@
                 SharedStateService.setAuthenticatedMember(result.data);
                 SharedStateService.setAuthorizationState(canEdit);
 // clear 
-                SharedStateService.setSelected("Site", null);
-                SharedStateService.setSelected("Journal", null);
-                SharedStateService.setSelected("Map", null);
-                SharedStateService.Repository.put("Sites", []);
-                SharedStateService.Repository.put("Map", null);
-                SharedStateService.Repository.put("Journals", []);
-                SharedStateService.Repository.put("Photos", [])
-
+                SharedStateService.clearMap();
                 $scope.systemMessage.text = "Account created successfully.";
                 $scope.systemMessage.activate();
                 $location.path("/Map")

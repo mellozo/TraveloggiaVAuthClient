@@ -23,7 +23,6 @@
     $window.setDateTime = function (strDate, prop) {
         if (VM.Site == null)
             return;
-
         $scope.$apply(function () {
             switch (prop) {
                 case "Arrival":
@@ -33,15 +32,16 @@
                     VM.Site.Departure = strDate;
                     break;
             }
-
-
         })
-
-        // $scope.$apply();
     }
   
-    var VM = this;
 
+
+    if ($location.path() == "/Site") {
+        $scope.ConfirmCancel.question = "Delete Selected Location ?";
+        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccConfirm = deleteSite;
+    }
 
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
@@ -58,11 +58,20 @@
     }
    
 
+    var VM = this;
 
-    VM.Site = SharedStateService.Selected.Site;
+    localforage.getItem("Site", function (error, value) {
+        if(error==null){
+            VM.Site = value;
+            makeDates(VM.Site)
+        }
+            
 
+    })
 
-    function makeDates(site) {
+ 
+
+    var makeDates = function(site) {
         if (site.Arrival != null)
             site.Arrival = new Date(site.Arrival);
 
@@ -71,26 +80,21 @@
 
     }
 
-    if (VM.Site == null)
-    {
-        var siteID = SharedStateService.getSelectedID("Site");
-        if(siteID != null && siteID != "null")
-        DataTransportService.getSiteByID(siteID).then(
-            function (result)
-            {
-                VM.Site = result.data;
-              makeDates(VM.Site)
-            },
-            function (error)
-            {
-                $scope.systemMessage.text = "error reloading site data"
-                $scope.systemMessage.activate();
-            })
 
+
+    var fetchSiteByID = function () {
+        DataTransportService.getSiteByID(siteID).then(
+    function (result) {
+        VM.Site = result.data;
+        makeDates(VM.Site)
+    },
+    function (error) {
+        $scope.systemMessage.text = "error reloading site data"
+        $scope.systemMessage.activate();
+    })
 
     }
-    else
-        makeDates(VM.Site)
+
 
 
     VM.saveSite = function () {
@@ -105,16 +109,15 @@
         VM.Site.SiteID = null;
         DataTransportService.addSite(VM.Site).then(
         function (result) {
-            var cachedSites = SharedStateService.Repository.get('Sites');
-            cachedSites.push(result.data);
-            SharedStateService.Repository.put('Sites', cachedSites);
-            SharedStateService.setSelected("Site", result.data);
-            // invalidate cache of child records
-            SharedStateService.Repository.put('Photos', []);
-            SharedStateService.Repository.put('Journals', []);
-            $scope.systemMessage.text = "Location saved successfully"
-            $scope.systemMessage.activate();
-            $location.path("/Album");
+            SharedStateService.addToCacheAsync("Sites", result.data, function () {
+                SharedStateService.setSelectedAsync("Site", result.data);
+                // invalidate cache of child records
+                SharedStateService.clearSiteChildren();
+                $scope.systemMessage.text = "Location saved successfully"
+                $scope.systemMessage.activate();
+                $location.path("/Album");
+            })
+           
         },
         function (error) {
             $scope.systemMessage.text = "Error saving location";
@@ -127,13 +130,17 @@
     VM.updateSite = function () {
         DataTransportService.updateSite(VM.Site).then(
                      function (result) {
-                         $scope.systemMessage.text = "Location edits saved successfully";
-                         $scope.systemMessage.activate();
+                         SharedStateService.updateCacheAsync("Sites", "SiteID", VM.SiteID, VM.Site, function (error) {
+                             if (error == null) {
+                                
+                                 $scope.systemMessage.text = "Location edits saved successfully";
+                                 $scope.systemMessage.activate();
+                             }
+                         })
                      },
                      function (error) {
                          $scope.systemMessage.text = "Error saving location";
                          $scope.systemMessage.activate();
-                         //to do log error
                      }
          );
     }
@@ -143,11 +150,14 @@
         $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
-                SharedStateService.deleteFromCache("Sites", "SiteID", VM.Site.SiteID);
-                SharedStateService.setSelected("Site",null)
-                $scope.systemMessage.text = "Location deleted successfully";
-                $scope.systemMessage.activate();
-                VM.Site = null;
+                SharedStateService.deleteFromCacheAsync("Sites", "SiteID", VM.Site.SiteID, function () {
+                    SharedStateService.setSelectedAsync("Site", null)
+                    SharedService.clearSiteChildren();
+                    $scope.systemMessage.text = "Location deleted successfully";
+                    $scope.systemMessage.activate();
+                    VM.Site = null;
+                })
+              
             },
             function (error) {
                 $scope.systemMessage.text = "Error deleteing location";
@@ -168,14 +178,6 @@
     }
 
 
-    if ($location.path() == "/Site") {
-        $scope.ConfirmCancel.question = "Delete Selected Location ?";
-        $scope.ConfirmCancel.ccCancel = dismiss;
-        $scope.ConfirmCancel.ccConfirm = deleteSite;
-    }
-
-
-
 
 
     VM.openURL = function () {
@@ -191,18 +193,20 @@
 
 
 
-
+// now broken
 
     $scope.$watch(
        function (scope) {
-           if (SharedStateService.Selected.Site != null)
-               return SharedStateService.Selected.Site.Latitude;
-           else
-               return SharedStateService.Selected.Site;
+
+           localforage.getItem("Site", function (error, value) {
+               if (error == null)
+                   return value;
+           })
+       
        },
        function (newValue, oldValue) {
            if ( newValue != oldValue) {
-               VM.Site = SharedStateService.Selected.Site;
+               VM.Site = newValue
            }
        });
 

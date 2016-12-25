@@ -77,7 +77,7 @@
 
     // demonstrating use of inherited scope via nested controllers
     // even though some people think this is a big no no
-  var isMapPage = ($location.path() == "/Map" || $location.path() == "/") ? true : false;
+  var isMapPage = ($location.path() != "/MapList" && $location.path().indexOf("/Map")==0 || $location.path() == "/") ? true : false;
 
     var userAgentParser = new UAParser();
     var result = userAgentParser.getResult();

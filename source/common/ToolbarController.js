@@ -24,7 +24,7 @@
                    function handleRouteChangeEvent(event) {
 
                        // show search on map page
-                       if ($location.path() == "/" || $location.path() == "/Map")
+                       if ($location.path() != "/MapList" && $location.path() == "/" || $location.path().indexOf("/Map")==0)
                            $scope.Swap.Map = true;
                        else
                            $scope.Swap.Map = false;
@@ -134,8 +134,8 @@
 
     }
 
-    $scope.goMapFirstTime = function () {
-        $location.path("/Map").search({"ZoomOut": "true"});
+    $scope.goMapFirstTime = function (mapID) {
+        $location.path("/Map/"+mapID).search({"ZoomOut": "true"});
     }
 
     $scope.goMapList = function () {

@@ -38,6 +38,7 @@
        return id;
     }
 
+
     local_scope.setAuthenticatedMember = function (member) {
         local_scope.authenticatedMember = member;
         var inTenYears = new Date("3016-10-10");
@@ -46,8 +47,184 @@
     }
  
 
+    local_scope.setSelectedAsync = function (key, value) {
+        localforage.setItem(key, value, function (err) {
+            if(err== null)
+            {
+                ;
+            }
+            else{
+                $scope.systemMessage.text = "error setting cache";
+                $scope.systemMessage.activate();
+            }
+        })
+    }
+
+    local_scope.getItemFromCache=function(key,idField, idValue, callback){
+
+
+
+
+    }
+
+
+
+
+
+    local_scope.updateCacheAsync = function (collectionName, propName, itemID, item, callback) {
+        localforage.getItem("collectionName", function (error, value) {
+            var collection = value;
+            if (collection == null)
+                return;
+            for (var i = 0; i < collection.length; i++) {
+                if (collection[i][propName] == itemID) {
+                    collection[i] = item;
+                    break;
+                }
+            }
+            callback();
+        })
+    }
+
+
+
+    local_scope.clearMap = function () {
+        local_scope.setSelectedAsync('Map' ,null);
+        local_scope.clearMapChildren();
+    }
+
+    local_scope.clearMapChildren = function () {
+        local_scope.setSelectedAsync("Site", null);
+        local_scope.setSelectedAsync("Sites", []);
+        local_scope.clearSiteChildren();
+    }
+
+
+    local_scope.clearSiteChildren = function () {
+        local_scope.setSelectedAsync('Photos', []);
+        local_scope.setSelectedAsync('Journals', []);
+        local_scope.setSelectedAsync('Photo', null);
+        local_scope.setSelectedAsync('Journal', null);
+    }
+
+
+
+    local_scope.addToCacheAsync = function (collectionName, item, callback) {
+        localforage.getItem(collectionName, function (error, value) {
+            var list = value;
+            list.splice(0, 0, item);
+            localforage.setItem(collectionName, function (err) {
+                if (err == null)
+                    callback();
+            })
+        })
+    }
+
+    //ridiculous that angular doesnt have this already
+    // nor does local forage :(
+    local_scope.deleteFromCacheAsync = function (collectionName, propName, itemID,callback) 
+    {
+        localforage.getItem(collectionName, function (err, value) 
+        {
+            var collection = value;
+            if (collection == null)
+                return;
+            var spliceIndex = 0;
+            try {
+                        for (var i = 0; i < collection.length; i++) {
+                            if (collection[i][propName] == itemID) {
+                                spliceIndex = i;
+                                break;
+                            }
+                        }
+                        collection.splice(i, 1);
+                        localforage.setItem(collectionName, collection, function (error) {
+                            callback();
+                        })
+                }
+            catch (error) {
+                $scope.systemMessage.text = "error deleting from cache";
+                $scope.systemMessage.activate();
+            }
+        })
+       
+    }
+
+
+
+
+
+
+    local_scope.getSearchManager = function () {
+        var deferredResult = $q.defer();
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+            deferredResult.resolve("ok");
+        });
+        return deferredResult.promise;
+    }
+
+
+
+
+
+
+
+
+
+    // to be replaced with localforage
+
+
+    local_scope.updateCache = function (collectionName, propName, itemID, item) {
+        var collection = local_scope.Repository.get(collectionName);
+        if (collection == null)
+            return;
+
+        for (var i = 0; i < collection.length; i++) {
+            if (collection[i][propName] == itemID) {
+                collection[i] = item;
+                break;
+            }
+        }
+    }
+
+
+    local_scope.deleteFromCache = function (collectionName, propName, itemID) {
+        var collection = local_scope.Repository.get(collectionName);
+        if (collection == null)
+            return;
+        var spliceIndex = 0;
+
+        try {
+            for (var i = 0; i < collection.length; i++) {
+                if (collection[i][propName] == itemID) {
+                    spliceIndex = i;
+                    break;
+                }
+            }
+            collection.splice(i, 1);
+        }
+        catch (error) {
+
+            alert(error.message)
+        }
+
+        local_scope.Repository.put(collectionName, collection);
+    }
+
+    local_scope.Repository = $cacheFactory('Repository', {});
+    local_scope.Repository.put('Map', null);
+    local_scope.Repository.put('Sites', []);
+    // for now these are not multi - dimensional arrays
+    // but todo - store whatever we load from the same map
+    local_scope.Repository.put('Photos', []);
+    local_scope.Repository.put('Journals', [])
+
+
+
+    // to be replaced with local forage - store once and for all :(
     local_scope.setSelected = function (key, value) {
-     
+
+
         local_scope.Selected[key] = value;
         var propName = key + "ID";
         if (value != null)
@@ -58,7 +235,7 @@
         // this is messy indeed because we use the mapname in the photo path - probably shouldnt - human readable though
         if (key == "Map" && value != null)
             $cookies.put("MapName", value.MapName);
-        else if (key=="Map" && value == null)
+        else if (key == "Map" && value == null)
             $cookies.put("MapName", null);
     }
 
@@ -68,7 +245,6 @@
         ID = local_scope.Selected[key] == null ? $cookies.get(propName) : local_scope.Selected[key][propName];
         return ID;
     }
-
 
     local_scope.getSelectedSite = function () {
         var site = local_scope.Selected.Site;
@@ -84,24 +260,20 @@
                 }
             }
         }
-             return site;
+        return site;
     }
-
 
     local_scope.getSelectedPhoto = function () {
         var photo = local_scope.Selected.Photo;
-        if (photo == null)
-        {
+        if (photo == null) {
             var id = $cookies.get("PhotoID");
             var photos = local_scope.Repository.get("Photos");
-            for (var i = 0; i<photos.length; i++)
-            {
-                if(photos[i].PhotoID == id)
-                {
+            for (var i = 0; i < photos.length; i++) {
+                if (photos[i].PhotoID == id) {
                     photo = photos[i];
                     break;
                 }
-                    
+
             }
         }
         return photo;
@@ -119,70 +291,7 @@
 
 
 
-    local_scope.updateCache=function(collectionName, propName, itemID, item)
-    {
-        var collection = local_scope.Repository.get(collectionName);
-        if (collection == null)
-            return;
-
-        for (var i = 0; i < collection.length; i++) {
-            if (collection[i][propName] == itemID) {
-                collection[i] = item;
-                break;
-            }
-        }
-    }
-
-
-
-
-//ridiculous that angular doesnt have this already
-    local_scope.deleteFromCache=function(collectionName,propName, itemID){
-        var collection = local_scope.Repository.get(collectionName);
-        if (collection == null)
-            return;
-        var spliceIndex = 0;
-
-        try{
-            for (var i = 0; i < collection.length; i++) {
-                if (collection[i][propName]== itemID) {
-                    spliceIndex = i;
-                    break;
-                }
-            }
-            collection.splice(i, 1);
-        }
-        catch (error) {
-
-            alert(error.message)
-        }
-      
-        local_scope.Repository.put(collectionName, collection);
-    }
-
-    local_scope.Repository = $cacheFactory('Repository', {});
-
-    local_scope.Repository.put('Map', null);
-
-    local_scope.Repository.put('Sites', []);
-
-    // for now these are not multi - dimensional arrays
-    // but todo - store whatever we load from the same map
-    local_scope.Repository.put('Photos', []);
-
-    local_scope.Repository.put('Journals', [])
-
-
    
     
-    
-    local_scope.getSearchManager = function () {
-     var deferredResult= $q.defer();
-     Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-         deferredResult.resolve("ok");
-     });
-     return deferredResult.promise;
-    }
-  
 
 })

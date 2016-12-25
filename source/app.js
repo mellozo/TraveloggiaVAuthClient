@@ -30,6 +30,11 @@ angularTraveloggia.config(['$routeProvider', function ($routeProvider, $analytic
             controller:'MapController'
         })
 
+        .when('/Map/:mapID',{
+        templateUrl: 'map/Map.html',
+         controller:'MapController'
+        })
+
         .when('/Site', {
             templateUrl: 'site/Site.html',
             controller: 'SiteController'
@@ -86,6 +91,12 @@ angularTraveloggia.run(function ($rootScope) {
       
        
     });
+
+    localforage.config({
+        name: 'Traveloggia',
+        storeName:'clientSideDB'
+    });
+
 });
 
 
