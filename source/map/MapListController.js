@@ -16,21 +16,15 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     $scope.switchMap = function (map) {
         if ($scope.selectedMap.MapID != map.MapID) {
             $scope.selectedMap = map;      
-              
-            localforage.setItem("MapListItem", map, function (error) {
-                $scope.$apply();
+           SharedStateService.setSelectedAsync("MapListItem", map);
                 //  SharedStateService.clearMap();
-            });
-          
-         
         }
-      
     }
 
 
     $scope.switchAndGo = function (map) {
         $scope.switchMap(map);
-        $scope.goMapFirstTime(map.MapID);
+        $scope.goMapFirstTime();
     }
 
 
@@ -93,33 +87,24 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     
 
 
-    // for blog this is why not use this horseshit  
-    var getSelectedMap = function (callback) {
-        localforage.getItem("Map", function (error, value) {
-            if (value != null)
-                $scope.selectedMap = value;
-            // $scope.$apply(function () {
-            callback();
-
-            // })
-
-        })
+    var getSelectedMap = function () {
+       var value = JSON.parse(localStorage.getItem("Map"))
+        $scope.selectedMap = value;
+        loadMapList();
     }
 
     var loadMapList = function () {
-        localforage.getItem("MapList", function (err, value) {
-            var cachedMapList =value;
-            if (cachedMapList == null || (cachedMapList[0].MemberID != SharedStateService.getAuthenticatedMemberID()))
-                fetchMapList();
-            else {
-                $scope.MapList = value;
-                $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
-                $scope.ConfirmCancel.ccConfirm = deleteMap;
-                $scope.ConfirmCancel.ccCancel = dismiss;
-                $scope.ConfirmCancel.isShowing = false;
-            }
-                
-        })
+
+        var cachedMapList =JSON.parse( localStorage.getItem("MapList") )
+        if (cachedMapList == null || (cachedMapList[0].MemberID != SharedStateService.getAuthenticatedMemberID()))
+            fetchMapList();
+        else {
+            $scope.MapList = cachedMapList;
+            $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
+            $scope.ConfirmCancel.ccConfirm = deleteMap;
+            $scope.ConfirmCancel.ccCancel = dismiss;
+            $scope.ConfirmCancel.isShowing = false;
+        }
     }
 
 
@@ -182,16 +167,11 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
        
         DataTransportService.deleteMap($scope.selectedMap.MapID).then(
             function (result) {
-                SharedStateService.deleteFromCacheAsync("MapList", "MapID", $scope.selectedMap.MapID, function () {
-                    $scope.$apply(function(){
-                        dismiss();
-                        loadMapList();
-                        $scope.systemMessage.text = "map deleted successfully";
-                        $scope.systemMessage.activate();
-                    })
-                   
-                });
-               
+                SharedStateService.deleteFromCacheAsync("MapList", "MapID", $scope.selectedMap.MapID) 
+                dismiss();
+                loadMapList();
+                $scope.systemMessage.text = "map deleted successfully";
+                $scope.systemMessage.activate();
             },
             function (error) {
                 $scope.systemMessage.text = "error deleting map";
@@ -225,11 +205,10 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             DataTransportService.updateMap($scope.selectedMap).then(
                 function (result) {
                     SharedStateService.setSelectedAsync("Map", $scope.selectedMap);
-                    SharedStateService.updateCacheAsync("MapList", "MapID", $scope.selectedMap.MapID, $scope.selectedMap, function () {
-                        loadMapList();
-                        $scope.systemMessage.text = "map was updated successfully";
-                        $scope.systemMessage.activate();
-                    })
+                    SharedStateService.updateCacheAsync("MapList", "MapID", $scope.selectedMap.MapID, $scope.selectedMap) 
+                    loadMapList();
+                    $scope.systemMessage.text = "map was updated successfully";
+                    $scope.systemMessage.activate();
                 },
                 function (error) {
                     $scope.systemMessage.text = "error updating map";
@@ -247,7 +226,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     //kickoff
-    getSelectedMap(loadMapList)
+    getSelectedMap(); 
 
 
 })

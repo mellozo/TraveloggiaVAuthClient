@@ -1,4 +1,6 @@
-﻿angularTraveloggia.service('SharedStateService',function ( DataTransportService,isEditing,readOnly,canEdit,$cacheFactory,$window,$cookies,$q)
+﻿"use strict"
+
+angularTraveloggia.service('SharedStateService', function (DataTransportService, isEditing, readOnly, canEdit, $cacheFactory, $window, $cookies, $q)
 {
 
     var local_scope = this;
@@ -47,33 +49,53 @@
     }
  
 
+
     local_scope.setSelectedAsync = function (key, value) {
-        localforage.setItem(key, value, function (err) {
-            if(err== null)
-            {
-                ;
-            }
-            else{
-                $scope.systemMessage.text = "error setting cache";
-                $scope.systemMessage.activate();
-            }
-        })
-    }
+        try {
+            var stringified = (value != null) ? JSON.stringify(value) : null;
+            localStorage.setItem(key, stringified)
 
-    local_scope.getItemFromCache=function(key,idField, idValue, callback){
-
-
-
-
+        }
+        catch (error) {
+            console.log(error.message)
+        }
     }
 
 
+
+    //local_scope.setSelectedAsync = function (key, value) {
+    //    localforage.setItem(key, value, function (err) {
+    //        if(err== null)
+    //        {
+    //            ;
+    //        }
+    //        else{
+    //            $scope.systemMessage.text = "error setting cache";
+    //            $scope.systemMessage.activate();
+    //        }
+    //    })
+    //}
+
+    local_scope.getItemFromCollection=function(key,idField, idValue, callback){
+
+
+
+
+    }
+
+    local_scope.getItemFromCache = function (key) {
+        var item = null;
+        var cacheitem = localStorage.getItem(key);
+        if (cacheitem != null && cacheitem != "null")
+            item = JSON.parse(cacheitem);
+        return item;
+
+    }
 
 
 
     local_scope.updateCacheAsync = function (collectionName, propName, itemID, item, callback) {
-        localforage.getItem("collectionName", function (error, value) {
-            var collection = value;
+        var collection =JSON.parse(   localStorage.getItem("collectionName")) 
             if (collection == null)
                 return;
             for (var i = 0; i < collection.length; i++) {
@@ -83,7 +105,7 @@
                 }
             }
             callback();
-        })
+        
     }
 
 

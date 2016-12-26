@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REST_API", "..\TraveloggiaVServices\REST_API.csproj", "{FE44267E-3A52-41FE-A145-842016001607}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraveloggiaPro", "source\TraveloggiaPro.csproj", "{271D3EA9-42F5-40F8-A150-E08D23D3EAD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REST_API", "..\..\Traveloggia Source\TraveloggiaVServices\REST_API.csproj", "{FE44267E-3A52-41FE-A145-842016001607}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE44267E-3A52-41FE-A145-842016001607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE44267E-3A52-41FE-A145-842016001607}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE44267E-3A52-41FE-A145-842016001607}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE44267E-3A52-41FE-A145-842016001607}.Release|Any CPU.Build.0 = Release|Any CPU
 		{271D3EA9-42F5-40F8-A150-E08D23D3EAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{271D3EA9-42F5-40F8-A150-E08D23D3EAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{271D3EA9-42F5-40F8-A150-E08D23D3EAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{271D3EA9-42F5-40F8-A150-E08D23D3EAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE44267E-3A52-41FE-A145-842016001607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE44267E-3A52-41FE-A145-842016001607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE44267E-3A52-41FE-A145-842016001607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE44267E-3A52-41FE-A145-842016001607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

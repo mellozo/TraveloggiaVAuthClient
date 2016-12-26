@@ -134,8 +134,8 @@
 
     }
 
-    $scope.goMapFirstTime = function (mapID) {
-        $location.path("/Map/"+mapID).search({"ZoomOut": "true"});
+    $scope.goMapFirstTime = function () {
+        $location.path("/Map").search({"ZoomOut": "true"});
     }
 
     $scope.goMapList = function () {

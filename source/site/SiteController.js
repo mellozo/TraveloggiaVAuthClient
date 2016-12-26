@@ -58,30 +58,26 @@
     }
    
 
-    var VM = this;
 
-    localforage.getItem("Site", function (error, value) {
-        if(error==null){
-            VM.Site = value;
-            makeDates(VM.Site)
-        }
-            
 
-    })
-
- 
-
-    var makeDates = function(site) {
+    var makeDates = function (site) {
         if (site.Arrival != null)
             site.Arrival = new Date(site.Arrival);
 
-        if(site.Departure != null)
+        if (site.Departure != null)
             site.Departure = new Date(site.Departure)
 
     }
 
 
 
+    var VM = this;
+  
+    VM.Site =SharedStateService.getItemFromCache("Site");
+    if(VM.Site != null)
+        makeDates(VM.Site)
+
+ 
     var fetchSiteByID = function () {
         DataTransportService.getSiteByID(siteID).then(
     function (result) {
@@ -193,21 +189,17 @@
 
 
 
-// now broken
+
 
     $scope.$watch(
        function (scope) {
-
-           localforage.getItem("Site", function (error, value) {
-               if (error == null)
-                   return value;
-           })
-       
+           var value = SharedStateService.getItemFromCache("Site");
+           return value;
        },
        function (newValue, oldValue) {
            if ( newValue != oldValue) {
                VM.Site = newValue
            }
-       });
+       },true);
 
 })
