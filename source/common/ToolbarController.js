@@ -161,6 +161,7 @@
    
     }
 
-
+//if(    $scope.SiteList==null)
+//    loadSites();
 
 })
