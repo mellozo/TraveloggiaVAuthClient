@@ -109,13 +109,13 @@
 
     $scope.selectSite = function (site) {
         $scope.selectedSite = site;
-        SharedStateService.setSelected("Site", site);
+        SharedStateService.setSelectedAsync("Site", site);
         var currentpath = $location.path();
 
         if (currentpath == "/Photo")
             currentpath = "/Album"
         $location.path(currentpath).search({ });
-       // $location.path(currentpath).search( {"ZoomIn":"true"});
+      
     }
 
 
@@ -148,75 +148,19 @@
             plainold = plainold + "#/MapList";
             $window.location.replace(plainold);
         }
-    
-        
-      
     }
 
 
    
 
     var loadSites = function () {
-        var cachedSites = SharedStateService.Repository.get('Sites');
+        $scope.selectedSite = SharedStateService.getItemFromCache("Site");
+        var cachedSites = SharedStateService.getItemFromCache('Map').Sites;
         if (cachedSites != null && cachedSites.length > 0)
-            $scope.SiteList = cachedSites;
-        else {
-            var selectedMapID = SharedStateService.getSelectedID("Map")
-            if (selectedMapID != null)
-                DataTransportService.getMapByID(selectedMapID).then(
-                            function (result) {
-                                SharedStateService.setSelected("Map", result.data);
-                                SharedStateService.Repository.put('Map', result.data);
-                                if (result.data.Sites.length > 0) {
-                                    SharedStateService.Repository.put("Sites", result.data.Sites)
-                                    $scope.SiteList = result.data.Sites;
-                                    updateSelectedSite();
-                                }
-                            },
-                            function (error) {
-
-                            }
-                    );
-        }
+           $scope.SiteList = cachedSites;
+   
     }
 
-
-
-    var updateSelectedSite = function () {
-        var selectedSiteID = SharedStateService.getSelectedID("Site");
-        if (selectedSiteID != null)
-            for (var i = 0; i < $scope.SiteList.length; i++) {
-                if ($scope.SiteList[i].SiteID == selectedSiteID) {
-                    $scope.selectedSite = $scope.SiteList[i];
-                    break;
-                }
-            }
-
-
-    }
-
- 
-  
-
-
-    // loading the data if they change sites but stay on the page
-    $scope.$watch(
-        function (scope) {
-            if (SharedStateService.Selected.Site != null)
-                return SharedStateService.Selected.Site.SiteID;
-            else
-                return SharedStateService.getSelectedID("Site")
-        },
-        function (newValue, oldValue) {
-            if (newValue != null && newValue != oldValue) {
-                loadSites();
-            }
-
-        });
-
-
-    if ($scope.SiteList == null)
-        loadSites();
 
 
 })

@@ -27,9 +27,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         Address:null
     }
 
-  
-  
-
+ 
     // INIT SEQUENCE
 
     var clearSites = function () {
@@ -70,9 +68,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
  
     var setBounds = function (arrayOfMsftLocs) {
         $scope.systemMessage.loadComplete = true;
+        var map = getMapInstance();
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);   
-       
-                $scope.mapInstance.setView({ bounds: viewRect, padding: 30 })
+        $timeout(function () {
+            map.setView({ bounds: viewRect, padding: 30 })
+        });
     
     }
 
@@ -85,7 +85,11 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                 console.log("map is null inside draw sites trying to set view on selected site")
             else {
               
+                $timeout(function ()
+                {
                     map.setView({ center: loc, zoom: 17 });
+                }
+                );
          
 
             }
@@ -175,6 +179,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         {
             setBounds(arrayOfMsftLocs);
             SharedStateService.setSelectedAsync("Site", $scope.MapRecord.Sites[0]);
+            $scope.$emit("sitesLoaded")
         }
         else {
             setCenter(selectedSite)
@@ -236,10 +241,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
           $scope.MapRecord = result.data;
           SharedStateService.setSelectedAsync("Map", result.data);
+          SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
           if ($scope.MapRecord.Sites != null) {
-              SharedStateService.setSelectedAsync("Sites", $scope.MapRecord.Sites);
-              $scope.$emit("sitesLoaded")
-              //// if we are reloading a page from the same session selectedSite is saved
               drawSites();
           }
           else {
