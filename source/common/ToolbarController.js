@@ -151,8 +151,6 @@
     }
 
 
-   
-
     var loadSites = function () {
         $scope.selectedSite = SharedStateService.getItemFromCache("Site");
         var cachedSites = SharedStateService.getItemFromCache('Map').Sites;

@@ -3,7 +3,7 @@
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
    
  
-    $scope.PhotoList = [];
+   
 
 
     $scope.stateMachine = {
@@ -27,41 +27,83 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
-
-   
+ 
     $scope.imageRefresher = {
         queryString: "?reload=" + Math.random()
+    }
+
+  
+
+    var onPageLoad = function () {
+        $scope.photoReady = false;
+       if($scope.PhotoList ==null ||$scope.PhotoList.length == null)
+           loadPhotos()
+    }
+
+
+    var preparePreviewImage = function (pic) {
+        var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        var img = new Image();
+        img.onload = function (event) {
+            // this works but need to get background div out of the way or go back to switch in the html 
+            // to do 
+            //if(pic.orientationID != null)
+            //switch (pic.orientationID) {
+            //    case 3:
+            //    case 5:
+            //    case 6:
+            //    case 7:
+            //    case 8:
+            //    case 9:
+            //        if($scope.Capabilities.alreadyKnowsHow==false)
+            //        $scope.onImageLoad(event, pic.orientationID, pic);
+            //        break;
+           // }
+            $scope.$apply(function () {
+                $scope.previewImageUrl = theImageURL;
+                $scope.photoReady = true;
+
+            })
+        
+        }
+        img.src = theImageURL;
+        
+    }
+
+    var updateImagePath = function () {
+        var mapName = SharedStateService.getItemFromCache("Map").MapName;
+        var mapID = SharedStateService.getItemFromCache("Map").MapID
+        $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + mapName + "/";
+        $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + mapID + "/";
     }
 
     var loadPhotos = function () {
         var cachedPhotos = SharedStateService.getItemFromCache('Photos');
       //  var selectedSiteID 
-        if (cachedPhotos != null && cachedPhotos[0].SiteID == SharedStateService.getItemFromCache("Site").SiteID) {
+        if (cachedPhotos != null && cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getItemFromCache("Site").SiteID) {
             $scope.PhotoList = cachedPhotos;
+            preparePreviewImage($scope.PhotoList[0]);
             $scope.selectedPhoto = SharedStateService.getItemFromCache("Photo");
             if ($scope.selectedPhoto == null) {
+              
                 SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
                 $scope.selectedPhoto = $scope.PhotoList[0];
             }
             var mapName = SharedStateService.getItemFromCache("Map").MapName;
             var mapID = SharedStateService.getItemFromCache("Map").MapID
-            $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + mapName + "/";
-            $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + mapID + "/";
+          
         }
         else if (SharedStateService.getItemFromCache("Site") != null) {
             var siteID = SharedStateService.getItemFromCache("Site").SiteID
             DataTransportService.getPhotos(siteID).then(
                 function (result) {
                     $scope.PhotoList = result.data;
+                   
                     SharedStateService.setSelectedAsync('Photos', result.data);
                     if (result.data.length > 0) {
-                        
-                        var mapName = SharedStateService.getItemFromCache("Map").MapName;
-                        var mapID = SharedStateService.getItemFromCache("Map").MapID
-                        $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" +mapName  + "/";
-                        $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" +mapID + "/";
-                        SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
+                        preparePreviewImage($scope.PhotoList[0]);
                         $scope.selectedPhoto = $scope.PhotoList[0];
+                        SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
                     }
                     
                 },
@@ -219,7 +261,20 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 x = maxWidth;
 
             }
-            var canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
+            var canvas = null;
+            var isPreview = false;
+            if (loadedImage.parentNode != null)
+                canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
+            //else {
+            //    canvas = $window.document.getElementById("previewCanvas");
+            
+            //    $scope.$apply(function () {
+            //        var div = $window.document.getElementById("previewImageDiv")
+            //        div.style.display = "none"
+            //    })
+            
+            //}
+            
             var ctx = canvas.getContext("2d");
             ctx.save();
 
@@ -322,50 +377,40 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
   
 ///***WATCH SITE ID*****/
+    $scope.$watch(
+        function (scope) {
+            var value=SharedStateService.getItemFromCache("Site")
+            if (value == "null")
+                value = null;
+            return (value==null)?null:value.SiteID;
+        },
+        function (newValue, oldValue) {
+            if (newValue != oldValue)
+            {
+                $scope.photoReady = false;
+                // its worth it to clear the scope because images take so long to load, looks better empty than with the wrong one
+                // to do... there should be a splash image to go in fast and fix page load woes
+                $scope.PhotoList = [];
+                $scope.selectedPhoto = null;
+                updateImagePath();// only nescessary if map has been switched but simultaneous watchers causing error ( now )
+                loadPhotos();
+             }
+        });
+
+
+///****WATCH MAP ID ***/
 //    $scope.$watch(
-//        function (scope) {
-//            var value=SharedStateService.getItemFromCache("Site")
-//            if (value == "null")
-//                value = null;
-//            return (value==null)?null:value.SiteID;
-//        },
-//        function (newValue, oldValue) {
-
-//            if ( newValue != null && newValue != oldValue)
-//            {
-//                $scope.PhotoList = [];
-//                SharedStateService.setSelectedAsync("Photo", null);
-//               DataTransportService.getPhotos(newValue).then(
-//                function (result) {
-//                    $scope.PhotoList = result.data;
-//                    if (result.data.length > 0) {
-//                        SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
-//                        $scope.selectedPhoto = $scope.PhotoList[0];
-//                    }
-                   
-//                },
-//                function (error) { }
-//                );
-
- //           }
-               
-//        });
-
-
-/****WATCH MAP ID ***/
-    //$scope.$watch(
-    //     function (scope) {
-    //         var value = SharedStateService.getItemFromCache("Map");
-    //         if (value == "null")
-    //             value = null;
-    //         return value;
-    //     },
-    //     function (newValue, oldValue) {
-    //         if (newValue != null && newValue != oldValue) {
-    //             $scope.oldImagePath = SharedStateService.getAuthenticatedMemberID() + "/" + value.MapName + "/";
-    //             $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + value.MapID + "/";
-    //         } 
-    //     });
+//         function (scope) {
+//             var value = SharedStateService.getItemFromCache("Map");
+//             if (value == "null")
+//                 value = null;
+//             return value;
+//         },
+//         function (newValue, oldValue) {
+//             if (newValue != null && newValue != oldValue) {
+//                 updateImagePath();
+//             } 
+//         });
 
 
 ///***WATCH PHOTO LIST *****/
@@ -637,7 +682,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    loadPhotos();
+    onPageLoad();
 
 })
 

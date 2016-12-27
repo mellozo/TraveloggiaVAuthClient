@@ -72,7 +72,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);   
         $timeout(function () {
             map.setView({ bounds: viewRect, padding: 30 })
-        });
+        },1000);
     
     }
 
@@ -444,8 +444,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           return (value != null) ? value.MapID : null;
       },
       function (newValue, oldValue) {
-          if ($location.path() == "/MapList" && newValue != null && newValue != oldValue) {
+          if (  newValue != oldValue) {
               clearSites();
+            if(  newValue != null)
               $timeout(loadSelectedMap(newValue),1000);
           }
 
@@ -559,7 +560,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           var reverseGeocodeRequestOptions = {
               location: new Microsoft.Maps.Location(lat, long),
               callback: function (answer, userData) {
-                   var site = SharedStateService.Selected.Site;
+                   var site = SharedStateService.getItemFromCache("Site")
                    site.Address = answer.address.formattedAddress;
 
                   if(site.SiteID == 0)// its a new location

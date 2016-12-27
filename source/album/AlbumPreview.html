@@ -2,56 +2,45 @@
 
 
 <div  ng-click="goAlbum()" 
-    class="dottedBorderRed glow" 
+    class="dottedBorderRed glow" 2:
+
     ng-style="previewPaneStyle"
     style="padding:2px;">
         <div ng-controller="AlbumController" style="height:100%"    >
 
-            <div ng-show="PhotoList[0]!=null">
+            <div ng-show="photoReady==true">
 
-                        <div ng-if="PhotoList[0].StorageURL !=null " >
-
-                            <div ng-if="PhotoList[0].orientationID==null || PhotoList[0].orientationID ==1 || PhotoList[0].orientationID ==2 || PhotoList[0].orientationID ==4"
-                                " ng-style="previewImageStyle" >
-                                        <div   
-                                            style="height:100%;width:100%;
-                                                 background-image:url('{{  imageServer + imagePath + PhotoList[0].FileName}}');
+                            <div  ng-style="previewImageStyle" >
+                                        <div   id="previewImageDiv"
+                                            style="height: 100%; width: 100%; background-image: url('{{previewImageUrl }}');
                                                  background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
                                         </div>
-
+                                        <canvas id="previewCanvas" style="display:block;"></canvas>
                             </div>
 
-                            <div ng-if="PhotoList[0].orientationID != null && PhotoList[0].orientationID !=1 && PhotoList[0].orientationID !=2 && PhotoList[0].orientationID !=4">
+                          <!--  <div>
 
-                                <div ng-if="Capabilities.alreadyKnowsHow==false ">
                                         <img on-load="onImageLoad($event, PhotoList[0].orientationID,PhotoList[0])"
                                                 style="position:absolute;visibility:hidden"
-                                                ng-src="{{  imageServer + imagePath + PhotoList[0].FileName  +imageRefresher.queryString}}" />
-                                        <canvas id="canvas" style="display:block;"></canvas>
-
-                                </div>
-
-
-
-
-                                <div ng-if="Capabilities.alreadyKnowsHow==true">
-                                    <img style="width:100%;visibility:visible;vertical-align:middle"
-                                         ng-src="{{  imageServer + imagePath + PhotoList[0].FileName }}" />
-                                </div>
-
-          
-                            </div>
-                        </div>
-
-
-
-                        <div ng-if="PhotoList[0].StorageURL==null " ng-style="previewImageStyle">
-                
-                                    <div   style="height:100%;width:100%;background-image:url('{{oldImagePath + PhotoList[0].FileName}}');
-                                        background-size:cover;background-repeat:no-repeat;background-position:50% 50%">
-                                     </div>
-                   
-                        </div>
-
+                                                />
+                                </div>-->
             </div>
+
+
+
+
+            
+            <div ng-show="photoReady==false">
+                            <div ng-style="previewImageStyle" >
+                                        <div   
+                                            style="height:100%;width:100%;
+                                                 background-image:url('../image/sail.jpeg');
+                                                 background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
+                                        </div>
+                            </div>
+            </div>
+
+
+
+
 </div>

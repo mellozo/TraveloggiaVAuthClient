@@ -1,4 +1,4 @@
-﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route,$window) {
+﻿angularTraveloggia.controller('SignInController', function ($route, SharedStateService,DataTransportService,canEdit,readOnly,isEditing,$location,$scope,$route,$window,$timeout) {
     var VM = this;
     VM.Member = new Member();
 
@@ -17,14 +17,15 @@
               SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.setAuthorizationState(canEdit);
               if ($window.location.search.indexOf("MapID") == -1)
-                  $location.path("/Map")
+                  $timeout(function () {
+                      $location.path("/Map")
+                  }, 800);// wait till clear is set
               else {
                   var plainold = $window.location.href.split("?")[0]
                   plainold = plainold + "#/Map";
-                  $window.location.replace(plainold);
+                  $timeout($window.location.replace(plainold), 800);
               }
 
-              $location.path("/Map")
           },
           function (error) {
               VM.Member = new Member();
@@ -56,10 +57,12 @@
     VM.signOut = function(){
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
-        // clear 
-        SharedStateService.clearMap();
+        // clear  
+       SharedStateService.clearMap();
         VM.authenticationStatus.signedIn = false;
-        $route.reload();
+        $timeout(function () {
+            $route.reload()
+        }, 800);
 
     }
 

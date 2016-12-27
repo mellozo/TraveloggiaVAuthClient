@@ -108,9 +108,14 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
         
     }
 
+    local_scope.clearAll = function () {
 
+        local_scope.setSelectedAsync("MapListItem",null)
+        local_scope.clearMap();
+    }
 
     local_scope.clearMap = function () {
+        
         local_scope.setSelectedAsync('Map' ,null);
         local_scope.clearMapChildren();
     }
