@@ -45,26 +45,24 @@
         <div ng-repeat="Photo in PhotoList " style="margin-top:4px;padding-top:0px;">
             <a href="" ng-click="selectPhoto(Photo)">
                     <div  class="imageFrame"  >                          
-                                       <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
+                                      <!-- <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
                                                 <img 
                                                         ng-style="getImageStyle(Photo)"
                                                     ng-src="{{getImagePath(Photo)}}" 
-                                                      on-load="dontAsk($event,Photo)" 
-                                                   
-                                                     />
+                                                      on-load="dontAsk($event,Photo)" />
                                        </div>
-                          
 
-<!--  
-   
+                                          ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false"
+                          -->
   
-                                        <div ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false" >                                                                                                    
+                                        <div  ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false">                                                                                                    
                                                 <img  
                                                         style="position:absolute;visibility:hidden"
-                                                        on-load="onImageLoad($event, Photo.orientationID,Photo)"
-                                                        ng-src="{{  getImageUrl(Photo) }}" />
+                                                      ng-src="{{  getImagePath(Photo) }}"
+                                                        on-load="onImageLoad($event, Photo.orientationID,Photo)"/>
+                                                      
                                                 <canvas id="canvas" style="display:block;" ></canvas>
-                                        </div>-->
+                                        </div>
 
                     </div>
             </a>

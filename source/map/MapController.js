@@ -57,9 +57,20 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var map = null;
         if (($location.path() != "/MapList") && ($location.path() == "/" || $location.path().indexOf("/Map") == 0)) {
             map = $scope.mapInstance;
+            if (map == null) {
+                prepareMainMap();
+                return null;
+
+            }
         }
         else if ($window.innerWidth > 768) {
             map = $scope.previewMap;
+            if (map == null)
+            {
+                preparePreviewMap();
+                return null;
+
+            }
         }
         return map;
     }
@@ -224,8 +235,9 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var getMapByID = function (selectedMapID) {
-      // to do store all the maps as we get them, - whats bad is they will never be refreshed unless check first for updates so...
-     //   var cachedMap = SharedStateService.getItemFromCache("Maps","MapID",selectedMapID, callback)
+        var map = getMapInstance();
+        if (map == null)
+            return;
         DataTransportService.getMapByID(selectedMapID).then(
           function (result) {
               //if (mapID != null)// this is passed by a query string param on a shareable link
@@ -235,7 +247,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
               //    SharedStateService.setAuthorizationState(readOnly);
               //    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
               //}
-              var map = getMapInstance();
+        
           $scope.MapRecord = result.data;
           SharedStateService.setSelectedAsync("Map", result.data);
           SharedStateService.setSelectedAsync("Site", null);// clear any previous settings

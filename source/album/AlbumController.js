@@ -39,6 +39,21 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.getImagePath= function (pic) {
         updateImagePath();
         var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        //if(pic.orientationID != null)
+        //switch (pic.orientationID) {
+        //    case 3:
+        //    case 5:
+        //    case 6:
+        //    case 7:
+        //    case 8:
+        //    case 9:
+        //        if ($scope.Capabilities.alreadyKnowsHow == false) {
+        //            var x = Math.random();
+        //            theImageURL =theImageURL+ "?reload=" + x.toString();
+        //        }
+                    
+        //        break;
+        // }
         return theImageURL;
     }
 
@@ -203,7 +218,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             Photo.Width = loadedImage.width;
             DataTransportService.updatePhoto(Photo).then(
           function (result) {
-              SharedStateService.updateCache("Photo", "PhotoID", Photo.PhotoID, result.data)
+              SharedStateService.updateCacheAsync("Photo", "PhotoID", Photo.PhotoID, result.data)
               doRotation(orientationID, loadedImage);
               $scope.$apply();
               console.log("uploaded photo dimensions")
@@ -400,30 +415,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         });
 
 
-///****WATCH MAP ID ***/
-//    $scope.$watch(
-//         function (scope) {
-//             var value = SharedStateService.getItemFromCache("Map");
-//             if (value == "null")
-//                 value = null;
-//             return value;
-//         },
-//         function (newValue, oldValue) {
-//             if (newValue != null && newValue != oldValue) {
-//                 updateImagePath();
-//             } 
-//         });
-
-
-///***WATCH PHOTO LIST *****/
-//    $scope.$watch(function (scope) {
-//        return $scope.PhotoList;
-//    },
-//        function (newValue, oldValue) {
-//            if (newValue.length == 0)
-//                loadPhotos();
-//    })
-
 
 
     //******************single photo edit page 
@@ -442,13 +433,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deletePhoto($scope.selectedPhoto.PhotoID).then(
             function (result) {
-                var cachedPhotos = SharedStateService.Repository.get('Photos');
-                for (var i = 0; i < cachedPhotos.length; i++) {
-                    if (cachedPhotos[i].PhotoID == $scope.selectedPhoto.PhotoID) {
-                        cachedPhotos.splice(i, 1);
-                        break;
-                    }
-                }
+                SharedStateService.deleteFromCacheAsync("Photos", "PhotoID", $scope.selectedPhoto.PhotoID);
+                $scope.PhotoList=SharedStateService.getItemFromCache("Photos")
+               SharedStateService.setSelectedAsync("Photo", null)
                 $scope.systemMessage.text = "selected photo has been deleted";
                 $scope.systemMessage.activate();
                 $location.path("/Album");
@@ -472,6 +459,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.updatePhoto = function () {
         DataTransportService.updatePhoto($scope.selectedPhoto).then(
              function (result) {
+                 SharedStateService.updateCacheAsync("Photos","PhotoID",$scope.selectedPhoto.PhotoID,$scope.selectedPhoto)
+                 $scope.PhotoList=SharedStateService.getItemFromCache("Photos")
                  $scope.systemMessage.text = " photo updated successfully";
                  $scope.systemMessage.activate();
              },
