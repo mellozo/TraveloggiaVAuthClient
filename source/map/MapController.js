@@ -67,17 +67,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
  
     var setBounds = function (arrayOfMsftLocs) {
-        $scope.systemMessage.loadComplete = true;
+    
         var map = getMapInstance();
         var viewRect = Microsoft.Maps.LocationRect.fromLocations(arrayOfMsftLocs);   
         $timeout(function () {
+            $scope.systemMessage.loadComplete = true;
             map.setView({ bounds: viewRect, padding: 30 })
         },1000);
     
     }
 
     var setCenter = function (selectedSite) {
-        $scope.systemMessage.loadComplete = true;
+  
         var map = getMapInstance();
         if (selectedSite != null) {
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
@@ -87,6 +88,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
               
                 $timeout(function ()
                 {
+                    $scope.systemMessage.loadComplete = true;
                     map.setView({ center: loc, zoom: 17 });
                 }
                 );
@@ -192,7 +194,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     $scope.MapRecord = result.data;               
                     SharedStateService.setSelectedAsync("Map", $scope.MapRecord);               
                     SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
-                    if ($scope.MapRecord.Sites != null) {                    
+                    if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length >0) {                    
                         //SharedStateService.setSelectedAsync("Sites", $scope.MapRecord.Sites)
                         drawSites();
                     }
@@ -210,7 +212,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     var reloadMap = function (cachedMap) {
         var map = getMapInstance();
         $scope.MapRecord = cachedMap;
-        if ($scope.MapRecord.Sites != null)
+        if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length > 0)
         {
             if(map.name =="MainMap")
                 drawSites();
@@ -224,11 +226,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var getMapByID = function (selectedMapID) {
-
       // to do store all the maps as we get them, - whats bad is they will never be refreshed unless check first for updates so...
      //   var cachedMap = SharedStateService.getItemFromCache("Maps","MapID",selectedMapID, callback)
-
-
         DataTransportService.getMapByID(selectedMapID).then(
           function (result) {
               //if (mapID != null)// this is passed by a query string param on a shareable link
@@ -242,7 +241,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           $scope.MapRecord = result.data;
           SharedStateService.setSelectedAsync("Map", result.data);
           SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
-          if ($scope.MapRecord.Sites != null) {
+          if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length > 0) {
               drawSites();
           }
           else {
@@ -266,7 +265,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         return mapID;
     }
-
 
     var loadSelectedMap = function (mapID) {
         getMapByID(mapID)
@@ -399,7 +397,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // }
      catch (error) {
         console.log("msft bing map v8 was null waiting 2000")
-        $timeout(waitAndReload, 2000); 
+        $timeout(waitAndReload, 5000); 
      }
 
   

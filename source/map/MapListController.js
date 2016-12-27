@@ -11,7 +11,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
         linkSelected:false
     }
   
-
+    $scope.ConfirmCancel.isShowing = false;
   
     $scope.switchMap = function (map) {
         if ($scope.selectedMap.MapID != map.MapID) {
@@ -89,7 +89,8 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
     var getSelectedMap = function () {
        var value = JSON.parse(localStorage.getItem("Map"))
-        $scope.selectedMap = value;
+       $scope.selectedMap = value;
+ 
         loadMapList();
     }
 
@@ -100,10 +101,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             fetchMapList();
         else {
             $scope.MapList = cachedMapList;
-            $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
-            $scope.ConfirmCancel.ccConfirm = deleteMap;
-            $scope.ConfirmCancel.ccCancel = dismiss;
-            $scope.ConfirmCancel.isShowing = false;
+           
         }
     }
 
@@ -113,10 +111,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
                     function (result) {
                         SharedStateService.setSelectedAsync("MapList", result.data);
                         $scope.MapList = result.data;
-                        $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
-                        $scope.ConfirmCancel.ccConfirm = deleteMap;
-                        $scope.ConfirmCancel.ccCancel = dismiss;
-                        $scope.ConfirmCancel.isShowing = false;
+                    
                     },
                     function (error) {
                         $scope.systemMessage.text = "error loading maps";
@@ -153,18 +148,21 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     }
 
 
-    $scope.confirmDelete=function(){
+    $scope.confirmDelete = function () {
+        $scope.ConfirmCancel.question = "Delete " + $scope.selectedMap.MapName + " ?";
+        $scope.ConfirmCancel.ccConfirm = deleteMap;
+        $scope.ConfirmCancel.ccCancel = dismiss;
         $scope.ConfirmCancel.isShowing = true;
     }
 
 
     var dismiss = function () {
+
         $scope.ConfirmCancel.isShowing = false;
     }
    
 
     var deleteMap = function () {
-       
         DataTransportService.deleteMap($scope.selectedMap.MapID).then(
             function (result) {
                 SharedStateService.deleteFromCacheAsync("MapList", "MapID", $scope.selectedMap.MapID) 
@@ -187,13 +185,13 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             $scope.selectedState.addSelected = false;
             DataTransportService.addMap($scope.selectedMap).then(
                 function (result) {
-                    SharedStateService.addToCacheAsync("MapList",result.data, function () {
-                        SharedStateService.setSelectedAsync("Map", result.data);
-                        clearMapChildren();
-                        $scope.systemMessage.text = "map was added successfully";
-                        $scope.systemMessage.activate();
-                        $scope.goMapFirstTime();
-                    })
+                    SharedStateService.addToCacheAsync("MapList",result.data) ;
+                    SharedStateService.setSelectedAsync("Map", result.data);
+                    SharedStateService.clearMap();
+                    $scope.systemMessage.text = "map was added successfully";
+                    $scope.systemMessage.activate();
+                    $timeout($scope.goMapFirstTime(), 1000);
+               
                 },
                 function (error) {
                     $scope.systemMessage.text = "error adding map";

@@ -136,49 +136,52 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
 
 
 
-    local_scope.addToCacheAsync = function (collectionName, item, callback) {
-        localforage.getItem(collectionName, function (error, value) {
-            var list = value;
-            list.splice(0, 0, item);
-            localforage.setItem(collectionName, function (err) {
-                if (err == null)
-                    callback();
-            })
-        })
-    }
 
     //ridiculous that angular doesnt have this already
     // nor does local forage :(
-    local_scope.deleteFromCacheAsync = function (collectionName, propName, itemID,callback) 
+    local_scope.deleteFromCacheAsync = function (collectionName, propName, itemID) 
     {
-        localforage.getItem(collectionName, function (err, value) 
-        {
-            var collection = value;
-            if (collection == null)
-                return;
-            var spliceIndex = 0;
-            try {
-                        for (var i = 0; i < collection.length; i++) {
-                            if (collection[i][propName] == itemID) {
-                                spliceIndex = i;
-                                break;
-                            }
+        var collection = local_scope.getItemFromCache(collectionName)
+        if (collection == null)
+            return;
+        var spliceIndex = 0;
+        try {
+                    for (var i = 0; i < collection.length; i++) {
+                        if (collection[i][propName] == itemID) {
+                            spliceIndex = i;
+                            break;
                         }
-                        collection.splice(i, 1);
-                        localforage.setItem(collectionName, collection, function (error) {
-                            callback();
-                        })
-                }
+                    }
+                    collection.splice(i, 1);
+                    local_scope.setSelectedAsync(collectionName, collection) 
+            }
             catch (error) {
                 $scope.systemMessage.text = "error deleting from cache";
                 $scope.systemMessage.activate();
             }
-        })
-       
     }
 
 
+    local_scope.addToCacheAsync = function (collectionName, item) {
+        var list = local_scope.getItemFromCache(collectionName)
+        list.splice(0, 0, item);
+        local_scope.setSelectedAsync(collectionName, list)
+    }
 
+    local_scope.updateCache = function (collectionName, propName, itemID, item) {
+        var collection = local_scope.getItemFromCache(collectionName);
+        if (collection == null)
+            return;
+
+        for (var i = 0; i < collection.length; i++) {
+            if (collection[i][propName] == itemID) {
+                collection[i] = item;
+                break;
+            }
+        }
+
+        local_scope.setSelectedAsync(collectionName, collection)
+    }
 
 
 
@@ -193,26 +196,6 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
 
 
 
-
-
-
-
-
-    // to be replaced with localforage
-
-
-    local_scope.updateCache = function (collectionName, propName, itemID, item) {
-        var collection = local_scope.Repository.get(collectionName);
-        if (collection == null)
-            return;
-
-        for (var i = 0; i < collection.length; i++) {
-            if (collection[i][propName] == itemID) {
-                collection[i] = item;
-                break;
-            }
-        }
-    }
 
 
     local_scope.deleteFromCache = function (collectionName, propName, itemID) {
