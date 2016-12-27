@@ -24,12 +24,13 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
     $scope.switchAndGo = function (map) {
         $scope.switchMap(map);
-        $scope.goMapFirstTime();
+        $timeout($scope.goMapFirstTime(), 1000);
     }
 
 
     var getPreviewPhoto = function () {
-        var pic = SharedStateService.Selected.Site.Photos[0];
+        var picList= SharedStateService.getItemFromCache("Photos")
+        var pic =picList[0];
         var photoURL = "http://www.traveloggia.pro/image/compass.gif";
         var rawURI = "";
         var imageServer1 = "https://s3-us-west-2.amazonaws.com";
@@ -52,7 +53,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     $scope.sendEmail = function () {
-        $window.open('mailto:?body=Sharing a link to my map http://www.traveloggia.pro?MapID='+$scope.selectedMap.MapID);
+        $window.open('mailto:?subject=' +$scope.selectedMap.MapName +'&body=Sharing a link to my map http://www.traveloggia.pro?MapID=' + $scope.selectedMap.MapID);
   }
 
 
@@ -95,13 +96,11 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     }
 
     var loadMapList = function () {
-
-        var cachedMapList =JSON.parse( localStorage.getItem("MapList") )
+        var cachedMapList =SharedStateService.getItemFromCache("MapList")
         if (cachedMapList == null || (cachedMapList[0].MemberID != SharedStateService.getAuthenticatedMemberID()))
             fetchMapList();
         else {
-            $scope.MapList = cachedMapList;
-           
+            $scope.MapList = cachedMapList;           
         }
     }
 

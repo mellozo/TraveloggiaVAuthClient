@@ -94,19 +94,7 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
 
 
 
-    local_scope.updateCacheAsync = function (collectionName, propName, itemID, item, callback) {
-        var collection =JSON.parse(   localStorage.getItem("collectionName")) 
-            if (collection == null)
-                return;
-            for (var i = 0; i < collection.length; i++) {
-                if (collection[i][propName] == itemID) {
-                    collection[i] = item;
-                    break;
-                }
-            }
-            callback();
-        
-    }
+  
 
     local_scope.clearAll = function () {
 
@@ -168,7 +156,7 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
         local_scope.setSelectedAsync(collectionName, list)
     }
 
-    local_scope.updateCache = function (collectionName, propName, itemID, item) {
+    local_scope.updateCacheAsync = function (collectionName, propName, itemID, item) {
         var collection = local_scope.getItemFromCache(collectionName);
         if (collection == null)
             return;
@@ -183,7 +171,7 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
         local_scope.setSelectedAsync(collectionName, collection)
     }
 
-
+  
 
     local_scope.getSearchManager = function () {
         var deferredResult = $q.defer();

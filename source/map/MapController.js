@@ -78,7 +78,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var setCenter = function (selectedSite) {
-  
         var map = getMapInstance();
         if (selectedSite != null) {
             var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude)
@@ -92,12 +91,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                     map.setView({ center: loc, zoom: 17 });
                 }
                 );
-         
-
             }
-               
         }
-
     }
 
     var pushPin = function (pin) {
@@ -123,10 +118,15 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
             selectedSite = $scope.MapRecord.Sites[0];
             SharedStateService.setSelectedAsync("Site", selectedSite);
         }
-        var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
-        var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
-        pushPin(pin);
-        setCenter(selectedSite);
+
+        if (selectedSite != null) {
+            var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
+            var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: false, title: selectedSite.Name, subTitle: selectedSite.Address });
+            pushPin(pin);
+            setCenter(selectedSite);
+        }
+        
+       
     }
 
     var drawSites = function () {
@@ -237,15 +237,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
               //    SharedStateService.setAuthorizationState(readOnly);
               //    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
               //}
-
+              var map = getMapInstance();
           $scope.MapRecord = result.data;
           SharedStateService.setSelectedAsync("Map", result.data);
           SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
           if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length > 0) {
-              drawSites();
+              if (map.name == "MainMap")
+                  drawSites();
+              else if (map.name == "PreviewMap")
+                  drawPreviewSite();
           }
-          else {
-              $scope.systemMessage.loadComplete = true;
+          else{
+            map.setView({ zoom: 1});
           }
       },
           function (error) {
