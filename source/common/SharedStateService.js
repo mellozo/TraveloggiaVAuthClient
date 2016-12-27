@@ -7,9 +7,9 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
     local_scope.Authorization = {
         state: null
     }
-    local_scope.center = null;
-    local_scope.zoom = null;
-    local_scope.Selected = {}
+    //local_scope.center = null;
+    //local_scope.zoom = null;
+    //local_scope.Selected = {}
 
     local_scope.setAuthorizationState = function (constValue) {
         local_scope.Authorization.state = constValue;
@@ -61,28 +61,6 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
         }
     }
 
-
-
-    //local_scope.setSelectedAsync = function (key, value) {
-    //    localforage.setItem(key, value, function (err) {
-    //        if(err== null)
-    //        {
-    //            ;
-    //        }
-    //        else{
-    //            $scope.systemMessage.text = "error setting cache";
-    //            $scope.systemMessage.activate();
-    //        }
-    //    })
-    //}
-
-    local_scope.getItemFromCollection=function(key,idField, idValue, callback){
-
-
-
-
-    }
-
     local_scope.getItemFromCache = function (key) {
         var item = null;
         var cacheitem = localStorage.getItem(key);
@@ -92,41 +70,7 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
 
     }
 
-
-
-  
-
-    local_scope.clearAll = function () {
-
-        local_scope.setSelectedAsync("MapListItem",null)
-        local_scope.clearMap();
-    }
-
-    local_scope.clearMap = function () {
-        
-        local_scope.setSelectedAsync('Map' ,null);
-        local_scope.clearMapChildren();
-    }
-
-    local_scope.clearMapChildren = function () {
-        local_scope.setSelectedAsync("Site", null);
-      //  local_scope.setSelectedAsync("Sites", []);
-        local_scope.clearSiteChildren();
-    }
-
-
-    local_scope.clearSiteChildren = function () {
-        local_scope.setSelectedAsync('Photos', []);
-        local_scope.setSelectedAsync('Journals', []);
-        local_scope.setSelectedAsync('Photo', null);
-        local_scope.setSelectedAsync('Journal', null);
-    }
-
-
-
-
     //ridiculous that angular doesnt have this already
-    // nor does local forage :(
     local_scope.deleteFromCacheAsync = function (collectionName, propName, itemID) 
     {
         var collection = local_scope.getItemFromCache(collectionName)
@@ -149,9 +93,9 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
             }
     }
 
-
     local_scope.addToCacheAsync = function (collectionName, item) {
-        var list = local_scope.getItemFromCache(collectionName)
+        var list = local_scope.getItemFromCache(collectionName);
+
         list.splice(0, 0, item);
         local_scope.setSelectedAsync(collectionName, list)
     }
@@ -171,7 +115,36 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
         local_scope.setSelectedAsync(collectionName, collection)
     }
 
-  
+
+    local_scope.clearAll = function () {
+        local_scope.setSelectedAsync("MapListItem", null)
+        local_scope.clearMap();
+    }
+
+    local_scope.clearMap = function () {
+        local_scope.setSelectedAsync('Map', null);
+        local_scope.clearMapChildren();
+    }
+
+    local_scope.clearMapChildren = function () {
+        local_scope.setSelectedAsync("Site", null);
+        //  local_scope.setSelectedAsync("Sites", []);
+        local_scope.clearSiteChildren();
+    }
+
+    local_scope.clearSiteChildren = function () {
+        local_scope.setSelectedAsync('Photos', []);
+        local_scope.setSelectedAsync('Journals', []);
+        local_scope.setSelectedAsync('Photo', null);
+        local_scope.setSelectedAsync('Journal', null);
+    }
+
+
+    // to do maybe
+    local_scope.getItemFromCollection = function (key, idField, idValue, callback) {
+
+    }
+
 
     local_scope.getSearchManager = function () {
         var deferredResult = $q.defer();

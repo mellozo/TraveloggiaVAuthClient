@@ -44,47 +44,32 @@
     <div  style="margin:0px;padding:0px;position:relative;width:100%" id="photoListContainer"> 
         <div ng-repeat="Photo in PhotoList " style="margin-top:4px;padding-top:0px;">
             <a href="" ng-click="selectPhoto(Photo)">
-
-
-                <div ng-if="Photo.StorageURL !=null " class="imageFrame"  >
+                    <div  class="imageFrame"  >                          
+                                       <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
+                                                <img 
+                                                        ng-style="getImageStyle(Photo)"
+                                                    ng-src="{{getImagePath(Photo)}}" 
+                                                      on-load="dontAsk($event,Photo)" 
+                                                   
+                                                     />
+                                       </div>
                           
-                                   <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
-                                            <img 
-                                                 on-load="dontAsk($event,Photo)"
-                                                 ng-style="getImageStyle(Photo)"
-                                                 ng-src="{{  imageServer + imagePath + Photo.FileName}}"  />
-                                   </div>
-                          
 
-                                    <div ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false" >                                                                                                    
-                                            <img  
-                                                    style="position:absolute;visibility:hidden"
-                                                    on-load="onImageLoad($event, Photo.orientationID,Photo)"
-                                                    ng-src="{{  imageServer + imagePath + Photo.FileName }}" />
-                                            <canvas id="canvas" style="display:block;" 
-                                                    ></canvas>
-                                    </div>
+<!--  
+   
+  
+                                        <div ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false" >                                                                                                    
+                                                <img  
+                                                        style="position:absolute;visibility:hidden"
+                                                        on-load="onImageLoad($event, Photo.orientationID,Photo)"
+                                                        ng-src="{{  getImageUrl(Photo) }}" />
+                                                <canvas id="canvas" style="display:block;" ></canvas>
+                                        </div>-->
 
-
-                </div>
-
-                <div ng-if="Photo.StorageURL==null " class="imageFrame"  >
-                            <div>
-                                        <img
-                                            ng-style="getImageStyle(Photo)"
-                                            on-load="dontAsk($event,Photo)"
-                                            ng-src="{{  oldImagePath + Photo.FileName}}"
-                                                 />
-                               </div>
-                </div>
-
-
-                    </a>
-                    <div> {{Photo.FileName}}</div>
-                </div>
-
-    </div>
-
+                    </div>
+            </a>
+            <div> {{Photo.FileName}}</div>
+        </div>
 
 </div>
 

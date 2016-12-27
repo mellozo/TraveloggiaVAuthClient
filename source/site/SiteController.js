@@ -37,11 +37,7 @@
   
 
 
-    if ($location.path() == "/Site") {
-        $scope.ConfirmCancel.question = "Delete Selected Location ?";
-        $scope.ConfirmCancel.ccCancel = dismiss;
-        $scope.ConfirmCancel.ccConfirm = deleteSite;
-    }
+ 
 
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
@@ -78,21 +74,6 @@
         makeDates(VM.Site)
 
  
-    var fetchSiteByID = function () {
-        DataTransportService.getSiteByID(siteID).then(
-    function (result) {
-        VM.Site = result.data;
-        makeDates(VM.Site)
-    },
-    function (error) {
-        $scope.systemMessage.text = "error reloading site data"
-        $scope.systemMessage.activate();
-    })
-
-    }
-
-
-
     VM.saveSite = function () {
         if (VM.Site.SiteID == 0)
             VM.addSite();
@@ -105,15 +86,15 @@
         VM.Site.SiteID = null;
         DataTransportService.addSite(VM.Site).then(
         function (result) {
-            SharedStateService.addToCacheAsync("Sites", result.data, function () {
-                SharedStateService.setSelectedAsync("Site", result.data);
-                // invalidate cache of child records
-                SharedStateService.clearSiteChildren();
-                $scope.systemMessage.text = "Location saved successfully"
-                $scope.systemMessage.activate();
-                $location.path("/Album");
-            })
-           
+            var currentMap = SharedStateService.getItemFromCache("Map");
+            currentMap.Sites.splice(0, 0, result.data);
+            SharedStateService.setSelectedAsync("Map",currentMap);
+            SharedStateService.setSelectedAsync("Site", result.data);
+            // invalidate cache of child records
+            SharedStateService.clearSiteChildren();
+            $scope.systemMessage.text = "Location saved successfully"
+            $scope.systemMessage.activate();
+            $location.path("/Album");
         },
         function (error) {
             $scope.systemMessage.text = "Error saving location";
@@ -146,14 +127,12 @@
         $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
-                SharedStateService.deleteFromCacheAsync("Sites", "SiteID", VM.Site.SiteID, function () {
-                    SharedStateService.setSelectedAsync("Site", null)
-                    SharedService.clearSiteChildren();
-                    $scope.systemMessage.text = "Location deleted successfully";
-                    $scope.systemMessage.activate();
-                    VM.Site = null;
-                })
-              
+                SharedStateService.deleteFromCacheAsync("Sites", "SiteID", VM.Site.SiteID) 
+                SharedService.clearSiteChildren();
+                SharedStateService.setSelectedAsync("Site", null)
+                $scope.systemMessage.text = "Location deleted successfully";
+                $scope.systemMessage.activate();
+                VM.Site = null;
             },
             function (error) {
                 $scope.systemMessage.text = "Error deleteing location";
@@ -170,7 +149,13 @@
     }
 
     VM.confirmDeleteSite = function () {
-        $scope.ConfirmCancel.isShowing = true;
+        if ($location.path() == "/Site") {
+            $scope.ConfirmCancel.question = "Delete Selected Location ?";
+            $scope.ConfirmCancel.ccCancel = dismiss;
+            $scope.ConfirmCancel.ccConfirm = deleteSite;
+            $scope.ConfirmCancel.isShowing = true;
+        }
+        
     }
 
 

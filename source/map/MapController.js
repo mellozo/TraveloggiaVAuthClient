@@ -9,24 +9,22 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         afterLoaded();
     })
 
-    
     $scope.$on("searchClicked", function (event, data) {
         $scope.selectedState.searchSelected = true;
     });
-
 
     $scope.selectedState = {
         editSelected: false,
         searchSelected:false
     }
 
-    var mapClickHandler = null; 
+    var mapClickHandler = null;
+
     var pushpinCollection = null;
 
     $scope.Search = {
         Address:null
     }
-
  
     // INIT SEQUENCE
 
@@ -573,7 +571,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   {
                       DataTransportService.updateSite(site).then(
                           function (result) {
-                              SharedStateService.updateCache("Sites", "SiteID", result.data.SiteID, result.data);
+                              SharedStateService.updateCacheAsync("Sites", "SiteID", result.data.SiteID, result.data);
                               $scope.systemMessage.text = "Location has been updated";
                               $scope.systemMessage.activate();
                               $scope.$apply();
@@ -638,7 +636,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
    
     
     //ConfirmCancel Handlers
-    var dismiss = function () {
+    var dismissSave = function () {
         $scope.ConfirmCancel.isShowing = false;
     }
 
@@ -650,7 +648,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     if ($location.path() == "/" || $location.path().indexOf("/Map") ==0){
         $scope.ConfirmCancel.question = "Save location permanently to map?";
-        $scope.ConfirmCancel.ccCancel = dismiss;
+        $scope.ConfirmCancel.ccCancel = dismissSave;
         $scope.ConfirmCancel.ccConfirm = saveCurrentLocation;
     }
 

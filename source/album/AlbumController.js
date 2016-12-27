@@ -2,10 +2,6 @@
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce) {
    
- 
-   
-
-
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
@@ -40,9 +36,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
            loadPhotos()
     }
 
+    $scope.getImagePath= function (pic) {
+        updateImagePath();
+        var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        return theImageURL;
+    }
 
     var preparePreviewImage = function (pic) {
-        var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        var theImageURL = $scope.getImagePath(pic);
         var img = new Image();
         img.onload = function (event) {
             // this works but need to get background div out of the way or go back to switch in the html 
@@ -79,26 +80,23 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     var loadPhotos = function () {
         var cachedPhotos = SharedStateService.getItemFromCache('Photos');
+        var selectedSite = SharedStateService.getItemFromCache("Site");
       //  var selectedSiteID 
-        if (cachedPhotos != null && cachedPhotos.length > 0 && cachedPhotos[0].SiteID == SharedStateService.getItemFromCache("Site").SiteID) {
+        if (cachedPhotos != null && cachedPhotos.length > 0 && cachedPhotos[0].SiteID ==selectedSite.SiteID) {
             $scope.PhotoList = cachedPhotos;
             preparePreviewImage($scope.PhotoList[0]);
             $scope.selectedPhoto = SharedStateService.getItemFromCache("Photo");
             if ($scope.selectedPhoto == null) {
-              
                 SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
                 $scope.selectedPhoto = $scope.PhotoList[0];
             }
-            var mapName = SharedStateService.getItemFromCache("Map").MapName;
-            var mapID = SharedStateService.getItemFromCache("Map").MapID
-          
+       
         }
         else if (SharedStateService.getItemFromCache("Site") != null) {
             var siteID = SharedStateService.getItemFromCache("Site").SiteID
             DataTransportService.getPhotos(siteID).then(
                 function (result) {
                     $scope.PhotoList = result.data;
-                   
                     SharedStateService.setSelectedAsync('Photos', result.data);
                     if (result.data.length > 0) {
                         preparePreviewImage($scope.PhotoList[0]);
@@ -119,7 +117,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             Photo.Width = loadedImage.width;
             DataTransportService.updatePhoto(Photo).then(
             function (result) {
-                SharedStateService.updateCache("Photo","PhotoID",Photo.PhotoID, result.data)
+                SharedStateService.updateCacheAsync("Photo","PhotoID",Photo.PhotoID, result.data)
                 var origH = loadedImage.height;
                 var origW = loadedImage.width;
                 var maxH = heightMinusPad;
@@ -370,7 +368,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     $scope.selectPhoto = function (photo) {
-        SharedStateService.setSelected("Photo", photo);
+        SharedStateService.setSelectedAsync("Photo", photo);
         $scope.selectedPhoto = photo;
         $location.path("/Photo");
     }
@@ -566,7 +564,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     var createPhotoRecord = function (fileName, exif, orientationID) {
         var photoRecord = new Photo();
-        photoRecord.SiteID = SharedStateService.getSelectedID("Site");
+        photoRecord.SiteID = SharedStateService.getItemFromCache("Site").SiteID;
         photoRecord.StorageURL = $scope.imageServer;
      
         photoRecord.FileName = fileName;
@@ -611,7 +609,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     var uploadFile = function () {
         var memberID = SharedStateService.getAuthenticatedMemberID();
-        var mapID = SharedStateService.getSelectedID("Map");
+        var mapID = SharedStateService.getItemFromCache("Map").MapID;
         for (var i = 0; i < $scope.filesToUpload.length; i++) {
             (function (imageFile, fileName, photoRecord) {
                 var fileName = imageFile.name
@@ -673,9 +671,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.addPhotoRecord = function (photoRecord) {
         DataTransportService.addPhoto(photoRecord).then(
             function (result) {
-                var cachedPhotos = SharedStateService.Repository.get('Photos');
+                var cachedPhotos = SharedStateService.getItemFromCache('Photos');
                 cachedPhotos.push(result.data);
-                SharedStateService.Repository.put('Photos', cachedPhotos);
+                SharedStateService.setSelectedAsync('Photos', cachedPhotos);
                 $scope.filesUploadedCount = $scope.filesUploadedCount + 1;
                 // $route.reload();
             },
