@@ -19,11 +19,11 @@
               if ($window.location.search.indexOf("MapID") == -1)
                   $timeout(function () {
                       $location.path("/Map")
-                  }, 800);// wait till clear is set
+                  },1500);// wait till clear is set
               else {
                   var plainold = $window.location.href.split("?")[0]
                   plainold = plainold + "#/Map";
-                  $timeout($window.location.replace(plainold), 800);
+                  $timeout($window.location.replace(plainold), 1500);
               }
 
           },
@@ -62,7 +62,7 @@
         VM.authenticationStatus.signedIn = false;
         $timeout(function () {
             $route.reload()
-        }, 800);
+        }, 1500);
 
     }
 

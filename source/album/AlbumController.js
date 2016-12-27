@@ -392,8 +392,12 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 // to do... there should be a splash image to go in fast and fix page load woes
                 $scope.PhotoList = [];
                 $scope.selectedPhoto = null;
-                updateImagePath();// only nescessary if map has been switched but simultaneous watchers causing error ( now )
-                loadPhotos();
+                if (newValue != null) {
+                  updateImagePath();// only nescessary if map has been switched but simultaneous watchers causing error ( now )
+                    loadPhotos();
+
+                }
+            
              }
         });
 
