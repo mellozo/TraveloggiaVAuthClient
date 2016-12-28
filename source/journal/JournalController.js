@@ -30,36 +30,33 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
       
 
-    $scope.JournalEntries = [];  
-    $scope.Journal = null;
+    var clearJournals = function () {
+        SharedStateService.setSelectedAsync("Journals", null);
+        SharedStateService.setSelectedAsync("Journal", null);
+        $scope.Journal = null;
+        $scope.JournalEntries = null;
+
+        }
 
 
-    // initialize 
-    $scope.JournalEntries = SharedStateService.getItemFromCache('Journals')
-   
-    if ($scope.JournalEntries != null && $scope.JournalEntries.length > 0) 
-   {
-        $scope.Journal = $scope.JournalEntries[0];
-    }
-    else
-    {
-       
-        if(SharedStateService.getItemFromCache("Site") != null  && SharedStateService.getItemFromCache("Site") != "null")
-        DataTransportService.getJournals(SharedStateService.getItemFromCache("Site").SiteID).then(
+    var fetchJournals = function (siteID) {    
+        DataTransportService.getJournals(siteID).then(
                     function (result) {
-                        $scope.JournalEntries = result.data;
-                        if ($scope.JournalEntries.length > 0) {
-                            SharedStateService.setSelectedAsync("Journals", result.data);
-                            $scope.Journal = $scope.JournalEntries[0];
+                        if (result.data.length > 0) {
+                            $scope.Journal = result.data[0];
                             SharedStateService.setSelectedAsync("Journal", $scope.Journal)
+                            $scope.JournalEntries = result.data;
+                            SharedStateService.setSelectedAsync("Journals", result.data);
                         }
                     },
                     function (error) {
-                        $scope.systemMessage.text = "error fetching journals" ;
+                        $scope.systemMessage.text = "error fetching journals";
                         $scope.systemMessage.activate();
                     });
-    }
+     
+}
 
+   
 
 
 
@@ -187,43 +184,24 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     $scope.$watch(
         function (scope) {
             var value = SharedStateService.getItemFromCache("Site");
+            if (value == "null")
+                value =null;
             return (value != null) ? value.SiteID : null;
         },
         function (newValue, oldValue) {
             if (newValue != oldValue) 
             {
-                if (newValue != null){
-                    DataTransportService.getJournals(newValue).then(
-                     function (result) {
-                         $scope.JournalEntries = result.data;
-                         if ($scope.JournalEntries.length > 0) {
-                             SharedStateService.setSelectedAsync("Journals", result.data);
-                             $scope.Journal = $scope.JournalEntries[0];
-                         }
-                         else
-                             clearJournals();
-                     },
-                     function (error) {
-                         $scope.systemMessage.text = "error fetching journals" + error.data.Message;
-                         $scope.systemMessage.activate();
-                     });
-                }
-                else {
-                    clearJournals();
-                }
+                if (newValue != null)
+                fetchJournals(newValue);
+                else
+                clearJournals();
             }
+            //else
+            //    $scope.JournalEntries = SharedStateService.getItemFromCache('Journals')
+          
         });
 
 
-
-
-    var clearJournals = function () {
-        SharedStateService.setSelectedAsync("Journals", null);
-        SharedStateService.setSelectedAsync("Journal", null);
-        $scope.Journal = null;
-        $scope.JournalEntries = null;
-
-    }
 
 
 
