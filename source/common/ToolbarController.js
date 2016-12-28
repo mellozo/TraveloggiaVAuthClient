@@ -149,9 +149,10 @@
 
 
     var loadSites = function () {
+        $scope.SiteList = null;
         $scope.selectedSite = SharedStateService.getItemFromCache("Site");
         var cachedSites = SharedStateService.getItemFromCache('Map').Sites;
-        if (cachedSites != null && cachedSites.length > 0)
+     //   if (cachedSites != null && cachedSites.length > 0)
            $scope.SiteList = cachedSites;
    
     }

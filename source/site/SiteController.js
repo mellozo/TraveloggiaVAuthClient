@@ -89,10 +89,11 @@
             var currentMap = SharedStateService.getItemFromCache("Map");
             currentMap.Sites.splice(0, 0, result.data);
             SharedStateService.setSelectedAsync("Map", currentMap);
-            $scope.$emit("sitesLoaded"); // so toolbar list will reload
+         
             SharedStateService.setSelectedAsync("Site", result.data);
             // invalidate cache of child records
             SharedStateService.clearSiteChildren();
+            $scope.$emit("sitesLoaded"); // so toolbar list will reload
             $scope.systemMessage.text = "Location saved successfully"
             $scope.systemMessage.activate();
             $location.path("/Album");
@@ -111,10 +112,11 @@
                          // this is some smelly code because we are using Map.Sites rather than making it a separate collection
                          var selectedMap = SharedStateService.getItemFromCache("Map");
                          SharedStateService.setSelectedAsync("Sites", selectedMap.Sites);
-                         SharedStateService.updateCacheAsync("Sites", "SiteID", VM.SiteID, VM.Site)
+                         SharedStateService.updateCacheAsync("Sites", "SiteID", VM.Site.SiteID, VM.Site)
                          var updatedSites = SharedStateService.getItemFromCache("Sites")
                          selectedMap.Sites = updatedSites;
-                         SharedStateService.setSelectedAsync("Map",selectedMap)
+                         SharedStateService.setSelectedAsync("Map", selectedMap)
+                         $scope.$emit("sitesLoaded"); // so toolbar list will reload
                         $scope.systemMessage.text = "Location edits saved successfully";
                         $scope.systemMessage.activate();
                      },
@@ -139,6 +141,8 @@
                 SharedStateService.setSelectedAsync("Map", selectedMap)
                 SharedStateService.clearSiteChildren();
                 SharedStateService.setSelectedAsync("Site", null)
+                $scope.$emit("sitesLoaded"); // so toolbar list will reload
+            
                 $scope.systemMessage.text = "Location deleted successfully";
                 $scope.systemMessage.activate();
                 VM.Site = null;

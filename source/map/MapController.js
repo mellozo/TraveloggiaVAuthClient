@@ -448,20 +448,6 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       });
 
 
-//WATCH MAP.Sites - this is the reason to manage a separate site list... for now 
-  $scope.$watch(
-      function (scope) {
-          var value = SharedStateService.getItemFromCache("Map");
-          return (value != null) ? value.Sites : null;
-      },
-      function (newValue, oldValue) {
-          if (newValue != null && newValue[0].SiteID == oldValue[0].SiteID) {
-              var cachedMap = SharedStateService.getItemFromCache("Map")
-              reloadMap(cachedMap);
-          }
-      },true);
-
-
 
     //WATCH MAP ID
   $scope.$watch(
