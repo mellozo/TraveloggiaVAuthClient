@@ -24,7 +24,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
     $scope.switchAndGo = function (map) {
         $scope.switchMap(map);
-        $timeout($scope.goMapFirstTime(), 1000);
+        $timeout($scope.goMapFirstTime(), 5000);
     }
 
 

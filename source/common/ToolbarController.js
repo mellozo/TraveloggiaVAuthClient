@@ -15,9 +15,6 @@
         Map:true
     }
 
-
-   
-
    
     $scope.$on(
                    "$routeChangeSuccess",

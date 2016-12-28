@@ -88,7 +88,8 @@
         function (result) {
             var currentMap = SharedStateService.getItemFromCache("Map");
             currentMap.Sites.splice(0, 0, result.data);
-            SharedStateService.setSelectedAsync("Map",currentMap);
+            SharedStateService.setSelectedAsync("Map", currentMap);
+            $scope.$emit("sitesLoaded"); // so toolbar list will reload
             SharedStateService.setSelectedAsync("Site", result.data);
             // invalidate cache of child records
             SharedStateService.clearSiteChildren();
@@ -107,13 +108,15 @@
     VM.updateSite = function () {
         DataTransportService.updateSite(VM.Site).then(
                      function (result) {
-                         SharedStateService.updateCacheAsync("Sites", "SiteID", VM.SiteID, VM.Site, function (error) {
-                             if (error == null) {
-                                
-                                 $scope.systemMessage.text = "Location edits saved successfully";
-                                 $scope.systemMessage.activate();
-                             }
-                         })
+                         // this is some smelly code because we are using Map.Sites rather than making it a separate collection
+                         var selectedMap = SharedStateService.getItemFromCache("Map");
+                         SharedStateService.setSelectedAsync("Sites", selectedMap.Sites);
+                         SharedStateService.updateCacheAsync("Sites", "SiteID", VM.SiteID, VM.Site)
+                         var updatedSites = SharedStateService.getItemFromCache("Sites")
+                         selectedMap.Sites = updatedSites;
+                         SharedStateService.setSelectedAsync("Map",selectedMap)
+                        $scope.systemMessage.text = "Location edits saved successfully";
+                        $scope.systemMessage.activate();
                      },
                      function (error) {
                          $scope.systemMessage.text = "Error saving location";
@@ -127,8 +130,14 @@
         $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteSite(VM.Site.SiteID).then(
             function (result) {
-                SharedStateService.deleteFromCacheAsync("Sites", "SiteID", VM.Site.SiteID) 
-                SharedService.clearSiteChildren();
+                // this is some smelly code because we are using Map.Sites rather than making it a separate collection
+                var selectedMap = SharedStateService.getItemFromCache("Map");
+                SharedStateService.setSelectedAsync("Sites", selectedMap.Sites);
+                SharedStateService.deleteFromCacheAsync("Sites", "SiteID", VM.Site.SiteID)
+                var updatedSites = SharedStateService.getItemFromCache("Sites")
+                selectedMap.Sites = updatedSites;
+                SharedStateService.setSelectedAsync("Map", selectedMap)
+                SharedStateService.clearSiteChildren();
                 SharedStateService.setSelectedAsync("Site", null)
                 $scope.systemMessage.text = "Location deleted successfully";
                 $scope.systemMessage.activate();

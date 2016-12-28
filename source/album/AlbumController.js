@@ -87,6 +87,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     var updateImagePath = function () {
+        if (SharedStateService.getItemFromCache("Map") == null)
+            return;
         var mapName = SharedStateService.getItemFromCache("Map").MapName;
         var mapID = SharedStateService.getItemFromCache("Map").MapID
         $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + mapName + "/";

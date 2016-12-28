@@ -11,9 +11,9 @@
    
     VM.authenticate = function () {
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
-          function (result, x, y, z, h) {
+          function (result) {
               // clear default map loaded with default display user's data
-              SharedStateService.clearMap();
+              SharedStateService.clearAll();
               SharedStateService.setAuthenticatedMember(result.data);
               SharedStateService.setAuthorizationState(canEdit);
               if ($window.location.search.indexOf("MapID") == -1)
@@ -58,7 +58,7 @@
         SharedStateService.setAuthenticatedMember({ MemberID: 1 });
         SharedStateService.setAuthorizationState(readOnly);
         // clear  
-       SharedStateService.clearMap();
+        SharedStateService.clearAll();
         VM.authenticationStatus.signedIn = false;
         $timeout(function () {
             $route.reload()

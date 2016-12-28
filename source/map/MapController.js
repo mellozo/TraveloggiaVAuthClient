@@ -448,21 +448,35 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       });
 
 
-//WATCH MAP ID
+//WATCH MAP.Sites - this is the reason to manage a separate site list... for now 
+  $scope.$watch(
+      function (scope) {
+          var value = SharedStateService.getItemFromCache("Map");
+          return (value != null) ? value.Sites : null;
+      },
+      function (newValue, oldValue) {
+          if (newValue != null && newValue[0].SiteID == oldValue[0].SiteID) {
+              var cachedMap = SharedStateService.getItemFromCache("Map")
+              reloadMap(cachedMap);
+          }
+      },true);
+
+
+
+    //WATCH MAP ID
   $scope.$watch(
       function (scope) {
           var value = SharedStateService.getItemFromCache("MapListItem");
           return (value != null) ? value.MapID : null;
       },
       function (newValue, oldValue) {
-          if (  newValue != oldValue) {
+          if (newValue != oldValue) {
               clearSites();
-            if(  newValue != null)
-              $timeout(loadSelectedMap(newValue),1000);
+              if (newValue != null)
+                  $timeout(loadSelectedMap(newValue), 1000);
           }
 
       });
-
 
 
 
@@ -583,7 +597,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   {
                       DataTransportService.updateSite(site).then(
                           function (result) {
-                              SharedStateService.updateCacheAsync("Sites", "SiteID", result.data.SiteID, result.data);
+                              // this is some smelly code because we are using Map.Sites rather than making it a separate collection
+                              var selectedMap = SharedStateService.getItemFromCache("Map");
+                              SharedStateService.setSelectedAsync("Sites", selectedMap.Sites);
+                              SharedStateService.updateCacheAsync("Sites", "SiteID", VM.SiteID, VM.Site)
+                              var updatedSites = SharedStateService.getItemFromCache("Sites")
+                              selectedMap.Sites = updatedSites;
+                              SharedStateService.setSelectedAsync("Map", selectedMap)
                               $scope.systemMessage.text = "Location has been updated";
                               $scope.systemMessage.activate();
                               $scope.$apply();

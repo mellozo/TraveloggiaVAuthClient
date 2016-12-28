@@ -13,6 +13,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         var mapid = $location.search().MapID;
         var siteid = $location.search().SiteID;
         SharedStateService.readOnlyUser = true;
+        // to do this will need a call to the DB
         SharedStateService.Selected.SiteID = siteid;
         $location.search('MapID', {});
         $location.search('SiteID', {});
