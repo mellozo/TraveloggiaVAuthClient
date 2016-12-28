@@ -32,7 +32,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
     $scope.JournalEntries = [];  
     $scope.Journal = null;
-    $scope.journalIndex = 0;
+
 
     // initialize 
     $scope.JournalEntries = SharedStateService.getItemFromCache('Journals')
@@ -51,6 +51,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                         if ($scope.JournalEntries.length > 0) {
                             SharedStateService.setSelectedAsync("Journals", result.data);
                             $scope.Journal = $scope.JournalEntries[0];
+                            SharedStateService.setSelectedAsync("Journal", $scope.Journal)
                         }
                     },
                     function (error) {
@@ -66,7 +67,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     $scope.loadContent = function (index) {
         angular.element("#menuToggle").click();
             $scope.Journal = $scope.JournalEntries[index];
-            $scope.journalIndex = index;
+           SharedStateService.setSelectedAsync("Journal",$scope.Journal)
     }
 
 
@@ -79,7 +80,6 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         journal.Title = null;
         $scope.Journal = journal;
         SharedStateService.setAuthorizationState(isEditing);
-        $scope.stateMachine.state = isEditing;
     }
 
 
@@ -87,14 +87,14 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         if ($scope.Journal.JournalID == null)
             DataTransportService.addJournal($scope.Journal).then(
                 function (result) {
-                    $scope.systemMessage.text = "new journal was saved successfully";
-                    $scope.systemMessage.activate();
+                    $scope.Journal = result.data;
                     $scope.action = "read";
                     SharedStateService.setAuthorizationState(canEdit);
-                    $scope.stateMachine.state = canEdit;
                     SharedStateService.addToCacheAsync("Journals", result.data);
+                    SharedStateService.setSelectedAsync("Journal", result.data);
                     $scope.JournalEntries = SharedStateService.getItemFromCache("Journals")
-              
+                    $scope.systemMessage.text = "new journal was saved successfully";
+                    $scope.systemMessage.activate();
                 },
                 function (error) {
                     $scope.systemMessage.text = "error saving journal " + error.data.Message;
@@ -104,11 +104,13 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
         else // its update
             DataTransportService.updateJournal($scope.Journal).then(
                 function (result) {
-                    $scope.systemMessage.text = "journal edit was saved successfully";
-                    $scope.systemMessage.activate();
                     $scope.action = "read";
                     SharedStateService.setAuthorizationState(canEdit);
-                    $scope.stateMachine.state = canEdit;
+                    SharedStateService.updateCacheAsync("Journals", "JournalID", $scope.Journal.JournalID, $scope.Journal);
+                    SharedStateService.setSelectedAsync("Journal", result.data);
+                    $scope.JournalEntries = SharedStateService.getItemFromCache("Journals");
+                    $scope.systemMessage.text = "journal edit was saved successfully";
+                    $scope.systemMessage.activate();
                 },
                 function (error) {
                     $scope.systemMessage.text = "error saving journal " + error.statusText;
@@ -120,23 +122,21 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     $scope.editJournal = function () {
             $scope.action = "edit";
             SharedStateService.setAuthorizationState(isEditing);
-            $scope.stateMachine.state = isEditing;
     }
 
 
     var deleteJournal = function () {
         $scope.ConfirmCancel.isShowing = false;
         DataTransportService.deleteJournal($scope.Journal.JournalID).then(
-                function (result) {
+                function (result) {                    
                     SharedStateService.deleteFromCacheAsync("Journals","JournalID",$scope.Journal.JournalID)
                     $scope.JournalEntries = SharedStateService.getItemFromCache("Journals");
                     SharedStateService.setSelectedAsync("Journal",null)
                     $scope.Journal = null;
+                    SharedStateService.setAuthorizationState(canEdit);
                     $scope.systemMessage.text = "journal deleted successfully";
                     $scope.systemMessage.activate();
-                 //   $scope.action = "read"; deprecated
-                    SharedStateService.setAuthorizationState(canEdit);
-                    $scope.stateMachine.state = canEdit;
+
                 },
                 function (error) {
                     $scope.systemMessage.text = "error deleteing journal " + error.data.Message;
@@ -164,17 +164,23 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
     }
 
 
-
-
     $scope.cancelJournal = function () {
-         $scope.Journal = $scope.JournalEntries[$scope.journalIndex];
+         $scope.Journal = SharedStateService.getItemFromCache("Journal")
          SharedStateService.setAuthorizationState(canEdit);
-         $scope.stateMachine.state = canEdit;
-
     }
 
 
 
+    $scope.$watch(
+        function (scope) {
+            var value = SharedStateService.getAuthorizationState();
+            return value;
+        },
+        function (newValue, oldValue) {
+            if (newValue != oldValue) {
+                $scope.stateMachine.state = newValue;
+            }
+        });
 
 
 
@@ -191,9 +197,11 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                      function (result) {
                          $scope.JournalEntries = result.data;
                          if ($scope.JournalEntries.length > 0) {
-                             SharedStateService.Repository.put("Journals", result.data);
+                             SharedStateService.setSelectedAsync("Journals", result.data);
                              $scope.Journal = $scope.JournalEntries[0];
                          }
+                         else
+                             clearJournals();
                      },
                      function (error) {
                          $scope.systemMessage.text = "error fetching journals" + error.data.Message;
@@ -201,10 +209,7 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                      });
                 }
                 else {
-                    SharedStateService.setSelectedAsync("Journals",null);
-                    SharedStateService.setSelectedAsync("Journal", null);
-                    $scope.Journal = null;
-                    $scope.JournalEntries = null;
+                    clearJournals();
                 }
             }
         });
@@ -212,7 +217,13 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
 
 
 
+    var clearJournals = function () {
+        SharedStateService.setSelectedAsync("Journals", null);
+        SharedStateService.setSelectedAsync("Journal", null);
+        $scope.Journal = null;
+        $scope.JournalEntries = null;
 
+    }
 
 
 

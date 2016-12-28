@@ -47,33 +47,41 @@
                         </div>
                     </div>
 
-               
+ <!--Pencil edit buttom-->              
                     <button ng-show="stateMachine.state=='CAN_EDIT' && Journal.JournalID != null" title="Edit" style="float:right; vertical-align:top;height:40px;width:40px;margin:0; padding:0;border:none;background:transparent"
                             ng-click="editJournal()">
                         <img src="../image/pencil.png" style="width:100%" />
                     </button>
-                    <!--   <div  class ="journalLabel">Site: {{Site.Name  }}</div><br /> -->
-                    <div class="journalLabel">
-                       
-                        JournalDate: {{Journal.DateAdded  | date:'MM/dd/yyyy @ h:mma'}}
+
+                          <div class="journalLabel">
+                        Journal Date: {{Journal.DateAdded  | date:'MM/dd/yyyy @ h:mma'}}
+                    </div>
+                    <div>
+                              <form>
+                                      
+                                        <div class="form-group row journalLabel" ng-show="stateMachine.state=='IS_EDITING' ">
+                                          <span class="col-sm-1 ">Title:</span>
+                                          <div class="col-sm-11">
+                                            <input type="text"  class="form-control journalLabel" id="journalTitle" ng-model="Journal.Title">
+                                          </div>
+                                        </div>
+                                  </form>
+
                     </div>
 
 
-                        <div ng-show="stateMachine.state=='IS_EDITING' ">
-                            <div class="journalLabel" style="display:inline-block">Title:</div>
-                            <input type="text" class="form-control" id="journalTitle" ng-model="Journal.Title">
-                        </div>
 
                         <text-angular ng-hide="stateMachine.state=='IS_EDITING'" id="textReader"
                                       name="readhtmlcontent" 
                                        ng-model="Journal.Text"
+                                 class="journalBodyFont"
                                       ta-toolbar="[]">
                         </text-angular>
 
                         <text-angular ng-show="stateMachine.state=='IS_EDITING'  " id="textEditor"
                                       name="edithtmlcontent"
                                 ng-model="Journal.Text"
-                                      style="font-size:20px;min-height:260px;"
+                                     class="journalBodyFont"
                                       ta-toolbar="[ ['h1', 'h2', 'h3'],   ['bold', 'italics', 'underline',  'ul', 'ol',  'undo'],   ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],  ['insertLink'] ]" ;>
                         </text-angular>
 

@@ -49,7 +49,6 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
     }
  
 
-
     local_scope.setSelectedAsync = function (key, value) {
         try {
             var stringified = (value != null) ? JSON.stringify(value) : null;
@@ -60,6 +59,7 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
             console.log(error.message)
         }
     }
+
 
     local_scope.getItemFromCache = function (key) {
         var item = null;
@@ -93,10 +93,13 @@ angularTraveloggia.service('SharedStateService', function (DataTransportService,
             }
     }
 
+
     local_scope.addToCacheAsync = function (collectionName, item) {
         var list = local_scope.getItemFromCache(collectionName);
+        if (list == null)
+            list = [];
 
-        list.splice(0, 0, item);
+            list.splice(0, 0, item);
         local_scope.setSelectedAsync(collectionName, list)
     }
 
