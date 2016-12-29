@@ -11,10 +11,10 @@
 
 
                <div id="previewImageContainer"  ng-style="previewImageStyle" >
-                                        <div ng-hide="needsCanvas"   id="previewImageDiv"
-                                            style="height: 100%; width: 100%; background-image: url('{{previewImage.Url }}');
-                                                 background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
-                                        </div>
+                        <div ng-hide="needsCanvas"   id="previewImageDiv"
+                            style="height: 100%; width: 100%; background-image: url('{{previewImage.Url }}');
+                                    background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
+                        </div>
                         <canvas ng-show="needsCanvas"  id="previewCanvas" style="display:block;"></canvas>
              </div>
 

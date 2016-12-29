@@ -49,6 +49,8 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                             $scope.JournalEntries = result.data;
                             SharedStateService.setSelectedAsync("Journals", result.data);
                         }
+                        else
+                            clearJournals();
                     },
                     function (error) {
                         $scope.systemMessage.text = "error fetching journals";
