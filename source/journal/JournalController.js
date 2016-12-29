@@ -196,8 +196,22 @@ angularTraveloggia.controller('JournalController', function (DataTransportServic
                 else
                 clearJournals();
             }
-            //else
-            //    $scope.JournalEntries = SharedStateService.getItemFromCache('Journals')
+            else {
+                if ($scope.JournalEntries == null) {
+                    $scope.JournalEntries = SharedStateService.getItemFromCache('Journals');
+                    var selectedJournal = SharedStateService.getItemFromCache("Journal");
+                    if(selectedJournal != null)
+                        $scope.Journal = selectedJournal
+                    else
+                    {
+                        $scope.Journal = $scope.JournalEntries[0];
+                        SharedStateService.setSelectedAsync("$scope.Journal")
+
+                    }
+            }
+                    
+            }
+              
           
         });
 
