@@ -185,16 +185,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
         var searchObject = $location.search();
         var selectedSite = SharedStateService.getItemFromCache("Site");
-
+        $scope.$emit("sitesLoaded")
         if (selectedSite == null || selectedSite=="null" || searchObject["ZoomOut"] == "true")// if loading from a shared link)
         {
             setBounds(arrayOfMsftLocs);
             SharedStateService.setSelectedAsync("Site", $scope.MapRecord.Sites[0]);
-            $scope.$emit("sitesLoaded")
+            
         }
         else {
             setCenter(selectedSite)
         }
+
+       
     }
 
     var loadDefaultMap = function () {
