@@ -223,6 +223,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     //kickoff
+
     getSelectedMap(); 
 
 

@@ -8,37 +8,15 @@
     style="padding:2px;">
         <div ng-controller="AlbumController" style="height:100%"    >
 
-            <div ng-show="photoReady==true">
 
-                            <div  ng-style="previewImageStyle" >
-                                        <div   id="previewImageDiv"
-                                            style="height: 100%; width: 100%; background-image: url('{{previewImageUrl }}');
+
+               <div id="previewImageContainer"  ng-style="previewImageStyle" >
+                                        <div ng-hide="needsCanvas"   id="previewImageDiv"
+                                            style="height: 100%; width: 100%; background-image: url('{{previewImage.Url }}');
                                                  background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
                                         </div>
-                                        <canvas id="previewCanvas" style="display:block;"></canvas>
-                            </div>
-
-                          <!--  <div>
-
-                                        <img on-load="onImageLoad($event, PhotoList[0].orientationID,PhotoList[0])"
-                                                style="position:absolute;visibility:hidden"
-                                                />
-                                </div>-->
-            </div>
-
-
-
-
-            
-            <div ng-show="photoReady==false">
-                            <div ng-style="previewImageStyle" >
-                                        <div   
-                                            style="height:100%;width:100%;
-                                                 background-image:url('../image/sail.jpeg');
-                                                 background-size:cover; background-position:50% 50%; background-repeat:no-repeat">
-                                        </div>
-                            </div>
-            </div>
+                        <canvas ng-show="needsCanvas"  id="previewCanvas" style="display:block;"></canvas>
+             </div>
 
 
 

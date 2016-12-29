@@ -5,6 +5,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
+    $scope.previewImage={
+        Url :'../image/sail.jpeg'
+}
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
@@ -58,29 +61,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     var preparePreviewImage = function (pic) {
+        $scope.needsCanvas = false;
         var theImageURL = $scope.getImagePath(pic);
         var img = new Image();
         img.onload = function (event) {
-            // this works but need to get background div out of the way or go back to switch in the html 
-            // to do 
-            //if(pic.orientationID != null)
-            //switch (pic.orientationID) {
-            //    case 3:
-            //    case 5:
-            //    case 6:
-            //    case 7:
-            //    case 8:
-            //    case 9:
-            //        if($scope.Capabilities.alreadyKnowsHow==false)
-            //        $scope.onImageLoad(event, pic.orientationID, pic);
-            //        break;
-           // }
+            if(pic.orientationID != null)
+            switch (pic.orientationID) {
+                case 3:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    if($scope.Capabilities.alreadyKnowsHow==false)
+                    $scope.onImageLoad(event, pic.orientationID, pic);
+                    break;
+            }
             $scope.$apply(function () {
-                $scope.previewImageUrl = theImageURL;
-                $scope.photoReady = true;
-
+                $scope.previewImage.Url = theImageURL;
             })
-        
         }
         img.src = theImageURL;
         
@@ -212,7 +211,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     // rotates image if nescessary 
-    $scope.onImageLoad = function (e, orientationID,Photo) {
+    $scope.onImageLoad = function (e, orientationID, Photo) {
+        $scope.needsCanvas = true;
         var loadedImage = e.target;
         if (Photo.Height == null || Photo.Width == null)
         {
@@ -280,15 +280,17 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             var isPreview = false;
             if (loadedImage.parentNode != null)
                 canvas = loadedImage.parentNode.getElementsByTagName("canvas")[0];
-            //else {
-            //    canvas = $window.document.getElementById("previewCanvas");
+            else {
+                canvas = $window.document.getElementById("previewCanvas");
             
-            //    $scope.$apply(function () {
-            //        var div = $window.document.getElementById("previewImageDiv")
-            //        div.style.display = "none"
-            //    })
+                //$scope.$apply(function () {
+                //    var previewContainer= $window.document.getElementById("previewImageContainer")
+                //    var div = $window.document.getElementById("previewImageDiv");
+                //    previewContainer.removeChild(div)
+                    
+                //})
             
-            //}
+            }
             
             var ctx = canvas.getContext("2d");
             ctx.save();
@@ -402,7 +404,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
-                $scope.photoReady = false;
+                $scope.previewImage.Url = '../image/sail.jpeg'
                 // its worth it to clear the scope because images take so long to load, looks better empty than with the wrong one
                 // to do... there should be a splash image to go in fast and fix page load woes
                 $scope.PhotoList = [];
@@ -674,7 +676,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             });
     }
 
-
+// to do refactor... watch can handle this
     onPageLoad();
 
 })
