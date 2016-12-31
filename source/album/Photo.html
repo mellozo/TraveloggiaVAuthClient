@@ -2,14 +2,8 @@
 
    
 
-    <div  ng-show="selectedPhoto != null">
-     
-
-<!--     
-    image path will work here
-                <img src="getImagePath(selectedPhoto)" />
-                  -->
-
+    <div class="monkey" ng-show="selectedPhoto != null">
+                <img ng-src="{{getImageURL(selectedPhoto)}}" />
     </div>
 
     

@@ -27,17 +27,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
  
-    $scope.imageRefresher = {
-        queryString: "?reload=" + Math.random()
-    }
-
-  
 
     var onPageLoad = function () {
         $scope.photoReady = false;
        if($scope.PhotoList ==null ||$scope.PhotoList.length == null)
            loadPhotos()
     }
+
 
     var loadPhotos = function () {
         var cachedPhotos = SharedStateService.getItemFromCache('Photos');
@@ -77,7 +73,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
     var updateImagePath = function () {
         if (SharedStateService.getItemFromCache("Map") == null)
             return;
@@ -87,9 +82,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + mapID + "/";
     }
 
-
-    // called by onImageLoad
-    // returns a rotated canvas element
+    // called by onImageLoad 
     var doRotation = function (orientationID, loadedImage, index) {
         var degrees = 0;
         var maxHeight = 0
@@ -227,9 +220,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     // called by preparePreviewImage and getImagePath
     // injects a rotated canvas if nescessary
-    // return boolean whether it did
     var onImageLoad = function (e, orientationID, Photo, index) {
-        $scope.needsCanvas = true;
         var loadedImage = e.target;
         if (Photo.Height == null || Photo.Width == null) {
             Photo.Height = loadedImage.height;
@@ -260,13 +251,17 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-// called by preloadImages and preloadImagesSequentially
-    $scope.getImagePath = function (pic, index) {
-        var needsCanvas = false;
+    $scope.getImageURL = function (pic) {
         updateImagePath();
         var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        return theImageURL;
+    }
+
+    // called by  preloadImagesSequentially
+    var getImagePath = function (pic, index) {
+        var needsCanvas = false;
+        var theImageURL =$scope.getImageURL(pic)
         var img = new Image();
-        
         img.onload = function (event) {
             if (pic.orientationID != null)
                 switch (pic.orientationID) {
@@ -305,10 +300,38 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+// called by preparePreviewImage
+    var onPreviewImageLoad = function (e, orientationID, Photo) {
+    // injects a rotated canvas if nescessary
+        $scope.needsCanvas = true;
+        var loadedImage = e.target;
+        if (Photo.Height == null || Photo.Width == null) {
+            Photo.Height = loadedImage.height;
+            Photo.Width = loadedImage.width;
+            DataTransportService.updatePhoto(Photo).then(
+          function (result) {
+              SharedStateService.updateCacheAsync("Photo", "PhotoID", Photo.PhotoID, result.data)
+              doRotation(orientationID, loadedImage, index);
+              $scope.$apply();
+              console.log("uploaded photo dimensions")
+          },
+           function (error) {
+               console.log("error updating photo height and width")
+           }
+          );
+        }
+        else {
+           doRotation(orientationID, loadedImage);
+          
+        }
 
-    var preparePreviewImage = function (pic) {
+    }
+
+
+
+   var preparePreviewImage = function (pic) {
         $scope.needsCanvas = false;
-        var theImageURL = $scope.getImagePath(pic);
+        var theImageURL = $scope.getImageURL(pic);
         var img = new Image();
         img.onload = function (event) {
             if (pic.orientationID != null)
@@ -320,7 +343,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     case 8:
                     case 9:
                         if ($scope.Capabilities.alreadyKnowsHow == false)
-                            onImageLoad(event, pic.orientationID, pic);
+                            onPreviewImageLoad(event, pic.orientationID, pic);
                         break;
                 }
             $scope.$apply(function () {
@@ -433,7 +456,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             var pic = $scope.PhotoList[i];
             if (pic != null) {
                 updateImagePath();
-                var theImageURL = $scope.getImagePath(pic, i)
+                var theImageURL = getImagePath(pic, i)
                 if (theImageURL != null) {
                     var img = new Image();
                     var dimensions = calculateImageWidth(pic)
