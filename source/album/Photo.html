@@ -5,35 +5,14 @@
     <div  ng-show="selectedPhoto != null">
      
 
-    <div ng-if="selectedPhoto.StorageURL !=null " >
-                 
-                    <div ng-if="selectedPhoto.orientationID ==null || selectedPhoto.orientationID ==1 || selectedPhoto.orientationID ==2 || selectedPhoto.orientationID ==4 ||  Capabilities.alreadyKnowsHow == true" >
-                                    <img 
-                                        ng-style="getImageStyle(selectedPhoto)"
-                                        ng-src="{{  imageServer + imagePath + selectedPhoto.FileName}}"
-                                       />
-                    </div>
-                  
+<!--     
+    image path will work here
+                <img src="getImagePath(selectedPhoto)" />
+                  -->
 
-                    <div ng-if="selectedPhoto.orientationID != null && selectedPhoto.orientationID !=1 && selectedPhoto.orientationID !=2  && selectedPhoto.orientationID !=4  && Capabilities.alreadyKnowsHow ==false" >
-                                    <img 
-                                        style="position:absolute;visibility:hidden"
-                                        on-load="onImageLoad($event, selectedPhoto.orientationID,selectedPhoto)"
-                                        ng-src="{{  imageServer + imagePath + selectedPhoto.FileName  +imageRefresher.queryString}}" />
-                                    <canvas id="canvas" style="display:block;" 
-                                      ></canvas>
-                    </div>
     </div>
 
-    <div ng-if="selectedPhoto.StorageURL==null " >
-                    <div>          
-                                    <img 
-                                         ng-style="getImageStyle(selectedPhoto)"
-                                         ng-src="{{oldImagePath + selectedPhoto.FileName }}"  />          
-                    </div>
-
-    </div>  
-      
+    
  
 
 

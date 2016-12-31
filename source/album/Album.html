@@ -5,9 +5,8 @@
     style="padding:0px 16px 16px;overflow-y:auto;-webkit-overflow-scrolling: touch;"  ng-controller="AlbumController" >
 
 
-
+<!-- uploader - to do move to its own page -->
 <div ng-show="stateMachine.state=='CAN_EDIT' " style="margin-bottom:20px;padding-bottom:0px">
-  
         <div class="panel-group" id="accordion" style="margin-top:10px;margin-bottom:4px;padding-bottom:0px;">
             <div class="panel panel-default" style="background-color:#DEE5F2;font-family:Centaur;font-size:16px;margin-bottom:0px;padding-bottom:0px;">
                 <div class="panel-heading" style="background-color:#8EBBDA;text-align:right;">
@@ -36,35 +35,22 @@
 
             </div>
         </div>
-   
 </div>
 
 
-
+<!--CATALOG-->
     <div  style="margin:0px;padding:0px;position:relative;width:100%" id="photoListContainer"> 
         <div ng-repeat="Photo in PhotoList " style="margin-top:4px;padding-top:0px;">
-            <a href="" ng-click="selectPhoto(Photo)">
-                    <div  class="imageFrame"  >                          
-                                       <div ng-if="Photo.orientationID == null || Photo.orientationID ==1 || Photo.orientationID ==2 || Photo.orientationID ==4 || Capabilities.alreadyKnowsHow == true"  >
-                                                <img 
-                                                        ng-style="getImageStyle(Photo)"
-                                                    ng-src="{{getImagePath(Photo)}}" 
-                                                      on-load="dontAsk($event,Photo)" />
-                                       </div>
-
-                                      
-  
-                                        <div  ng-if="Photo.orientationID != null && Photo.orientationID !=1  && Photo.orientationID !=2  && Photo.orientationID !=4  &&Capabilities.alreadyKnowsHow ==false">                                                                                                    
-                                                <img  
-                                                        style="position:absolute;visibility:hidden"
-                                                      ng-src="{{  getImagePath(Photo) }}"
-                                                        on-load="onImageLoad($event, Photo.orientationID,Photo)"/>
-                                                      
-                                                <canvas id="canvas" style="display:block;" ></canvas>
-                                        </div>
-
+            <a href="" ng-click="selectPhoto(Photo)" >
+                   
+                
+                   <div  class="imageFrame monkey"   >                          
+                        <img id="catalog" style="width:130px"
+                                    ng-src="../image/sherl1.gif" />   
+                                                                     
                     </div>
             </a>
+            
             <div> {{Photo.FileName}}</div>
         </div>
 

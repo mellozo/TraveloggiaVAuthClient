@@ -89,6 +89,7 @@
     <Content Include="image\glass.png" />
     <Content Include="image\globe.png" />
     <Content Include="image\golddust.jpg" />
+    <Content Include="image\hourglass.png" />
     <Content Include="image\internet.png" />
     <Content Include="image\largepalm.png" />
     <Content Include="image\lightblue.jpg" />
@@ -99,6 +100,8 @@
     <Content Include="image\plus.png" />
     <Content Include="image\sail.jpeg" />
     <Content Include="image\scroll.png" />
+    <Content Include="image\sherl1.gif" />
+    <Content Include="image\sherl2.gif" />
     <Content Include="image\ship.png" />
     <Content Include="image\skull.png" />
     <Content Include="image\stack.png" />
