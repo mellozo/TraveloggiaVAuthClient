@@ -446,7 +446,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     // called by notifyImageLoaded
     var applyImage = function (index, Photo, preloadedImage) {
-        if ($location.path() == "/Album") {
+      //  if ($location.path() == "/Album") {
             $timeout(function () {
                 var pic = Photo;
                 var frames = $window.document.getElementsByClassName("monkey");
@@ -457,7 +457,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     frame.appendChild(preloadedImage);
                 })
             })
-        }
+       // }
 
 
     }
@@ -484,9 +484,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var preloadedImage = theImage;
         if (preloadedImage.complete == true) {
             applyImage(0, Photo, preloadedImage);
-          
         }
-
         else
             $timeout(function () {
                 notifySelectedImageLoaded(e,  Photo, preloadedImage)
