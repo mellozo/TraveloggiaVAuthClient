@@ -247,12 +247,17 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             if(canvasEl != null)
             {
                 var frames = $window.document.getElementsByClassName("monkey")
+                if (frames == null) {
+                    frames = $window.document.getElementByClassName("uncle");
+                    index = 0;
+                }
+                   
                 if (frames.length > 0) {
-                    var parent = frames[0];
+                    var parent = frames[index];
                     parent.style.height = canvasEl.height + "px";
                     parent.innerHTML = "";
                     parent.appendChild(canvasEl);
-                    if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
+                    if (SharedStateService.getAuthorizationState() == "CAN_EDIT" && $location.path() =="/Album")
                         $window.document.getElementById("albumScroller").scrollTop = 62;
                 }
             
@@ -269,7 +274,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     // called by  preloadImagesSequentially
-    var getImagePath = function (pic, index) {
+     $scope.getImagePath = function (pic, index) {
         var needsCanvas = false;
         var theImageURL =$scope.getImageURL(pic)
         var img = new Image();
@@ -463,7 +468,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var preloadedImage = theImage;
         if (preloadedImage.complete == true){
             applyImage(index, Photo, preloadedImage);
-            if (index < $scope.PhotoList.length )
+            if (index <= $scope.PhotoList.length )
                 preloadImagesSequentially(index + 3);
         }
             
@@ -475,14 +480,51 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
+    var notifySelectedImageLoaded = function (e, Photo, theImage) {
+        var preloadedImage = theImage;
+        if (preloadedImage.complete == true) {
+            applyImage(0, Photo, preloadedImage);
+          
+        }
 
+        else
+            $timeout(function () {
+                notifySelectedImageLoaded(e,  Photo, preloadedImage)
+            }, 200)
+
+    }
+
+    var preloadSelectedImage = function (pic) {
+        if (pic != null) {
+            var theImageURL = $scope.getImagePath(pic, 0)
+            if (theImageURL != null) {
+                var img = new Image();
+                var dimensions = calculateImageWidth(pic)
+                img.style.width = dimensions.width + "px"
+                if (dimensions.height != "")
+                    img.style.height = dimensions.height + "px"
+                img.onload = notifySelectedImageLoaded(event, pic, img)
+                img.src = theImageURL;
+            }// end URL param is not null
+
+        }// end pic param is not null
+
+    }
 
     var preloadImagesSequentially = function (start) {
-        for (var i = start; i < start + 3; i++) {
+        if ($location.path() == "/Photo")
+        {
+            var selectedImage = SharedStateService.getItemFromCache("Photo");
+            preloadSelectedImage(selectedImage);
+            return;
+        }
+
+        for (var i = start; i < start + 3; i++)
+        {
             var pic = $scope.PhotoList[i];
-            if (pic != null) {
-                updateImagePath();
-                var theImageURL = getImagePath(pic, i)
+            if (pic != null)
+            {
+                var theImageURL = $scope.getImagePath(pic, i)
                 if (theImageURL != null) {
                     var img = new Image();
                     var dimensions = calculateImageWidth(pic)
@@ -491,34 +533,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                         img.style.height = dimensions.height + "px"
                     img.onload = notifyImageLoaded(event, i, pic, img)
                     img.src = theImageURL;
-                }
-               
+                }// end URL param is not null
 
-            }
-        }
+            }// end pic param is not null
+
+          }// for 3 photos at a time
 
 
     }
-
-
-
-    //var preloadImages = function () {
-    //    for (var i = 0; i < $scope.PhotoList.length; i++) {
-    //        var pic = $scope.PhotoList[i];
-    //        updateImagePath();
-    //        var theImageURL = $scope.getImagePath(pic, i)
-    //        var img = new Image();
-    //        var dimensions = calculateImageWidth(pic)
-    //        img.style.width = dimensions.width + "px"
-    //        if (dimensions.height != "")
-    //            img.style.height = dimensions.height + "px"
-    //        img.onload = notifyImageLoaded(event, i, pic, img)
-    //        img.src = theImageURL;
-
-    //    }
-
-
-    //}
 
 
 
