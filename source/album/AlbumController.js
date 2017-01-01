@@ -100,8 +100,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
         else//preview frame rotation?
         {
-            maxHeight = $scope.previewMapStyle.height;
-            maxWidth = $scope.previewMapStyle.width;
+            if ($scope.previewMapStyle != null) {
+                maxHeight = $scope.previewMapStyle.height;
+                maxWidth = $scope.previewMapStyle.width;
+            }
+            else
+                return;
+        
         }
 
         var scaledWidth = maxHeight;
@@ -126,7 +131,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var ctx = canvas.getContext("2d");
         ctx.save();
         canvas.width = x;
-        canvas.height = scaledWidth;
+        canvas.height = scaledWidth ;// adding 10 for border... which was previously padding
         // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
         ctx.restore();
 
@@ -241,10 +246,16 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             var canvasEl = doRotation(orientationID, loadedImage, index);
             if(canvasEl != null)
             {
-              var  frames= $window.document.getElementsByClassName("monkey")
-              var parent = frames[0];
-              parent.innerHTML = "";
-              parent.appendChild(canvasEl);
+                var frames = $window.document.getElementsByClassName("monkey")
+                if (frames.length > 0) {
+                    var parent = frames[0];
+                    parent.style.height = canvasEl.height + "px";
+                    parent.innerHTML = "";
+                    parent.appendChild(canvasEl);
+                    if (SharedStateService.getAuthorizationState() == "CAN_EDIT")
+                        $window.document.getElementById("albumScroller").scrollTop = 62;
+                }
+            
             }
         }
 

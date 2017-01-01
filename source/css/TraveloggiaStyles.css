@@ -248,7 +248,7 @@ padding:0px;
 border:5px solid;
  border-color:#92793c;
  display:inline-block;
-
+ box-sizing:content-box;
 }
 
 /*toolbarstyles*/
