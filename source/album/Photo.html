@@ -2,15 +2,10 @@
 
    
 
-    <div class="monkey" ng-show="selectedPhoto != null">
-                <img ng-src="{{getImageURL(selectedPhoto)}}" />
+    <div class="monkey" ng-show="selectedPhoto != null" >
+                <img  ng-style="getFrameStyle(selectedPhoto)" ng-src="{{getImageURL(selectedPhoto)}}" />
     </div>
 
-    
- 
-
-
-</div>
 
     <div class="infoText " style ="margin-top:16px;margin-bottom:16px;">
       

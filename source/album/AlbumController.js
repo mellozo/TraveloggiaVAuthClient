@@ -391,10 +391,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     portraitWidth = calculatedWidth;
 
                 
-                return { "width": portraitWidth, "height": "" }
+                return { "width": portraitWidth, "height": portraitHeight }
                 //$scope.whateverStyle.height = pStyle;
                 break;
         }
+    }
+
+
+
+    $scope.getFrameStyle = function (Photo) {
+        if (Photo == null)
+            return;
+        if (Photo.Height == null || Photo.Width == null)
+            return;
+        var origH = Photo.Height;
+        var origW = Photo.Width;
+        var maxH = heightMinusPad;
+        var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPadScroll;
+        var w = calculateAspectRatio(origH, origW, maxH, maxW)
+        return w;
     }
 
 
