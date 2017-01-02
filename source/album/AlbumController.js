@@ -5,9 +5,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
-    $scope.previewImage={
-        Url :'../image/sail.jpeg'
-}
+
+    $scope.previewImage = {
+        Url:"../image/sail.jpeg"
+    }
+  
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
@@ -414,7 +416,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
         if (preloadedImage.complete == true){
             applyImage(index, Photo, preloadedImage);
-            if (index <= $scope.PhotoList.length )
+            var remainder = $scope.PhotoList.length % 3;
+            if ((index % 3 == 0) || (index >= $scope.PhotoList.length - remainder))
                 preloadImagesSequentially(index + 3);
         }
         else
