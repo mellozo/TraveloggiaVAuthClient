@@ -25,6 +25,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         "width": previewWidth - 32
     }
 
+
     $scope.imageServer = "https://s3-us-west-2.amazonaws.com/traveloggia-guests/";
  
 
@@ -199,6 +200,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var maxH = heightMinusPad;
         var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPadScroll;
         var dimensions = calculateAspectRatio(origH, origW, maxH, maxW)
+        if (dimensions.width == null)
+            dimensions={"width":maxW}
         return dimensions;
     }
 
@@ -379,7 +382,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     var applyImage = function (index, Photo, preloadedImage) {
         $timeout(function () {
             var pic = Photo;
-            if (pic.orientationID != null)
+            if (pic.orientationID == null)
+                pic.orientationID = 0;
+   
                 switch (pic.orientationID) {
                     case 3:
                     case 5:
