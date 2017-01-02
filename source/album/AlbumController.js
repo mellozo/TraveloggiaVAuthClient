@@ -48,11 +48,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
                 $scope.selectedPhoto = $scope.PhotoList[0];
             }
-            else if($location.path()=="Photo") {
-                $scope.getImagePath($scope.selectedPhoto,0)
-
-            }
-
+         
         }
         else if (SharedStateService.getItemFromCache("Site") != null) {
             var siteID = SharedStateService.getItemFromCache("Site").SiteID
@@ -75,10 +71,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 })
         }
 
-
-
-
-
     }
 
 
@@ -92,60 +84,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
-
-
-
-
-    $scope.getImageURL = function (pic) {
+   var getImageURL = function (pic) {
         updateImagePath();
         var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
         return theImageURL;
     }
 
-    // called by  preloadImagesSequentially
-     $scope.getImagePath = function (pic, index) {
-        var needsCanvas = false;
-        var theImageURL =$scope.getImageURL(pic)
-        var img = new Image();
-        img.onload = function (event) {
-            if (pic.orientationID != null)
-                switch (pic.orientationID) {
-                    case 3:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                        if ($scope.Capabilities.alreadyKnowsHow == false) {
-                           injectCanvas(index,  pic, img);
-                            theImageURL =  null;
-                        }
-
-                        break;
-                    default:
-                        ;
-                }
-        }
-        img.src = theImageURL;
-        if (pic.orientationID != null)
-            switch (pic.orientationID) {
-                case 3:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    theImageURL = null;
-                    break;
-                default:
-                    ;
-            }
-
-        return theImageURL;
-
-    }
-
+ 
 // called by preparePreviewImage
     var onPreviewImageLoad = function (e, orientationID, Photo) {
     // injects a rotated canvas if nescessary
@@ -174,10 +119,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
    var preparePreviewImage = function (pic) {
         $scope.needsCanvas = false;
-        var theImageURL = $scope.getImageURL(pic);
+        var theImageURL = getImageURL(pic);
         var img = new Image();
         img.onload = function (event) {
             if (pic.orientationID != null)
@@ -244,25 +188,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
-    $scope.getFrameStyle = function (Photo) {
-        if (Photo == null)
-            return;
-        if (Photo.Height == null || Photo.Width == null)
-            return;
-        var origH = Photo.Height;
-        var origW = Photo.Width;
-        var maxH = heightMinusPad;
-        var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPadScroll;
-        var w = calculateAspectRatio(origH, origW, maxH, maxW)
-        return w;
-    }
-
-
-
-
-
-
     // called by preloadImagesSequentially
     var calculateImageWidth = function (Photo) {
         if (Photo == null)
@@ -276,7 +201,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var dimensions = calculateAspectRatio(origH, origW, maxH, maxW)
         return dimensions;
     }
-
 
 
     // called by onImageLoad 
@@ -474,9 +398,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         });
     }
 
-   
-
-
 
 // called by preloadImagesSequentially
     var notifyImageLoaded = function ( index, Photo, theImage) {
@@ -512,7 +433,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             var pic = $scope.PhotoList[i];
             if (pic != null)
             {
-                var theImageURL =$scope.getImageURL(pic)
+                var theImageURL =getImageURL(pic)
                 var img = new Image();
                 img.onload = notifyImageLoaded( i, pic, img)
                 img.src = theImageURL;           
@@ -520,9 +441,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
           }// for 3 photos at a time
 
-
     }
-
 
 
     var notifySelectedImageLoaded = function ( Photo, theImage) {
@@ -537,21 +456,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+
     var preloadSelectedImage = function (pic) {
         if (pic != null) {
-            var theImageURL = $scope.getImagePath(pic, 0)
-            if (theImageURL != null) {
-                var img = new Image();
-                var dimensions = calculateImageWidth(pic)
-                img.style.width = dimensions.width + "px"
-                if (dimensions.height != "")
-                    img.style.height = dimensions.height + "px"
-                img.onload = notifySelectedImageLoaded( pic, img)
-                img.src = theImageURL;
-            }// end URL param is not null
-
+            var theImageURL = getImageURL(pic, 0)
+            var img = new Image();
+            var dimensions = calculateImageWidth(pic)
+            img.style.width = dimensions.width + "px"
+            if (dimensions.height != "")
+                img.style.height = dimensions.height + "px"
+            img.onload = notifySelectedImageLoaded( pic, img)
+            img.src = theImageURL;
         }// end pic param is not null
-
     }
 
 
