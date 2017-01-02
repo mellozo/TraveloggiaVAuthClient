@@ -151,13 +151,15 @@
     var loadSites = function () {
         $scope.SiteList = null;
         $scope.selectedSite = SharedStateService.getItemFromCache("Site");
+        var mapRecord = SharedStateService.getItemFromCache('Map');
+        if (mapRecord != null)
         var cachedSites = SharedStateService.getItemFromCache('Map').Sites;
      //   if (cachedSites != null && cachedSites.length > 0)
            $scope.SiteList = cachedSites;
    
     }
 
-//if(    $scope.SiteList==null)
-//    loadSites();
+if(    $scope.SiteList==null)
+    loadSites();
 
 })
