@@ -403,7 +403,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                      loadMap();               
              }
              else  {
-                 if ($scope.previewMap == null)
+                 if ($scope.previewMap == null && $window.innerWidth > 769)
                      preparePreviewMap();
                  else
                      loadMap();
