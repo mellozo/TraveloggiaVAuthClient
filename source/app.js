@@ -92,10 +92,7 @@ angularTraveloggia.run(function ($rootScope) {
        
     });
 
-    localforage.config({
-        name: 'Traveloggia',
-        storeName:'clientSideDB'
-    });
+   
 
 });
 
