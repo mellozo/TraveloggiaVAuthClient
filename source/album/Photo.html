@@ -2,8 +2,8 @@
 
    
 
-    <div class="monkey" ng-show="selectedPhoto != null" >
-              
+    <div class="monkey" ng-show="selectedPhoto != null"   >
+              <img ng-style="getImageStyle(selectedPhoto,$index)"  ng-src="{{getImageSource(selectedPhoto)}}" />
     </div>
 
 

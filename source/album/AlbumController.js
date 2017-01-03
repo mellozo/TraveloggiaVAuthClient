@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="C:\Traveloggia Experimental\TraveloggiaVAuthClient\source\common/SharedStateService.js" />
+
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce,$timeout) {
    
@@ -41,10 +42,10 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     var loadPhotos = function () {
         var cachedPhotos = SharedStateService.getItemFromCache('Photos');
         var selectedSite = SharedStateService.getItemFromCache("Site");
-        //  var selectedSiteID 
+      
         if (cachedPhotos != null && cachedPhotos.length > 0 && cachedPhotos[0].SiteID == selectedSite.SiteID) {
             $scope.PhotoList = cachedPhotos;
-            preloadImagesSequentially(0);
+           preloadImagesSequentially(0);
             preparePreviewImage($scope.PhotoList[0]);
             $scope.selectedPhoto = SharedStateService.getItemFromCache("Photo");
             if ($scope.selectedPhoto == null) {
@@ -63,7 +64,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                         preparePreviewImage($scope.PhotoList[0]);
                         $scope.selectedPhoto = $scope.PhotoList[0];
                         SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
-                        preloadImagesSequentially(0);
+                      
                     }
 
                 },
@@ -99,25 +100,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     // injects a rotated canvas if nescessary
         $scope.needsCanvas = true;
         var loadedImage = e.target;
-        if (Photo.Height == null || Photo.Width == null) {
-            Photo.Height = loadedImage.height;
-            Photo.Width = loadedImage.width;
-            DataTransportService.updatePhoto(Photo).then(
-          function (result) {
-              SharedStateService.updateCacheAsync("Photo", "PhotoID", Photo.PhotoID, result.data)
-              doRotation(orientationID, loadedImage, index);
-              $scope.$apply();
-              console.log("uploaded photo dimensions")
-          },
-           function (error) {
-               console.log("error updating photo height and width")
-           }
-          );
-        }
-        else {
+        //if (Photo.Height == null || Photo.Width == null) {
+        //    Photo.Height = loadedImage.height;
+        //    Photo.Width = loadedImage.width;
+        //    DataTransportService.updatePhoto(Photo).then(
+        //  function (result) {
+        //      SharedStateService.updateCacheAsync("Photo", "PhotoID", Photo.PhotoID, result.data)
+        //      doRotation(orientationID, loadedImage, index);
+        //      $scope.$apply();
+        //      console.log("uploaded photo dimensions")
+        //  },
+        //   function (error) {
+        //       console.log("error updating photo height and width")
+        //   }
+        //  );
+        //}
+        //else {
            doRotation(orientationID, loadedImage);
           
-        }
+        //}
 
     }
 
@@ -208,8 +209,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    // called by onImageLoad 
-    var doRotation = function (orientationID, loadedImage, index) {
+    // called by injectCanvas
+   // var doRotation = function (orientationID, loadedImage, index) {
+        var doRotation = function (orientationID, Photo, index) {
         var degrees = 0;
         var maxHeight = 0
         var maxWidth = 0
@@ -236,8 +238,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
 
         var scaledWidth = maxHeight;
-        var height = loadedImage.height;
-        var width = loadedImage.width;
+        var height = Photo.Height;
+        var width = Photo.Width;
         var x;
         x = (height * scaledWidth) / width;
         if (x > maxWidth) {
@@ -350,39 +352,59 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    var injectCanvas = function (index, Photo, loadedImage) {
+    var injectCanvas = function (index, Photo) {
         var orientationID = Photo.orientationID;
         var canvasEl = doRotation(orientationID, loadedImage, index);
         if (canvasEl != null) {
-            var frames = $window.document.getElementsByClassName("monkey")
-            if (frames.length > 0) {
-                var parent = frames[index];
+            var frames = $window.document.getElementsByClassName("monkey")           
+            var parent = frames[index];
+            if (parent != null) {
                 parent.style.height = canvasEl.height + "px";
                 parent.innerHTML = "";
                 parent.appendChild(canvasEl);
                 if (SharedStateService.getAuthorizationState() == "CAN_EDIT" && $location.path() == "/Album")
                     $window.document.getElementById("albumScroller").scrollTop = 62;
             }
+            else {
+                $timeout(function () {
+                    console.log("frame for canvas " + index + " was null  try again")
+                    injectCanvas(index, Photo)
+
+                })
+            }
 
         }
     }
 
 
-    var injectImage = function (index,preloadedImage) {
-        var frames = $window.document.getElementsByClassName("monkey");
-        var frame = frames[index];
-        if (frame != null)
-            $scope.$apply(function () {
-                frame.innerHTML = "";
-                preloadedImage.style.height = "100%"
-                frame.appendChild(preloadedImage);
-            })
-    }
+    //var injectImage = function (index,preloadedImage) {
+    //    var frames = $window.document.getElementsByClassName("monkey");
+    //    var frame = frames[index];
+    //    if (frame != null)
+    //        $scope.$apply(function () {
+    //            //var imgEl = frame.getElementsByTagName("img")[0];
+    //            //imgEl.style.width = preloadedImage.style.width;
+    //            //imgEl.style.height = ""; preloadedImage.style.height;
+    //            //imgEl.src = preloadedImage.src;
+    //            //preloadedImage = null;
+    //            frame.innerHTML = "";
+    //            preloadedImage.style.height = "100%"
+    //            frame.appendChild(preloadedImage);
+    //        })
+    //    else {
+    //        $timeout(function () {
+    //            console.log("frame " + index + " was null  try again")
+    //            injectImage(index,preloadedImage) 
+                
+    //        })
+
+    //    }
+    //}
 
 
     // called by notifyImageLoaded
-    var applyImage = function (index, Photo, preloadedImage) {
-        $timeout(function () {
+    var applyImage = function (index, Photo) {
+       // $timeout(function () {
             var pic = Photo;
             if (pic.orientationID == null)
                 pic.orientationID = 0;
@@ -395,14 +417,14 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     case 8:
                     case 9:
                         if ($scope.Capabilities.alreadyKnowsHow == false) {
-                            injectCanvas(index,Photo,preloadedImage);
+                            injectCanvas(index,Photo);
                         }
                         break;
                     default:
-                       injectImage(index,preloadedImage)
+                     ;//  injectImage(index,preloadedImage)
                 }
 
-        });
+     //   });
     }
 
 
@@ -413,17 +435,21 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         preloadedImage.style.width = dimensions.width + "px"
         if (dimensions.height != "")
             preloadedImage.style.height = dimensions.height + "px"
+       // else
+          //  preloadedImage.style.height="100%"
 
-        if (preloadedImage.complete == true){
-            applyImage(index, Photo, preloadedImage);
+        if (preloadedImage.complete == true) {
+            if($location.path() =="/Album")
+           // applyImage(index, Photo, preloadedImage);
             var remainder = $scope.PhotoList.length % 3;
             if ((index % 3 == 0) || (index >= $scope.PhotoList.length - remainder))
-                preloadImagesSequentially(index + 3);
+            if(index < $scope.PhotoList.length)
+                preloadImagesSequentially(index );
         }
         else
             $timeout(function () {
                 notifyImageLoaded( index, Photo, preloadedImage)
-            },200)
+            },300)
         
     }
 
@@ -431,23 +457,22 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     var preloadImagesSequentially = function (start) {
         if ($location.path() == "/Photo")
         {
-            var selectedImage = SharedStateService.getItemFromCache("Photo");
-            preloadSelectedImage(selectedImage);
+            //var selectedImage = SharedStateService.getItemFromCache("Photo");
+            //preloadSelectedImage(selectedImage);
             return;
         }
 
-        for (var i = start; i < start + 3; i++)
+        for (var i = 0; i <= $scope.PhotoList.length; i++)
         {
             var pic = $scope.PhotoList[i];
             if (pic != null)
             {
                 var theImageURL =getImageURL(pic)
                 var img = new Image();
-                img.onload = notifyImageLoaded( i, pic, img)
+               // img.onload = notifyImageLoaded( i, pic, img)
                 img.src = theImageURL;           
             }// end pic param is not null
-
-          }// for 3 photos at a time
+ }// for 3 photos at a time
 
     }
 
@@ -512,9 +537,17 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
              }
         });
 
+   
+    $scope.getImageSource = function (Photo) {
+        return getImageURL(Photo)
+    }
 
 
 
+    $scope.getImageStyle = function (Photo,index) {
+     //   applyImage (index, Photo) 
+        return calculateImageWidth(Photo);
+    }
     //******************single photo edit page 
 
 

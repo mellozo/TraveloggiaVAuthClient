@@ -389,6 +389,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 
     var afterLoaded = function () {
+       
         try {
            
          var x = (Microsoft != null)// map control not loaded yet - the problem is sometimes the map loades before angular  and sometimes angular loades before the map :(
@@ -396,7 +397,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           //   $timeout(afterLoaded, 800); // this ends up waiting for images which dont need to be waited for
          //}
          //else {
-             if ($location.path() != "/MapList" && $location.path().indexOf("/Map")==0 || $location.path() == "/") {
+             if ($location.path() =="/Map" || $location.path() == "/") {
                  if ($scope.mapInstance == null)
                      prepareMainMap();
                  else

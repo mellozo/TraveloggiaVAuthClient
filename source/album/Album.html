@@ -45,8 +45,12 @@
                    
                 
                         <div  class="imageFrame monkey"   >                          
-                        <img id="catalog" style="width:60px;height:60px"
-                                    ng-src="../image/hourglass.png" />   
+              <!--          <img id="catalog" style="width:60px;height:60px"
+                                    ng-src="../image/hourglass.png" />  --> 
+
+
+                               <img id="catalog" ng-style="getImageStyle(Photo,$index)"
+                                    ng-src="{{getImageSource(Photo)}}" />
                                                                      
                     </div>
                                                                      

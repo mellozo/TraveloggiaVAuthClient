@@ -14,7 +14,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     $scope.ConfirmCancel.isShowing = false;
   
     $scope.switchMap = function (map) {
-        if ($scope.selectedMap.MapID != map.MapID) {
+        if ( $scope.selectedMap == null || ($scope.selectedMap.MapID != map.MapID) ){
             $scope.selectedMap = map;      
             SharedStateService.setSelectedAsync("MapListItem", map);
             SharedStateService.clearMap();
