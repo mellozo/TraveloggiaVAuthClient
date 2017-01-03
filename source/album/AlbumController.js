@@ -88,7 +88,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-   var getImageURL = function (pic) {
+    var getImageURL = function (pic) {
+        if (pic == null)
+            return;
         updateImagePath();
         var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
         return theImageURL;
@@ -149,6 +151,158 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
+    // called by injectCanvas
+    // var doRotation = function (orientationID, loadedImage, index) {
+   var doRotation = function (orientationID, Photo, index) {
+       $scope.needsCanvas = true;
+       var loadedImage = new Image();
+       loadedImage.src = getImageURL(Photo);
+       loadedImage.height = Photo.Height;
+       loadedImage.width = Photo.Width;
+
+       var degrees = 0;
+       var maxHeight = 0
+       var maxWidth = 0
+       if ($location.path() == "/Album") {
+           var scrollContainer = $window.document.getElementById("albumScrollContainer")
+           var widthMinusPadScroll = widthMinusPad - scrollWidth;
+           var widthMinusBorderBackground = widthMinusPadScroll - 14;
+           maxHeight = heightMinusPad;
+           maxWidth = widthMinusBorderBackground;
+       }
+       else if ($location.path() == "/Photo") {
+           maxHeight = heightMinusPad;
+           maxWidth = widthMinusPad - scrollWidth;
+       }
+       else//preview frame rotation?
+       {
+           if ($scope.previewMapStyle != null) {
+               maxHeight = $scope.previewMapStyle.height;
+               maxWidth = $scope.previewMapStyle.width;
+           }
+           else
+               return;
+
+       }
+
+       var scaledWidth = maxHeight;
+       var height = Photo.Height;
+       var width = Photo.Width;
+       var x;
+       x = (height * scaledWidth) / width;
+       if (x > maxWidth) {
+           var y = 0;
+           y = (width * maxWidth) / height;
+           scaledWidth = y;
+           x = maxWidth;
+       }
+
+       var canvasElement = null;
+       var canvas = null;
+       canvas = $window.document.getElementById("previewCanvas");
+       if (canvas == null)
+           canvas = $window.document.getElementById("photoCanvas")
+       if (canvas == null) {
+           canvasElement = true;
+           canvas = $window.document.createElement("canvas")
+       }
+       var ctx = canvas.getContext("2d");
+       ctx.save();
+       canvas.width = x;
+       canvas.height = scaledWidth;// adding 10 for border... which was previously padding
+       // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
+       ctx.restore();
+
+       switch (orientationID) {
+           case 1:
+               degrees = 0;
+               break;
+           case 2:
+               degrees = 0;
+               break;
+           case 3:
+               degrees = 180;
+               var w = maxWidth;
+               var h = (maxWidth * loadedImage.height) / loadedImage.width;
+               canvas.width = w
+               canvas.height = h
+               ctx.translate(w / 2, h / 2)// move the origin to the center of the canvas so rotate will rotate around the center
+               ctx.rotate(degrees * Math.PI / 180);
+               ctx.drawImage(loadedImage, -w / 2, -h / 2, w, h);//specify starting coords ( back out from the center to get upper left corner )
+               break;
+           case 4:
+               degrees = 0;
+               break;
+           case 5:
+               degrees = 90;
+               ctx.translate(width / 2, height / 2);
+               ctx.rotate(degrees * Math.PI / 180);
+               var moveLeft = ((width / 2) - (height / 2)) * 2
+               ctx.translate(0, moveLeft)
+               ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+               break;
+           case 6:
+               ctx.save();
+               degrees = 90;
+               ctx.translate(scaledWidth / 2, x / 2);
+               ctx.rotate(degrees * Math.PI / 180);
+               var moveLeft = ((scaledWidth / 2) - (x / 2)) * 2
+               ctx.translate(0, moveLeft)
+               ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+               ctx.restore();
+               break;
+               //degrees = 90;
+               //ctx.translate(width / 2, height / 2);
+               //ctx.rotate(degrees * Math.PI / 180);
+               //var moveLeft = ((width / 2) - (height / 2)) * 2
+               //ctx.translate(0, moveLeft)
+               //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+               //break;
+           case 7:
+               ctx.save();
+               degrees = -90;
+               degrees = -90;
+               ctx.translate(scaledWidth / 2, x / 2);
+               ctx.rotate(degrees * Math.PI / 180);
+               var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
+               ctx.translate(-moveDown, 0)
+               ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+               ctx.restore();
+               break;
+               //degrees = -90;
+               //degrees = -90;
+               //ctx.translate(width / 2, height / 2);
+               //ctx.rotate(degrees * Math.PI / 180);
+               //var moveDown = ((width / 2) - (height / 2)) * 2
+               //ctx.translate(-moveDown, 0)
+               //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
+               //break;
+           case 8:
+               ctx.save();
+               degrees = -90;
+               ctx.translate(scaledWidth / 2, x / 2);
+               ctx.rotate(degrees * Math.PI / 180);
+               var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
+               ctx.translate(-moveDown, 0)
+               ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
+               ctx.restore();
+               break;
+               //degrees = -90;
+               //ctx.translate(width / 2, height / 2);
+               //ctx.rotate(degrees * Math.PI / 180);
+               //var moveDown = ((width / 2) - (height / 2)) * 2
+               //ctx.translate(-moveDown, 0)
+               //ctx.drawImage(loadedImage, -height/2, -width/2, width, height);
+               //break;
+       }
+
+       if (canvasElement == true)
+           return canvas;
+
+   }
+
+
+
     // called by  calculateImageWidth
     var calculateAspectRatio = function (origH, origW, maxH, maxW) {
         var orientation = (origH >= origW) ? "portrait" : "landscape";
@@ -163,7 +317,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 }
                
                 return { "width": landscapeWidth, "height": "" }
-                //$scope.whateverStyle.width = landscapeWidth;
+                
                 break;
 
             case "portrait":
@@ -186,7 +340,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
                 
                 return { "width": portraitWidth, "height": portraitHeight }
-                //$scope.whateverStyle.height = pStyle;
+               
                 break;
         }
     }
@@ -201,6 +355,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         var origH = Photo.Height;
         var origW = Photo.Width;
         var maxH = heightMinusPad;
+        // add preview image width
         var maxW = ($location.path() == "/Album") ? widthMinusPadScrollBorder : widthMinusPadScroll;
         var dimensions = calculateAspectRatio(origH, origW, maxH, maxW)
         if (dimensions.width == null)
@@ -209,152 +364,10 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    // called by injectCanvas
-   // var doRotation = function (orientationID, loadedImage, index) {
-        var doRotation = function (orientationID, Photo, index) {
-        var degrees = 0;
-        var maxHeight = 0
-        var maxWidth = 0
-        if ($location.path() == "/Album") {
-            var scrollContainer = $window.document.getElementById("albumScrollContainer")
-            var widthMinusPadScroll = widthMinusPad - scrollWidth;
-            var widthMinusBorderBackground = widthMinusPadScroll - 14;
-            maxHeight = heightMinusPad;
-            maxWidth = widthMinusBorderBackground;
-        }
-        else if ($location.path() == "/Photo") {
-            maxHeight = heightMinusPad;
-            maxWidth = widthMinusPad - scrollWidth;
-        }
-        else//preview frame rotation?
-        {
-            if ($scope.previewMapStyle != null) {
-                maxHeight = $scope.previewMapStyle.height;
-                maxWidth = $scope.previewMapStyle.width;
-            }
-            else
-                return;
-
-        }
-
-        var scaledWidth = maxHeight;
-        var height = Photo.Height;
-        var width = Photo.Width;
-        var x;
-        x = (height * scaledWidth) / width;
-        if (x > maxWidth) {
-            var y = 0;
-            y = (width * maxWidth) / height;
-            scaledWidth = y;
-            x = maxWidth;
-        }
-
-        var canvasElement = null;
-        var canvas = null;
-        canvas = $window.document.getElementById("previewCanvas");
-        if (canvas == null) {
-            canvasElement = true;
-            canvas = $window.document.createElement("canvas")
-        }
-        var ctx = canvas.getContext("2d");
-        ctx.save();
-        canvas.width = x;
-        canvas.height = scaledWidth;// adding 10 for border... which was previously padding
-        // ctx.drawImage(loadedImage, 0,0,scaledWidth, x);
-        ctx.restore();
-
-        switch (orientationID) {
-            case 1:
-                degrees = 0;
-                break;
-            case 2:
-                degrees = 0;
-                break;
-            case 3:
-                degrees = 180;
-                var w = maxWidth;
-                var h = (maxWidth * loadedImage.height) / loadedImage.width;
-                canvas.width = w
-                canvas.height = h
-                ctx.translate(w / 2, h / 2)// move the origin to the center of the canvas so rotate will rotate around the center
-                ctx.rotate(degrees * Math.PI / 180);
-                ctx.drawImage(loadedImage, -w / 2, -h / 2, w, h);//specify starting coords ( back out from the center to get upper left corner )
-                break;
-            case 4:
-                degrees = 0;
-                break;
-            case 5:
-                degrees = 90;
-                ctx.translate(width / 2, height / 2);
-                ctx.rotate(degrees * Math.PI / 180);
-                var moveLeft = ((width / 2) - (height / 2)) * 2
-                ctx.translate(0, moveLeft)
-                ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
-                break;
-            case 6:
-                ctx.save();
-                degrees = 90;
-                ctx.translate(scaledWidth / 2, x / 2);
-                ctx.rotate(degrees * Math.PI / 180);
-                var moveLeft = ((scaledWidth / 2) - (x / 2)) * 2
-                ctx.translate(0, moveLeft)
-                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
-                ctx.restore();
-                break;
-                //degrees = 90;
-                //ctx.translate(width / 2, height / 2);
-                //ctx.rotate(degrees * Math.PI / 180);
-                //var moveLeft = ((width / 2) - (height / 2)) * 2
-                //ctx.translate(0, moveLeft)
-                //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
-                //break;
-            case 7:
-                ctx.save();
-                degrees = -90;
-                degrees = -90;
-                ctx.translate(scaledWidth / 2, x / 2);
-                ctx.rotate(degrees * Math.PI / 180);
-                var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
-                ctx.translate(-moveDown, 0)
-                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
-                ctx.restore();
-                break;
-                //degrees = -90;
-                //degrees = -90;
-                //ctx.translate(width / 2, height / 2);
-                //ctx.rotate(degrees * Math.PI / 180);
-                //var moveDown = ((width / 2) - (height / 2)) * 2
-                //ctx.translate(-moveDown, 0)
-                //ctx.drawImage(loadedImage, -height / 2, -width / 2, width, height);
-                //break;
-            case 8:
-                ctx.save();
-                degrees = -90;
-                ctx.translate(scaledWidth / 2, x / 2);
-                ctx.rotate(degrees * Math.PI / 180);
-                var moveDown = ((scaledWidth / 2) - (x / 2)) * 2
-                ctx.translate(-moveDown, 0)
-                ctx.drawImage(loadedImage, -x / 2, -scaledWidth / 2, scaledWidth, x);
-                ctx.restore();
-                break;
-                //degrees = -90;
-                //ctx.translate(width / 2, height / 2);
-                //ctx.rotate(degrees * Math.PI / 180);
-                //var moveDown = ((width / 2) - (height / 2)) * 2
-                //ctx.translate(-moveDown, 0)
-                //ctx.drawImage(loadedImage, -height/2, -width/2, width, height);
-                //break;
-        }
-
-        if (canvasElement == true)
-            return canvas;
-
-    }
-
 
     var injectCanvas = function (index, Photo) {
         var orientationID = Photo.orientationID;
-        var canvasEl = doRotation(orientationID, loadedImage, index);
+        var canvasEl = doRotation(orientationID, Photo, index);
         if (canvasEl != null) {
             var frames = $window.document.getElementsByClassName("monkey")           
             var parent = frames[index];
@@ -370,11 +383,37 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     console.log("frame for canvas " + index + " was null  try again")
                     injectCanvas(index, Photo)
 
-                })
+                },1000)
             }
 
         }
     }
+
+
+    $scope.getImageSource = function (Photo) {
+        return getImageURL(Photo)
+    }
+
+
+
+    $scope.getImageStyle = function (Photo, index) {
+        var x = this;
+        var style={"width":0}
+        var rotate = needsRotation(Photo);
+        if (rotate == true) {
+            injectCanvas(index,Photo)
+        }
+        else {
+            style = calculateImageWidth(Photo);
+        }
+
+        return style;
+
+    }
+
+
+
+
 
 
     //var injectImage = function (index,preloadedImage) {
@@ -402,10 +441,12 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     //}
 
 
-    // called by notifyImageLoaded
-    var applyImage = function (index, Photo) {
-       // $timeout(function () {
-            var pic = Photo;
+
+    var needsRotation = function (pic) {
+        if (pic == null)
+            return;
+        var doRotation = false;
+    
             if (pic.orientationID == null)
                 pic.orientationID = 0;
    
@@ -417,14 +458,13 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     case 8:
                     case 9:
                         if ($scope.Capabilities.alreadyKnowsHow == false) {
-                            injectCanvas(index,Photo);
+                            doRotation = true;
                         }
                         break;
                     default:
-                     ;//  injectImage(index,preloadedImage)
+                     ;
                 }
-
-     //   });
+                return doRotation;
     }
 
 
@@ -504,6 +544,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
+
+
+
     $scope.selectPhoto = function (photo) {
         SharedStateService.setSelectedAsync("Photo", photo);
         $scope.selectedPhoto = photo;
@@ -538,16 +581,16 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         });
 
    
-    $scope.getImageSource = function (Photo) {
-        return getImageURL(Photo)
-    }
+  
 
 
 
-    $scope.getImageStyle = function (Photo,index) {
-     //   applyImage (index, Photo) 
-        return calculateImageWidth(Photo);
-    }
+
+
+
+
+
+
     //******************single photo edit page 
 
 

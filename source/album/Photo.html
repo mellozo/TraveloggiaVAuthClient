@@ -4,6 +4,7 @@
 
     <div class="monkey" ng-show="selectedPhoto != null"   >
               <img ng-style="getImageStyle(selectedPhoto,$index)"  ng-src="{{getImageSource(selectedPhoto)}}" />
+          <canvas ng-show="needsCanvas"  id="previewCanvas" ></canvas>
     </div>
 
 
