@@ -61,7 +61,7 @@
             vpWidth = vpWidth * .7;
 
         var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
-        var previewMapWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
+       $scope.previewMapWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
 
         $scope.mapStyle = {
             "height": vpHeight,
@@ -69,7 +69,7 @@
         }
         $scope.previewMapStyle = {
             "height": ( ($scope.reliableHeight -12  )* .33) -28,
-            "width": previewMapWidth
+            "width": $scope.previewMapWidth
         }
     }
 
