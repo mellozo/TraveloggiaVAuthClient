@@ -9,7 +9,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     $scope.previewImage = {
         Url: "../image/sail.jpeg",
-        needsCanvas:false
+        useCanvas:false
     }
   
     var toolbarHeight = 66;
@@ -107,29 +107,42 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     var preparePreviewImage = function (Photo) {
-        $scope.previewImage.needsCanvas = false;
-        $scope.previewImage.Url = "../image/sail.jpeg";
+
         var rotate = needsRotation(Photo);
+      
         if (rotate == true) {
-            $scope.previewImage.needsCanvas = true;
-            doRotation(Photo);
+            var canvas = $window.document.getElementById("previewCanvas")
+            var offlineImg = new Image();
+            var earl = $scope.getImageSource(Photo);
+            offlineImg.onload = function () {
+                $scope.$apply(function () {
+                    doRotation(Photo, canvas);
+                    $scope.previewImage.useCanvas = true;
+                });
+            }
+            offlineImg.src = earl;
+       
         }
         else {
-            $scope.previewImage.needsCanvas = false;
+            $scope.previewImage.useCanvas = false;
             var offlineImg = new Image();
             var earl = $scope.getImageSource(Photo);
             offlineImg.onload = function () {
                 $scope.$apply(function () {
                     $scope.previewImage.Url = earl;
+                  
                 });
             }
             offlineImg.src = earl;
+             
+
         }
+     
     }
 
 
     // called by injectCanvas
-    var doRotation = function ( Photo) {
+    var doRotation = function ( Photo,canvas) {
         var orientationID = Photo.orientationID;
         var loadedImage = new Image();
         loadedImage.src = getImageURL(Photo);
@@ -168,15 +181,15 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             x = maxWidth;
         }
 
-        var canvasElement = false;
-        var canvas = null;
-        canvas = $window.document.getElementById("previewCanvas");
-        if (canvas == null)
-            canvas = $window.document.getElementById("photoCanvas")
-        if (canvas == null) {
-            canvasElement = true;
-            canvas = $window.document.createElement("canvas")
-        }
+        //var canvasElement = false;
+        //var canvas = null;
+        //canvas = $window.document.getElementById("previewCanvas");
+        //if (canvas == null)
+        //    canvas = $window.document.getElementById("photoCanvas")
+        //if (canvas == null) {
+        //    canvasElement = true;
+        //    canvas = $window.document.createElement("canvas")
+        //}
         var ctx = canvas.getContext("2d");
         ctx.save();
         canvas.width = x;
@@ -249,8 +262,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         }
 
 
-        if (canvasElement == true)
-            return canvas;
+        //if (canvasElement == true)
+        //    return canvas;
 
     }
 
@@ -311,28 +324,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
 
-    var injectCanvas = function (canvasEl,index) {
-        var frames = $window.document.getElementsByClassName("monkey")           
-        var parent = frames[index];
-        if (parent != null) 
-        {
-           // parent.style.height = canvasEl.height + "px";
-            parent.innerHTML = "";
-            parent.appendChild(canvasEl);
-            //if (SharedStateService.getAuthorizationState() == "CAN_EDIT" && $location.path() == "/Album")
-            //    $window.document.getElementById("albumScroller").scrollTop = 62;
-        }
-        //else 
-        //{
-        //    $timeout( function () 
-        //                    {
-        //                        console.log("frame for canvas " + index + " was null  try again")
-        //                        injectCanvas(canvasEl, index)
-        //                    },3000)
-        //}
-    }
-
-
 
     $scope.getImageSource = function (Photo) {
         return getImageURL(Photo)
@@ -367,44 +358,46 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     // called by album.html
     $scope.getImageStyle = function (Photo, index) {
-        var style={"display":"none"}
         var rotate = needsRotation(Photo);
-        if (rotate == true) {
-            //var canvasEl=null
-            //    $scope.previewImage.needsCanvas = true;
-            //    $timeout(function () {
-            //        canvasEl = doRotation(Photo);
-            //        if (canvasEl != null) {
-            //            injectCanvas(canvasEl, index)
-            //        }
-            //    })
-        }
-        else {
-            $scope.previewImage.needsCanvas = false;
+        if (rotate != true) {
             style = calculateImageWidth(Photo);
         }
             return style;
         }
 
-
+    var rotatedImages = [];
     var preloadImagesSequentially = function (start) {
+        rotatedImages = new Array($scope.PhotoList.length)
         if ($location.path() == "/Album") 
+        {
+            for (var i = 0; i <= $scope.PhotoList.length; i++) {
+                var pic = $scope.PhotoList[i];
+                var theImageURL = getImageURL(pic)
+                var img = new Image();
+                img.src = theImageURL;
+              
+            }
 
-        for (var i = 0; i <= $scope.PhotoList.length; i++) {
-            var pic = $scope.PhotoList[i];
-            var theImageURL = getImageURL(pic)
-            var img = new Image();
-            img.src = theImageURL;
         }
-
+      
     }
 
 
-   
+    $scope.processImage = function (event, Photo) {
+        var imageEl = event.target;
+        var waitingImg = imageEl.parentNode.getElementsByTagName("img")[0];
+        var canvas = imageEl.parentNode.getElementsByTagName("canvas")[0];
+        var mustRotate = needsRotation(Photo);
+     
+            waitingImg.style.display = "none"
+            if (mustRotate) {
+                doRotation(Photo, canvas)
+                canvas.style.display="inline-block"
+            }
+            else
+            imageEl.style.display="inline-block"
 
-
-
-
+    }
 
 
 
@@ -420,7 +413,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
-                $scope.previewImage.Url = '../image/sail.jpeg'
+                $scope.previewImage.Url="../image/sail.jpeg"
+                $scope.previewImage.notReady = true;
                 // its worth it to clear the scope because images take so long to load, looks better empty than with the wrong one
                 // to do... there should be a splash image to go in fast and fix page load woes
                 $scope.PhotoList = [];
@@ -437,6 +431,27 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
    
   
+
+    //var injectCanvas = function (canvasEl, index) {
+    //    var frames = $window.document.getElementsByClassName("monkey")
+    //    var parent = frames[index];
+    //    if (parent != null) {
+    //        // parent.style.height = canvasEl.height + "px";
+    //        parent.innerHTML = "";
+    //        parent.appendChild(canvasEl);
+    //        //if (SharedStateService.getAuthorizationState() == "CAN_EDIT" && $location.path() == "/Album")
+    //        //    $window.document.getElementById("albumScroller").scrollTop = 62;
+    //    }
+    //    //else 
+    //    //{
+    //    //    $timeout( function () 
+    //    //                    {
+    //    //                        console.log("frame for canvas " + index + " was null  try again")
+    //    //                        injectCanvas(canvasEl, index)
+    //    //                    },3000)
+    //    //}
+    //}
+
 
 
 

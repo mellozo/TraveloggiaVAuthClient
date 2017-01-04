@@ -70,6 +70,7 @@
     <Content Include="common\DataObjects.js" />
     <Content Include="common\DataTransportService.js" />
     <Content Include="common\NotificationController.js" />
+    <Content Include="common\onLoadDirective.js" />
     <Content Include="common\SharedStateService.js" />
     <Content Include="common\ToolBar.html" />
     <Content Include="common\ToolbarController.js" />

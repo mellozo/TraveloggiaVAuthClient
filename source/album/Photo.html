@@ -1,11 +1,19 @@
 ﻿<div   ng-style="scrollWindowStyle"  ng-controller="AlbumController" class="slate" style="padding:16px;overflow-y:scroll">
 
    
+                    <div>                          
+                                <img id="waiting" style="width:60px;height:60px"
+                                    ng-src="../image/hourglass.png" />   
 
-    <div class="monkey" ng-show="selectedPhoto != null"     >
-                <img ng-style="getImageStyle(selectedPhoto,null)"  ng-src="{{getImageSource(selectedPhoto)}}" />
-                <canvas ng-show="previewImage.needsCanvas"  id="photoCanvas" ></canvas>
-    </div>
+
+                               <img id="catalog" 
+                                   style="display:none;"
+                                   on-load="processImage($event,selectedPhoto)"
+                                    ng-src="{{getImageSource(selectedPhoto)}}" 
+                                   ng-style="getImageStyle(selectedPhoto)"/>
+                            <canvas id="rotated" style="display:none"></canvas>
+                                                                     
+                        </div>
 
 
     <div class="infoText " style ="margin-top:16px;margin-bottom:16px;">

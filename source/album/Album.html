@@ -44,13 +44,18 @@
             <a href="" ng-click="selectPhoto(Photo)" >
                    
                 
-                        <div  class="imageFrame monkey"   >                          
-              <!--          <img id="catalog" style="width:60px;height:60px"
-                                    ng-src="../image/hourglass.png" />  --> 
+                        <div  class="imageFrame"   >                          
+                                <img id="waiting" style="width:60px;height:60px"
+                                    ng-src="../image/hourglass.png" />   
 
 
-                               <img id="catalog" ng-style="getImageStyle(Photo,$index)"
-                                    ng-src="{{getImageSource(Photo)}}" />
+                               <img id="catalog" 
+                                   style="display:none;"
+                                   on-load="processImage($event,Photo)"
+                                    ng-src="{{getImageSource(Photo)}}" 
+                                   ng-style="getImageStyle(Photo)"/>
+
+                            <canvas id="rotated" style="display:none"></canvas>
                                                                      
                         </div>
                                                                      
