@@ -10,9 +10,11 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
         emailSelected: false,
         linkSelected:false
     }
+
   
     $scope.ConfirmCancel.isShowing = false;
   
+
     $scope.switchMap = function (map) {
         if ( $scope.selectedMap == null || ($scope.selectedMap.MapID != map.MapID) ){
             $scope.selectedMap = map;      
@@ -28,27 +30,38 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     }
 
 
+
+
+    var updateImagePath = function () {
+        if (SharedStateService.getItemFromCache("Map") == null)
+            return;
+        var mapName = SharedStateService.getItemFromCache("Map").MapName;
+        var mapID = SharedStateService.getItemFromCache("Map").MapID
+        $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + mapName + "/";
+        $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + mapID + "/";
+    }
+
+
+    var getImageURL = function (pic) {
+        if (pic == null)
+            return;
+        updateImagePath();
+        var theImageURL = (pic.StorageURL != null) ? $scope.imageServer + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+        return theImageURL;
+    }
+
+
+
+
+
+
     var getPreviewPhoto = function () {
         var picList= SharedStateService.getItemFromCache("Photos")
         var pic =picList[0];
-        var photoURL = "http://www.traveloggia.pro/image/compass.gif";
-        var rawURI = "";
-        var imageServer1 = "https://s3-us-west-2.amazonaws.com";
-        var imageServer2 = "http://www.traveloggia.net";
-        var mapName = $scope.selectedMap.MapName;
-        var safeName = $window.encodeURIComponent(mapName)
-        if (pic != null) {
-            var imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + safeName + "/";
-            if (pic.StorageURL != null) {
-                rawURI = "/traveloggia-guests/" + imagePath + pic.FileName;
-                photoURL = imageServer1 + rawURI;
-            }
-            else {
-                rawURI = "/upload/" + imagePath + pic.FileName;
-                photoURL = imageServer2 + rawURI;
-            }
-        }
-        return photoURL;
+        $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + $scope.selectedMap.MapName + "/";
+        $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + $scope.selectedMap.MapID + "/";
+        var theImageURL = (pic.StorageURL != null) ? "https://s3-us-west-2.amazonaws.com/traveloggia-guests/" + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
+         return theImageURL;
     }
 
 
@@ -63,7 +76,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     $scope.facebook = function () {
-        var MapID = SharedStateService.getSelectedID("Map");
+        var MapID = $scope.selectedMap.MapID;
         var MapName = $scope.selectedMap.MapName;
         var imageURL = getPreviewPhoto();
         var params = {};
@@ -89,9 +102,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     var getSelectedMap = function () {
-       var value = JSON.parse(localStorage.getItem("Map"))
-       $scope.selectedMap = value;
- 
+       $scope.selectedMap = SharedStateService.getItemFromCache("Map")
         loadMapList();
     }
 
