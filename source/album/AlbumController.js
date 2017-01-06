@@ -107,9 +107,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
 
     var preparePreviewImage = function (Photo) {
-
         var rotate = needsRotation(Photo);
-      
         if (rotate == true) {
             var canvas = $window.document.getElementById("previewCanvas")
             var offlineImg = new Image();
@@ -141,7 +139,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-    // called by injectCanvas
+
     var doRotation = function ( Photo,canvas) {
         var orientationID = Photo.orientationID;
         var loadedImage = new Image();
@@ -181,15 +179,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             x = maxWidth;
         }
 
-        //var canvasElement = false;
-        //var canvas = null;
-        //canvas = $window.document.getElementById("previewCanvas");
-        //if (canvas == null)
-        //    canvas = $window.document.getElementById("photoCanvas")
-        //if (canvas == null) {
-        //    canvasElement = true;
-        //    canvas = $window.document.createElement("canvas")
-        //}
+ 
         var ctx = canvas.getContext("2d");
         ctx.save();
         canvas.width = x;
@@ -323,8 +313,6 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
 
-
-
     $scope.getImageSource = function (Photo) {
         return getImageURL(Photo)
     }
@@ -365,9 +353,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             return style;
         }
 
-    var rotatedImages = [];
+
+    // its not sequentially anymore - thats what the start param was for... leaving for now
     var preloadImagesSequentially = function (start) {
-        rotatedImages = new Array($scope.PhotoList.length)
         if ($location.path() == "/Album") 
         {
             for (var i = 0; i <= $scope.PhotoList.length; i++) {
@@ -375,11 +363,8 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                 var theImageURL = getImageURL(pic)
                 var img = new Image();
                 img.src = theImageURL;
-              
             }
-
         }
-      
     }
 
 
