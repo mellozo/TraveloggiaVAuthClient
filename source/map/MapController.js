@@ -23,6 +23,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     var pushpinCollection = null;
 
+    var arrayOfHandlerHandles = null;
+
     $scope.Search = {
         Address:null
     }
@@ -130,6 +132,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var drawPreviewSite = function () {
+        arrayOfHandlerHandles = [];
         var map = $scope.previewMap;
         if ($scope.previewMap == null)
             preparePreviewMap();
@@ -155,7 +158,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var map = $scope.mapInstance;
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
-        var arrayOfHandlerHandles=[]
+        arrayOfHandlerHandles=[]
         var isDraggable = (SharedStateService.getAuthorizationState() == "CAN_EDIT" && ($scope.Capabilities.currentDevice.deviceType == null || $scope.Capabilities.currentDevice.deviceType == "tablet")) ? true : false;
         for (var i = 0; i < sites.length; i++) {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
@@ -476,7 +479,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       function (newValue, oldValue) {
           if (newValue != oldValue )
           {
-              if (($location.path() != "/MapList") && $location.path() != "/" && ($location.path().indexOf("/Map")  != 0)) {
+              if (($location.path() != "/MapList") && $location.path() != "/" && $location.path()!="/Map") {
                   clearSites();
                   if (newValue != null)
                     drawPreviewSite();
