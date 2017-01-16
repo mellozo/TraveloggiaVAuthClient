@@ -1,6 +1,7 @@
 ﻿
 angularTraveloggia.controller('MapController', function (SharedStateService, canEdit, readOnly, isEditing, $window, $route,$routeParams, $scope, $location, DataTransportService, $timeout, $http, $rootScope) {
 
+
     $scope.stateMachine = {
         state: SharedStateService.getAuthorizationState()
     }
@@ -29,7 +30,19 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     // INIT SEQUENCE
 
     var clearSites = function () {
+        removeHandlers();
         removePins();
+    }
+
+
+    var removeHandlers = function () {
+        for (var i = 0; i < arrayOfHandlerHandles.length; i++) {
+
+            var handlerID = arrayOfHandlerHandles[i]
+            Microsoft.Maps.Events.removeHandler(handlerID)
+        }
+
+
     }
 
     var removePins = function () {
@@ -142,34 +155,43 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         var map = $scope.mapInstance;
         var sites = $scope.MapRecord.Sites;
         var arrayOfMsftLocs = [];
+        var arrayOfHandlerHandles=[]
         var isDraggable = (SharedStateService.getAuthorizationState() == "CAN_EDIT" && ($scope.Capabilities.currentDevice.deviceType == null || $scope.Capabilities.currentDevice.deviceType == "tablet")) ? true : false;
         for (var i = 0; i < sites.length; i++) {
             var loc = new Microsoft.Maps.Location(sites[i].Latitude, sites[i].Longitude)
             var pin = new Microsoft.Maps.Pushpin(loc, { anchor: (17, 17), enableHoverStyle: true, draggable: isDraggable, title: sites[i].Name, subTitle: sites[i].Address });
             (
                 function attachEventHandlers(site) {
-                    Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                    var handleClick=   Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                         $scope.$apply(function () {
                             SharedStateService.setSelectedAsync("Site", site)
                             $scope.goAlbum();
                         })
                     });
 
-                    Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
+                    arrayOfHandlerHandles.push(handleClick)
+
+                    var handleMouseOver = Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
                         $scope.$apply(function () {
                             SharedStateService.setSelectedAsync("Site", site);
                         });
                     });
 
-                    if (isDraggable == true) {
-                        Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
-                            $scope.$apply(
-                            function () {
-                                SharedStateService.setSelectedAsync("Site", site);
-                                var loc = e.location;
-                                $scope.editLocation(loc, site)
-                            })
-                        });
+                    arrayOfHandlerHandles.push(handleMouseOver);
+
+                    if (isDraggable == true)
+                    {
+                         var handleDrag =   Microsoft.Maps.Events.addHandler(pin, 'dragend', function (e) {
+                                $scope.$apply(
+                                function () {
+                                    SharedStateService.setSelectedAsync("Site", site);
+                                    var loc = e.location;
+                                    $scope.editLocation(loc, site)
+                                })
+                         });
+
+                         arrayOfHandlerHandles.push(handleDrag);
+
                     }
 
             }
@@ -236,19 +258,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
            
     }
 
-    var getMapByID = function (selectedMapID) {
+    var getMapByID = function (selectedMapID,readOnly) {
         var map = getMapInstance();
         if (map == null)
             return;
         DataTransportService.getMapByID(selectedMapID).then(
           function (result) {
-              //if (mapID != null)// this is passed by a query string param on a shareable link
-              //{
-              //    // move this to shared state service get auth
-              //    //- ie handling if there is a query string param should set auth once
-              //    SharedStateService.setAuthorizationState(readOnly);
-              //    SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
-              //}
+
+              if (readOnly != null && readOnly == true) {
+                  SharedStateService.setAuthorizationState(readOnly);
+                  SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
+              }
+         
         
           $scope.MapRecord = result.data;
           SharedStateService.setSelectedAsync("Map", result.data);
@@ -282,7 +303,16 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     }
 
     var loadSelectedMap = function (mapID) {
-        getMapByID(mapID)
+     
+        getMapByID(mapID, null)
+    }
+
+
+    var loadReadOnlyMap = function (mapID) {
+
+        var readOnly = true;
+        getMapByID(mapID, readOnly)
+
     }
 
     var getSelectedMapID=function(){
@@ -297,12 +327,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 // branch for different types of load
     var loadMap = function () {
         $scope.systemMessage.loadComplete = false;
-         var requestedMap = parseQueryString();
-         var selectedMapID = getSelectedMapID();
-         var cachedMap = SharedStateService.getItemFromCache("Map")
+        var requestedMap = parseQueryString();
+        if (requestedMap != null) 
+            SharedStateService.setSelectedAsync("GuestLogin", true)
+       
+        var guestLogin=SharedStateService.getItemFromCache("GuestLogin")
+        var selectedMapID = getSelectedMapID();
+        var cachedMap = SharedStateService.getItemFromCache("Map")
         
-        if (requestedMap != null && cachedMap == null)
-            loadSelectedMap(requestedMap);
+        if (requestedMap != null  )
+            loadReadOnlyMap(requestedMap);
+        else if(selectedMapID != null && guestLogin==true)
+            loadReadOnlyMap(selectedMapID);
         else if (cachedMap == null && (selectedMapID == null || selectedMapID == "null"))
             loadDefaultMap();
         else if (cachedMap == null && selectedMapID != null)

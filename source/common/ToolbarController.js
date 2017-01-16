@@ -162,4 +162,25 @@
 if(    $scope.SiteList==null)
     loadSites();
 
+
+
+$scope.$watch(
+  function (scope) {
+      var value = SharedStateService.getItemFromCache("Site")
+      if (value == "null")
+          value = null;
+      return (value == null) ? null : value.SiteID;
+  },
+  function (newValue, oldValue) {
+      if (newValue != null && newValue != oldValue) {
+        
+          $scope.selectedSite = SharedStateService.getItemFromCache("Site");
+      }
+  });
+
+
+
+
+
+
 })

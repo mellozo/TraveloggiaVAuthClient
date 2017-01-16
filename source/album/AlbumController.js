@@ -53,8 +53,11 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
       
         if (cachedPhotos != null && cachedPhotos.length > 0 && cachedPhotos[0].SiteID == selectedSite.SiteID) {
             $scope.PhotoList = cachedPhotos;
-            preloadImagesSequentially(0);
-            preparePreviewImage($scope.PhotoList[0]);
+            if($location.path() != "/Album")
+                preparePreviewImage($scope.PhotoList[0]);
+            else
+                preloadImagesSequentially(0);
+
             $scope.selectedPhoto = SharedStateService.getItemFromCache("Photo");
             if ($scope.selectedPhoto == null) {
                 SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
