@@ -1,107 +1,115 @@
 ﻿'use strict'
 
-function Member() {};
-Member.prototype.MemberID =null;
-Member.prototype.AccountCreateDate =new Date(Date.now()).toDateString();
-Member.prototype.Email=null;
-Member.prototype.Password=null;
-Member.prototype.OpenID = null;
-Member.prototype.TraveloggiaEdition = 'TraveloggiaV';
-Member.prototype.FirstName = null;
-Member.prototype.LastName = null;
-Member.prototype.TraveloggiaEditionID = 4;
+function Member(){
+this.MemberID =null;
+this.AccountCreateDate =new Date(Date.now()).toDateString();
+this.Email=null;
+this.Password=null;
+this.OpenID = null;
+this.TraveloggiaEdition = 'TraveloggiaV';
+this.FirstName = null;
+this.LastName = null;
+this.TraveloggiaEditionID = 4;
+}
 
 
-function Map() {};
-Map.prototype.MapID = null;
-Map.prototype.MapName = new Date(Date.now()).toDateString();
-Map.prototype.MemberID = 
-Map.prototype.MinX = null;
-Map.prototype.MaxX = null;
-Map.prototype.MinY = null;
-Map.prototype.MaxY = null;
-Map.prototype.CreateDate = null; // serializing js dates + entity no workey
-Map.prototype.FromPhone = null;
-Map.prototype.LastRevision = null;
-Map.prototype.HasLayers = null;
-Map.prototype.SavedToDB = false;
-Map.prototype.IsDeleted = false;
-Map.prototype.Sites = [];
+function Map(){
+this.MapID =null;
+this.MapName = new Date(Date.now()).toDateString();
+this.MemberID = null;
+this.MinX = null;
+this.MaxX = null;
+this.MinY = null;
+this.MaxY = null;
+this.CreateDate = null; // serializing js dates + entity no workey
+this.FromPhone = null;
+this.LastRevision = null;
+this.HasLayers = null;
+this.SavedToDB = false;
+this.IsDeleted = false;
+this.Sites = [];
+this.CrowdSourced = false;
+}
+
+function Site() {
+    this.SiteID = null;
+    this.Longitude = null;
+    this.Latitude = null;
+    this.MapID = null;
+    this.MemberID = null;
+    this.Name = null;
+    this.Address = null;
+    this.Description = null;
+    this.Phone = null;
+    this.Email = null;
+    this.URL = null;
+    this.DateAdded = new Date(Date.now()).toDateString();
+    this.RouteIndex = null;
+    this.Rating = null;
+    this.AverageRating = null;
+    this.VotesCast = null;
+    this.Arrival = null;
+    this.Departure = null;
+    this.Photos = [];
+    this.Journals = [];
+    this.IsDeleted = false;
+}
 
 
-function Site() {}
-Site.prototypeSiteID = null;
-Site.prototypeLongitude = null;
-Site.prototypeLatitude = null;
-Site.prototypeMapID = null;
-Site.prototypeMemberID = null;
-Site.prototypeName = null;
-Site.prototypeAddress = null;
-Site.prototypeDescription = null;
-Site.prototypePhone = null;
-Site.prototypeEmail = null;
-Site.prototypeURL = null;
-Site.prototypeDateAdded = new Date(Date.now()).toDateString();
-Site.prototypeRouteIndex = null;
-Site.prototypeRating = null;
-Site.prototypeAverageRating = null;
-Site.prototypeVotesCast = null;
-Site.prototypeArrival = null;
-Site.prototypeDeparture = null;
-Site.prototypePhotos = [];
-Site.prototypeJournals = [];
+
+function Photo() { 
+this.PhotoID = null;
+this.FileName = null;
+this.Caption = null;
+this.SiteID = null;
+this.JournalID = null;
+this.DateAdded = null;
+this.DateTaken = null;
+this.FromPhone = null;
+this.StorageURL = null;
+this.ThumbnailURL = null;
+this.orientation  = null;
+this.orientationID  = null;
+this.GPSLatitude  = null;
+this.GPSLongitude  = null;
+this.Camera  = null;
+this.Model  = null;
+this.Software  = null;
+this.Height  = null;
+this.Width  = null;
+this.BitsPerSample = null;
+this.IsDeleted = false;
+}
+
+function Journal() {
+    this.JournalID = null;
+    this.Text = null;
+    this.SiteID = null;
+    this.KeyWords = null;
+    this.DateAdded = new Date(Date.now()).toLocaleDateString();
+    this.JournalDate = null;
+    this.FromPhone = null;
+    this.Title = "untitled";
+    this.MemberID = null;
+    this.IsDeleted = false;
+}
 
 
-
-function Photo() { }
-Photo.prototype.PhotoID = null;
-Photo.prototype.FileName = null;
-Photo.prototype.Caption = null;
-Photo.prototype.SiteID = null;
-Photo.prototype.JournalID = null;
-Photo.prototype.DateAdded = null;
-Photo.prototype.DateTaken = null;
-Photo.prototype.FromPhone = null;
-Photo.prototype.StorageURL = null;
-Photo.prototype.ThumbnailURL = null;
-Photo.prototype.orientation  = null;
-Photo.prototype.orientationID  = null;
-Photo.prototype.GPSLatitude  = null;
-Photo.prototype.GPSLongitude  = null;
-Photo.prototype.Camera  = null;
-Photo.prototype.Model  = null;
-Photo.prototype.Software  = null;
-Photo.prototype.Height  = null;
-Photo.prototype.Width  = null;
-Photo.prototype.BitsPerSample  = null;
-
-
-function Journal() {}
-Journal.prototype.JournalID = null;
-Journal.prototype.Text = null;
-Journal.prototype.SiteID = null;
-Journal.prototype.KeyWords = null;
-Journal.prototype.DateAdded = new Date(Date.now()).toLocaleDateString();  
-Journal.prototype.JournalDate = null;
-Journal.prototype.FromPhone = null;
-Journal.prototype.Title = "untitled";
-Journal.prototype.MemberID = null;
-
-
-function Device(){}
-Device.prototype.osName=null;
-Device.prototype.osVersion=null;
-Device.prototype.browserName = null;
-Device.prototype.browserVersion = null;
-Device.prototype.engineName = null;
-Device.prototype.engineVersion = null;
-Device.prototype.deviceModel = null;
-Device.prototype.deviceType = null;
-Device.prototype.deviceVendor = null;
-Device.prototype.windowInnerHeight = null;
-Device.prototype.windowInnerWidth = null;
-Device.prototype.documentElementClientHeight = null;
-Device.prototype.documentElementClientWidth = null;
-Device.prototype.Issue = null;
-Device.prototype.MemberID = null;
+function Device() {
+   this.osName = null;
+   this.osVersion = null;
+   this.browserName = null;
+   this.browserVersion = null;
+   this.engineName = null;
+   this.engineVersion = null;
+   this.deviceModel = null;
+   this.deviceType = null;
+   this.deviceVendor = null;
+   this.windowInnerHeight = null;
+   this.windowInnerWidth = null;
+   this.documentElementClientHeight = null;
+   this.documentElementClientWidth = null;
+   this.Issue = null;
+   this.MemberID = null;
+}
 
