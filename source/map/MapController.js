@@ -267,20 +267,19 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
            
     }
 
-    var getMapByID = function (selectedMapID,readOnly) {
+    var getMapByID = function (selectedMapID) {
         var map = getMapInstance();
         if (map == null)
             return;
         DataTransportService.getMapByID(selectedMapID).then(
           function (result) {
-
-              if (readOnly != null && readOnly == true) {
-                  SharedStateService.setAuthorizationState(readOnly);
-                  SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
-              }
-         
-        
-          $scope.MapRecord = result.data;
+            $scope.MapRecord = result.data;
+            SharedStateService.setAuthenticatedMember({ MemberID: result.data.MemberID });
+            if ($scope.MapRecord.CrowdSourced == 1) {
+                SharedStateService.setAuthorizationState("CAN_EDIT")
+                $scope.stateMachine.state = "CAN_EDIT"
+            }
+               
           SharedStateService.setSelectedAsync("Map", result.data);
           SharedStateService.setSelectedAsync("Site", null);// clear any previous settings
           if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length > 0) {
@@ -311,18 +310,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         return mapID;
     }
 
-    var loadSelectedMap = function (mapID) {
-     
-        getMapByID(mapID, null)
-    }
-
-
-    var loadReadOnlyMap = function (mapID) {
-
-        var readOnly = true;
-        getMapByID(mapID, readOnly)
-
-    }
+   
 
     var getSelectedMapID=function(){
          var MapID = null
@@ -338,24 +326,23 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         $scope.systemMessage.loadComplete = false;
         var requestedMap = parseQueryString();
         if (requestedMap != null) 
-            SharedStateService.setSelectedAsync("GuestLogin", true)
-       
-        var guestLogin=SharedStateService.getItemFromCache("GuestLogin")
-        var selectedMapID = getSelectedMapID();
+            SharedStateService.setAuthorizationState("READ_ONLY");
+
+        var selectedMapID = getSelectedMapID();// set when you navigate from the map list
         var cachedMap = SharedStateService.getItemFromCache("Map")
         
         if (requestedMap != null  )
-            loadReadOnlyMap(requestedMap);
-        else if(selectedMapID != null && guestLogin==true)
-            loadReadOnlyMap(selectedMapID);
+            getMapByID(requestedMap);
+        else if(selectedMapID != null)
+            getMapByID(selectedMapID);
         else if (cachedMap == null && (selectedMapID == null || selectedMapID == "null"))
             loadDefaultMap();
         else if (cachedMap == null && selectedMapID != null)
-            loadSelectedMap(selectedMapID);
+            getMapByID(selectedMapID);
         else if (cachedMap != null && selectedMapID !== null && cachedMap.MapID == selectedMapID)
             reloadMap(cachedMap);
         else if (cachedMap != null && selectedMapID != null && cachedMap.MapID != selectedMapID)
-            loadSelectedMap(selectedMapID);
+            getMapByID(selectedMapID);
         else if (cachedMap != null && selectedMapID == null)
             reloadMap(cachedMap);
        
