@@ -29,7 +29,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
         $timeout($scope.goMapFirstTime(), 5000);
     }
 
-
+    $scope.selecteMap = {}
 
 
     var updateImagePath = function () {
@@ -154,7 +154,9 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     var createMap = function () {
         var anotherMap = new Map();
         anotherMap.MemberID = SharedStateService.getAuthenticatedMemberID();
+       
         $scope.selectedMap = anotherMap;
+      
     }
 
 
@@ -167,7 +169,6 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     var dismiss = function () {
-
         $scope.ConfirmCancel.isShowing = false;
     }
    
@@ -175,7 +176,8 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
     var deleteMap = function () {
         DataTransportService.deleteMap($scope.selectedMap.MapID).then(
             function (result) {
-                SharedStateService.deleteFromCacheAsync("MapList", "MapID", $scope.selectedMap.MapID) 
+                SharedStateService.deleteFromCacheAsync("MapList", "MapID", $scope.selectedMap.MapID)
+                SharedStateService.clearAll();
                 dismiss();
                 loadMapList();
                 $scope.systemMessage.text = "map deleted successfully";
@@ -195,9 +197,10 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             $scope.selectedState.addSelected = false;
             DataTransportService.addMap($scope.selectedMap).then(
                 function (result) {
-                    SharedStateService.addToCacheAsync("MapList",result.data) ;
+                    SharedStateService.addToCacheAsync("MapList", result.data);
+                    SharedStateService.setSelectedAsync("MapListItem", result.data);
                     SharedStateService.setSelectedAsync("Map", result.data);
-                    SharedStateService.clearMap();
+                    SharedStateService.clearMapChildren();
                     $scope.systemMessage.text = "map was added successfully";
                     $scope.systemMessage.activate();
                     $timeout($scope.goMapFirstTime(), 1000);
