@@ -8,7 +8,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     $scope.previewImage = {
-        Url: "../image/sail.jpeg",
+        Url: "../image/online.gif",
         useCanvas:false
     }
   
@@ -374,10 +374,18 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     $scope.processImage = function (event, Photo) {
         var imageEl = event.target;
         var waitingImg = imageEl.parentNode.getElementsByTagName("img")[0];
+     waitingImg.style.display = "none"
+
+
+    
+        if (Photo.Width == null || Photo.Height == null) {
+            sizeOnLoad(imageEl,Photo)
+            return;
+        }
         var canvas = imageEl.parentNode.getElementsByTagName("canvas")[0];
         var mustRotate = needsRotation(Photo);
      
-            waitingImg.style.display = "none"
+       
             if (mustRotate) {
                 doRotation(Photo, canvas)
                 canvas.style.display="inline-block"
@@ -387,6 +395,25 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     }
 
+
+
+    var sizeOnLoad = function (loadedImage, Photo) {
+
+        Photo.Height = loadedImage.height;
+        Photo.Width = loadedImage.width;
+        var dimensions = calculateImageWidth(Photo)
+        loadedImage.style.width = dimensions.width + "px";
+        loadedImage.style.display = "inline-block"
+
+        DataTransportService.updatePhoto(Photo).then(
+            function (result) {
+                SharedStateService.updateCacheAsync("Photos","PhotoID",Photo.PhotoID, result.data)
+                console.log("uploaded photo dimensions")
+            },
+             function (error) {
+                 console.log("error updating photo height and width")
+             });
+    }
 
 
   
@@ -401,17 +428,16 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         function (newValue, oldValue) {
             if (newValue != oldValue)
             {
-                $scope.previewImage.Url="../image/sail.jpeg"
+                $scope.previewImage.Url="../image/online.gif"
                 $scope.previewImage.notReady = true;
                 // its worth it to clear the scope because images take so long to load, looks better empty than with the wrong one
-                // to do... there should be a splash image to go in fast and fix page load woes
+          
                 $scope.PhotoList = [];
                 SharedStateService.setSelectedAsync("Photos", null);
                 $scope.selectedPhoto = null;
                 if (newValue != null) {
                   updateImagePath();// only nescessary if map has been switched but simultaneous watchers causing error ( now )
-                    loadPhotos();
-
+                  loadPhotos();
                 }
             
              }
@@ -627,9 +653,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
             }
         }
 
-        if (photoRecord.Height == null && photoRecord.Width == null) {
-            photoRecord = null;
-        }
+        //if (photoRecord.Height == null && photoRecord.Width == null) {
+        //    photoRecord = null;
+        //}
       
         return photoRecord;
     }
