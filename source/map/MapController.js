@@ -148,7 +148,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         }
         else
         {
-
+            $scope.systemMessage.loadComplete = true;
             map.setView({ zoom: 1});
         }
         
@@ -249,6 +249,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
     var reloadMap = function (cachedMap) {
         var map = getMapInstance();
         $scope.MapRecord = cachedMap;
+        if ($scope.MapRecord.CrowdSourced == true)
+            SharedStateService.setAuthorizationState("CAN_EDIT")
         if ($scope.MapRecord.Sites != null && $scope.MapRecord.Sites.length > 0)
         {
             if(map.name =="MainMap")
@@ -284,7 +286,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   drawPreviewSite();
           }
           else{
-            map.setView({ zoom: 1});
+              map.setView({ zoom: 1 });
+              $scope.systemMessage.loadComplete = true;
           }
       },
           function (error) {
@@ -319,18 +322,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 // branch for different types of load
     var loadMap = function () {
         $scope.systemMessage.loadComplete = false;
-        var requestedMap = parseQueryString();
-        if (requestedMap != null) 
-            SharedStateService.setAuthorizationState("READ_ONLY");
-
+        var requestedMapID = parseQueryString();
         var selectedMapID = getSelectedMapID();// set when you navigate from the map list
+        if (requestedMapID != null) {
+            SharedStateService.setAuthorizationState("READ_ONLY");
+            selectedMapID = requestedMapID;
+        }
+            
+
+       
         var cachedMap = SharedStateService.getItemFromCache("Map")
         
-        if (requestedMap != null  )
-            getMapByID(requestedMap);
-        else if(selectedMapID != null)
-            getMapByID(selectedMapID);
-        else if (cachedMap == null && (selectedMapID == null || selectedMapID == "null"))
+        if (cachedMap == null && (selectedMapID == null || selectedMapID == "null"))
             loadDefaultMap();
         else if (cachedMap == null && selectedMapID != null)
             getMapByID(selectedMapID);
@@ -701,7 +704,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
     var saveCurrentLocation = function () {
         $scope.ConfirmCancel.isShowing = false;
-        $location.path("/Site");
+        $location.path("/Site").search({});
     }
 
 
