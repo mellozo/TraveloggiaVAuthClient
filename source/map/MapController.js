@@ -10,6 +10,8 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         afterLoaded();
     })
 
+
+
     $scope.$on("searchClicked", function (event, data) {
         $scope.selectedState.searchSelected = true;
     });
@@ -177,7 +179,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
                     var handleMouseOver = Microsoft.Maps.Events.addHandler(pin, 'mouseover', function () {
                         $scope.$apply(function () {
-                            $location.search('ZoomOut', 'true');
+                            
                             SharedStateService.setSelectedAsync("Site", site);
                         });
                     });
@@ -213,7 +215,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         if (selectedSite == null || selectedSite=="null" || searchObject["ZoomOut"] == "true")// if loading from a shared link)
         {
             setBounds(arrayOfMsftLocs);
-            SharedStateService.setSelectedAsync("Site", $scope.MapRecord.Sites[0]);
+            //SharedStateService.setSelectedAsync("Site", $scope.MapRecord.Sites[0]);
             
         }
         else {
@@ -321,6 +323,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
 
 // branch for different types of load
     var loadMap = function () {
+     
         $scope.systemMessage.loadComplete = false;
         var requestedMapID = parseQueryString();
         var selectedMapID = getSelectedMapID();// set when you navigate from the map list
@@ -475,18 +478,16 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
                   if (newValue != null)
                     drawPreviewSite();
               }
-              else if ($location.path() == "/Map" || $location.path()=="/") {
-                  var selectedSite = SharedStateService.getItemFromCache("Site");
-                  if (selectedSite != null && $location.search().ZoomOut ==null ) {
-                      var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
-                      setCenter(selectedSite);
-                  }
-               
-              }
+           
           }
       });
 
 
+  $scope.$on("SiteSelected", function (event, data) {
+      var selectedSite = SharedStateService.getItemFromCache("Site");
+      var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
+      setCenter(selectedSite);
+  })
 
     //WATCH MAP ID
   $scope.$watch(

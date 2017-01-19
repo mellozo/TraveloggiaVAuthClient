@@ -107,6 +107,9 @@
     $scope.selectSite = function (site) {
         $scope.selectedSite = site;
         SharedStateService.setSelectedAsync("Site", site);
+        $scope.$broadcast("SiteSelected")
+
+
         var currentpath = $location.path();
 
         if (currentpath == "/Photo")
