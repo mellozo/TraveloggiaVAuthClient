@@ -56,8 +56,16 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
 
 
     var getPreviewPhoto = function () {
-        var picList= SharedStateService.getItemFromCache("Photos")
-        var pic =picList[0];
+        var selectedPhoto = SharedStateService.getItemFromCache("Photo");
+        var pic = "/images/defaultSplash.jpg";
+        if (selectedPhoto != null)
+            pic = selectedPhoto;
+        else {
+            var picList = SharedStateService.getItemFromCache("Photos")
+            if (picList.length >0)
+            pic = picList[0];
+        }
+       
         $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + $scope.selectedMap.MapName + "/";
         $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + $scope.selectedMap.MapID + "/";
         var theImageURL = (pic.StorageURL != null) ? "https://s3-us-west-2.amazonaws.com/traveloggia-guests/" + $scope.imagePath + pic.FileName : $scope.oldImagePath + pic.FileName;
@@ -94,8 +102,17 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             $window.FB.api('/me/feed', 'post', params,
                 function (response) {
                     var y = response;
+                    $scope.systemMessage.text = "map posted to facebook";
+                    $scope.systemMessage.activate();
+
+
+
+
                 });
-        }, { scope: 'publish_actions' });
+        }, {
+            scope: 'publish_actions',
+            enable_profile_selector:true
+        });
 
         };
     
