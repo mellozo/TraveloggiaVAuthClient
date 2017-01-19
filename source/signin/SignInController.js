@@ -2,12 +2,26 @@
     var VM = this;
     VM.Member = new Member();
 
+
+    var getAuthorization = function () {
+        var isSignedIn = false;
+       var canEdit = (SharedStateService.getAuthorizationState() =="CAN_EDIT") ? true:false
+       var selectedMap = SharedStateService.getItemFromCache("Map");
+       if (selectedMap.CrowdSourced == true)
+           isSignedIn = false;
+       else
+           isSignedIn = canEdit;
+        return isSignedIn;
+    }
+
     VM.authenticationStatus = {
         firstAttempt:($route.current.isCreate != null)?false:true,
         failedSignin: false,
         createAccount: ($route.current.isCreate != null) ? true : false,
-        signedIn: (SharedStateService.getAuthorizationState() =="CAN_EDIT") ? true:false
+        signedIn: getAuthorization()
     };
+
+   
    
     VM.authenticate = function () {
         DataTransportService.getMember(VM.Member.Email, VM.Member.Password).then(
