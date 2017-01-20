@@ -7,10 +7,20 @@
         var isSignedIn = false;
        var canEdit = (SharedStateService.getAuthorizationState() =="CAN_EDIT") ? true:false
        var selectedMap = SharedStateService.getItemFromCache("Map");
-       if (selectedMap.CrowdSourced == true)
+       var member = SharedStateService.getItemFromCache("AuthenticatedMember");
+
+       if (selectedMap != null && selectedMap.CrowdSourced == true)
            isSignedIn = false;
-       else
+       else if (member.MemberID == 1 && member.Password == null) {
+          
+
+               SharedStateService.setAuthorizationState("READ_ONLY");
+       
+           isSignedIn = false;
+       }
+       else {
            isSignedIn = canEdit;
+       }
         return isSignedIn;
     }
 
@@ -51,7 +61,7 @@
 
     }
 
-
+//watch auth state
     $scope.$watch(
         function (scope) {
             if (SharedStateService.getAuthorizationState() != null)
@@ -59,13 +69,23 @@
         },
         function (newValue, oldValue) {
             if (newValue != null && newValue != oldValue) {
-
-                var boolAuth =  (newValue==canEdit) ? true:false;
-                VM.authenticationStatus.signedIn = boolAuth;
+                getAuthorization();
                
             }
         });
 
+//watch MapID
+    $scope.$watch(
+        function (scope) {
+            if (SharedStateService.getItemFromCache("Map") != null)
+                return SharedStateService.getItemFromCache("Map").MapID
+        },
+        function (newValue, oldValue) {
+            if (newValue != null && newValue != oldValue) {
+                VM.authenticationStatus.signedIn = getAuthorization();
+                $scope.$emit("authStatusChanged");
+            }
+        });
 
 
     VM.signOut = function(){

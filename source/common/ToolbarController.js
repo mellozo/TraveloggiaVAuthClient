@@ -1,6 +1,9 @@
 ﻿angularTraveloggia.controller('ToolbarController',  function (SharedStateService,DataTransportService,$rootScope, $scope,$location,$window,$http,$timeout,$templateCache) {
 
-  
+
+
+
+
     $scope.$on("sitesLoaded", function (event, data) {
         loadSites();
     })
@@ -166,7 +169,7 @@ if(    $scope.SiteList==null)
     loadSites();
 
 
-
+//WATCH SiteID
 $scope.$watch(
   function (scope) {
       var value = SharedStateService.getItemFromCache("Site")

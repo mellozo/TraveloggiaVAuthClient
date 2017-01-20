@@ -6,10 +6,13 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
         state: SharedStateService.getAuthorizationState()
     }
 
+    $scope.$on("authStatusChanged", function (event, data) {
+        $scope.stateMachine.state= SharedStateService.getAuthorizationState()
+    })
+
     $scope.$on("softIsHere", function (event, data) {
         afterLoaded();
     })
-
 
 
     $scope.$on("searchClicked", function (event, data) {
@@ -509,7 +512,7 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
           }
       });
 
-
+//broadcast listener
   $scope.$on("SiteSelected", function (event, data) {
       var selectedSite = SharedStateService.getItemFromCache("Site");
       var loc = new Microsoft.Maps.Location(selectedSite.Latitude, selectedSite.Longitude);
@@ -537,6 +540,18 @@ angularTraveloggia.controller('MapController', function (SharedStateService, can
       });
 
 
+    //WATCH AUTH STATE
+  $scope.$watch(
+      function (scope) {
+          if (SharedStateService.getAuthorizationState() != null)
+              return SharedStateService.getAuthorizationState();
+      },
+      function (newValue, oldValue) {
+          if (newValue != null && newValue != oldValue) {
+              $scope.stateMachine.state = newValue;
+
+          }
+      });
 
 /******MAP EDITING ************************************************/
 
