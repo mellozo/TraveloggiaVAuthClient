@@ -29,6 +29,7 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
         $timeout($scope.goMapFirstTime(), 5000);
     }
 
+
     $scope.selecteMap = {}
 
 
@@ -102,9 +103,14 @@ angularTraveloggia.controller("MapListController", function (SharedStateService,
             $window.FB.api('/me/feed', 'post', params,
                 function (response) {
                     var y = response;
-                    $scope.systemMessage.text = "map posted to facebook";
-                    $scope.systemMessage.activate();
 
+                    $scope.$apply(function(){
+                        $scope.systemMessage.text = "map posted to facebook ";
+                        $scope.systemMessage.activate();
+
+
+                    })
+                   
 
 
 
