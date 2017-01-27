@@ -1,4 +1,4 @@
-﻿/// <reference path="C:\Traveloggia Experimental\TraveloggiaVAuthClient\source\common/SharedStateService.js" />
+﻿'use-strict'
 
 
 angularTraveloggia.controller('AlbumController', function ($scope, $location, $route, DataTransportService, SharedStateService, $window,debounce,$timeout) {
@@ -8,10 +8,10 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
     }
 
     $scope.previewImage = {
-        Url: "../image/online.gif",
+        Url: "https://www.traveloggia.pro/image/online.gif",
         useCanvas:false
     }
-  
+ 
     var toolbarHeight = 66;
     $scope.viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
     $scope.viewFrameHeight = ($window.document.getElementById("viewFrame").clientHeight) - toolbarHeight;
@@ -73,6 +73,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
                     SharedStateService.setSelectedAsync('Photos', result.data);
                     if (result.data.length > 0) {
                         preloadImagesSequentially(0);
+                        if($location.path() != "/Album")
                         preparePreviewImage($scope.PhotoList[0]);
                         $scope.selectedPhoto = $scope.PhotoList[0];
                         SharedStateService.setSelectedAsync("Photo", $scope.PhotoList[0]);
@@ -94,6 +95,9 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
         if (SharedStateService.getItemFromCache("Map") == null)
             return;
         var mapName = SharedStateService.getItemFromCache("Map").MapName;
+      
+        mapName = $window.encodeURIComponent(mapName)
+    
         var mapID = SharedStateService.getItemFromCache("Map").MapID
         $scope.oldImagePath = "http://www.traveloggia.net/upload/" + SharedStateService.getAuthenticatedMemberID() + "/" + mapName + "/";
         $scope.imagePath = SharedStateService.getAuthenticatedMemberID() + "/" + mapID + "/";
@@ -349,6 +353,7 @@ angularTraveloggia.controller('AlbumController', function ($scope, $location, $r
 
     // called by album.html
     $scope.getImageStyle = function (Photo, index) {
+        var style = "";
         var rotate = needsRotation(Photo);
         if (rotate != true) {
             style = calculateImageWidth(Photo);
