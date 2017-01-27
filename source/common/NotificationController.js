@@ -106,6 +106,8 @@
 
     if (result.os !== null && result.browser != null) {
         $scope.Capabilities.cantResize = (result.os.name == "Windows Phone" && result.browser.version == "11.0") ? true : false;
+        if ($window.innerWidth < 769)
+            $scope.Capabilities.cantResize = true;
     }
 
 
