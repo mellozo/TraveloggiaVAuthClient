@@ -55,20 +55,26 @@
 
 
   $scope.setMapStyle = function () {
-        var vpHeight = $scope.reliableHeight - $scope.toolbarHeight;
-        var vpWidth = $scope.reliableWidth
+      var vpHeight = $window.innerHeight - $scope.toolbarHeight;
+      var vpWidth = $window.innerWidth
         if (vpWidth > 768)
-            vpWidth = vpWidth * .7;
+            vpWidth = vpWidth * .70;
 
-        var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
-       $scope.previewMapWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
+  // just in case you want it... seems the same without decimal places      var viewFrameWidth = $window.document.getElementById("viewFrame").clientWidth;
+
+
 
         $scope.mapStyle = {
             "height": vpHeight,
-            "width": viewFrameWidth 
+            "width": vpWidth
         }
+
+
+      // read by album controller it seems :(
+        $scope.previewMapWidth = $window.document.getElementById("previewFrame").offsetWidth - 24;
+
         $scope.previewMapStyle = {
-            "height": ( ($scope.reliableHeight -12  )* .33) -28,
+            "height": (($window.innerHeight - 12) * .33) - 28,
             "width": $scope.previewMapWidth
         }
     }
